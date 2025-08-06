@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+  <!-- Create tc_resseller table -->
+  <changeSet id="1" author="Walter">
+    <createTable tableName="tc_resseller">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="name" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="2" author="Walter">
+    <renameTable oldTableName="tc_resseller" newTableName="tc_reseller"/>
+  </changeSet>
+
+
+    <!-- Create tc_user_reseller pivot table -->
+  <changeSet id="3" author="Walter">
+    <createTable tableName="tc_user_reseller">
+      <column name="userid" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="resellerid" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+  </changeSet>
+
+  <changeSet id="4" author="Walter">
+
+    <!-- Foreign key: userid -> tc_users.id -->
+    <addForeignKeyConstraint
+            baseTableName="tc_user_reseller"
+            baseColumnNames="userid"
+            referencedTableName="tc_users"
+            referencedColumnNames="id"
+            constraintName="fk_user_resellerid"
+            onDelete="CASCADE"/>
+
+    <!-- Foreign key: resellerid -> tc_resseller.id -->
+    <addForeignKeyConstraint
+            baseTableName="tc_user_reseller"
+            baseColumnNames="resellerid"
+            referencedTableName="tc_reseller"
+            referencedColumnNames="id"
+            constraintName="fk_reseller_userid"
+            onDelete="CASCADE"/>
+
+  </changeSet>
+
+  <changeSet id="5" author="Walter">
+    <addColumn tableName="tc_reseller">
+      <column name="attributes" type="VARCHAR(4000)">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
+<!--  <changeSet id="6" author="Walter">-->
+<!--    <dropTable tableName="tc_reseller"/>-->
+<!--    <dropTable tableName="tc_reseller" cascadeConstraints="true"/>-->
+<!--  </changeSet>-->
+
+
+</databaseChangeLog>
+
