@@ -6,16 +6,16 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import org.traccar.api.ExtendedObjectResource;
-import org.traccar.model.Reseller;
+import org.traccar.model.Client;
 import org.traccar.model.SubReseller;
 
-@Path("subresellers")
+@Path("clients")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class SubResellerResource extends ExtendedObjectResource<SubReseller> {
+public class ClientResource extends ExtendedObjectResource<Client> {
 
-    public SubResellerResource() {
-        super(SubReseller.class, "name");
+    public ClientResource() {
+        super(Client.class, "name");
     }
 
 }
