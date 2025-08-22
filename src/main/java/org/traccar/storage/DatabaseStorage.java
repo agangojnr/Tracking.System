@@ -37,8 +37,12 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class DatabaseStorage extends Storage {
 
+    private static final Logger logger = LoggerFactory.getLogger(DatabaseStorage.class);
     private final Config config;
     private final DataSource dataSource;
     private final ObjectMapper objectMapper;
@@ -182,10 +186,15 @@ public class DatabaseStorage extends Storage {
         try {
             QueryBuilder builder = QueryBuilder.create(config, dataSource, objectMapper, query.toString(), true);
             for (int index = 0; index < entries.size(); index++) {
-                builder.setLong(index, entries.get(index).getValue());
+                var value = entries.get(index).getValue();
+                //System.out.println("Binding param[" + index + "] = " + value);
+
+                builder.setLong(index, value);
             }
             builder.executeUpdate();
         } catch (SQLException e) {
+            logger.error("Failed to execute query: {} with values: {}", query, entries, e);
+            e.printStackTrace();
             throw new StorageException(e);
         }
     }

@@ -1,0 +1,30 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+  <changeSet id="1" author="Walter">
+    <!-- Foreign key: clientid -> tc_client.id -->
+    <addForeignKeyConstraint
+            baseTableName="tc_client_device"
+            baseColumnNames="clientid"
+            referencedTableName="tc_clients"
+            referencedColumnNames="id"
+            constraintName="fk_client_deviceid"
+            onDelete="CASCADE"/>
+
+    <!-- Foreign key: deviceid -> tc_devices.id -->
+    <addForeignKeyConstraint
+            baseTableName="tc_client_device"
+            baseColumnNames="deviceid"
+            referencedTableName="tc_devices"
+            referencedColumnNames="id"
+            constraintName="fk_device_clientid"
+            onDelete="CASCADE"/>
+  </changeSet>
+
+
+</databaseChangeLog>
+

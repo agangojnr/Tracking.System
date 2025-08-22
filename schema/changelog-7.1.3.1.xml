@@ -47,6 +47,94 @@
   </changeSet>
 
 
+  <changeSet id="4" author="Walter">
+    <renameTable oldTableName="tc_client" newTableName="tc_clients"/>
+  </changeSet>
+
+  <changeSet id="5" author="Walter">
+    <!-- Update foreign key in tc_user_client from tc_client -> tc_clients -->
+    <dropForeignKeyConstraint
+            baseTableName="tc_user_client"
+            constraintName="fk_client_userid"/>
+
+    <addForeignKeyConstraint
+            baseTableName="tc_user_client"
+            baseColumnNames="clientid"
+            referencedTableName="tc_clients"
+            referencedColumnNames="id"
+            constraintName="fk_client_userid"
+            onDelete="CASCADE"/>
+  </changeSet>
+
+  <changeSet id="6" author="Walter">
+    <!-- Update foreign key in tc_subreseller_client from tc_client -> tc_clients -->
+    <dropForeignKeyConstraint
+            baseTableName="tc_subreseller_client"
+            constraintName="fk_subreseller_client_client"/>
+
+    <addForeignKeyConstraint
+            baseTableName="tc_subreseller_client"
+            baseColumnNames="clientid"
+            referencedTableName="tc_clients"
+            referencedColumnNames="id"
+            constraintName="fk_subreseller_client_client"/>
+  </changeSet>
+
+
+  <changeSet id="7" author="Walter">
+    <!-- Drop old foreign key: clientid -> tc_client.id -->
+    <dropForeignKeyConstraint
+            baseTableName="tc_client_device"
+            constraintName="fk_client_deviceid"/>
+
+    <!-- Add new foreign key: clientid -> tc_clients.id -->
+    <addForeignKeyConstraint
+            baseTableName="tc_client_device"
+            baseColumnNames="clientid"
+            referencedTableName="tc_clients"
+            referencedColumnNames="id"
+            constraintName="fk_client_deviceid"
+            onDelete="CASCADE"/>
+
+    <!-- Device foreign key remains unchanged -->
+  </changeSet>
+
+  <changeSet id="8" author="Walter">
+    <!-- Ensure the column is not nullable -->
+    <addNotNullConstraint
+            tableName="tc_client_device"
+            columnName="deviceid"
+            columnDataType="INT"/>
+
+    <rollback>
+      <dropNotNullConstraint
+              tableName="tc_client_device"
+              columnName="deviceid"
+              columnDataType="INT"/>
+    </rollback>
+  </changeSet>
+
+
+  <changeSet id="9" author="Walter">
+    <!-- Foreign key: clientid -> tc_client.id -->
+    <addForeignKeyConstraint
+            baseTableName="tc_client_device"
+            baseColumnNames="clientid"
+            referencedTableName="tc_clients"
+            referencedColumnNames="id"
+            constraintName="fk_client_deviceid"
+            onDelete="CASCADE"/>
+
+    <!-- Foreign key: deviceid -> tc_devices.id -->
+    <addForeignKeyConstraint
+            baseTableName="tc_client_device"
+            baseColumnNames="deviceid"
+            referencedTableName="tc_devices"
+            referencedColumnNames="id"
+            constraintName="fk_device_clientid"
+            onDelete="CASCADE"/>
+  </changeSet>
+
 
 </databaseChangeLog>
 
