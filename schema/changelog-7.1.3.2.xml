@@ -25,6 +25,18 @@
             onDelete="CASCADE"/>
   </changeSet>
 
+  <changeSet id="2" author="walter">
+    <renameTable
+            oldTableName="tc_subreseller"
+            newTableName="tc_subresellers"/>
+  </changeSet>
+
+  <changeSet id="3" author="walter">
+    <renameTable
+            oldTableName="tc_reseller"
+            newTableName="tc_resellers"/>
+  </changeSet>
+
 
 </databaseChangeLog>
 

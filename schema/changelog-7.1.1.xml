@@ -47,7 +47,7 @@
     <addForeignKeyConstraint
             baseTableName="tc_user_subreseller"
             baseColumnNames="subresellerid"
-            referencedTableName="tc_subreseller"
+            referencedTableName="tc_subresellers"
             referencedColumnNames="id"
             constraintName="fk_subreseller_userid"
             onDelete="CASCADE"/>
@@ -68,14 +68,14 @@
     <addForeignKeyConstraint
             baseTableName="tc_reseller_subreseller"
             baseColumnNames="resellerid"
-            referencedTableName="tc_reseller"
+            referencedTableName="tc_resellers"
             referencedColumnNames="id"
             constraintName="fk_reseller_subreseller_reseller"/>
 
     <addForeignKeyConstraint
             baseTableName="tc_reseller_subreseller"
             baseColumnNames="subresellerid"
-            referencedTableName="tc_subreseller"
+            referencedTableName="tc_subresellers"
             referencedColumnNames="id"
             constraintName="fk_reseller_subreseller_subreseller"/>
   </changeSet>

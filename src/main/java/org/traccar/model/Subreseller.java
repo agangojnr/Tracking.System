@@ -4,7 +4,7 @@ package org.traccar.model;
 import org.traccar.storage.StorageName;
 
 @StorageName("tc_subreseller")
-public class SubReseller extends ExtendedModel {
+public class Subreseller extends ExtendedModel {
 
     private String name;
 

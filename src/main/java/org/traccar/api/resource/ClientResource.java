@@ -7,7 +7,6 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import org.traccar.api.ExtendedObjectResource;
 import org.traccar.model.Client;
-import org.traccar.model.SubReseller;
 
 @Path("clients")
 @Produces(MediaType.APPLICATION_JSON)

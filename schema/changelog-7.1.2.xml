@@ -68,14 +68,14 @@
     <addForeignKeyConstraint
             baseTableName="tc_subreseller_client"
             baseColumnNames="subresellerid"
-            referencedTableName="tc_subreseller"
+            referencedTableName="tc_subresellers"
             referencedColumnNames="id"
             constraintName="fk_subreseller_client_subreseller"/>
 
     <addForeignKeyConstraint
             baseTableName="tc_subreseller_client"
             baseColumnNames="clientid"
-            referencedTableName="tc_client"
+            referencedTableName="tc_clients"
             referencedColumnNames="id"
             constraintName="fk_subreseller_client_client"/>
   </changeSet>
