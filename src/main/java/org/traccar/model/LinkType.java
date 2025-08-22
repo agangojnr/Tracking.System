@@ -6,7 +6,8 @@ public enum LinkType {
     CLIENT_DEVICE(Client.class, Device.class, "tc_client_device"),
     SUBRESELLER_DEVICE(Subreseller.class, Device.class, "tc_subreseller_device"),
     RESELLER_DEVICE(Reseller.class, Device.class, "tc_reseller_device"),
-    SUBRESELLER_CLIENT(Subreseller.class, Client.class, "tc_subreseller_client");
+    SUBRESELLER_CLIENT(Subreseller.class, Client.class, "tc_subreseller_client"),
+    RESELLER_SUBRESELLER(Reseller.class, Subreseller.class, "tc_reseller_subreseller");
 
     private final Class<? extends BaseModel> ownerClass;
     private final Class<? extends BaseModel> propertyClass;
