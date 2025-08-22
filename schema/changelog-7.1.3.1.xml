@@ -1,0 +1,52 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+    <!-- Create tc_client_device pivot table -->
+  <changeSet id="1" author="Walter">
+    <createTable tableName="tc_client_device">
+      <column name="clientid" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="deviceid" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+  </changeSet>
+
+
+  <changeSet id="2" author="Walter">
+    <modifyDataType
+            tableName="tc_client_device"
+            columnName="deviceid"
+            newDataType="INT"/>
+  </changeSet>
+
+  <changeSet id="3" author="Walter">
+    <!-- Foreign key: clientid -> tc_client.id -->
+    <addForeignKeyConstraint
+            baseTableName="tc_client_device"
+            baseColumnNames="clientid"
+            referencedTableName="tc_client"
+            referencedColumnNames="id"
+            constraintName="fk_client_deviceid"
+            onDelete="CASCADE"/>
+
+    <!-- Foreign key: deviceid -> tc_devices.id -->
+    <addForeignKeyConstraint
+            baseTableName="tc_client_device"
+            baseColumnNames="deviceid"
+            referencedTableName="tc_devices"
+            referencedColumnNames="id"
+            constraintName="fk_device_clientid"
+            onDelete="CASCADE"/>
+  </changeSet>
+
+
+
+</databaseChangeLog>
+

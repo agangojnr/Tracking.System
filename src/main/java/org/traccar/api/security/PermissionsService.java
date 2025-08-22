@@ -16,39 +16,71 @@
 package org.traccar.api.security;
 
 import com.google.inject.servlet.RequestScoped;
-import org.traccar.model.BaseModel;
-import org.traccar.model.Calendar;
-import org.traccar.model.Command;
-import org.traccar.model.Device;
-import org.traccar.model.Group;
-import org.traccar.model.GroupedModel;
-import org.traccar.model.ManagedUser;
-import org.traccar.model.Notification;
-import org.traccar.model.Schedulable;
-import org.traccar.model.Server;
-import org.traccar.model.User;
-import org.traccar.model.UserRestrictions;
+import org.traccar.model.*;
+import org.traccar.session.ConnectionManager;
 import org.traccar.storage.Storage;
 import org.traccar.storage.StorageException;
 import org.traccar.storage.query.Columns;
 import org.traccar.storage.query.Condition;
 import org.traccar.storage.query.Request;
-
+import org.traccar.session.cache.CacheManager;
 import jakarta.inject.Inject;
+import org.traccar.helper.LogAction;
+import org.traccar.model.LinkType;
+
 import java.util.Objects;
+
 
 @RequestScoped
 public class PermissionsService {
 
     private final Storage storage;
+    private final CacheManager cacheManager;
+    private final LogAction actionLogger;
+    private final ConnectionManager connectionManager;
 
     private Server server;
     private User user;
+    private LinkType type;
+    private long ownerId;
+    private long propertyId;
 
     @Inject
-    public PermissionsService(Storage storage) {
+    public PermissionsService(Storage storage, CacheManager cacheManager, LogAction actionLogger, ConnectionManager connectionManager) {
+        this.cacheManager = cacheManager;
+        this.actionLogger = actionLogger;
+        this.connectionManager = connectionManager;
         this.storage = storage;
     }
+
+
+
+    public void link(LinkType type, long ownerId, long propertyId) throws Exception {
+        Permission permission = new Permission(
+                type.getOwnerClass(),
+                ownerId,
+                type.getPropertyClass(),
+                propertyId
+        );
+        storage.addPermission(permission);
+        cacheManager.invalidatePermission(true, permission.getOwnerClass(), ownerId, permission.getPropertyClass(), propertyId, true);
+        connectionManager.invalidatePermission(true, permission.getOwnerClass(), ownerId, permission.getPropertyClass(), propertyId, true);
+        //actionLogger.link(type.getTableName(), ownerId, propertyId);
+    }
+
+    public void unlink(LinkType type, long ownerId, long propertyId) throws Exception {
+        Permission permission = new Permission(
+                type.getOwnerClass(),
+                ownerId,
+                type.getPropertyClass(),
+                propertyId
+        );
+        storage.removePermission(permission);
+        cacheManager.invalidatePermission(false, permission.getOwnerClass(), ownerId, permission.getPropertyClass(), propertyId, false);
+        connectionManager.invalidatePermission(false, permission.getOwnerClass(), ownerId,permission.getPropertyClass(), propertyId, false);
+        //actionLogger.unlink(type.getTableName(), ownerId, propertyId);
+    }
+
 
     public Server getServer() throws StorageException {
         if (server == null) {
@@ -222,5 +254,7 @@ public class PermissionsService {
             }
         }
     }
+
+
 
 }

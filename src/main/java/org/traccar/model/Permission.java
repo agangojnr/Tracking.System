@@ -73,6 +73,8 @@ public class Permission {
         data.put(getKey(propertyClass), propertyId);
     }
 
+
+
     public static Class<? extends BaseModel> getKeyClass(String key) {
         return CLASSES.get(key.substring(0, key.length() - 2));
     }

@@ -48,6 +48,9 @@ public class PermissionsResource  extends BaseResource {
     private CacheManager cacheManager;
 
     @Inject
+    private ClientPermissionResource clientPermissionResource;
+
+    @Inject
     private LogAction actionLogger;
 
     @Context
