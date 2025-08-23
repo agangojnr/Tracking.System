@@ -3,7 +3,7 @@ package org.traccar.model;
 
 import org.traccar.storage.StorageName;
 
-@StorageName("tc_reseller")
+@StorageName("tc_resellers")
 public class Reseller extends ExtendedModel {
 
     private String name;
