@@ -1,23 +1,12 @@
-/*
- * Copyright 2015 - 2024 Anton Tananaev (anton@traccar.org)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+
 package org.traccar.api.resource;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.FormParam;
 import jakarta.ws.rs.core.Context;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.traccar.api.BaseObjectResource;
 import org.traccar.api.signature.TokenManager;
 import org.traccar.broadcast.BroadcastService;
@@ -25,11 +14,7 @@ import org.traccar.config.Config;
 import org.traccar.config.Keys;
 import org.traccar.database.MediaManager;
 import org.traccar.helper.LogAction;
-import org.traccar.model.Device;
-import org.traccar.model.DeviceAccumulators;
-import org.traccar.model.Permission;
-import org.traccar.model.Position;
-import org.traccar.model.User;
+import org.traccar.model.*;
 import org.traccar.session.ConnectionManager;
 import org.traccar.session.cache.CacheManager;
 import org.traccar.storage.StorageException;
@@ -59,6 +44,9 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Path("devices")
 @Produces(MediaType.APPLICATION_JSON)
@@ -92,6 +80,8 @@ public class DeviceResource extends BaseObjectResource<Device> {
     @Context
     private HttpServletRequest request;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(DeviceResource.class);
+
     public DeviceResource() {
         super(Device.class);
     }
@@ -99,8 +89,11 @@ public class DeviceResource extends BaseObjectResource<Device> {
     @GET
     public Collection<Device> get(
             @QueryParam("all") boolean all, @QueryParam("userId") long userId,
+            @QueryParam("clientId") long clientId,
             @QueryParam("uniqueId") List<String> uniqueIds,
             @QueryParam("id") List<Long> deviceIds) throws StorageException {
+
+        //LOGGER.info("Received POST request -> clientId: {}", clientId);
 
         if (!uniqueIds.isEmpty() || !deviceIds.isEmpty()) {
 
@@ -129,12 +122,16 @@ public class DeviceResource extends BaseObjectResource<Device> {
                 if (permissionsService.notAdmin(getUserId())) {
                     conditions.add(new Condition.Permission(User.class, getUserId(), baseClass));
                 }
-            } else {
+            } else if(userId >= 0) {
+                //LOGGER.info("Received POST request -> clientId: {}", clientId);
                 if (userId == 0) {
                     conditions.add(new Condition.Permission(User.class, getUserId(), baseClass));
                 } else {
                     permissionsService.checkUser(getUserId(), userId);
                     conditions.add(new Condition.Permission(User.class, userId, baseClass).excludeGroups());
+                }
+                if(clientId >= 0){
+                    conditions.add(new Condition.Permission(Client.class, clientId, Device.class).excludeGroups());
                 }
             }
 
