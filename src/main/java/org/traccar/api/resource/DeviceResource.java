@@ -87,24 +87,23 @@ public class DeviceResource extends BaseObjectResource<Device> {
     }
 
     @GET
-    public Collection<Device> get(
-            @QueryParam("all") boolean all, @QueryParam("userId") long userId,
-            @QueryParam("clientId") long clientId,
-            @QueryParam("uniqueId") List<String> uniqueIds,
-            @QueryParam("id") List<Long> deviceIds) throws StorageException {
-
-        //LOGGER.info("Received POST request -> clientId: {}", clientId);
-
+    public Collection<Device> get(@QueryParam("all") boolean all,
+                                  @QueryParam("userId") long userId,
+                                  @QueryParam("clientId") long clientId,
+                                  @QueryParam("uniqueId") List<String> uniqueIds,
+                                  @QueryParam("id") List<Long> deviceIds) throws StorageException {
         if (!uniqueIds.isEmpty() || !deviceIds.isEmpty()) {
-
             List<Device> result = new LinkedList<>();
             for (String uniqueId : uniqueIds) {
                 result.addAll(storage.getObjects(Device.class, new Request(
                         new Columns.All(),
                         new Condition.And(
                                 new Condition.Equals("uniqueId", uniqueId),
-                                new Condition.Permission(User.class, getUserId(), Device.class)))));
+                                new Condition.Permission(User.class, getUserId(), Device.class)
+                        )
+                )));
             }
+
             for (Long deviceId : deviceIds) {
                 result.addAll(storage.getObjects(Device.class, new Request(
                         new Columns.All(),
@@ -115,31 +114,115 @@ public class DeviceResource extends BaseObjectResource<Device> {
             return result;
 
         } else {
-
             var conditions = new LinkedList<Condition>();
 
             if (all) {
                 if (permissionsService.notAdmin(getUserId())) {
                     conditions.add(new Condition.Permission(User.class, getUserId(), baseClass));
                 }
-            } else if(userId >= 0) {
-                //LOGGER.info("Received POST request -> clientId: {}", clientId);
+            } else {
                 if (userId == 0) {
                     conditions.add(new Condition.Permission(User.class, getUserId(), baseClass));
                 } else {
                     permissionsService.checkUser(getUserId(), userId);
                     conditions.add(new Condition.Permission(User.class, userId, baseClass).excludeGroups());
                 }
-                if(clientId >= 0){
+
+              if(clientId > 0){
+                   LOGGER.info("Received POST request -> clientId: {}", clientId);
                     conditions.add(new Condition.Permission(Client.class, clientId, Device.class).excludeGroups());
                 }
             }
 
+
+
+
+
             return storage.getObjects(baseClass, new Request(
                     new Columns.All(), Condition.merge(conditions), new Order("name")));
-
         }
     }
+
+
+
+//    @GET
+//    //@Path("query")
+//    public Collection<Device> get(
+//            @QueryParam("all") boolean all, @QueryParam("userId") long userId,
+//            @QueryParam("clientId") long clientId,
+//            @QueryParam("uniqueId") List<String> uniqueIds,
+//            @QueryParam("id") List<Long> deviceIds) throws StorageException {
+
+        //LOGGER.info("Received POST request -> clientId: {}", clientId);
+//
+//        if (!uniqueIds.isEmpty() || !deviceIds.isEmpty()) {
+//
+//            List<Device> result = new LinkedList<>();
+//            for (String uniqueId : uniqueIds) {
+//                result.addAll(storage.getObjects(Device.class, new Request(
+//                        new Columns.All(),
+//                        new Condition.And(
+//                                new Condition.Equals("uniqueId", uniqueId),
+//                                new Condition.Permission(User.class, getUserId(), Device.class)))));
+//            }
+//            for (Long deviceId : deviceIds) {
+//                result.addAll(storage.getObjects(Device.class, new Request(
+//                        new Columns.All(),
+//                        new Condition.And(
+//                                new Condition.Equals("id", deviceId),
+//                                new Condition.Permission(User.class, getUserId(), Device.class)))));
+//            }
+//            return result;
+//
+//        } else {
+//
+//            var conditions = new LinkedList<Condition>();
+//
+//            if (all) {
+//                if (permissionsService.notAdmin(getUserId())) {
+//                    conditions.add(new Condition.Permission(User.class, getUserId(), baseClass));
+//                }
+//            } else if(userId > 0) {
+//                LOGGER.info("Received POST request Userid query param, {}", userId);
+//                    permissionsService.checkUser(getUserId(), userId);
+//                    conditions.add(new Condition.Permission(User.class, userId, Device.class).excludeGroups());
+//            }else{
+//                conditions.add(new Condition.Permission(User.class, getUserId(), baseClass).excludeGroups());
+//                //LOGGER.info("Received POST request Userid query param, {}", getUserId());
+//            }
+//
+//            if(clientId >= 0){
+//                conditions.add(new Condition.Permission(Client.class, clientId, Device.class).excludeGroups());
+//            }
+
+//
+//        if (!uniqueIds.isEmpty() || !deviceIds.isEmpty()) {
+//
+//            List<Device> result = new LinkedList<>();
+//
+//
+//            if (permissionsService.notAdmin(getUserId())) {
+//                conditions.add(new Condition.Permission(User.class, getUserId(), baseClass));
+//            }
+//        } else {
+//        } else if(userId >= 0) {
+//            //LOGGER.info("Received POST request -> clientId: {}", clientId);
+//            if (userId == 0) {
+//                conditions.add(new Condition.Permission(User.class, getUserId(), baseClass));
+//            } else {
+//                permissionsService.checkUser(getUserId(), userId);
+//                conditions.add(new Condition.Permission(User.class, userId, baseClass).excludeGroups());
+//            }
+//            if(clientId >= 0){
+//                conditions.add(new Condition.Permission(Client.class, clientId, Device.class).excludeGroups());
+//            }
+//        }
+//
+//            return storage.getObjects(baseClass, new Request(
+//                    new Columns.All(), Condition.merge(conditions), new Order("name")));
+//
+//        }
+//    }
 
     @Path("{id}/accumulators")
     @PUT

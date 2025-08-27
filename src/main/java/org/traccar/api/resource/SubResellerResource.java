@@ -4,7 +4,6 @@ package org.traccar.api.resource;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import org.traccar.api.ExtendedObjectResource;
-import org.traccar.model.Client;
 import org.traccar.model.Reseller;
 import org.traccar.model.Subreseller;
 import org.traccar.model.User;
@@ -25,7 +24,6 @@ public class SubResellerResource extends ExtendedObjectResource<Subreseller> {
     public SubResellerResource() {
         super(Subreseller.class, "name");
     }
-
 
     @GET
     @Path("query")

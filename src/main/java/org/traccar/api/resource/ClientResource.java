@@ -29,7 +29,6 @@ public class ClientResource extends ExtendedObjectResource<Client> {
 
     public ClientResource() {
         super(Client.class, "name");
-        LOGGER.info("Received POST request -> subresellerId:");
     }
 
 
