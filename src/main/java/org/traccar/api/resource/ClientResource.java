@@ -1,12 +1,20 @@
 
 package org.traccar.api.resource;
 
+import jakarta.inject.Inject;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import org.eclipse.jetty.websocket.core.server.internal.UpgradeHttpServletRequest;
 import org.traccar.api.ExtendedObjectResource;
-import org.traccar.model.Client;
-import org.traccar.model.Subreseller;
-import org.traccar.model.User;
+import org.traccar.api.security.PermissionsService;
+import org.traccar.api.security.ServiceAccountUser;
+import org.traccar.helper.LogAction;
+import org.traccar.model.*;
+import org.traccar.session.ConnectionManager;
+import org.traccar.session.cache.CacheManager;
 import org.traccar.storage.StorageException;
 import org.traccar.storage.query.Columns;
 import org.traccar.storage.query.Condition;
@@ -24,6 +32,20 @@ import org.slf4j.LoggerFactory;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class ClientResource extends ExtendedObjectResource<Client> {
+
+
+    @Inject
+    private CacheManager cacheManager;
+
+    @Inject
+    private LogAction actionLogger;
+
+    @Inject
+    private ConnectionManager connectionManager;
+
+    @Context
+    private HttpServletRequest request;
+
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ClientResource.class);
 
@@ -58,4 +80,40 @@ public class ClientResource extends ExtendedObjectResource<Client> {
         ));
 
     }
+
+
+    @Path("create")
+    @POST
+    public Response add(Client entity) throws Exception {
+        permissionsService.checkEdit(getUserId(), entity, true, false);
+
+        if(validate(entity)){
+            entity.setId(storage.addObject(entity, new Request(new Columns.Exclude("id"))));
+            actionLogger.create(request, getUserId(), entity);
+
+            if (getUserId() != ServiceAccountUser.ID) {
+                storage.addPermission(new Permission(User.class, getUserId(), baseClass, entity.getId()));
+                cacheManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
+                connectionManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
+                actionLogger.link(request, getUserId(), User.class, getUserId(), baseClass, entity.getId());
+            }
+
+            return Response.ok(entity).build();
+        }else{
+            return Response.status(Response.Status.FOUND).build();
+        }
+    }
+
+    public boolean validate(Client entity) throws StorageException {
+        String name = entity.getName();
+
+        Client client = storage.getObject(Client.class, new Request(
+                new Columns.All(),
+                new Condition.And(
+                        new Condition.Equals("name", name),
+                        new Condition.Permission(User.class, getUserId(), Client.class))));
+
+        return client == null;
+    }
+
 }

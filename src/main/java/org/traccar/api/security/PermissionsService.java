@@ -16,6 +16,7 @@
 package org.traccar.api.security;
 
 import com.google.inject.servlet.RequestScoped;
+import org.apache.poi.ss.formula.functions.T;
 import org.traccar.model.*;
 import org.traccar.session.ConnectionManager;
 import org.traccar.storage.Storage;
@@ -80,7 +81,6 @@ public class PermissionsService {
         connectionManager.invalidatePermission(false, permission.getOwnerClass(), ownerId,permission.getPropertyClass(), propertyId, false);
         //actionLogger.unlink(type.getTableName(), ownerId, propertyId);
     }
-
 
     public Server getServer() throws StorageException {
         if (server == null) {

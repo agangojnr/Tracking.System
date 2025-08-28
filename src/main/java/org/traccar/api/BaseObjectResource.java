@@ -3,6 +3,8 @@ package org.traccar.api;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.core.Context;
+import org.traccar.api.resource.ClientResource;
+import org.traccar.api.security.PermissionsService;
 import org.traccar.api.security.ServiceAccountUser;
 import org.traccar.model.ObjectOperation;
 import org.traccar.helper.LogAction;
@@ -26,6 +28,9 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.core.Response;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public abstract class BaseObjectResource<T extends BaseModel> extends BaseResource {
 
     @Inject
@@ -37,6 +42,8 @@ public abstract class BaseObjectResource<T extends BaseModel> extends BaseResour
     @Inject
     private LogAction actionLogger;
 
+
+
     @Context
     private HttpServletRequest request;
 
@@ -45,6 +52,8 @@ public abstract class BaseObjectResource<T extends BaseModel> extends BaseResour
     public BaseObjectResource(Class<T> baseClass) {
         this.baseClass = baseClass;
     }
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ClientResource.class);
 
     @Path("{id}")
     @GET
