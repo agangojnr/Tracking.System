@@ -1,12 +1,18 @@
 
 package org.traccar.api.resource;
 
+import jakarta.inject.Inject;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import org.traccar.api.ExtendedObjectResource;
-import org.traccar.model.Reseller;
-import org.traccar.model.Subreseller;
-import org.traccar.model.User;
+import org.traccar.api.security.ServiceAccountUser;
+import org.traccar.helper.LogAction;
+import org.traccar.model.*;
+import org.traccar.session.ConnectionManager;
+import org.traccar.session.cache.CacheManager;
 import org.traccar.storage.StorageException;
 import org.traccar.storage.query.Columns;
 import org.traccar.storage.query.Condition;
@@ -20,6 +26,20 @@ import java.util.LinkedList;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class SubResellerResource extends ExtendedObjectResource<Subreseller> {
+
+    @Inject
+    private CacheManager cacheManager;
+
+    @Inject
+    private LogAction actionLogger;
+
+    @Inject
+    private ConnectionManager connectionManager;
+
+    @Context
+    private HttpServletRequest request;
+
+
 
     public SubResellerResource() {
         super(Subreseller.class, "name");
@@ -47,5 +67,41 @@ public class SubResellerResource extends ExtendedObjectResource<Subreseller> {
                 new Columns.All(), Condition.merge(conditions), new Order("name")
         ));
     }
+
+
+    @Path("create")
+    @POST
+    public Response add(Subreseller entity) throws Exception {
+        permissionsService.checkEdit(getUserId(), entity, true, false);
+
+        if(validate(entity)){
+            entity.setId(storage.addObject(entity, new Request(new Columns.Exclude("id"))));
+            actionLogger.create(request, getUserId(), entity);
+
+            if (getUserId() != ServiceAccountUser.ID) {
+                storage.addPermission(new Permission(User.class, getUserId(), baseClass, entity.getId()));
+                cacheManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
+                connectionManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
+                actionLogger.link(request, getUserId(), User.class, getUserId(), baseClass, entity.getId());
+            }
+
+            return Response.ok(entity).build();
+        }else{
+            return Response.status(Response.Status.FOUND).build();
+        }
+    }
+
+    public boolean validate(Subreseller entity) throws StorageException {
+        String name = entity.getName();
+
+        Subreseller subreseller = storage.getObject(Subreseller.class, new Request(
+                new Columns.All(),
+                new Condition.And(
+                        new Condition.Equals("name", name),
+                        new Condition.Permission(User.class, getUserId(), Subreseller.class))));
+
+        return subreseller == null;
+    }
+
 
 }
