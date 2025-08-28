@@ -91,6 +91,25 @@ public class SubResellerResource extends ExtendedObjectResource<Subreseller> {
         }
     }
 
+
+    @Path("update/{id}")
+    @PUT
+    public Response update(Subreseller entity) throws Exception {
+
+        if(validate(entity)){
+            storage.updateObject(entity, new Request(
+                    new Columns.Exclude("id"),
+                    new Condition.Equals("id", entity.getId())));
+
+            cacheManager.invalidateObject(true, entity.getClass(), entity.getId(), ObjectOperation.UPDATE);
+            actionLogger.edit(request, getUserId(), entity);
+
+            return Response.ok(entity).build();
+        }else{
+            return Response.status(Response.Status.FOUND).build();
+        }
+    }
+
     public boolean validate(Subreseller entity) throws StorageException {
         String name = entity.getName();
 

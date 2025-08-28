@@ -18,10 +18,7 @@ package org.traccar.api.resource;
 
 import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -77,6 +74,27 @@ public class ResellerResource extends ExtendedObjectResource<Reseller> {
                 connectionManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
                 actionLogger.link(request, getUserId(), User.class, getUserId(), baseClass, entity.getId());
             }
+
+            return Response.ok(entity).build();
+        }else{
+            return Response.status(Response.Status.FOUND).build();
+        }
+    }
+
+
+    @Path("update/{id}")
+    @PUT
+    public Response update(Reseller entity) throws Exception {
+        //permissionsService.checkPermission(baseClass, getUserId(), entity.getId());
+        //permissionsService.checkEdit(getUserId(), entity, false, false);
+
+        if(validate(entity)){
+            storage.updateObject(entity, new Request(
+                    new Columns.Exclude("id"),
+                    new Condition.Equals("id", entity.getId())));
+
+            cacheManager.invalidateObject(true, entity.getClass(), entity.getId(), ObjectOperation.UPDATE);
+            actionLogger.edit(request, getUserId(), entity);
 
             return Response.ok(entity).build();
         }else{
