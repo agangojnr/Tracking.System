@@ -19,6 +19,7 @@ public enum LinkType {
         this.ownerClass = ownerClass;
         this.propertyClass = propertyClass;
         this.tableName = tableName;
+
     }
 
     public Class<? extends BaseModel> getOwnerClass() {
@@ -32,4 +33,8 @@ public enum LinkType {
     public String getTableName() {
         return tableName;
     }
+
+
+
+
     }

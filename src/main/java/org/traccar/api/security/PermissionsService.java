@@ -29,6 +29,8 @@ import jakarta.inject.Inject;
 import org.traccar.helper.LogAction;
 import org.traccar.model.LinkType;
 
+import java.beans.Introspector;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -43,8 +45,7 @@ public class PermissionsService {
     private Server server;
     private User user;
     private LinkType type;
-    private long ownerId;
-    private long propertyId;
+
 
     @Inject
     public PermissionsService(Storage storage, CacheManager cacheManager, LogAction actionLogger, ConnectionManager connectionManager) {
@@ -55,7 +56,6 @@ public class PermissionsService {
     }
 
 
-
     public void link(LinkType type, long ownerId, long propertyId) throws Exception {
         Permission permission = new Permission(
                 type.getOwnerClass(),
@@ -63,11 +63,34 @@ public class PermissionsService {
                 type.getPropertyClass(),
                 propertyId
         );
-        storage.addPermission(permission);
-        cacheManager.invalidatePermission(true, permission.getOwnerClass(), ownerId, permission.getPropertyClass(), propertyId, true);
-        connectionManager.invalidatePermission(true, permission.getOwnerClass(), ownerId, permission.getPropertyClass(), propertyId, true);
-        //actionLogger.link(type.getTableName(), ownerId, propertyId);
+
+
+        // Determine the correct link table name dynamically
+        String storageName = permission.getStorageName();
+
+        // Check if this link already exists in the link table
+        Object existing = null;
+
+//                storage.getObject(storageName, new Request(
+//                new Columns.All(),
+//                new Condition.And(
+//                        new Condition.Equals(type.getOwnerIdColumn(), ownerId),
+//                        new Condition.Equals(type.getPropertyIdColumn(), propertyId)
+//                )
+//        ));
+
+        if (existing == null) {
+            // Only insert if no record exists
+            storage.addPermission(permission);
+
+            cacheManager.invalidatePermission(true, permission.getOwnerClass(), ownerId,
+                    permission.getPropertyClass(), propertyId, true);
+            connectionManager.invalidatePermission(true, permission.getOwnerClass(), ownerId,
+                    permission.getPropertyClass(), propertyId, true);
+            // actionLogger.link(type.getTableName(), ownerId, propertyId);
+        }
     }
+
 
     public void unlink(LinkType type, long ownerId, long propertyId) throws Exception {
         Permission permission = new Permission(

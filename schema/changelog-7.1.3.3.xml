@@ -1,0 +1,51 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+  <changeSet id="1" author="walter">
+    <addUniqueConstraint
+            tableName="tc_clients"
+            columnNames="name"
+            constraintName="uc_tc_clients_name"/>
+  </changeSet>
+
+  <changeSet id="2" author="walter">
+    <addUniqueConstraint
+            tableName="tc_subresellers"
+            columnNames="name"
+            constraintName="uc_tc_subresellers_name"/>
+  </changeSet>
+
+  <changeSet id="3" author="walter">
+    <addUniqueConstraint
+            tableName="tc_resellers"
+            columnNames="name"
+            constraintName="uc_tc_resellers_name"/>
+  </changeSet>
+
+  <changeSet id="4" author="walter">
+    <addUniqueConstraint
+            tableName="tc_client_device"
+            columnNames="deviceid"
+            constraintName="uc_tc_client_device_deviceid"/>
+  </changeSet>
+
+  <changeSet id="5" author="walter">
+    <addUniqueConstraint
+            tableName="tc_subreseller_client"
+            columnNames="clientid"
+            constraintName="uc_tc_subreseller_client_clientid"/>
+  </changeSet>
+
+  <changeSet id="6" author="walter">
+    <addUniqueConstraint
+            tableName="tc_reseller_subreseller"
+            columnNames="subresellerid"
+            constraintName="uc_tc_reseller_subreseller_subresellerid"/>
+  </changeSet>
+
+</databaseChangeLog>
+
