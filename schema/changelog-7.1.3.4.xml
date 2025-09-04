@@ -1,0 +1,310 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+  <!-- Create tc_resellers table -->
+  <changeSet id="1" author="Walter">
+    <createTable tableName="tc_resellers">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="name" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="attributes" type="VARCHAR(4000)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <!-- Create tc_user_reseller pivot table -->
+  <changeSet id="2" author="Walter">
+    <createTable tableName="tc_user_reseller">
+      <column name="userid" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="resellerid" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="3" author="Walter">
+    <!-- Foreign key: userid -> tc_users.id -->
+    <addForeignKeyConstraint
+            baseTableName="tc_user_reseller"
+            baseColumnNames="userid"
+            referencedTableName="tc_users"
+            referencedColumnNames="id"
+            constraintName="fk_user_resellerid"
+            onDelete="CASCADE"/>
+
+    <!-- Foreign key: resellerid -> tc_reseller.id -->
+    <addForeignKeyConstraint
+            baseTableName="tc_user_reseller"
+            baseColumnNames="resellerid"
+            referencedTableName="tc_resellers"
+            referencedColumnNames="id"
+            constraintName="fk_reseller_userid"
+            onDelete="CASCADE"/>
+  </changeSet>
+
+  <!-- Create tc_subresellers table -->
+  <changeSet id="4" author="Walter">
+    <createTable tableName="tc_subresellers">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="name" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="attributes" type="VARCHAR(4000)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <!-- Create tc_user_subreseller pivot table -->
+  <changeSet id="5" author="Walter">
+    <createTable tableName="tc_user_subreseller">
+      <column name="userid" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="subresellerid" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="6" author="Walter">
+    <!-- Foreign key: userid -> tc_users.id -->
+    <addForeignKeyConstraint
+            baseTableName="tc_user_subreseller"
+            baseColumnNames="userid"
+            referencedTableName="tc_users"
+            referencedColumnNames="id"
+            constraintName="fk_user_subresellerid"
+            onDelete="CASCADE"/>
+
+    <!-- Foreign key: subresellerid -> tc_subreseller.id -->
+    <addForeignKeyConstraint
+            baseTableName="tc_user_subreseller"
+            baseColumnNames="subresellerid"
+            referencedTableName="tc_subresellers"
+            referencedColumnNames="id"
+            constraintName="fk_subreseller_userid"
+            onDelete="CASCADE"/>
+  </changeSet>
+
+  <changeSet id="7" author="Walter">
+    <createTable tableName="tc_reseller_subreseller">
+      <column name="resellerid" type="BIGINT" defaultValueNumeric="1">
+        <constraints nullable="false"/>
+      </column>
+      <column name="subresellerid" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint
+            baseTableName="tc_reseller_subreseller"
+            baseColumnNames="resellerid"
+            referencedTableName="tc_resellers"
+            referencedColumnNames="id"
+            constraintName="fk_reseller_subreseller_reseller"/>
+    <addForeignKeyConstraint
+            baseTableName="tc_reseller_subreseller"
+            baseColumnNames="subresellerid"
+            referencedTableName="tc_subresellers"
+            referencedColumnNames="id"
+            constraintName="fk_reseller_subreseller_subreseller"/>
+  </changeSet>
+
+  <!-- Create tc_clients table -->
+  <changeSet id="8" author="Walter">
+    <createTable tableName="tc_clients">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="name" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="attributes" type="VARCHAR(4000)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <!-- Create tc_user_client pivot table -->
+  <changeSet id="9" author="Walter">
+    <createTable tableName="tc_user_client">
+      <column name="userid" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="clientid" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="10" author="Walter">
+    <!-- Foreign key: userid -> tc_users.id -->
+    <addForeignKeyConstraint
+            baseTableName="tc_user_client"
+            baseColumnNames="userid"
+            referencedTableName="tc_users"
+            referencedColumnNames="id"
+            constraintName="fk_user_clientid"
+            onDelete="CASCADE"/>
+
+    <!-- Foreign key: clientid -> tc_client.id -->
+    <addForeignKeyConstraint
+            baseTableName="tc_user_client"
+            baseColumnNames="clientid"
+            referencedTableName="tc_clients"
+            referencedColumnNames="id"
+            constraintName="fk_client_userid"
+            onDelete="CASCADE"/>
+  </changeSet>
+
+  <changeSet id="11" author="Walter">
+    <createTable tableName="tc_subreseller_client">
+      <column name="subresellerid" type="BIGINT" defaultValueNumeric="1">
+        <constraints nullable="false"/>
+      </column>
+      <column name="clientid" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint
+            baseTableName="tc_subreseller_client"
+            baseColumnNames="subresellerid"
+            referencedTableName="tc_subresellers"
+            referencedColumnNames="id"
+            constraintName="fk_subreseller_client_subreseller"/>
+
+<!--    <addForeignKeyConstraint-->
+<!--            baseTableName="tc_subreseller_client"-->
+<!--            baseColumnNames="clientid"-->
+<!--            referencedTableName="tc_clients"-->
+<!--            referencedColumnNames="id"-->
+<!--            constraintName="fk_subreseller_client_client"/>-->
+  </changeSet>
+
+  <!-- Create tc_client_device pivot table -->
+  <changeSet id="12" author="Walter">
+    <createTable tableName="tc_client_device">
+      <column name="clientid" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="deviceid" type="INT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="13" author="Walter">
+    <!-- Foreign key: clientid -> tc_client.id -->
+<!--    <addForeignKeyConstraint-->
+<!--            baseTableName="tc_client_device"-->
+<!--            baseColumnNames="clientid"-->
+<!--            referencedTableName="tc_clients"-->
+<!--            referencedColumnNames="id"-->
+<!--            constraintName="fk_client_deviceid"-->
+<!--            onDelete="CASCADE"/>-->
+    <!-- Foreign key: deviceid -> tc_devices.id -->
+    <addForeignKeyConstraint
+            baseTableName="tc_client_device"
+            baseColumnNames="deviceid"
+            referencedTableName="tc_devices"
+            referencedColumnNames="id"
+            constraintName="fk_device_clientid"
+            onDelete="CASCADE"/>
+  </changeSet>
+
+<!--  <changeSet id="14" author="Walter">-->
+<!--    <addForeignKeyConstraint-->
+<!--            baseTableName="tc_user_client"-->
+<!--            baseColumnNames="clientid"-->
+<!--            referencedTableName="tc_clients"-->
+<!--            referencedColumnNames="id"-->
+<!--            constraintName="fk_client_userid"-->
+<!--            onDelete="CASCADE"/>-->
+<!--  </changeSet>-->
+
+  <changeSet id="15" author="Walter">
+    <addForeignKeyConstraint
+            baseTableName="tc_subreseller_client"
+            baseColumnNames="clientid"
+            referencedTableName="tc_clients"
+            referencedColumnNames="id"
+            constraintName="fk_subreseller_client_client"/>
+  </changeSet>
+
+  <changeSet id="16" author="Walter">
+    <!-- Foreign key: clientid -> tc_client.id -->
+    <addForeignKeyConstraint
+            baseTableName="tc_client_device"
+            baseColumnNames="clientid"
+            referencedTableName="tc_clients"
+            referencedColumnNames="id"
+            constraintName="fk_client_deviceid"
+            onDelete="CASCADE"/>
+
+    <!-- Foreign key: deviceid -> tc_devices.id -->
+    <addForeignKeyConstraint
+            baseTableName="tc_client_device"
+            baseColumnNames="deviceid"
+            referencedTableName="tc_devices"
+            referencedColumnNames="id"
+            constraintName="fk_device_clientid"
+            onDelete="CASCADE"/>
+  </changeSet>
+
+  <changeSet id="17" author="walter">
+    <addUniqueConstraint
+            tableName="tc_clients"
+            columnNames="name"
+            constraintName="uc_tc_clients_name"/>
+  </changeSet>
+
+  <changeSet id="18" author="walter">
+    <addUniqueConstraint
+            tableName="tc_subresellers"
+            columnNames="name"
+            constraintName="uc_tc_subresellers_name"/>
+  </changeSet>
+
+  <changeSet id="19" author="walter">
+    <addUniqueConstraint
+            tableName="tc_resellers"
+            columnNames="name"
+            constraintName="uc_tc_resellers_name"/>
+  </changeSet>
+
+  <changeSet id="20" author="walter">
+    <addUniqueConstraint
+            tableName="tc_client_device"
+            columnNames="deviceid"
+            constraintName="uc_tc_client_device_deviceid"/>
+  </changeSet>
+
+  <changeSet id="21" author="walter">
+    <addUniqueConstraint
+            tableName="tc_subreseller_client"
+            columnNames="clientid"
+            constraintName="uc_tc_subreseller_client_clientid"/>
+  </changeSet>
+
+  <changeSet id="22" author="walter">
+    <addUniqueConstraint
+            tableName="tc_reseller_subreseller"
+            columnNames="subresellerid"
+            constraintName="uc_tc_reseller_subreseller_subresellerid"/>
+  </changeSet>
+</databaseChangeLog>
+
