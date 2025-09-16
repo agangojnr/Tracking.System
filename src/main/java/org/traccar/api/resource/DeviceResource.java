@@ -100,7 +100,6 @@ public class DeviceResource extends BaseObjectResource<Device> {
                                   @QueryParam("uniqueId") List<String> uniqueIds,
                                   @QueryParam("id") List<Long> deviceIds) throws StorageException {
 
-
         if (!uniqueIds.isEmpty() || !deviceIds.isEmpty()) {
             List<Device> result = new LinkedList<>();
             for (String uniqueId : uniqueIds) {

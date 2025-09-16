@@ -8,6 +8,7 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.traccar.api.ExtendedObjectResource;
+import org.traccar.api.security.PermissionsService;
 import org.traccar.api.security.ServiceAccountUser;
 import org.traccar.helper.LogAction;
 import org.traccar.model.*;
@@ -39,7 +40,8 @@ public class SubResellerResource extends ExtendedObjectResource<Subreseller> {
     @Context
     private HttpServletRequest request;
 
-
+    @Inject
+    private PermissionsService permissionsService;
 
     public SubResellerResource() {
         super(Subreseller.class, "name");
@@ -69,13 +71,16 @@ public class SubResellerResource extends ExtendedObjectResource<Subreseller> {
     }
 
 
-    @Path("create")
+    @Path("create/{resellerId}")
     @POST
-    public Response add(Subreseller entity) throws Exception {
+    public Response add(Subreseller entity, @PathParam("resellerId") Long resellerId) throws Exception {
         permissionsService.checkEdit(getUserId(), entity, true, false);
 
         if(validate(entity)){
-            entity.setId(storage.addObject(entity, new Request(new Columns.Exclude("id"))));
+            entity.setId(0);
+            Long subresellerId = storage.addObject(entity, new Request(new Columns.Exclude("id")));
+            permissionsService.link(LinkType.RESELLER_SUBRESELLER, resellerId, subresellerId);
+            entity.setId(subresellerId);
             actionLogger.create(request, getUserId(), entity);
 
             if (getUserId() != ServiceAccountUser.ID) {

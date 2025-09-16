@@ -46,6 +46,9 @@ public class ClientResource extends ExtendedObjectResource<Client> {
     @Context
     private HttpServletRequest request;
 
+    @Inject
+    private PermissionsService permissionsService;
+
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ClientResource.class);
 
@@ -82,13 +85,16 @@ public class ClientResource extends ExtendedObjectResource<Client> {
     }
 
 
-    @Path("create")
+    @Path("create/{subresellerId}")
     @POST
-    public Response add(Client entity) throws Exception {
+    public Response add(Client entity, @PathParam("subresellerId") Long subresellerId) throws Exception {
         permissionsService.checkEdit(getUserId(), entity, true, false);
 
         if(validate(entity)){
-            entity.setId(storage.addObject(entity, new Request(new Columns.Exclude("id"))));
+            entity.setId(0);
+            Long clientId = storage.addObject(entity, new Request(new Columns.Exclude("id")));
+            permissionsService.link(LinkType.SUBRESELLER_CLIENT, subresellerId, clientId);
+            entity.setId(clientId);
             actionLogger.create(request, getUserId(), entity);
 
             if (getUserId() != ServiceAccountUser.ID) {
