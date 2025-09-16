@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.traccar.api.BaseObjectResource;
 import org.traccar.api.security.PermissionsService;
+import org.traccar.api.security.ServiceAccountUser;
 import org.traccar.api.signature.TokenManager;
 import org.traccar.broadcast.BroadcastService;
 import org.traccar.config.Config;
@@ -81,6 +82,9 @@ public class DeviceResource extends BaseObjectResource<Device> {
     @Context
     private HttpServletRequest request;
 
+    @Inject
+    private PermissionsService permissionsService;
+
 
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DeviceResource.class);
@@ -95,6 +99,8 @@ public class DeviceResource extends BaseObjectResource<Device> {
                                   @QueryParam("clientId") long clientId,
                                   @QueryParam("uniqueId") List<String> uniqueIds,
                                   @QueryParam("id") List<Long> deviceIds) throws StorageException {
+
+
         if (!uniqueIds.isEmpty() || !deviceIds.isEmpty()) {
             List<Device> result = new LinkedList<>();
             for (String uniqueId : uniqueIds) {
@@ -140,6 +146,37 @@ public class DeviceResource extends BaseObjectResource<Device> {
             return storage.getObjects(baseClass, new Request(
                     new Columns.All(), Condition.merge(conditions), new Order("name")));
         }
+    }
+
+
+    @Path("create/{clientId}")
+    @POST
+    public Response add(Device entity,@PathParam("clientId") Long clientId) throws Exception {
+
+        if (getUserId() != ServiceAccountUser.ID) {
+            entity.setId(0);
+            long deviceId = storage.addObject(entity, new Request(new Columns.Exclude("id")));
+            entity.setId(deviceId);
+            permissionsService.link(LinkType.CLIENT_DEVICE, clientId, deviceId);
+            cacheManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
+            connectionManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
+            actionLogger.create(request, getUserId(), entity);
+        }
+        //LOGGER.info("Inserted entity with ID: {}", deviceId);
+
+        /*permissionsService.checkEdit(getUserId(), entity, true, false);
+
+        entity.setId(storage.addObject(entity, new Request(new Columns.Exclude("id"))));
+        actionLogger.create(request, getUserId(), entity);
+
+        if (getUserId() != ServiceAccountUser.ID) {
+            storage.addPermission(new Permission(User.class, getUserId(), baseClass, entity.getId()));
+            cacheManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
+            connectionManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
+            actionLogger.link(request, getUserId(), User.class, getUserId(), baseClass, entity.getId());
+        }*/
+
+        return Response.ok(entity).build();
     }
 
 
@@ -273,5 +310,7 @@ public class DeviceResource extends BaseObjectResource<Device> {
 
         return tokenManager.generateToken(share.getId(), expiration);
     }
+
+
 
 }

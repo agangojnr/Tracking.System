@@ -97,7 +97,6 @@ public class ClientResource extends ExtendedObjectResource<Client> {
                 connectionManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
                 actionLogger.link(request, getUserId(), User.class, getUserId(), baseClass, entity.getId());
             }
-
             return Response.ok(entity).build();
         }else{
             return Response.status(Response.Status.FOUND).build();
