@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class ClientResource extends ExtendedObjectResource<Client> {
-
+    //public class ExtendedObjectResource<T> extends BaseObjectResource<T> {
 
     @Inject
     private CacheManager cacheManager;

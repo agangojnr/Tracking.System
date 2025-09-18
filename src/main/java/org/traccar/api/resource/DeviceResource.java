@@ -8,6 +8,7 @@ import jakarta.ws.rs.core.Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.traccar.api.BaseObjectResource;
+import org.traccar.api.ExtendedObjectResource;
 import org.traccar.api.security.PermissionsService;
 import org.traccar.api.security.ServiceAccountUser;
 import org.traccar.api.signature.TokenManager;
@@ -152,30 +153,49 @@ public class DeviceResource extends BaseObjectResource<Device> {
     @POST
     public Response add(Device entity,@PathParam("clientId") Long clientId) throws Exception {
 
-        if (getUserId() != ServiceAccountUser.ID) {
-            entity.setId(0);
-            long deviceId = storage.addObject(entity, new Request(new Columns.Exclude("id")));
-            entity.setId(deviceId);
-            permissionsService.link(LinkType.CLIENT_DEVICE, clientId, deviceId);
-            cacheManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
-            connectionManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
+        if(validate(entity)){
+            if (getUserId() != ServiceAccountUser.ID) {
+                entity.setId(0);
+                long deviceId = storage.addObject(entity, new Request(new Columns.Exclude("id")));
+                entity.setId(deviceId);
+                storage.addPermission(new Permission(User.class, getUserId(), baseClass, entity.getId()));
+                permissionsService.link(LinkType.CLIENT_DEVICE, clientId, deviceId);
+                cacheManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
+                connectionManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
+                actionLogger.create(request, getUserId(), entity);
+            }
+            //LOGGER.info("Inserted entity with ID: {}", deviceId);
+
+            /*permissionsService.checkEdit(getUserId(), entity, true, false);
+
+            entity.setId(storage.addObject(entity, new Request(new Columns.Exclude("id"))));
             actionLogger.create(request, getUserId(), entity);
+            actionLogger.create(request, getUserId(), entity);
+
+            if (getUserId() != ServiceAccountUser.ID) {
+                storage.addPermission(new Permission(User.class, getUserId(), baseClass, entity.getId()));
+                cacheManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
+                connectionManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
+                actionLogger.link(request, getUserId(), User.class, getUserId(), baseClass, entity.getId());
+            }*/
+
+            return Response.ok(entity).build();
+        }else{
+            return Response.status(Response.Status.FOUND).build();
         }
-        //LOGGER.info("Inserted entity with ID: {}", deviceId);
+    }
 
-        /*permissionsService.checkEdit(getUserId(), entity, true, false);
 
-        entity.setId(storage.addObject(entity, new Request(new Columns.Exclude("id"))));
-        actionLogger.create(request, getUserId(), entity);
+    public boolean validate(Device entity) throws StorageException {
+        String name = entity.getName();
 
-        if (getUserId() != ServiceAccountUser.ID) {
-            storage.addPermission(new Permission(User.class, getUserId(), baseClass, entity.getId()));
-            cacheManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
-            connectionManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
-            actionLogger.link(request, getUserId(), User.class, getUserId(), baseClass, entity.getId());
-        }*/
+        Device device = storage.getObject(Device.class, new Request(
+                new Columns.All(),
+                new Condition.And(
+                        new Condition.Equals("name", name),
+                        new Condition.Permission(User.class, getUserId(), Device.class))));
 
-        return Response.ok(entity).build();
+        return device == null;
     }
 
 
