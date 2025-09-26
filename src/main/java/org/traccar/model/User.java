@@ -81,6 +81,8 @@ public class User extends ExtendedModel implements UserRestrictions, Disableable
 
     private boolean administrator;
 
+
+
     @QueryIgnore
     @JsonIgnore
     public boolean getManager() {

@@ -6,6 +6,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.core.Context;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.traccar.api.BaseObjectResource;
 import org.traccar.config.Config;
 import org.traccar.config.Keys;
@@ -52,6 +54,8 @@ public class UserResource extends BaseObjectResource<User> {
     public UserResource() {
         super(User.class);
     }
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(User.class);
 
     @GET
     public Collection<User> get(
@@ -115,6 +119,14 @@ public class UserResource extends BaseObjectResource<User> {
             actionLogger.link(request, getUserId(), User.class, getUserId(), ManagedUser.class, entity.getId());
         }
         return Response.ok(entity).build();
+    }
+
+
+    @Path("create/{level}/{id}")
+    @POST
+    public Response add(@PathParam("level") String level, @PathParam("id") Long id){
+        LOGGER.info("Something happening. Level: {} and ID: {}", level, id);
+        return null;
     }
 
     @Path("{id}")

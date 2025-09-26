@@ -33,8 +33,11 @@ import org.traccar.session.cache.CacheManager;
 import org.traccar.storage.StorageException;
 import org.traccar.storage.query.Columns;
 import org.traccar.storage.query.Condition;
+import org.traccar.storage.query.Order;
 import org.traccar.storage.query.Request;
 
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 @Path("groups")
@@ -127,6 +130,30 @@ public class GroupResource extends SimpleObjectResource<Group> {
         }
 
         return Response.ok("{\"status\":\"success\"}").build();
+    }
+
+
+    @GET
+    @Path("query")
+    public Collection<Group> get(@QueryParam("all") Boolean all,
+                                       @QueryParam("clientId") Long clientId,
+                                       @QueryParam("userId") Long userId) throws StorageException{
+        //LOGGER.info("This is it");
+        var conditions = new LinkedList<Condition>();
+
+        if (Boolean.TRUE.equals(all)) {
+            if (permissionsService.notAdmin(getUserId())) {
+                conditions.add(new Condition.Permission(User.class, getUserId(), baseClass));
+            }
+        } else if (clientId != null && clientId > 0) {
+            conditions.add(new Condition.Permission(Client.class, clientId,  Group.class).excludeGroups());
+        }else if(userId != null && userId > 0){
+            conditions.add(new Condition.Permission(User.class, userId, Client.class).excludeGroups());
+        }
+
+        return storage.getObjects(baseClass, new Request(
+                new Columns.All(), Condition.merge(conditions), new Order("name")
+        ));
     }
 
 }
