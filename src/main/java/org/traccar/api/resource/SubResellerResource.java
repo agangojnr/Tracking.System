@@ -91,6 +91,7 @@ public class SubResellerResource extends ExtendedObjectResource<Subreseller> {
             }
 
             return Response.ok(entity).build();
+            //return Response.ok("{\"status\":\"success\"}").build();
         }else{
             return Response.status(Response.Status.FOUND).build();
         }

@@ -15,21 +15,118 @@
  */
 package org.traccar.api.resource;
 
+import jakarta.inject.Inject;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.traccar.api.SimpleObjectResource;
-import org.traccar.model.Group;
+import org.traccar.api.security.PermissionsService;
+import org.traccar.api.security.ServiceAccountUser;
+import org.traccar.helper.LogAction;
+import org.traccar.model.*;
 
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
+import org.traccar.session.ConnectionManager;
+import org.traccar.session.cache.CacheManager;
+import org.traccar.storage.StorageException;
+import org.traccar.storage.query.Columns;
+import org.traccar.storage.query.Condition;
+import org.traccar.storage.query.Request;
+
+import java.util.List;
 
 @Path("groups")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class GroupResource extends SimpleObjectResource<Group> {
 
+    @Inject
+    private LogAction actionLogger;
+
+    @Inject
+    private CacheManager cacheManager;
+
+    @Inject
+    private ConnectionManager connectionManager;
+
+    @Inject
+    private HttpServletRequest request;
+
+    @Inject
+    private PermissionsService permissionsService;
+
     public GroupResource() {
         super(Group.class, "name");
+    }
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Group.class);
+
+    @Path("create/{clientId}")
+    @POST
+    public Response add(Group entity, @PathParam("clientId") Long clientId) throws Exception {
+        permissionsService.checkEdit(getUserId(), entity, true, false);
+
+        if(validate(entity)){
+            entity.setId(0);
+            Long groupId = storage.addObject(entity, new Request(new Columns.Exclude("id")));
+            permissionsService.link(LinkType.CLIENT_GROUP, clientId, groupId);
+            entity.setId(groupId);
+            actionLogger.create(request, getUserId(), entity);
+
+            if (getUserId() != ServiceAccountUser.ID) {
+                storage.addPermission(new Permission(User.class, getUserId(), baseClass, entity.getId()));
+                cacheManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
+                connectionManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
+                actionLogger.link(request, getUserId(), User.class, getUserId(), baseClass, entity.getId());
+            }
+            return Response.ok(entity).build();
+        }else{
+            return Response.status(Response.Status.FOUND).build();
+        }
+    }
+
+    public boolean validate(Group entity) throws StorageException {
+        String name = entity.getName();
+
+        Group group = storage.getObject(Group.class, new Request(
+                new Columns.All(),
+                new Condition.And(
+                        new Condition.Equals("name", name),
+                        new Condition.Permission(User.class, getUserId(), Group.class))));
+
+        return group == null;
+    }
+
+    @Path("link")
+    @POST
+    public Response linkGroupDevice(List<GroupDevice> links) throws Exception{
+        //LOGGER.info("This is it");
+
+        for(GroupDevice link: links){
+            int groupId = link.getGroupid();
+            int deviceId = link.getDeviceid();
+
+            permissionsService.link(LinkType.GROUP_DEVICE, groupId, deviceId);
+        }
+
+        return Response.ok("{\"status\":\"success\"}").build();
+    }
+
+    @Path("unlink")
+    @DELETE
+    public Response unlinkGroupDevice(List<GroupDevice> links) throws Exception{
+        //LOGGER.info("This is it");
+
+        for(GroupDevice link: links){
+            int groupId = link.getGroupid();
+            int deviceId = link.getDeviceid();
+
+            permissionsService.unlink(LinkType.GROUP_DEVICE, groupId, deviceId);
+        }
+
+        return Response.ok("{\"status\":\"success\"}").build();
     }
 
 }

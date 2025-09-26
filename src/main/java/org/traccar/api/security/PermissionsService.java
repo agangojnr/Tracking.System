@@ -71,14 +71,6 @@ public class PermissionsService {
         // Check if this link already exists in the link table
         Object existing = null;
 
-//                storage.getObject(storageName, new Request(
-//                new Columns.All(),
-//                new Condition.And(
-//                        new Condition.Equals(type.getOwnerIdColumn(), ownerId),
-//                        new Condition.Equals(type.getPropertyIdColumn(), propertyId)
-//                )
-//        ));
-
         if (existing == null) {
             // Only insert if no record exists
             storage.addPermission(permission);

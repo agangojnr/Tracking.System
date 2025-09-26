@@ -1,0 +1,68 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+  <changeSet id="create-tc-client-group" author="walter">
+    <createTable tableName="tc_client_group">
+      <column name="clientid" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="groupid" type="INT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+
+    <addForeignKeyConstraint baseTableName="tc_client_group"
+                             baseColumnNames="clientid"
+                             constraintName="fk_client_group_client"
+                             referencedTableName="tc_clients"
+                             referencedColumnNames="id"
+                             onDelete="CASCADE"/>
+
+    <addForeignKeyConstraint baseTableName="tc_client_group"
+                             baseColumnNames="groupid"
+                             constraintName="fk_client_group_group"
+                             referencedTableName="tc_groups"
+                             referencedColumnNames="id"
+                             onDelete="CASCADE"/>
+
+  </changeSet>
+
+  <changeSet id="2" author="walter">
+    <addUniqueConstraint
+            tableName="tc_client_group"
+            columnNames="groupid"
+            constraintName="uc_tc_client_group_groupid"/>
+  </changeSet>
+
+  <changeSet id="create-tc-group-device" author="walter">
+    <createTable tableName="tc_group_device">
+      <column name="groupid" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="deviceid" type="INT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint baseTableName="tc_group_device"
+                             baseColumnNames="groupid"
+                             constraintName="fk_group_device_group"
+                             referencedTableName="tc_groups"
+                             referencedColumnNames="id"
+                             onDelete="CASCADE"/>
+
+    <addForeignKeyConstraint baseTableName="tc_group_device"
+                             baseColumnNames="deviceid"
+                             constraintName="fk_group_device_device"
+                             referencedTableName="tc_devices"
+                             referencedColumnNames="id"
+                             onDelete="CASCADE"/>
+  </changeSet>
+
+</databaseChangeLog>
+

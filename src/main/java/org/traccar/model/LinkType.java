@@ -3,6 +3,8 @@ package org.traccar.model;
 public enum LinkType {
 
     USER_DEVICE(User.class, Device.class, "tc_user_device"),
+    CLIENT_GROUP(Client.class, Group.class, "tc_client_group"),
+    GROUP_DEVICE(Group.class, Device.class, "tc_group_device"),
     CLIENT_DEVICE(Client.class, Device.class, "tc_client_device"),
     SUBRESELLER_DEVICE(Subreseller.class, Device.class, "tc_subreseller_device"),
     RESELLER_DEVICE(Reseller.class, Device.class, "tc_reseller_device"),
@@ -33,8 +35,5 @@ public enum LinkType {
     public String getTableName() {
         return tableName;
     }
-
-
-
 
     }
