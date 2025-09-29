@@ -1,0 +1,97 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+  <!-- Create tc_subresellers table -->
+  <changeSet id="1" author="Walter">
+    <createTable tableName="tc_userlevels">
+      <column name="id" type="INT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="name" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="attributes" type="VARCHAR(4000)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="create-tc-user-userlevel" author="walter">
+    <createTable tableName="tc_user_userlevel">
+
+      <column name="userid" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="levelid" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="levelgroupid" type="INT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+
+    <addForeignKeyConstraint baseTableName="tc_user_userlevel"
+                             baseColumnNames="userid"
+                             constraintName="fk_user_userlevel_user"
+                             referencedTableName="tc_users"
+                             referencedColumnNames="id"
+                             onDelete="CASCADE"/>
+
+    <addForeignKeyConstraint baseTableName="tc_user_userlevel"
+                             baseColumnNames="levelid"
+                             constraintName="fk_user_userlevel_userlevel"
+                             referencedTableName="tc_userlevels"
+                             referencedColumnNames="id"
+                             onDelete="CASCADE"/>
+
+  </changeSet>
+
+  <changeSet id="rename-tc-userlevels-to-tc-access-levels" author="Walter">
+    <renameTable oldTableName="tc_userlevels" newTableName="tc_access_levels"/>
+  </changeSet>
+
+  <changeSet id="rename-tc-access-levels-to-tc-accesslevels" author="Walter">
+    <renameTable oldTableName="tc_access_levels" newTableName="tc_accesslevels"/>
+  </changeSet>
+
+  <changeSet id="rename-tc-user-level-to-tc-user-userlevel" author="Walter">
+    <renameTable oldTableName="tc_user_userlevel" newTableName="tc_user_level"/>
+  </changeSet>
+
+
+
+  <changeSet id="create-tc-user-accesslevel" author="walter">
+    <createTable tableName="tc_user_accesslevel">
+
+      <column name="userid" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="accesslevelid" type="INT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+
+    <addForeignKeyConstraint baseTableName="tc_user_accesslevel"
+                             baseColumnNames="userid"
+                             constraintName="fk_user_accesslevel_user"
+                             referencedTableName="tc_users"
+                             referencedColumnNames="id"
+                             onDelete="CASCADE"/>
+
+    <addForeignKeyConstraint baseTableName="tc_user_accesslevel"
+                             baseColumnNames="accesslevelid"
+                             constraintName="fk_user_accesslevel_accesslevel"
+                             referencedTableName="tc_accesslevels"
+                             referencedColumnNames="id"
+                             onDelete="CASCADE"/>
+
+  </changeSet>
+
+</databaseChangeLog>
+

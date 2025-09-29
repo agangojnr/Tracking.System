@@ -131,8 +131,8 @@ public abstract class BaseObjectResource<T extends BaseModel> extends BaseResour
         cacheManager.invalidateObject(true, baseClass, id, ObjectOperation.DELETE);
 
         actionLogger.remove(request, getUserId(), baseClass, id);
-
-        return Response.noContent().build();
+        //return Response.noContent().build();
+        return Response.ok("{\"status\":\"Deleted Successfully\"}").build();
     }
 
 }

@@ -2,8 +2,8 @@ package org.traccar.model;
 
 import org.traccar.storage.StorageName;
 
-@StorageName("tc_userlevels")
-public class UserLevel extends ExtendedModel{
+@StorageName("tc_accesslevels")
+public class Accesslevel extends ExtendedModel{
     private String name;
 
     public String getName() {
@@ -13,5 +13,4 @@ public class UserLevel extends ExtendedModel{
     public void setName(String name) {
         this.name = name;
     }
-
 }

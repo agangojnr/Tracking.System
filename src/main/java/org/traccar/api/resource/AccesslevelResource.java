@@ -18,12 +18,16 @@ import org.traccar.session.cache.CacheManager;
 import org.traccar.storage.StorageException;
 import org.traccar.storage.query.Columns;
 import org.traccar.storage.query.Condition;
+import org.traccar.storage.query.Order;
 import org.traccar.storage.query.Request;
 
-@Path("userlevels")
+import java.util.Collection;
+import java.util.LinkedList;
+
+@Path("accesslevels")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class UserLevelResource extends ExtendedObjectResource<UserLevel> {
+public class AccesslevelResource extends ExtendedObjectResource<Accesslevel> {
 
     @Inject
     private CacheManager cacheManager;
@@ -37,17 +41,17 @@ public class UserLevelResource extends ExtendedObjectResource<UserLevel> {
     @Context
     private HttpServletRequest request;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserLevel.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Accesslevel.class);
 
-    public UserLevelResource() {
-        super(UserLevel.class, "name");
+    public AccesslevelResource() {
+        super(Accesslevel.class, "name");
     }
+
+
 
     @Path("create")
     @POST
-    public Response add(UserLevel entity) throws Exception {
-        //LOGGER.info("Checking for testing for Reseller");
-        permissionsService.checkEdit(getUserId(), entity, true, false);
+    public Response add(Accesslevel entity) throws Exception {
 
         if(validate(entity)){
             entity.setId(storage.addObject(entity, new Request(new Columns.Exclude("id"))));
@@ -59,17 +63,18 @@ public class UserLevelResource extends ExtendedObjectResource<UserLevel> {
                 connectionManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
                 actionLogger.link(request, getUserId(), User.class, getUserId(), baseClass, entity.getId());
             }
-
-            return Response.ok(entity).build();
+            //return Response.ok(entity).build();
+            return Response.ok("{\"status\":\"Created Successfully.\"}").build();
         }else{
-            return Response.status(Response.Status.FOUND).build();
+            //return Response.status(Response.Status.FOUND).build();
+            return Response.ok("{\"status\":\"Access level exist\"}").build();
         }
     }
 
 
     @Path("update/{id}")
     @PUT
-    public Response update(UserLevel entity) throws Exception {
+    public Response update(Accesslevel entity) throws Exception {
         //permissionsService.checkPermission(baseClass, getUserId(), entity.getId());
         //permissionsService.checkEdit(getUserId(), entity, false, false);
 
@@ -81,22 +86,24 @@ public class UserLevelResource extends ExtendedObjectResource<UserLevel> {
             cacheManager.invalidateObject(true, entity.getClass(), entity.getId(), ObjectOperation.UPDATE);
             actionLogger.edit(request, getUserId(), entity);
 
-            return Response.ok(entity).build();
+            //return Response.ok(entity).build();
+            return Response.ok("{\"status\":\"Updated Successfully.\"}").build();
         }else{
-            return Response.status(Response.Status.FOUND).build();
+            //return Response.status(Response.Status.FOUND).build();
+            return Response.ok("{\"status\":\"Access level exist\"}").build();
         }
     }
 
-    public boolean validate(UserLevel entity) throws StorageException {
+    public boolean validate(Accesslevel entity) throws StorageException {
         String name = entity.getName();
 
-        UserLevel userlevel = storage.getObject(UserLevel.class, new Request(
+        Accesslevel accesslevel = storage.getObject(Accesslevel.class, new Request(
                 new Columns.All(),
                 new Condition.And(
                         new Condition.Equals("name", name),
-                        new Condition.Permission(User.class, getUserId(), UserLevel.class))));
+                        new Condition.Permission(User.class, getUserId(), Accesslevel.class))));
 
-        return userlevel == null;
+        return accesslevel == null;
     }
 
 }
