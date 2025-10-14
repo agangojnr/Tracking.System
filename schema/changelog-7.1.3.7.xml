@@ -93,5 +93,21 @@
 
   </changeSet>
 
+
+  <changeSet id="add-attributes-column-to-tc_user_level" author="walter">
+    <addColumn tableName="tc_user_level">
+      <column name="attributes" type="VARCHAR(4000)">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="make-attributes-column-nullable" author="walter">
+    <dropNotNullConstraint
+            tableName="tc_user_level"
+            columnName="attributes"
+            columnDataType="VARCHAR(4000)"/>
+  </changeSet>
+
 </databaseChangeLog>
 

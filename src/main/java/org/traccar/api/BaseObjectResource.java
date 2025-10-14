@@ -70,20 +70,21 @@ public abstract class BaseObjectResource<T extends BaseModel> extends BaseResour
 
     @POST
     public Response add(T entity) throws Exception {
-        permissionsService.checkEdit(getUserId(), entity, true, false);
-
-        entity.setId(storage.addObject(entity, new Request(new Columns.Exclude("id"))));
-        actionLogger.create(request, getUserId(), entity);
-
-        if (getUserId() != ServiceAccountUser.ID) {
-            storage.addPermission(new Permission(User.class, getUserId(), baseClass, entity.getId()));
-            cacheManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
-            connectionManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
-            actionLogger.link(request, getUserId(), User.class, getUserId(), baseClass, entity.getId());
-        }
-
+//        permissionsService.checkEdit(getUserId(), entity, true, false);
+//        LOGGER.info("Checking for Base-b4 userid: {}", entity.getId());
+//        entity.setId(storage.addObject(entity, new Request(new Columns.Exclude("id"))));
+//        actionLogger.create(request, getUserId(), entity);
+//
+//        if (getUserId() != ServiceAccountUser.ID) {
+//            storage.addPermission(new Permission(User.class, getUserId(), baseClass, entity.getId()));
+//            cacheManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
+//            connectionManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
+//            actionLogger.link(request, getUserId(), User.class, getUserId(), baseClass, entity.getId());
+//        }
+        LOGGER.info("Checking for Base-Aft userid: {}", entity.getId());
         return Response.ok(entity).build();
     }
+
 
     @Path("{id}")
     @PUT

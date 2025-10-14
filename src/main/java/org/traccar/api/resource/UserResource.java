@@ -14,10 +14,7 @@ import org.traccar.config.Keys;
 import org.traccar.helper.LogAction;
 import org.traccar.helper.SessionHelper;
 import org.traccar.helper.model.UserUtil;
-import org.traccar.model.Device;
-import org.traccar.model.ManagedUser;
-import org.traccar.model.Permission;
-import org.traccar.model.User;
+import org.traccar.model.*;
 import org.traccar.storage.StorageException;
 import org.traccar.storage.query.Columns;
 import org.traccar.storage.query.Condition;
@@ -86,8 +83,8 @@ public class UserResource extends BaseObjectResource<User> {
                 int userLimit = currentUser.getUserLimit();
                 if (userLimit > 0) {
                     int userCount = storage.getObjects(baseClass, new Request(
-                            new Columns.All(),
-                            new Condition.Permission(User.class, getUserId(), ManagedUser.class).excludeGroups()))
+                                    new Columns.All(),
+                                    new Condition.Permission(User.class, getUserId(), ManagedUser.class).excludeGroups()))
                             .size();
                     if (userCount >= userLimit) {
                         throw new SecurityException("Manager user limit reached");
@@ -121,13 +118,136 @@ public class UserResource extends BaseObjectResource<User> {
         return Response.ok(entity).build();
     }
 
-
-    @Path("create/{level}/{id}")
+    @PermitAll
+    @Path("create/{accesslevelid}/{levelid}")
     @POST
-    public Response add(@PathParam("level") String level, @PathParam("id") Long id){
-        LOGGER.info("Something happening. Level: {} and ID: {}", level, id);
-        return null;
+    public Response addUser(User entity, @PathParam("accesslevelid") Long accesslevelid, @PathParam("levelid") Long levelid) throws StorageException {
+        User currentUser = getUserId() > 0 ? permissionsService.getUser(getUserId()) : null;
+
+        if (currentUser == null || !currentUser.getAdministrator()) {
+            permissionsService.checkUserUpdate(getUserId(), new User(), entity);
+            if (currentUser != null && currentUser.getUserLimit() != 0) {
+                int userLimit = currentUser.getUserLimit();
+                if (userLimit > 0) {
+                    int userCount = storage.getObjects(baseClass, new Request(
+                                    new Columns.All(),
+                                    new Condition.Permission(User.class, getUserId(), ManagedUser.class).excludeGroups()))
+                            .size();
+                    if (userCount >= userLimit) {
+                        throw new SecurityException("Manager user limit reached");
+                    }
+                }
+            } else {
+                if (UserUtil.isEmpty(storage)) {
+                    entity.setAdministrator(true);
+                } else if (!permissionsService.getServer().getRegistration()) {
+                    throw new SecurityException("Registration disabled");
+                }
+                if (permissionsService.getServer().getBoolean(Keys.WEB_TOTP_FORCE.getKey())
+                        && entity.getTotpKey() == null) {
+                    throw new SecurityException("One-time password key is required");
+                }
+                UserUtil.setUserDefaults(entity, config);
+            }
+        }
+
+        //entity.setId(storage.addObject(entity, new Request(new Columns.Exclude("id"))));
+        entity.setId(0);
+        long inserteduserId = storage.addObject(entity, new Request(new Columns.Exclude("id")));
+        entity.setId(inserteduserId);
+        storage.updateObject(entity, new Request(
+                new Columns.Include("hashedPassword", "salt"),
+                new Condition.Equals("id", entity.getId())));
+
+        actionLogger.create(request, getUserId(), entity);
+
+
+        UserLevel userLevel = new UserLevel();
+        userLevel.setUserid(inserteduserId);
+        userLevel.setLevelid(accesslevelid);
+        userLevel.setLevelgroupid(levelid);
+        //userLevel.setAttributes("ww");
+        LOGGER.info("Testing levelid, accesslevelid & inserteduserId: {}, {}, and {}", levelid, accesslevelid, inserteduserId);
+
+        storage.addObject(userLevel, new Request(
+                new Columns.Exclude("id")));
+
+
+        if (currentUser != null && currentUser.getUserLimit() != 0) {
+            storage.addPermission(new Permission(User.class, getUserId(), ManagedUser.class, entity.getId()));
+            actionLogger.link(request, getUserId(), User.class, getUserId(), ManagedUser.class, entity.getId());
+        }
+        return Response.ok(entity).build();
     }
+
+
+
+//    @Override
+//    @PermitAll
+//    @POST
+//    @Path("create")
+//    public Response addUser(User entity, @PathParam("accesslevelid") long accesslevelid, @PathParam("levelid") long levelid) throws StorageException {
+//        User currentUser = getUserId() > 0 ? permissionsService.getUser(getUserId()) : null;
+//        //LOGGER.info("Testing not found. {}", getUserId());
+//        if (currentUser == null || !currentUser.getAdministrator()) {
+//            permissionsService.checkUserUpdate(getUserId(), new User(), entity);
+//            if (currentUser != null && currentUser.getUserLimit() != 0) {
+//                int userLimit = currentUser.getUserLimit();
+//                if (userLimit > 0) {
+//                    int userCount = storage.getObjects(baseClass, new Request(
+//                                    new Columns.All(),
+//                                    new Condition.Permission(User.class, getUserId(), ManagedUser.class).excludeGroups()))
+//                            .size();
+//                    if (userCount >= userLimit) {
+//                        throw new SecurityException("Manager user limit reached");
+//                    }
+//                }
+//
+//            } else {
+//                //LOGGER.info("Checking for testing");
+//                if (UserUtil.isEmpty(storage)) {
+//                    entity.setAdministrator(true);
+//                } else if (!permissionsService.getServer().getRegistration()) {
+//                    throw new SecurityException("Registration disabled");
+//                }
+//                if (permissionsService.getServer().getBoolean(Keys.WEB_TOTP_FORCE.getKey())
+//                        && entity.getTotpKey() == null) {
+//                    throw new SecurityException("One-time password key is required");
+//                }
+//                UserUtil.setUserDefaults(entity, config);
+//            }
+//        }
+//        LOGGER.info("Testing admin user creation {}", entity.getPassword());
+//
+//
+//        entity.setId(0);
+//        UserUtil.setUserDefaults(entity, config);
+//        long inserteduserId = storage.addObject(entity, new Request(new Columns.Exclude("id")));
+//        entity.setId(inserteduserId);
+//
+//        UserLevel userLevel = new UserLevel();
+//        userLevel.setUserid(inserteduserId);
+//        userLevel.setLevelid(accesslevelid);
+//        userLevel.setLevelgroupid(levelid);
+//
+//        storage.addObject(userLevel, new Request(
+//                new Columns.Exclude("id")));
+//
+//
+//        storage.updateObject(entity, new Request(
+//                new Columns.Include("hashedPassword", "salt"),
+//                new Condition.Equals("id", entity.getId())));
+//
+//        actionLogger.create(request, getUserId(), entity);
+//
+//        if (currentUser != null && currentUser.getUserLimit() != 0) {
+//
+//            storage.addPermission(new Permission(User.class, getUserId(), ManagedUser.class, entity.getId()));
+//            actionLogger.link(request, getUserId(), User.class, getUserId(), ManagedUser.class, entity.getId());
+//        }
+//        return Response.ok(entity).build();
+//    }
+
 
     @Path("{id}")
     @DELETE
