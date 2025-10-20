@@ -69,6 +69,13 @@ tags:
     description: Calendar management
   - name: Statistics
     description: Retrieving server statistics
+  - name: Resellers
+    description: Reseller Management
+  - name: Subresellers
+    description: Subreseller Management
+  - name: Clients
+    description: Client Management
+
 paths:
   /commands:
     get:
@@ -285,6 +292,11 @@ paths:
           description: Standard users can use this only with their own _userId_
           schema:
             type: integer
+        - name: clientId
+          in: query
+          description: Standard for fetching devices in a particular client _clientId_
+          schema:
+            type: integer
         - name: id
           in: query
           description: >-
@@ -305,7 +317,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
+                type: array0
                 items:
                   $ref: '#/components/schemas/Device'
         '400':
@@ -329,6 +341,115 @@ paths:
               schema:
                 $ref: '#/components/schemas/Device'
       x-codegen-request-body-name: body
+
+  /devices/{clientId}:
+    post:
+      summary: Create a Device by clientID
+      tags:
+        - Devices
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Device'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Device'
+      x-codegen-request-body-name: body
+
+  /client/permissions:
+    post:
+      summary: Link Device to Client
+      description: >
+        Assigns a device to a client by linking their IDs.  
+        Both `clientId` and `deviceId` are passed as query parameters.
+      tags:
+        - Clients
+      parameters:
+        - name: clientId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Unique identifier of the client.
+        - name: deviceId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Unique identifier of the device to be linked.
+      responses:
+        '200':
+          description: Device successfully linked to client.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Device linked to client successfully."
+        '400':
+          description: Invalid or missing parameters.
+        '401':
+          description: Unauthorized access.
+        '404':
+          description: Client or device not found.
+        '500':
+          description: Internal server error.
+
+  /client/permissions:
+    delete:
+      summary: Unlink Device from Client
+      description: >
+        Removes the association between a client and a device using their IDs.  
+        Both `clientId` and `deviceId` must be provided as query parameters.
+      tags:
+        - Clients
+      parameters:
+        - name: clientId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Unique identifier of the client.
+        - name: deviceId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Unique identifier of the device to be unlinked.
+      responses:
+        '200':
+          description: Device successfully unlinked from client.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Device unlinked from client successfully."
+        '400':
+          description: Invalid or missing parameters.
+        '401':
+          description: Unauthorized access.
+        '404':
+          description: Client or device not found.
+        '500':
+          description: Internal server error.
+
   /devices/{id}:
     put:
       summary: Update a Device
@@ -390,6 +511,49 @@ paths:
           description: No Content
           content: {}
       x-codegen-request-body-name: body
+
+  /accesslevels:
+    get:
+      summary: Get Access Levels
+      description: >
+        Retrieves a list of all available access levels.  
+        The optional query parameter `all` can be used to fetch every access level without pagination or filtering.
+      tags:
+        - Access Levels
+      parameters:
+        - name: all
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: Retrieve all access levels if true.
+      responses:
+        '200':
+          description: Successfully retrieved list of access levels.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 6
+                    name:
+                      type: string
+                      example: CLIENT USER1
+                    attributes:
+                      type: object
+                      example: { }
+        '400':
+          description: Invalid request parameters.
+        '401':
+          description: Unauthorized access.
+        '500':
+          description: Internal server error.
+
+
   /groups:
     get:
       summary: Fetch a list of Groups
