@@ -26,7 +26,6 @@ public class ClientPermissionResource extends BaseResource {
     public Response linkClientDevice(@QueryParam("clientId") long clientId, @QueryParam("deviceId") long deviceId) throws Exception{
         //LOGGER.info("Received POST request -> clientId: {}, deviceId: {}", clientId, deviceId);
         permissionsService.link(LinkType.CLIENT_DEVICE, clientId, deviceId);
-        //return Response.ok().build();
         return Response.ok("{\"status\":\"Linked success\"}").build();
     }
 

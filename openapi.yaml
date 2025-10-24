@@ -362,7 +362,7 @@ paths:
                 $ref: '#/components/schemas/Device'
       x-codegen-request-body-name: body
 
-paths:
+
     /api/group/permissions:
       post:
         summary: Link Group to Device
@@ -402,6 +402,44 @@ paths:
           '500':
             description: Internal server error.
 
+  /api/group/permissions:
+    delete:
+      summary: Unlink Group from Device
+      description: Unlinks or detaches a device from a group using their respective IDs.
+      tags:
+        - Groups
+      parameters:
+        - name: groupId
+          in: query
+          required: true
+          description: The unique identifier of the group to unlink.
+          schema:
+            type: integer
+            example: 4
+        - name: deviceId
+          in: query
+          required: true
+          description: The unique identifier of the device to unlink.
+          schema:
+            type: integer
+            example: 27
+      responses:
+        '200':
+          description: Successfully unlinked the device from the group.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "Unlinked successfully."
+        '400':
+          description: Invalid or missing parameters.
+        '404':
+          description: Group or device not found.
+        '500':
+          description: Internal server error.
 
 
   /client/permissions:
