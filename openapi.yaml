@@ -362,79 +362,46 @@ paths:
                 $ref: '#/components/schemas/Device'
       x-codegen-request-body-name: body
 
-  openapi: 3.0.3
-  info:
-    title: Get Devices by Group API
-    description: Retrieves all devices that belong to a specific group.
-    version: 1.0.0
-
-  paths:
-    /api/devices/bygroup/{groupId}:
-      get:
-        summary: Get Devices by Group
-        description: Fetches a list of devices associated with a given group ID.
+paths:
+    /api/group/permissions:
+      post:
+        summary: Link Group to Device
+        description: Establishes a link between a group and a device by their respective IDs.
         tags:
-          - Devices
+          - Groups
         parameters:
           - name: groupId
-            in: path
+            in: query
             required: true
-            description: The unique ID of the group to fetch devices for.
+            description: The unique identifier of the group to link.
             schema:
               type: integer
-              example: 2
+              example: 1
+          - name: deviceId
+            in: query
+            required: true
+            description: The unique identifier of the device to link.
+            schema:
+              type: integer
+              example: 25
         responses:
           '200':
-            description: Successful response containing device data.
+            description: Successfully linked the device to the group.
             content:
               application/json:
                 schema:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      id:
-                        type: integer
-                        example: 4
-                      attributes:
-                        type: object
-                        additionalProperties: true
-                        example: { }
-                      groupId:
-                        type: integer
-                        example: 0
-                      calendarId:
-                        type: integer
-                        example: 0
-                      name:
-                        type: string
-                        example: "KDT2"
-                      uniqueId:
-                        type: string
-                        example: "354778344423814"
-                      status:
-                        type: string
-                        example: "offline"
-                      lastUpdate:
-                        type: string
-                        format: date-time
-                        nullable: true
-                        example: null
-                      positionId:
-                        type: integer
-                        example: 0
-                      phone:
-                        type: string
-                        example: "762963579"
-                      model:
-                        type: string
-                        example: "Isuzu"
+                  type: object
+                  properties:
+                    status:
+                      type: string
+                      example: "Linked success"
           '400':
-            description: Invalid group ID supplied.
+            description: Invalid parameters or missing IDs.
           '404':
-            description: Group not found.
+            description: Group or device not found.
           '500':
             description: Internal server error.
+
 
 
   /client/permissions:

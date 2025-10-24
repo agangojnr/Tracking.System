@@ -3,7 +3,7 @@ package org.traccar.api.resource;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.NotNull;
-import jakarta.ws.rs.FormParam;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,15 +27,6 @@ import org.traccar.storage.query.Order;
 import org.traccar.storage.query.Request;
 
 import jakarta.inject.Inject;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.HeaderParam;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.PUT;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -165,19 +156,6 @@ public class DeviceResource extends BaseObjectResource<Device> {
                 actionLogger.create(request, getUserId(), entity);
             }
             //LOGGER.info("Inserted entity with ID: {}", deviceId);
-
-            /*permissionsService.checkEdit(getUserId(), entity, true, false);
-
-            entity.setId(storage.addObject(entity, new Request(new Columns.Exclude("id"))));
-            actionLogger.create(request, getUserId(), entity);
-            actionLogger.create(request, getUserId(), entity);
-
-            if (getUserId() != ServiceAccountUser.ID) {
-                storage.addPermission(new Permission(User.class, getUserId(), baseClass, entity.getId()));
-                cacheManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
-                connectionManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
-                actionLogger.link(request, getUserId(), User.class, getUserId(), baseClass, entity.getId());
-            }*/
 
             return Response.ok(entity).build();
         }else{

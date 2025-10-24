@@ -105,7 +105,6 @@ public class GroupResource extends SimpleObjectResource<Group> {
     @Path("link")
     @POST
     public Response linkGroupDevice(List<GroupDevice> links) throws Exception{
-        //LOGGER.info("This is it");
 
         for(GroupDevice link: links){
             int groupId = link.getGroupid();
