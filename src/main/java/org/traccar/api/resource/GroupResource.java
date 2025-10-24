@@ -120,7 +120,6 @@ public class GroupResource extends SimpleObjectResource<Group> {
     @Path("unlink")
     @DELETE
     public Response unlinkGroupDevice(List<GroupDevice> links) throws Exception{
-        //LOGGER.info("This is it");
 
         for(GroupDevice link: links){
             int groupId = link.getGroupid();
@@ -156,4 +155,8 @@ public class GroupResource extends SimpleObjectResource<Group> {
         ));
     }
 
+    @Override
+    public Collection<Group> get(boolean all, long userId) throws StorageException {
+        return super.get(all, userId);
+    }
 }

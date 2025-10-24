@@ -362,49 +362,80 @@ paths:
                 $ref: '#/components/schemas/Device'
       x-codegen-request-body-name: body
 
-  /client/permissions:
-    post:
-      summary: Link Device to Client
-      description: >
-        Assigns a device to a client by linking their IDs.  
-        Both `clientId` and `deviceId` are passed as query parameters.
-      tags:
-        - Clients
-      parameters:
-        - name: clientId
-          in: query
-          required: true
-          schema:
-            type: integer
-          description: Unique identifier of the client.
-        - name: deviceId
-          in: query
-          required: true
-          schema:
-            type: integer
-          description: Unique identifier of the device to be linked.
-      responses:
-        '200':
-          description: Device successfully linked to client.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  message:
-                    type: string
-                    example: "Device linked to client successfully."
-        '400':
-          description: Invalid or missing parameters.
-        '401':
-          description: Unauthorized access.
-        '404':
-          description: Client or device not found.
-        '500':
-          description: Internal server error.
+  openapi: 3.0.3
+  info:
+    title: Get Devices by Group API
+    description: Retrieves all devices that belong to a specific group.
+    version: 1.0.0
+
+  paths:
+    /api/devices/bygroup/{groupId}:
+      get:
+        summary: Get Devices by Group
+        description: Fetches a list of devices associated with a given group ID.
+        tags:
+          - Devices
+        parameters:
+          - name: groupId
+            in: path
+            required: true
+            description: The unique ID of the group to fetch devices for.
+            schema:
+              type: integer
+              example: 2
+        responses:
+          '200':
+            description: Successful response containing device data.
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 4
+                      attributes:
+                        type: object
+                        additionalProperties: true
+                        example: { }
+                      groupId:
+                        type: integer
+                        example: 0
+                      calendarId:
+                        type: integer
+                        example: 0
+                      name:
+                        type: string
+                        example: "KDT2"
+                      uniqueId:
+                        type: string
+                        example: "354778344423814"
+                      status:
+                        type: string
+                        example: "offline"
+                      lastUpdate:
+                        type: string
+                        format: date-time
+                        nullable: true
+                        example: null
+                      positionId:
+                        type: integer
+                        example: 0
+                      phone:
+                        type: string
+                        example: "762963579"
+                      model:
+                        type: string
+                        example: "Isuzu"
+          '400':
+            description: Invalid group ID supplied.
+          '404':
+            description: Group not found.
+          '500':
+            description: Internal server error.
+
 
   /client/permissions:
     delete:

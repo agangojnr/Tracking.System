@@ -330,6 +330,17 @@ public class DeviceResource extends BaseObjectResource<Device> {
         return tokenManager.generateToken(share.getId(), expiration);
     }
 
+    @GET
+    @Path("bygroup/{groupId}")
+   public Collection<Device> get(@PathParam("groupId") long groupId) throws StorageException{
+        var conditions = new LinkedList<Condition>();
 
+        if(groupId > 0){
+            conditions.add(new Condition.Permission(Group.class, groupId, Device.class).excludeGroups());
+        }
+
+        return storage.getObjects(baseClass, new Request(
+                new Columns.All(), Condition.merge(conditions), new Order("name")));
+   }
 
 }
