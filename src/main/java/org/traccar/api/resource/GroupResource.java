@@ -102,34 +102,6 @@ public class GroupResource extends SimpleObjectResource<Group> {
         return group == null;
     }
 
-    @Path("link")
-    @POST
-    public Response linkGroupDevice(List<GroupDevice> links) throws Exception{
-
-        for(GroupDevice link: links){
-            int groupId = link.getGroupid();
-            int deviceId = link.getDeviceid();
-
-            permissionsService.link(LinkType.GROUP_DEVICE, groupId, deviceId);
-        }
-
-        return Response.ok("{\"status\":\"success\"}").build();
-    }
-
-    @Path("unlink")
-    @DELETE
-    public Response unlinkGroupDevice(List<GroupDevice> links) throws Exception{
-
-        for(GroupDevice link: links){
-            int groupId = link.getGroupid();
-            int deviceId = link.getDeviceid();
-
-            permissionsService.unlink(LinkType.GROUP_DEVICE, groupId, deviceId);
-        }
-
-        return Response.ok("{\"status\":\"success\"}").build();
-    }
-
 
     @GET
     @Path("query")

@@ -159,6 +159,10 @@ public class UserResource extends BaseObjectResource<User> {
                 new Columns.Include("hashedPassword", "salt"),
                 new Condition.Equals("id", entity.getId())));
 
+        storage.getObjects(baseClass, new Request(
+                        new Columns.All(),
+                        new Condition.Permission(User.class, getUserId(), ManagedUser.class).excludeGroups()));
+
         actionLogger.create(request, getUserId(), entity);
 
         UserLevel userLevel = new UserLevel();

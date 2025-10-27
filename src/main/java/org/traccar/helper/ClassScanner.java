@@ -62,6 +62,7 @@ public final class ClassScanner {
             if (files != null) {
                 for (File actual: files) {
                     String entryName = actual.getName();
+                    //System.out.println("Scanning file: " + entryName);
                     names.add(entryName.substring(0, entryName.lastIndexOf('.')));
                 }
             }

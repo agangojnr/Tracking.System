@@ -37,7 +37,7 @@ public class ResellerResource extends ExtendedObjectResource<Reseller> {
     @Context
     private HttpServletRequest request;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ClientResource.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ResellerResource.class);
 
     public ResellerResource() {
         super(Reseller.class, "name");
@@ -46,15 +46,17 @@ public class ResellerResource extends ExtendedObjectResource<Reseller> {
     @Path("create")
     @POST
     public Response add(Reseller entity) throws Exception {
-        //LOGGER.info("Checking for testing for Reseller");
+
         permissionsService.checkEdit(getUserId(), entity, true, false);
 
         if(validate(entity)){
             entity.setId(storage.addObject(entity, new Request(new Columns.Exclude("id"))));
+            //LOGGER.info("Checking for testing error");
             actionLogger.create(request, getUserId(), entity);
 
             if (getUserId() != ServiceAccountUser.ID) {
                 storage.addPermission(new Permission(User.class, getUserId(), baseClass, entity.getId()));
+                //LOGGER.info("Checking resellerId: {}");
                 cacheManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
                 connectionManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
                 actionLogger.link(request, getUserId(), User.class, getUserId(), baseClass, entity.getId());
@@ -70,8 +72,8 @@ public class ResellerResource extends ExtendedObjectResource<Reseller> {
     @Path("update/{id}")
     @PUT
     public Response update(Reseller entity) throws Exception {
-        //permissionsService.checkPermission(baseClass, getUserId(), entity.getId());
-        //permissionsService.checkEdit(getUserId(), entity, false, false);
+        permissionsService.checkPermission(baseClass, getUserId(), entity.getId());
+        permissionsService.checkEdit(getUserId(), entity, false, false);
 
         if(validate(entity)){
             storage.updateObject(entity, new Request(

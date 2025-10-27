@@ -1,18 +1,4 @@
-/*
- * Copyright 2022 - 2023 Anton Tananaev (anton@traccar.org)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+
 package org.traccar.api.security;
 
 import com.google.inject.servlet.RequestScoped;
@@ -44,8 +30,6 @@ public class PermissionsService {
 
     private Server server;
     private User user;
-    private LinkType type;
-
 
     @Inject
     public PermissionsService(Storage storage, CacheManager cacheManager, LogAction actionLogger, ConnectionManager connectionManager) {
@@ -55,7 +39,6 @@ public class PermissionsService {
         this.storage = storage;
     }
 
-
     public void link(LinkType type, long ownerId, long propertyId) throws Exception {
         Permission permission = new Permission(
                 type.getOwnerClass(),
@@ -63,26 +46,13 @@ public class PermissionsService {
                 type.getPropertyClass(),
                 propertyId
         );
-
-
-        // Determine the correct link table name dynamically
-        String storageName = permission.getStorageName();
-
-        // Check if this link already exists in the link table
-        Object existing = null;
-
-        if (existing == null) {
-            // Only insert if no record exists
-            storage.addPermission(permission);
-
-            cacheManager.invalidatePermission(true, permission.getOwnerClass(), ownerId,
-                    permission.getPropertyClass(), propertyId, true);
-            connectionManager.invalidatePermission(true, permission.getOwnerClass(), ownerId,
-                    permission.getPropertyClass(), propertyId, true);
-            // actionLogger.link(type.getTableName(), ownerId, propertyId);
-        }
+        storage.addPermission(permission);
+        cacheManager.invalidatePermission(false, permission.getOwnerClass(), ownerId, permission.getPropertyClass(), propertyId, false);
+        connectionManager.invalidatePermission(true,
+                permission.getOwnerClass(), ownerId,
+                permission.getPropertyClass(), propertyId, true);
+        //actionLogger.link(type.getTableName(), ownerId, propertyId);
     }
-
 
     public void unlink(LinkType type, long ownerId, long propertyId) throws Exception {
         Permission permission = new Permission(
@@ -122,7 +92,8 @@ public class PermissionsService {
     }
 
     public void checkAdmin(long userId) throws StorageException, SecurityException {
-        if (!getUser(userId).getAdministrator()) {
+        User currentUser = getUser(userId);
+        if (!currentUser.getAdministrator()) {
             throw new SecurityException("Administrator access required");
         }
     }
@@ -148,7 +119,8 @@ public class PermissionsService {
     public void checkEdit(
             long userId, Class<?> clazz, boolean addition, boolean skipReadonly)
             throws StorageException, SecurityException {
-        if (!getUser(userId).getAdministrator()) {
+        User currentUser = getUser(userId);
+        if (!currentUser.getAdministrator()) {
             boolean denied = false;
             if (!skipReadonly && (getServer().getReadonly() || getUser(userId).getReadonly())) {
                 denied = true;
@@ -173,7 +145,8 @@ public class PermissionsService {
     public void checkEdit(
             long userId, BaseModel object, boolean addition, boolean skipReadonly)
             throws StorageException, SecurityException {
-        if (!getUser(userId).getAdministrator()) {
+        User currentUser = getUser(userId);
+        if (!currentUser.getAdministrator()) {
             checkEdit(userId, object.getClass(), addition, skipReadonly);
             if (object instanceof GroupedModel after) {
                 if (after.getGroupId() > 0) {
@@ -269,7 +242,5 @@ public class PermissionsService {
             }
         }
     }
-
-
 
 }
