@@ -22,8 +22,6 @@ public class ExtendedObjectResource<T extends BaseModel> extends BaseObjectResou
 
     private  final String sortField;
 
-
-
     @Inject
     protected PermissionsService permissionsService;
 

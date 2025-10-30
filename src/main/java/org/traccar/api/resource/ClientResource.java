@@ -71,7 +71,7 @@ public class ClientResource extends ExtendedObjectResource<Client> {
                 conditions.add(new Condition.Permission(User.class, getUserId(), baseClass));
             }
         } else if (subresellerId != null && subresellerId > 0) {
-            LOGGER.info("Received POST request -> subresellerId: {}", subresellerId);
+            //LOGGER.info("Received POST request -> subresellerId: {}", subresellerId);
             conditions.add(new Condition.Permission(Subreseller.class, subresellerId, Client.class).excludeGroups());
         }else if(userId != null && userId > 0){
             conditions.add(new Condition.Permission(User.class, userId, Client.class).excludeGroups());
@@ -93,7 +93,7 @@ public class ClientResource extends ExtendedObjectResource<Client> {
         if(validate(entity)){
             entity.setId(0);
             long clientId = storage.addObject(entity, new Request(new Columns.Exclude("id")));
-            LOGGER.info("Checking for clientId: {}", clientId);
+            //LOGGER.info("Checking for clientId: {}", clientId);
             permissionsService.link(LinkType.SUBRESELLER_CLIENT, subresellerId, clientId);
             entity.setId(clientId);
             actionLogger.create(request, getUserId(), entity);

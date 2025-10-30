@@ -70,20 +70,16 @@ public abstract class BaseObjectResource<T extends BaseModel> extends BaseResour
 
     @POST
     public Response add(T entity) throws Exception {
-        System.out.println("11");
+        //System.out.println("11");
         permissionsService.checkEdit(getUserId(), entity, true, false);
-        System.out.println("12");
+
         entity.setId(storage.addObject(entity, new Request(new Columns.Exclude("id"))));
         actionLogger.create(request, getUserId(), entity);
 
         if (getUserId() != ServiceAccountUser.ID) {
-            System.out.println("1");
             storage.addPermission(new Permission(User.class, getUserId(), baseClass, entity.getId()));
-            System.out.println("2");
             cacheManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
-            System.out.println("3");
             connectionManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
-            System.out.println("4");
             actionLogger.link(request, getUserId(), User.class, getUserId(), baseClass, entity.getId());
         }
 
@@ -140,5 +136,4 @@ public abstract class BaseObjectResource<T extends BaseModel> extends BaseResour
         //return Response.noContent().build();
         return Response.ok("{\"status\":\"Deleted Successfully\"}").build();
     }
-
 }
