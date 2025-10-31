@@ -61,11 +61,10 @@ public class ClientResource extends ExtendedObjectResource<Client> {
     @Path("query")
     public Collection<Client> get(@QueryParam("all") Boolean all,
                                   @QueryParam("userId") Long userId,
+                                  @QueryParam("groupid") Long groupid,
                                   @QueryParam("subresellerId") Long subresellerId) throws StorageException {
-
-
         var conditions = new LinkedList<Condition>();
-
+        
         if (Boolean.TRUE.equals(all)) {
             if (permissionsService.notAdmin(getUserId())) {
                 conditions.add(new Condition.Permission(User.class, getUserId(), baseClass));
@@ -73,14 +72,14 @@ public class ClientResource extends ExtendedObjectResource<Client> {
         } else if (subresellerId != null && subresellerId > 0) {
             //LOGGER.info("Received POST request -> subresellerId: {}", subresellerId);
             conditions.add(new Condition.Permission(Subreseller.class, subresellerId, Client.class).excludeGroups());
+        } else if (groupid != null && groupid > 0) {
+            conditions.add(new Condition.Permission(Client.class, Group.class, groupid).excludeGroups());
         }else if(userId != null && userId > 0){
             conditions.add(new Condition.Permission(User.class, userId, Client.class).excludeGroups());
         }
-
         return storage.getObjects(baseClass, new Request(
                 new Columns.All(), Condition.merge(conditions), new Order("name")
         ));
-
     }
 
 

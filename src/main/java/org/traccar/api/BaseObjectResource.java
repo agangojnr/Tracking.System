@@ -6,12 +6,8 @@ import jakarta.ws.rs.core.Context;
 import org.traccar.api.resource.ClientResource;
 import org.traccar.api.security.PermissionsService;
 import org.traccar.api.security.ServiceAccountUser;
-import org.traccar.model.ObjectOperation;
+import org.traccar.model.*;
 import org.traccar.helper.LogAction;
-import org.traccar.model.BaseModel;
-import org.traccar.model.Group;
-import org.traccar.model.Permission;
-import org.traccar.model.User;
 import org.traccar.session.ConnectionManager;
 import org.traccar.session.cache.CacheManager;
 import org.traccar.storage.StorageException;
@@ -136,4 +132,5 @@ public abstract class BaseObjectResource<T extends BaseModel> extends BaseResour
         //return Response.noContent().build();
         return Response.ok("{\"status\":\"Deleted Successfully\"}").build();
     }
+
 }
