@@ -107,6 +107,7 @@ public class GroupResource extends SimpleObjectResource<Group> {
     @Path("query")
     public Collection<Group> get(@QueryParam("all") Boolean all,
                                        @QueryParam("clientId") Long clientId,
+                                        @QueryParam("deviceId") Long deviceId,
                                        @QueryParam("userId") Long userId) throws StorageException{
         //LOGGER.info("This is it");
         var conditions = new LinkedList<Condition>();
@@ -115,8 +116,11 @@ public class GroupResource extends SimpleObjectResource<Group> {
             if (permissionsService.notAdmin(getUserId())) {
                 conditions.add(new Condition.Permission(User.class, getUserId(), baseClass));
             }
+
         } else if (clientId != null && clientId > 0) {
             conditions.add(new Condition.Permission(Client.class, clientId,  Group.class).excludeGroups());
+        } else if (deviceId != null && deviceId > 0) {
+            conditions.add(new Condition.Permission(Group.class, Device.class, deviceId).excludeGroups());
         }else if(userId != null && userId > 0){
             conditions.add(new Condition.Permission(User.class, userId, Client.class).excludeGroups());
         }

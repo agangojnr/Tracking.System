@@ -64,7 +64,7 @@ public class ClientResource extends ExtendedObjectResource<Client> {
                                   @QueryParam("groupid") Long groupid,
                                   @QueryParam("subresellerId") Long subresellerId) throws StorageException {
         var conditions = new LinkedList<Condition>();
-        
+
         if (Boolean.TRUE.equals(all)) {
             if (permissionsService.notAdmin(getUserId())) {
                 conditions.add(new Condition.Permission(User.class, getUserId(), baseClass));
