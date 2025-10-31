@@ -51,6 +51,7 @@ public class SubResellerResource extends ExtendedObjectResource<Subreseller> {
     @Path("query")
     public Collection<Subreseller> get(@QueryParam("all") Boolean all,
                                        @QueryParam("resellerId") Long resellerId,
+                                       @QueryParam("clientid") Long clientid,
                                        @QueryParam("userId") Long userId) throws StorageException{
 
         var conditions = new LinkedList<Condition>();
@@ -61,6 +62,8 @@ public class SubResellerResource extends ExtendedObjectResource<Subreseller> {
             }
         } else if (resellerId != null && resellerId > 0) {
             conditions.add(new Condition.Permission(Reseller.class, resellerId, Subreseller.class).excludeGroups());
+        } else if (clientid != null && clientid > 0) {
+            conditions.add(new Condition.Permission(Subreseller.class, Client.class, clientid).excludeGroups());
         }else if(userId != null && userId > 0){
             conditions.add(new Condition.Permission(User.class, userId, Subreseller.class).excludeGroups());
         }
