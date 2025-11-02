@@ -58,7 +58,7 @@
       </column>
     </createTable>
 
-    <addForeignKeyConstraint baseTableName="tc_user_simcard"
+    <addForeignKeyConstraint baseTableName="tc_device_simcard"
                              baseColumnNames="deviceid"
                              constraintName="fk_device_simcard_device"
                              referencedTableName="tc_devices"
@@ -138,6 +138,19 @@
                              referencedTableName="tc_networks"
                              referencedColumnNames="id"
                              onDelete="CASCADE"/>
+  </changeSet>
+
+
+  <changeSet id="rename-tc-networks-to-tc-networkproviders" author="Walter">
+    <renameTable oldTableName="tc_networks" newTableName="tc_networkproviders"/>
+  </changeSet>
+
+  <changeSet id="rename-tc-user-network-to-tc-user-networkprovider" author="Walter">
+    <renameTable oldTableName="tc_user_network" newTableName="tc_user_networkprovider"/>
+  </changeSet>
+
+  <changeSet id="rename-tc-simcard-network-to-tc-simcard-networkprovider" author="Walter">
+    <renameTable oldTableName="tc_simcard_network" newTableName="tc_simcard_networkprovider"/>
   </changeSet>
 
 
