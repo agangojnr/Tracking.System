@@ -1,0 +1,146 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+  <!-- Create tc_simcards table -->
+  <changeSet id="1" author="Walter">
+    <createTable tableName="tc_simcards">
+      <column name="id" type="INT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="phonenumber" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="iccid" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="attributes" type="VARCHAR(4000)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="create-tc-user-simcard" author="walter">
+    <createTable tableName="tc_user_simcard">
+      <column name="userid" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="simcardid" type="INT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint baseTableName="tc_user_simcard"
+                             baseColumnNames="userid"
+                             constraintName="fk_user_simcard_user"
+                             referencedTableName="tc_users"
+                             referencedColumnNames="id"
+                             onDelete="CASCADE"/>
+
+    <addForeignKeyConstraint baseTableName="tc_user_simcard"
+                             baseColumnNames="simcardid"
+                             constraintName="fk_user_simcard_simcard"
+                             referencedTableName="tc_simcards"
+                             referencedColumnNames="id"
+                             onDelete="CASCADE"/>
+  </changeSet>
+
+  <changeSet id="create-tc-device-simcard" author="walter">
+    <createTable tableName="tc_device_simcard">
+      <column name="deviceid" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="simcardid" type="INT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint baseTableName="tc_user_simcard"
+                             baseColumnNames="deviceid"
+                             constraintName="fk_device_simcard_device"
+                             referencedTableName="tc_devices"
+                             referencedColumnNames="id"
+                             onDelete="CASCADE"/>
+
+    <addForeignKeyConstraint baseTableName="tc_device_simcard"
+                             baseColumnNames="simcardid"
+                             constraintName="fk_device_simcard_simcard"
+                             referencedTableName="tc_simcards"
+                             referencedColumnNames="id"
+                             onDelete="CASCADE"/>
+  </changeSet>
+
+  <!-- Create tc_networks table -->
+  <changeSet id="2" author="Walter">
+    <createTable tableName="tc_networks">
+      <column name="id" type="INT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="name" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="attributes" type="VARCHAR(4000)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="create-tc-user-network" author="walter">
+    <createTable tableName="tc_user_network">
+
+      <column name="userid" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="networkid" type="INT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint baseTableName="tc_user_network"
+                             baseColumnNames="userid"
+                             constraintName="fk_user_network_user"
+                             referencedTableName="tc_users"
+                             referencedColumnNames="id"
+                             onDelete="CASCADE"/>
+
+    <addForeignKeyConstraint baseTableName="tc_user_network"
+                             baseColumnNames="networkid"
+                             constraintName="fk_user_network_network"
+                             referencedTableName="tc_networks"
+                             referencedColumnNames="id"
+                             onDelete="CASCADE"/>
+
+  </changeSet>
+
+  <changeSet id="create-tc-simcard-network" author="walter">
+    <createTable tableName="tc_simcard_network">
+      <column name="simcardid" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="networkid" type="INT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint baseTableName="tc_simcard_network"
+                             baseColumnNames="simcardid"
+                             constraintName="fk_simcard_network_simcard"
+                             referencedTableName="tc_simcards"
+                             referencedColumnNames="id"
+                             onDelete="CASCADE"/>
+
+    <addForeignKeyConstraint baseTableName="tc_simcard_network"
+                             baseColumnNames="networkid"
+                             constraintName="fk_simcard_network_network"
+                             referencedTableName="tc_networks"
+                             referencedColumnNames="id"
+                             onDelete="CASCADE"/>
+  </changeSet>
+
+
+
+</databaseChangeLog>
+
