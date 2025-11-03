@@ -153,6 +153,21 @@
     <renameTable oldTableName="tc_simcard_network" newTableName="tc_simcard_networkprovider"/>
   </changeSet>
 
+  <changeSet id="20251103-rename-networkid-column" author="walter.odhiambo">
+    <renameColumn
+            tableName="tc_user_networkprovider"
+            oldColumnName="networkid"
+            newColumnName="networkproviderid"
+            columnDataType="INT"/>
+  </changeSet>
+
+  <changeSet id="20251103-rename-networkid-column-1" author="walter.odhiambo">
+    <renameColumn
+            tableName="tc_simcard_networkprovider"
+            oldColumnName="networkid"
+            newColumnName="networkproviderid"
+            columnDataType="INT"/>
+  </changeSet>
 
 
 </databaseChangeLog>
