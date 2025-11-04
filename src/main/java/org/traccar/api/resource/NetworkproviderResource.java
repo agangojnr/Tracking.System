@@ -98,7 +98,7 @@ public class NetworkproviderResource extends ExtendedObjectResource<Networkprovi
     }
 
 
-    @Path("update")
+    @Path("update/{id}")
     @PUT
     public Response update(Networkprovider entity) throws Exception {
 

@@ -9,7 +9,10 @@ public enum LinkType {
     SUBRESELLER_DEVICE(Subreseller.class, Device.class, "tc_subreseller_device"),
     RESELLER_DEVICE(Reseller.class, Device.class, "tc_reseller_device"),
     SUBRESELLER_CLIENT(Subreseller.class, Client.class, "tc_subreseller_client"),
-    RESELLER_SUBRESELLER(Reseller.class, Subreseller.class, "tc_reseller_subreseller");
+    RESELLER_SUBRESELLER(Reseller.class, Subreseller.class, "tc_reseller_subreseller"),
+    RESELLER_SIMCARD(Reseller.class, Simcard.class, "tc_reseller_simcard"),
+    SIMCARD_NETWORKPROVIDER(Simcard.class, Networkprovider.class, "tc_simcard_networkprovider"),
+    DEVICE_SIMCARD(Device.class, Simcard.class, "tc_device_simcard");
 
     private final Class<? extends BaseModel> ownerClass;
     private final Class<? extends BaseModel> propertyClass;

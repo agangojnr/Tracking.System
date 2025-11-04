@@ -140,6 +140,31 @@
                              onDelete="CASCADE"/>
   </changeSet>
 
+  <changeSet id="create-tc-reseller-simcard" author="walter">
+    <createTable tableName="tc_reseller_simcard">
+      <column name="resellerid" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="simcardid" type="INT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint baseTableName="tc_reseller_simcard"
+                             baseColumnNames="resellerid"
+                             constraintName="fk_reseller_simcard_reseller"
+                             referencedTableName="tc_resellers"
+                             referencedColumnNames="id"
+                             onDelete="CASCADE"/>
+
+    <addForeignKeyConstraint baseTableName="tc_reseller_simcard"
+                             baseColumnNames="simcardid"
+                             constraintName="fk_reseller_simcard_simcard"
+                             referencedTableName="tc_simcards"
+                             referencedColumnNames="id"
+                             onDelete="CASCADE"/>
+  </changeSet>
+
 
   <changeSet id="rename-tc-networks-to-tc-networkproviders" author="Walter">
     <renameTable oldTableName="tc_networks" newTableName="tc_networkproviders"/>
