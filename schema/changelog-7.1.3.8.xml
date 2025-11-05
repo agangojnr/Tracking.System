@@ -195,5 +195,31 @@
   </changeSet>
 
 
+  <changeSet id="create-tc-user-devicegroup" author="walter">
+    <createTable tableName="tc_user_devicegroup">
+      <column name="userid" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="devicegroupid" type="INT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint baseTableName="tc_user_devicegroup"
+                             baseColumnNames="userid"
+                             constraintName="fk_user_devicegroup_user"
+                             referencedTableName="tc_users"
+                             referencedColumnNames="id"
+                             onDelete="CASCADE"/>
+
+    <addForeignKeyConstraint baseTableName="tc_user_devicegroup"
+                             baseColumnNames="devicegroupid"
+                             constraintName="fk_user_devicegroup_devicegroup"
+                             referencedTableName="tc_groups"
+                             referencedColumnNames="id"
+                             onDelete="CASCADE"/>
+  </changeSet>
+
+
 </databaseChangeLog>
 

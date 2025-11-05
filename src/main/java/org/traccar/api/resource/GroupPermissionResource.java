@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.traccar.api.BaseResource;
 import org.traccar.api.security.PermissionsService;
-import org.traccar.model.Group;
+import org.traccar.model.UserDevicegroup;
 import org.traccar.model.GroupDevice;
 import org.traccar.model.LinkType;
 import org.traccar.model.User;
@@ -62,6 +62,43 @@ public class GroupPermissionResource extends BaseResource {
         // If the record exists, return true; otherwise, false
         return link != null;
     }
+
+    @Path("devicegroup")
+    @POST
+    public Response linkUserDevicegroup(@QueryParam("userId") long userId, @QueryParam("devicegroupId") long devicegroupId) throws Exception{
+        //LOGGER.info("Received POST request -> userId: {}, devicegroupId: {}", userId, devicegroupId);
+        if(!validateDeviceGroupLink(userId,devicegroupId)){
+            permissionsService.link(LinkType.USER_DEVICEGROUP, userId, devicegroupId);
+            return Response.ok("{\"status\":\"Linked successfully.\"}").build();
+        }else{
+            return Response.ok("{\"status\":\"Group already linked to the user.\"}").build();
+        }
+    }
+
+    @Path("devicegroup")
+    @DELETE
+    public Response unlinkUserDevicegroup(@QueryParam("userId") long userId, @QueryParam("devicegroupId") long devicegroupId) throws Exception{
+        if(validateDeviceGroupLink(userId,devicegroupId)) {
+            permissionsService.unlink(LinkType.USER_DEVICEGROUP, userId, devicegroupId);
+            return Response.ok("{\"status\":\"Unlinked successfully.\"}").build();
+        }else{
+            return Response.ok("{\"status\":\"The group-device link doesnot exist.\"}").build();
+        }
+    }
+
+    public boolean validateDeviceGroupLink(long userId, long devicegroupId) throws StorageException {
+        // Query the database for a record matching both groupId and deviceId
+        UserDevicegroup link = storage.getObject(UserDevicegroup.class, new Request(
+                new Columns.All(),
+                new Condition.And(
+                        new Condition.Equals("userid", userId),
+                        new Condition.Equals("devicegroupid", devicegroupId)
+                )));
+
+        // If the record exists, return true; otherwise, false
+        return link != null;
+    }
+
 
 
 }
