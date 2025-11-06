@@ -20,6 +20,16 @@
     </createTable>
   </changeSet>
 
+  <changeSet id="add-assettypeid-to-assets" author="Walter">
+    <addColumn tableName="tc_assets">
+      <column name="assettypeid" type="INT">
+        <constraints nullable="false" foreignKeyName="fk_assets_assettype"
+                     referencedTableName="tc_assettypes"
+                     referencedColumnNames="id"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
   <changeSet id="create-tc-user-asset" author="walter">
     <createTable tableName="tc_user_asset">
       <column name="userid" type="INT">

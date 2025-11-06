@@ -16,4 +16,14 @@ public class Asset extends ExtendedModel {
         this.name = name;
     }
 
+    private Long assettypeid;
+
+    public Long getAssettypeid() {
+        return assettypeid;
+    }
+
+    public void setAssettypeid(Long assettypeid) {
+        this.assettypeid = assettypeid;
+    }
+
 }
