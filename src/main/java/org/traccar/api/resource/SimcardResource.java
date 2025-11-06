@@ -125,8 +125,6 @@ public class SimcardResource extends ExtendedObjectResource<Simcard> {
         }else{
             return Response.status(Response.Status.FOUND).build();
         }
-
-
     }
 
     public boolean validate(Simcard entity) throws StorageException {

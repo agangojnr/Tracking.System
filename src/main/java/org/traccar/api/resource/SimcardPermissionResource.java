@@ -11,6 +11,7 @@ import org.traccar.api.security.PermissionsService;
 import org.traccar.model.Device;
 import org.traccar.model.DeviceSimcard;
 import org.traccar.model.LinkType;
+import org.traccar.model.ResellerSimcard;
 import org.traccar.storage.StorageException;
 import org.traccar.storage.query.Columns;
 import org.traccar.storage.query.Condition;
@@ -36,7 +37,6 @@ public class SimcardPermissionResource extends BaseResource {
         }else{
             return Response.ok("{\"status\":\"Device already linked to the simcard.\"}").build();
         }
-
     }
 
     @DELETE
@@ -66,6 +66,42 @@ public class SimcardPermissionResource extends BaseResource {
                 new Columns.All(),
                 new Condition.And(
                         new Condition.Equals("deviceid", deviceId),
+                        new Condition.Equals("simcardid", simcardId)
+                )));
+        return link != null;
+    }
+
+
+
+    @Path("reseller")
+    @POST
+    public Response linkResellerSimcard(@QueryParam("resellerId") long resellerId, @QueryParam("simcardId") long simcardId) throws Exception{
+        //LOGGER.info("Received POST request -> groupId: {}, deviceId: {}", groupId, deviceId);
+        if(!validateResellerSimcardLink(resellerId,simcardId)){
+            permissionsService.link(LinkType.RESELLER_SIMCARD, resellerId, simcardId);
+            return Response.ok("{\"status\":\"Linked successfully\"}").build();
+        }else{
+            return Response.ok("{\"status\":\"Reseller already linked to the simcard.\"}").build();
+        }
+    }
+
+    @Path("reseller")
+    @DELETE
+    public Response unlinkResellerSimcard(@QueryParam("resellerId") long resellerId, @QueryParam("simcardId") long simcardId) throws Exception{
+        if(validateResellerSimcardLink(resellerId,simcardId)) {
+            permissionsService.unlink(LinkType.RESELLER_SIMCARD, resellerId, simcardId);
+            return Response.ok("{\"status\":\"Unlinked successfully.\"}").build();
+        }else{
+            return Response.ok("{\"status\":\"The reseller-simcard link doesnot exist.\"}").build();
+        }
+    }
+
+    public boolean validateResellerSimcardLink(long resellerId, long simcardId) throws StorageException {
+        // Query the database for a record matching both groupId and deviceId
+        ResellerSimcard link = storage.getObject(ResellerSimcard.class, new Request(
+                new Columns.All(),
+                new Condition.And(
+                        new Condition.Equals("resellerid", resellerId),
                         new Condition.Equals("simcardid", simcardId)
                 )));
         return link != null;
