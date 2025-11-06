@@ -50,7 +50,7 @@ public class SimcardResource extends ExtendedObjectResource<Simcard> {
     private static final Logger LOGGER = LoggerFactory.getLogger(SimcardResource.class);
 
     public SimcardResource() {
-        super(Simcard.class, "name");
+        super(Simcard.class, "phonenumber");
     }
 
 

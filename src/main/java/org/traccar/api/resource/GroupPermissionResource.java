@@ -99,6 +99,4 @@ public class GroupPermissionResource extends BaseResource {
         return link != null;
     }
 
-
-
 }

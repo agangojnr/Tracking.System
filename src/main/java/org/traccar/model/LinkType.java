@@ -13,7 +13,9 @@ public enum LinkType {
     RESELLER_SIMCARD(Reseller.class, Simcard.class, "tc_reseller_simcard"),
     SIMCARD_NETWORKPROVIDER(Simcard.class, Networkprovider.class, "tc_simcard_networkprovider"),
     USER_DEVICEGROUP(User.class, Devicegroup.class, "tc_user_devicegroup"),
-    DEVICE_SIMCARD(Device.class, Simcard.class, "tc_device_simcard");
+    DEVICE_SIMCARD(Device.class, Simcard.class, "tc_device_simcard"),
+    ASSET_DEVICE(Asset.class, Device.class, "tc_asset_device"),
+    CLIENT_ASSET(Client.class, Asset.class, "tc_client_asset");
 
     private final Class<? extends BaseModel> ownerClass;
     private final Class<? extends BaseModel> propertyClass;

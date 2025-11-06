@@ -1,0 +1,165 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+  <!-- Create tc_assets table -->
+  <changeSet id="1" author="Walter">
+    <createTable tableName="tc_assets">
+      <column name="id" type="INT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="name" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="attributes" type="VARCHAR(4000)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="create-tc-user-asset" author="walter">
+    <createTable tableName="tc_user_asset">
+      <column name="userid" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="assetid" type="INT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint baseTableName="tc_user_asset"
+                             baseColumnNames="userid"
+                             constraintName="fk_user_asset_user"
+                             referencedTableName="tc_users"
+                             referencedColumnNames="id"
+                             onDelete="CASCADE"/>
+
+    <addForeignKeyConstraint baseTableName="tc_user_asset"
+                             baseColumnNames="assetid"
+                             constraintName="fk_user_asset_asset"
+                             referencedTableName="tc_assets"
+                             referencedColumnNames="id"
+                             onDelete="CASCADE"/>
+  </changeSet>
+
+  <changeSet id="create-tc-asset-device" author="walter">
+    <createTable tableName="tc_asset_device">
+      <column name="assetid" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="deviceid" type="INT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint baseTableName="tc_asset_device"
+                             baseColumnNames="assetid"
+                             constraintName="fk_asset_asset_device"
+                             referencedTableName="tc_assets"
+                             referencedColumnNames="id"
+                             onDelete="CASCADE"/>
+
+    <addForeignKeyConstraint baseTableName="tc_asset_device"
+                             baseColumnNames="deviceid"
+                             constraintName="fk_asset_device_device"
+                             referencedTableName="tc_devices"
+                             referencedColumnNames="id"
+                             onDelete="CASCADE"/>
+  </changeSet>
+
+
+  <!-- Create tc_assettypes table -->
+  <changeSet id="2" author="Walter">
+    <createTable tableName="tc_assettypes">
+      <column name="id" type="INT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="name" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="attributes" type="VARCHAR(4000)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="create-tc-user-assettype" author="walter">
+    <createTable tableName="tc_user_assettype">
+      <column name="userid" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="assettypeid" type="INT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint baseTableName="tc_user_assettype"
+                             baseColumnNames="userid"
+                             constraintName="fk_user_assettype_user"
+                             referencedTableName="tc_users"
+                             referencedColumnNames="id"
+                             onDelete="CASCADE"/>
+
+    <addForeignKeyConstraint baseTableName="tc_user_assettype"
+                             baseColumnNames="assettypeid"
+                             constraintName="fk_user_assettype_assettype"
+                             referencedTableName="tc_assettypes"
+                             referencedColumnNames="id"
+                             onDelete="CASCADE"/>
+  </changeSet>
+
+  <changeSet id="create-tc-asset-assettype" author="walter">
+    <createTable tableName="tc_asset_assettype">
+      <column name="assetid" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="assettypeid" type="INT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint baseTableName="tc_asset_assettype"
+                             baseColumnNames="assetid"
+                             constraintName="fk_asset_asset_assettype"
+                             referencedTableName="tc_assets"
+                             referencedColumnNames="id"
+                             onDelete="CASCADE"/>
+
+    <addForeignKeyConstraint baseTableName="tc_asset_assettype"
+                             baseColumnNames="assettypeid"
+                             constraintName="fk_asset_assettype_assettype"
+                             referencedTableName="tc_assettypes"
+                             referencedColumnNames="id"
+                             onDelete="CASCADE"/>
+  </changeSet>
+
+  <changeSet id="create-tc-client-asset" author="walter">
+    <createTable tableName="tc_client_asset">
+      <column name="clientid" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="assetid" type="INT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint baseTableName="tc_client_asset"
+                             baseColumnNames="clientid"
+                             constraintName="fk_client_client_asset"
+                             referencedTableName="tc_clients"
+                             referencedColumnNames="id"
+                             onDelete="CASCADE"/>
+
+    <addForeignKeyConstraint baseTableName="tc_client_asset"
+                             baseColumnNames="assetid"
+                             constraintName="fk_client_asset_asset"
+                             referencedTableName="tc_assets"
+                             referencedColumnNames="id"
+                             onDelete="CASCADE"/>
+  </changeSet>
+
+</databaseChangeLog>
+
