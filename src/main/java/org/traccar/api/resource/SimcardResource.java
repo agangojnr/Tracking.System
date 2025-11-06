@@ -81,11 +81,10 @@ public class SimcardResource extends ExtendedObjectResource<Simcard> {
     }
 
 
-    @Path("create/{resellerid}/{networkproviderid}")
+    @Path("create/{resellerid}")
     @POST
     public Response add(Simcard entity,
-                        @PathParam("resellerid") Long resellerid,
-                        @PathParam("networkproviderid") Long networkproviderid) throws Exception {
+                        @PathParam("resellerid") Long resellerid) throws Exception {
 
         permissionsService.checkEdit(getUserId(), entity, true, false);
 
@@ -94,7 +93,7 @@ public class SimcardResource extends ExtendedObjectResource<Simcard> {
             long simcardid = storage.addObject(entity, new Request(new Columns.Exclude("id")));
             //LOGGER.info("Checking for clientId: {}", clientId);
             permissionsService.link(LinkType.RESELLER_SIMCARD, resellerid, simcardid);
-            permissionsService.link(LinkType.SIMCARD_NETWORKPROVIDER, simcardid, networkproviderid);
+            //permissionsService.link(LinkType.SIMCARD_NETWORKPROVIDER, simcardid, networkproviderid);
             entity.setId(simcardid);
             actionLogger.create(request, getUserId(), entity);
 
@@ -116,7 +115,7 @@ public class SimcardResource extends ExtendedObjectResource<Simcard> {
 
         if(validate(entity)){
             storage.updateObject(entity, new Request(
-                    new Columns.Exclude("id"),
+                    new Columns.Exclude("id", "phonenumber"),
                     new Condition.Equals("id", entity.getId())));
 
             cacheManager.invalidateObject(true, entity.getClass(), entity.getId(), ObjectOperation.UPDATE);
@@ -126,6 +125,8 @@ public class SimcardResource extends ExtendedObjectResource<Simcard> {
         }else{
             return Response.status(Response.Status.FOUND).build();
         }
+
+
     }
 
     public boolean validate(Simcard entity) throws StorageException {

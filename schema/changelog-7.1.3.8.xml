@@ -23,6 +23,16 @@
     </createTable>
   </changeSet>
 
+  <changeSet id="add-networkproviderid-to-simcards" author="Walter">
+    <addColumn tableName="tc_simcards">
+      <column name="networkproviderid" type="INT">
+        <constraints nullable="false" foreignKeyName="fk_simcards_networkprovider"
+                     referencedTableName="tc_networkproviders"
+                     referencedColumnNames="id"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
   <changeSet id="create-tc-user-simcard" author="walter">
     <createTable tableName="tc_user_simcard">
       <column name="userid" type="INT">

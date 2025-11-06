@@ -6,6 +6,7 @@ import org.traccar.storage.StorageName;
 public class Simcard extends ExtendedModel{
     private String phonenumber;
     private String iccid;
+    private String networkproviderid;
 
     public String getPhonenumber() {
         return phonenumber;
@@ -21,5 +22,13 @@ public class Simcard extends ExtendedModel{
 
     public void setIccid(String iccid) {
         this.iccid = iccid;
+    }
+
+    public String getNetworkproviderid() {
+        return networkproviderid;
+    }
+
+    public void setNetworkproviderid(String networkproviderid) {
+        this.networkproviderid = networkproviderid;
     }
 }
