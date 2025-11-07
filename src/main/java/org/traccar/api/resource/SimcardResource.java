@@ -46,7 +46,6 @@ public class SimcardResource extends ExtendedObjectResource<Simcard> {
     @Inject
     private PermissionsService permissionsService;
 
-
     private static final Logger LOGGER = LoggerFactory.getLogger(SimcardResource.class);
 
     public SimcardResource() {
@@ -88,10 +87,10 @@ public class SimcardResource extends ExtendedObjectResource<Simcard> {
 
         permissionsService.checkEdit(getUserId(), entity, true, false);
 
-        if(validate(entity)){
+        if(!validate(entity)){
             entity.setId(0);
             long simcardid = storage.addObject(entity, new Request(new Columns.Exclude("id")));
-            //LOGGER.info("Checking for clientId: {}", clientId);
+            //LOGGER.info("Checking for clientId: {}", resellerid);
             permissionsService.link(LinkType.RESELLER_SIMCARD, resellerid, simcardid);
             //permissionsService.link(LinkType.SIMCARD_NETWORKPROVIDER, simcardid, networkproviderid);
             entity.setId(simcardid);
@@ -112,30 +111,44 @@ public class SimcardResource extends ExtendedObjectResource<Simcard> {
     @Path("update/{id}")
     @PUT
     public Response update(Simcard entity) throws Exception {
+        //LOGGER.info("Checking for simcardId: {}", entity.getId());
+            if(validate(entity)){
+                storage.updateObject(entity, new Request(
+                        new Columns.Exclude("id", "phonenumber"),
+                        new Condition.Equals("id", entity.getId())));
 
-        if(validate(entity)){
-            storage.updateObject(entity, new Request(
-                    new Columns.Exclude("id", "phonenumber"),
-                    new Condition.Equals("id", entity.getId())));
+                cacheManager.invalidateObject(true, entity.getClass(), entity.getId(), ObjectOperation.UPDATE);
+                actionLogger.edit(request, getUserId(), entity);
+            }else {
+                //LOGGER.info("Simcard doesnt exists, {}", simExist);
+                storage.updateObject(entity, new Request(
+                        new Columns.Exclude("id"),
+                        new Condition.Equals("id", entity.getId())));
 
-            cacheManager.invalidateObject(true, entity.getClass(), entity.getId(), ObjectOperation.UPDATE);
-            actionLogger.edit(request, getUserId(), entity);
-
+                cacheManager.invalidateObject(true, entity.getClass(), entity.getId(), ObjectOperation.UPDATE);
+                actionLogger.edit(request, getUserId(), entity);
+            }
             return Response.ok(entity).build();
-        }else{
-            return Response.status(Response.Status.FOUND).build();
-        }
     }
 
     public boolean validate(Simcard entity) throws StorageException {
         String phonenumber = entity.getPhonenumber();
+        if (phonenumber == null) {
+            throw new IllegalArgumentException("Phonenumber cannot be null");
+        }
 
         Simcard simcard = storage.getObject(Simcard.class, new Request(
                 new Columns.All(),
                 new Condition.And(
                         new Condition.Equals("phonenumber", phonenumber),
                         new Condition.Permission(User.class, getUserId(), Simcard.class))));
-        return simcard == null;
+
+        return simcard != null;
     }
 
+
 }
+
+
+
+

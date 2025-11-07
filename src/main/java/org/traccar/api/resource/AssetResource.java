@@ -118,17 +118,21 @@ public class AssetResource extends SimpleObjectResource<Asset> {
     @PUT
     public Response update(Asset entity) throws Exception {
 
-        if(validate(entity)){
+        if(!validate(entity)){
+            storage.updateObject(entity, new Request(
+                    new Columns.Exclude("id","name"),
+                    new Condition.Equals("id", entity.getId())));
+
+            cacheManager.invalidateObject(true, entity.getClass(), entity.getId(), ObjectOperation.UPDATE);
+            actionLogger.edit(request, getUserId(), entity);
+        }else{
             storage.updateObject(entity, new Request(
                     new Columns.Exclude("id"),
                     new Condition.Equals("id", entity.getId())));
 
             cacheManager.invalidateObject(true, entity.getClass(), entity.getId(), ObjectOperation.UPDATE);
             actionLogger.edit(request, getUserId(), entity);
-
-            return Response.ok(entity).build();
-        }else{
-            return Response.status(Response.Status.FOUND).build();
         }
+        return Response.ok(entity).build();
     }
 }
