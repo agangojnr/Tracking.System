@@ -77,8 +77,6 @@ public class DeviceResource extends BaseObjectResource<Device> {
     @Inject
     private PermissionsService permissionsService;
 
-
-
     private static final Logger LOGGER = LoggerFactory.getLogger(DeviceResource.class);
 
     public DeviceResource() {
