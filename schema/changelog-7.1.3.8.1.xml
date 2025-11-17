@@ -59,22 +59,22 @@
   <!-- 2. SIMCARD STRUCTURES -->
   <!-- ===================== -->
 
-  <!--  <changeSet id="2" author="Walter">-->
-  <!--    <createTable tableName="tc_simcards">-->
-  <!--      <column name="id" type="INT" autoIncrement="true">-->
-  <!--        <constraints primaryKey="true" nullable="false"/>-->
-  <!--      </column>-->
-  <!--      <column name="phonenumber" type="VARCHAR(255)">-->
-  <!--        <constraints nullable="false"/>-->
-  <!--      </column>-->
-  <!--      <column name="iccid" type="VARCHAR(255)">-->
-  <!--        <constraints nullable="false"/>-->
-  <!--      </column>-->
-  <!--      <column name="attributes" type="VARCHAR(4000)">-->
-  <!--        <constraints nullable="false"/>-->
-  <!--      </column>-->
-  <!--    </createTable>-->
-  <!--  </changeSet>-->
+    <changeSet id="2" author="Walter">
+      <createTable tableName="tc_simcards">
+        <column name="id" type="INT" autoIncrement="true">
+          <constraints primaryKey="true" nullable="false"/>
+        </column>
+        <column name="phonenumber" type="VARCHAR(255)">
+          <constraints nullable="false"/>
+        </column>
+        <column name="iccid" type="VARCHAR(255)">
+          <constraints nullable="false"/>
+        </column>
+        <column name="attributes" type="VARCHAR(4000)">
+          <constraints nullable="false"/>
+        </column>
+      </createTable>
+    </changeSet>
   <!-- ========================= -->
   <!-- 3. ADD FOREIGN KEY COLUMN -->
   <!-- ========================= -->
@@ -142,34 +142,6 @@
                              referencedColumnNames="id"
                              onDelete="CASCADE"/>
   </changeSet>
-
-
-  <!--  <changeSet id="create-tc-simcard-networkprovider" author="walter">-->
-  <!--    <createTable tableName="tc_simcard_networkprovider">-->
-  <!--      <column name="simcardid" type="INT">-->
-  <!--        <constraints nullable="false"/>-->
-  <!--      </column>-->
-  <!--      <column name="networkproviderid" type="INT">-->
-  <!--        <constraints nullable="false"/>-->
-  <!--      </column>-->
-  <!--    </createTable>-->
-
-  <!--    <addForeignKeyConstraint baseTableName="tc_simcard_networkprovider"-->
-  <!--                             baseColumnNames="simcardid"-->
-  <!--                             constraintName="fk_simcard_networkprovider_simcard"-->
-  <!--                             referencedTableName="tc_simcards"-->
-  <!--                             referencedColumnNames="id"-->
-  <!--                             onDelete="CASCADE"/>-->
-
-  <!--    <addForeignKeyConstraint baseTableName="tc_simcard_networkprovider"-->
-  <!--                             baseColumnNames="networkproviderid"-->
-  <!--                             constraintName="fk_simcard_networkprovider_provider"-->
-  <!--                             referencedTableName="tc_networkproviders"-->
-  <!--                             referencedColumnNames="id"-->
-  <!--                             onDelete="CASCADE"/>-->
-  <!--  </changeSet>-->
-
-
 
   <!-- ========================= -->
   <!-- 5. EXTRA RELATIONSHIPS -->

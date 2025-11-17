@@ -25,7 +25,7 @@
 <!--    <entry key='database.password'></entry>-->
 
     <entry key='database.driver'>com.microsoft.sqlserver.jdbc.SQLServerDriver</entry>
-    <entry key='database.url'>jdbc:sqlserver://localhost:1433;databaseName=ipinner;user=dbuser;password=P@55w0rd;encrypt=false;</entry>
+    <entry key='database.url'>jdbc:sqlserver://localhost:1433;databaseName=nanofleet;user=dbuser;password=P@55w0rd;encrypt=false;</entry>
 
     <!--<entry key='server.instantAcknowledgement'>true</entry>
     <entry key='server.buffering.threshold'>5000</entry>-->
