@@ -31,6 +31,11 @@ public class OrbcommProtocol extends BaseProtocol {
     public OrbcommProtocol(Config config) {
         addClient(new TrackerClient(config, getName()) {
             @Override
+            public int getPort() {
+                return 0;
+            }
+
+            @Override
             protected void addProtocolHandlers(PipelineBuilder pipeline, Config config) {
                 pipeline.addLast(new HttpRequestEncoder());
                 pipeline.addLast(new HttpResponseDecoder());
