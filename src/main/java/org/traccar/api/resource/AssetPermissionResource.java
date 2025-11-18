@@ -28,7 +28,7 @@ public class AssetPermissionResource extends BaseResource {
     private PermissionsService permissionsService;
 
     @POST
-    public Response linkClientDevice(@QueryParam("assetId") long assetId, @QueryParam("deviceId") long deviceId) throws Exception{
+    public Response linkAssetDevice(@QueryParam("assetId") long assetId, @QueryParam("deviceId") long deviceId) throws Exception{
         //LOGGER.info("Received POST request -> clientId: {}, deviceId: {}", clientId, deviceId);
         if(!validateAssetDeviceLink(assetId,deviceId)){
             permissionsService.link(LinkType.ASSET_DEVICE, assetId, deviceId);
@@ -39,7 +39,7 @@ public class AssetPermissionResource extends BaseResource {
     }
 
     @DELETE
-    public Response unlinkClientDevice(@QueryParam("assetId") long assetId, @QueryParam("deviceId") long deviceId) throws Exception{
+    public Response unlinkAssetDevice(@QueryParam("assetId") long assetId, @QueryParam("deviceId") long deviceId) throws Exception{
         if(validateAssetDeviceunLink(assetId,deviceId)){
         permissionsService.unlink(LinkType.ASSET_DEVICE, assetId, deviceId);
             return Response.ok("{\"status\":\"Link deleted successfully.\"}").build();

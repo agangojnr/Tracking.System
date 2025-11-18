@@ -57,6 +57,7 @@ public class SimcardResource extends ExtendedObjectResource<Simcard> {
     @Path("query")
     public Collection<Simcard> get(@QueryParam("all") Boolean all,
                                   @QueryParam("userId") Long userId,
+                                  @QueryParam("deviceid") Long deviceid,
                                   @QueryParam("resellerid") Long resellerid,
                                   @QueryParam("networkproviderid") Long networkproviderid) throws StorageException {
         var conditions = new LinkedList<Condition>();
@@ -65,6 +66,11 @@ public class SimcardResource extends ExtendedObjectResource<Simcard> {
             if (permissionsService.notAdmin(getUserId())) {
                 conditions.add(new Condition.Permission(User.class, getUserId(), baseClass));
             }
+
+        } else if (deviceid != null && deviceid > 0) {
+            //LOGGER.info("Received POST request -> resellerid: {}", resellerid);
+            conditions.add(new Condition.Permission(Device.class, deviceid, Simcard.class).excludeGroups());
+
         } else if (resellerid != null && resellerid > 0) {
             //LOGGER.info("Received POST request -> resellerid: {}", resellerid);
             conditions.add(new Condition.Permission(Reseller.class, resellerid, Simcard.class).excludeGroups());
