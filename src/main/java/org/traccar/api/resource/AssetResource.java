@@ -94,59 +94,22 @@ public class AssetResource extends SimpleObjectResource<Asset> {
                                         @QueryParam("deviceId") Long deviceId,
                                        @QueryParam("userId") Long userId) throws StorageException{
 
+        //LOGGER.info("Testing this API");
         var conditions = new LinkedList<Condition>();
-        //LOGGER.info("This is it right");
         if (Boolean.TRUE.equals(all)) {
-            LOGGER.info("This is it right - equals");
             if (permissionsService.notAdmin(getUserId())) {
-                LOGGER.info("This is it right - not admin");
                 conditions.add(new Condition.Permission(User.class, getUserId(), baseClass));
             }
 
         } else if (clientId != null && clientId > 0) {
-            LOGGER.info("This is it right - 1");
             conditions.add(new Condition.Permission(Client.class, clientId,  Asset.class).excludeGroups());
         } else if (deviceId != null && deviceId > 0) {
-            LOGGER.info("This is it right - 2");
             conditions.add(new Condition.Permission(Asset.class, Device.class, deviceId).excludeGroups());
         }else if(userId != null && userId > 0){
-            LOGGER.info("This is it right - 3");
             conditions.add(new Condition.Permission(User.class, userId, Asset.class).excludeGroups());
         }
-
-//        return storage.getObjects(baseClass, new Request(
-//                new Columns.All(), Condition.merge(conditions), new Order("name")
-//        ));
-//            conditions.add(new Condition.Join(
-//                    Asset.class, "assettypeid",
-//                    Assettype.class, "id"
-//            ));
-
-//        new Columns.All(),
-//                new Condition.Join(Asset.class, "assettypeid", Assettype.class, "id"),
-//                conditions.isEmpty() ? new Condition.Raw("1 = 1") : Condition.merge(conditions),
-//                new Order("name")
-//        var request = new Request(
-//                new Columns.All(),
-//                new Condition.Join(Asset.class, "assettypeid", Assettype.class, "id")
-//
-//        );
-        Condition join = new Condition.Join(
-                Asset.class, "assettypeid",
-                Assettype.class, "id"
-        );
-
-        Condition where = conditions.isEmpty()
-                ? new Condition.Raw("1 = 1")
-                : Condition.merge(conditions);
-
-        var request = new Request(
-                new Columns.All(),
-                Condition.merger(join, where),   // JOIN + WHERE merged here
-                new Order("name")
-        );
-
-        return storage.getObjects(Asset.class, request);
+        return storage.getObjects(baseClass, new Request(
+                new Columns.All(), Condition.merge(conditions), new Order("name")));
     }
 
     @Path("update/{id}")
