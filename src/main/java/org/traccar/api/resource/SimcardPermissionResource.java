@@ -31,6 +31,7 @@ public class SimcardPermissionResource extends BaseResource {
     @POST
     public Response linkDeviceSimcard(@QueryParam("deviceId") long deviceId, @QueryParam("simcardId") long simcardId) throws Exception{
         //LOGGER.info("Received POST request -> groupId: {}, deviceId: {}", groupId, deviceId);
+        LOGGER.info("Testing simcard device linking {} and {}", deviceId, simcardId);
         if(!validateDeviceSimcardLink(deviceId,simcardId)){
             permissionsService.link(LinkType.DEVICE_SIMCARD, deviceId, simcardId);
             return Response.ok("{\"status\":\"Linked successfully\"}").build();
@@ -104,6 +105,20 @@ public class SimcardPermissionResource extends BaseResource {
                         new Condition.Equals("resellerid", resellerId),
                         new Condition.Equals("simcardid", simcardId)
                 )));
+        return link != null;
+    }
+
+    public <T> boolean validateLink(Class<T> modelClass,
+                                    String fieldA, Object valueA,
+                                    String fieldB, Object valueB) throws StorageException {
+
+        T link = storage.getObject(modelClass, new Request(
+                new Columns.All(),
+                new Condition.Or(
+                        new Condition.Equals(fieldA, valueA),
+                        new Condition.Equals(fieldB, valueB)
+                )
+        ));
         return link != null;
     }
 

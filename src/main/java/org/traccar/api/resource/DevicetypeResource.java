@@ -45,7 +45,7 @@ public class DevicetypeResource extends SimpleObjectResource<Devicetype> {
     private PermissionsService permissionsService;
 
     public DevicetypeResource() {
-        super(Devicetype.class, "name");
+        super(Devicetype.class, "model");
     }
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Devicetype.class);

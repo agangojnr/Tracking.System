@@ -79,6 +79,38 @@ public class Permission {
         return "tc_" + Introspector.decapitalize(ownerName) + "_" + Introspector.decapitalize(propertyName);
     }
 
+    public String getColumnName(Class<?> propertyClass) {
+        String propertyName = propertyClass.getSimpleName();
+        String managedPrefix = "Managed";
+        if (propertyName.startsWith(managedPrefix)) {
+            propertyName = propertyName.substring(managedPrefix.length());
+        }
+        return Introspector.decapitalize(propertyName) + "id";
+    }
+
+    public static Class<?> getModelClass(Class<?> ownerClass, Class<?> propertyClass)
+            throws ClassNotFoundException {
+
+        String ownerName = ownerClass.getSimpleName();
+        String propertyName = propertyClass.getSimpleName();
+        String managedPrefix = "Managed";
+
+        // Remove "Managed" prefix if present
+        if (propertyName.startsWith(managedPrefix)) {
+            propertyName = propertyName.substring(managedPrefix.length());
+        }
+
+        // Build final class name
+        String modelName = ownerName + propertyName;
+
+        // Convert to full package name
+        String fullClassName = "org.traccar.model." + modelName;
+
+        // Load dynamically
+        return Class.forName(fullClassName);
+    }
+
+
     @QueryIgnore
     @JsonIgnore
     public String getStorageName() {

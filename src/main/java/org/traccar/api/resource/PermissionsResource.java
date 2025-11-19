@@ -1,23 +1,10 @@
-/*
- * Copyright 2017 - 2022 Anton Tananaev (anton@traccar.org)
- * Copyright 2017 Andrey Kunitsyn (andrey@traccar.org)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+
 package org.traccar.api.resource;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.core.Context;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.traccar.api.BaseResource;
 import org.traccar.helper.LogAction;
 import org.traccar.model.Permission;
@@ -51,17 +38,43 @@ public class PermissionsResource  extends BaseResource {
     private ClientPermissionResource clientPermissionResource;
 
     @Inject
+    private SimcardPermissionResource simcardPermissionResource;
+
+    @Inject
     private LogAction actionLogger;
 
     @Context
     private HttpServletRequest request;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(SimcardPermissionResource.class);
+
     private void checkPermission(Permission permission) throws StorageException {
         if (permissionsService.notAdmin(getUserId())) {
             permissionsService.checkPermission(permission.getOwnerClass(), getUserId(), permission.getOwnerId());
             permissionsService.checkPermission(permission.getPropertyClass(), getUserId(), permission.getPropertyId());
+            boolean valid = simcardPermissionResource.validateLink(permission.getOwnerClass(),
+                    "ownerid", permission.getOwnerId(),
+                    "propertyid", permission.getPropertyId());
         }
     }
+
+    private void checkLinkage(Permission permission) throws StorageException, ClassNotFoundException {
+
+        boolean invalid = simcardPermissionResource.validateLink(permission.getModelClass(permission.getOwnerClass(),permission.getPropertyClass()),
+                ""+permission.getColumnName(permission.getOwnerClass())+"", permission.getOwnerId(),
+                ""+permission.getColumnName(permission.getPropertyClass())+"", permission.getPropertyId()
+        );
+        if (invalid) {
+            throw new StorageException(
+                    "Invalid Link: "
+                            + permission.getOwnerClass().getSimpleName() + "(" + permission.getOwnerId() + ") and "
+                            + permission.getPropertyClass().getSimpleName() + "(" + permission.getPropertyId() + "), " +
+                            "Device already linked to a simcard."
+            );
+
+        }
+    }
+
 
     private void checkPermissionTypes(List<LinkedHashMap<String, Long>> entities) {
         Set<String> keys = null;
@@ -81,6 +94,7 @@ public class PermissionsResource  extends BaseResource {
         for (LinkedHashMap<String, Long> entity: entities) {
             Permission permission = new Permission(entity);
             checkPermission(permission);
+            checkLinkage(permission);
             storage.addPermission(permission);
             cacheManager.invalidatePermission(
                     true,
@@ -96,6 +110,7 @@ public class PermissionsResource  extends BaseResource {
 
     @POST
     public Response add(LinkedHashMap<String, Long> entity) throws Exception {
+
         return add(Collections.singletonList(entity));
     }
 
