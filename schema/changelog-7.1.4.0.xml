@@ -70,13 +70,12 @@
                              onDelete="CASCADE"/>
   </changeSet>
 
-<!--  <changeSet id="rename-asset-device-table" author="you">-->
-<!--    <renameTable-->
-<!--            oldTableName="tc_asset_device"-->
-<!--            newTableName="tc_device_asset"/>-->
+
+<!--  <changeSet id="drop-tc-device-asset-table" author="Walter">-->
+<!--    <dropTable tableName="tc_device_asset"/>-->
 <!--  </changeSet>-->
 
-  <changeSet id="create-tc-device-asset" author="walter">
+  <changeSet id="create-tc-device-asset1" author="walter">
     <createTable tableName="tc_device_asset">
       <column name="deviceid" type="INT">
         <constraints nullable="false"/>

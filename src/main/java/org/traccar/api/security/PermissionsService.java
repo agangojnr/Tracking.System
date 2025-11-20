@@ -91,6 +91,10 @@ public class PermissionsService {
         return !getUser(userId).getAdministrator();
     }
 
+    public boolean isAdmin(long userId) throws StorageException {
+        return getUser(userId).getAdministrator();
+    }
+
     public void checkAdmin(long userId) throws StorageException, SecurityException {
         User currentUser = getUser(userId);
         if (!currentUser.getAdministrator()) {

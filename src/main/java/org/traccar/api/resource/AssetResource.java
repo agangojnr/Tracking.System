@@ -94,7 +94,6 @@ public class AssetResource extends SimpleObjectResource<Asset> {
                                         @QueryParam("deviceId") Long deviceId,
                                        @QueryParam("userId") Long userId) throws StorageException{
 
-        //LOGGER.info("Testing this API ClientId: {}", clientId);
         var conditions = new LinkedList<Condition>();
         if (Boolean.TRUE.equals(all)) {
             if (permissionsService.notAdmin(getUserId())) {
@@ -102,7 +101,6 @@ public class AssetResource extends SimpleObjectResource<Asset> {
             }
 
         } else if (clientId != null && clientId > 0) {
-            //LOGGER.info("Testing Inside this API ClientId: {}", clientId);
             conditions.add(new Condition.Permission(Client.class, clientId,  Asset.class).excludeGroups());
         } else if (deviceId != null && deviceId > 0) {
             conditions.add(new Condition.Permission(Device.class, deviceId, Asset.class).excludeGroups());
