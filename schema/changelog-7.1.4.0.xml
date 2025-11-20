@@ -70,5 +70,39 @@
                              onDelete="CASCADE"/>
   </changeSet>
 
+<!--  <changeSet id="rename-asset-device-table" author="you">-->
+<!--    <renameTable-->
+<!--            oldTableName="tc_asset_device"-->
+<!--            newTableName="tc_device_asset"/>-->
+<!--  </changeSet>-->
+
+  <changeSet id="create-tc-device-asset" author="walter">
+    <createTable tableName="tc_device_asset">
+      <column name="deviceid" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="assetid" type="INT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint baseTableName="tc_device_asset"
+                             baseColumnNames="deviceid"
+                             constraintName="fk_asset_device_device"
+                             referencedTableName="tc_devices"
+                             referencedColumnNames="id"
+                             onDelete="CASCADE"/>
+
+    <addForeignKeyConstraint baseTableName="tc_device_asset"
+                             baseColumnNames="assetid"
+                             constraintName="fk_asset_asset_device"
+                             referencedTableName="tc_assets"
+                             referencedColumnNames="id"
+                             onDelete="CASCADE"/>
+
+
+  </changeSet>
+
+
 </databaseChangeLog>
 

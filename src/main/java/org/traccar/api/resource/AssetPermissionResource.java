@@ -8,9 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.traccar.api.BaseResource;
 import org.traccar.api.security.PermissionsService;
-import org.traccar.model.AssetDevice;
+import org.traccar.model.DeviceAsset;
 import org.traccar.model.LinkType;
-import org.traccar.model.UserDevicegroup;
 import org.traccar.storage.StorageException;
 import org.traccar.storage.query.Columns;
 import org.traccar.storage.query.Condition;
@@ -28,10 +27,10 @@ public class AssetPermissionResource extends BaseResource {
     private PermissionsService permissionsService;
 
     @POST
-    public Response linkAssetDevice(@QueryParam("assetId") long assetId, @QueryParam("deviceId") long deviceId) throws Exception{
+    public Response linkDeviceAsset(@QueryParam("assetId") long assetId, @QueryParam("deviceId") long deviceId) throws Exception{
         //LOGGER.info("Received POST request -> clientId: {}, deviceId: {}", clientId, deviceId);
-        if(!validateAssetDeviceLink(assetId,deviceId)){
-            permissionsService.link(LinkType.ASSET_DEVICE, assetId, deviceId);
+        if(!validateDeviceAssetLink(assetId,deviceId)){
+            permissionsService.link(LinkType.DEVICE_ASSET, deviceId,assetId);
             return Response.ok("{\"status\":\"Linked successfully.\"}").build();
         }else{
             return Response.ok("{\"status\":\"Asset already linked to the device.\"}").build();
@@ -39,9 +38,9 @@ public class AssetPermissionResource extends BaseResource {
     }
 
     @DELETE
-    public Response unlinkAssetDevice(@QueryParam("assetId") long assetId, @QueryParam("deviceId") long deviceId) throws Exception{
-        if(validateAssetDeviceunLink(assetId,deviceId)){
-        permissionsService.unlink(LinkType.ASSET_DEVICE, assetId, deviceId);
+    public Response unlinkDeviceAsset(@QueryParam("assetId") long assetId, @QueryParam("deviceId") long deviceId) throws Exception{
+        if(validateDeviceAssetunLink(assetId,deviceId)){
+        permissionsService.unlink(LinkType.DEVICE_ASSET, deviceId,assetId);
             return Response.ok("{\"status\":\"Link deleted successfully.\"}").build();
         }else{
             return Response.ok("{\"status\":\"Asset already linked to the device.\"}").build();
@@ -49,9 +48,9 @@ public class AssetPermissionResource extends BaseResource {
         }
 
 
-public boolean validateAssetDeviceLink(long assetId, long deviceId) throws StorageException {
+public boolean validateDeviceAssetLink(long assetId, long deviceId) throws StorageException {
     // Query the database for a record matching both groupId and deviceId
-    AssetDevice link = storage.getObject(AssetDevice.class, new Request(
+    DeviceAsset link = storage.getObject(DeviceAsset.class, new Request(
             new Columns.All(),
             new Condition.Or(
                     new Condition.Equals("assetid", assetId),
@@ -61,9 +60,9 @@ public boolean validateAssetDeviceLink(long assetId, long deviceId) throws Stora
     return link != null;
 }
 
-    public boolean validateAssetDeviceunLink(long assetId, long deviceId) throws StorageException {
+    public boolean validateDeviceAssetunLink(long assetId, long deviceId) throws StorageException {
         // Query the database for a record matching both groupId and deviceId
-        AssetDevice link = storage.getObject(AssetDevice.class, new Request(
+        DeviceAsset link = storage.getObject(DeviceAsset.class, new Request(
                 new Columns.All(),
                 new Condition.And(
                         new Condition.Equals("assetid", assetId),

@@ -56,6 +56,7 @@ public class SimcardResource extends ExtendedObjectResource<Simcard> {
     @GET
     @Path("query")
     public Collection<Simcard> get(@QueryParam("all") Boolean all,
+                                   @QueryParam("linked") String linked,
                                   @QueryParam("userId") Long userId,
                                   @QueryParam("deviceid") Long deviceid,
                                   @QueryParam("resellerid") Long resellerid,
@@ -66,23 +67,41 @@ public class SimcardResource extends ExtendedObjectResource<Simcard> {
             if (permissionsService.notAdmin(getUserId())) {
                 conditions.add(new Condition.Permission(User.class, getUserId(), baseClass));
             }
-
+//        } else if ("linked".equals(linked)) {
+//            //conditions.add(new Condition.Permission(Device.class, deviceid, Simcard.class).excludeGroups());
+//            LOGGER.info("Testing joins - 1");
+//            return storage.getObjects(baseClass, new Request(
+//                    new Columns.All(),
+//                            Condition.merger(
+//                                    new Condition.Join(
+//                                            Device.class, "id",
+//                                            DeviceSimcard.class, "deviceid"
+//                                    ),
+//                                    new Condition.Join(
+//                                            Device.class, "id",
+//                                            DeviceSimcard.class, "simcardid"
+//                                    )
+//                            )
+//
+//            ));
+//
+//        } else if ("unlinked".equals(linked)) {
+//            conditions.add(new Condition.Permission(Device.class, deviceid, Simcard.class).excludeGroups());
         } else if (deviceid != null && deviceid > 0) {
-            //LOGGER.info("Received POST request -> resellerid: {}", resellerid);
             conditions.add(new Condition.Permission(Device.class, deviceid, Simcard.class).excludeGroups());
-
         } else if (resellerid != null && resellerid > 0) {
-            //LOGGER.info("Received POST request -> resellerid: {}", resellerid);
             conditions.add(new Condition.Permission(Reseller.class, resellerid, Simcard.class).excludeGroups());
-
         } else if (networkproviderid != null && networkproviderid > 0) {
             conditions.add(new Condition.Permission(Simcard.class, Networkprovider.class, networkproviderid).excludeGroups());
         }else if(userId != null && userId > 0){
             conditions.add(new Condition.Permission(User.class, userId, Simcard.class).excludeGroups());
         }
-        return storage.getObjects(baseClass, new Request(
-                new Columns.All(), Condition.merge(conditions), new Order("phonenumber")
-        ));
+
+            return storage.getObjects(baseClass, new Request(
+                    new Columns.All(), Condition.merge(conditions), new Order("phonenumber")
+            ));
+
+
     }
 
 

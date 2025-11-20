@@ -33,5 +33,9 @@
     <entry key='atrack.custom'>true</entry>
     <entry key='intellitrac.port'>6037</entry>
 
+    <entry key='geocoder.enable'>true</entry>
+    <entry key='geocoder.type'>nominatim</entry>
+    <entry key='geocoder.url'>https://nominatim.openstreetmap.org/reverse</entry>
+
 
 </properties>

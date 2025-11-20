@@ -190,35 +190,35 @@ public interface Condition {
         }
     }
 
-//    class Join implements Condition {
-//        private final Class<?> leftClass;
-//        private final String leftColumn;
-//        private final Class<?> rightClass;
-//        private final String rightColumn;
-//
-//        public Join(Class<?> leftClass, String leftColumn, Class<?> rightClass, String rightColumn) {
-//            this.leftClass = leftClass;
-//            this.leftColumn = leftColumn;
-//            this.rightClass = rightClass;
-//            this.rightColumn = rightColumn;
-//        }
-//
-//        public Class<?> getLeftClass() {
-//            return leftClass;
-//        }
-//
-//        public String getLeftColumn() {
-//            return leftColumn;
-//        }
-//
-//        public Class<?> getRightClass() {
-//            return rightClass;
-//        }
-//
-//        public String getRightColumn() {
-//            return rightColumn;
-//        }
-//    }
+    class Join implements Condition {
+        private final Class<?> leftClass;
+        private final String leftColumn;
+        private final Class<?> rightClass;
+        private final String rightColumn;
+
+        public Join(Class<?> leftClass, String leftColumn, Class<?> rightClass, String rightColumn) {
+            this.leftClass = leftClass;
+            this.leftColumn = leftColumn;
+            this.rightClass = rightClass;
+            this.rightColumn = rightColumn;
+        }
+
+        public Class<?> getLeftClass() {
+            return leftClass;
+        }
+
+        public String getLeftColumn() {
+            return leftColumn;
+        }
+
+        public Class<?> getRightClass() {
+            return rightClass;
+        }
+
+        public String getRightColumn() {
+            return rightColumn;
+        }
+    }
 //
 //    class Raw implements Condition {
 //

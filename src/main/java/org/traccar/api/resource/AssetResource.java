@@ -105,7 +105,7 @@ public class AssetResource extends SimpleObjectResource<Asset> {
             //LOGGER.info("Testing Inside this API ClientId: {}", clientId);
             conditions.add(new Condition.Permission(Client.class, clientId,  Asset.class).excludeGroups());
         } else if (deviceId != null && deviceId > 0) {
-            conditions.add(new Condition.Permission(Asset.class, Device.class, deviceId).excludeGroups());
+            conditions.add(new Condition.Permission(Device.class, deviceId, Asset.class).excludeGroups());
         }else if(userId != null && userId > 0){
             conditions.add(new Condition.Permission(User.class, userId, Asset.class).excludeGroups());
         }

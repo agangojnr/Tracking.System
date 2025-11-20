@@ -115,23 +115,31 @@ public class DeviceResource extends BaseObjectResource<Device> {
             var conditions = new LinkedList<Condition>();
 
             if (all) {
+                LOGGER.info("All devices - 1");
                 if (permissionsService.notAdmin(getUserId())) {
                     conditions.add(new Condition.Permission(User.class, getUserId(), baseClass));
                 }
             } else {
+                LOGGER.info("All devices - 2");
                 if (userId == 0) {
+                    LOGGER.info("All devices - xx");
                     conditions.add(new Condition.Permission(User.class, getUserId(), baseClass));
                 } else {
-                    permissionsService.checkUser(getUserId(), userId);
-                    conditions.add(new Condition.Permission(User.class, userId, baseClass).excludeGroups());
+                    LOGGER.info("All devices - 3");
+                    //permissionsService.checkUser(getUserId(), userId);
+                   //conditions.add(new Condition.Permission(User.class, userId, baseClass).excludeGroups());
+                    return storage.getObjects(
+                            Device.class,
+                            new Request(
+                                    new Columns.All()
+                            )
+                    );
                 }
 
               if(clientId > 0){
                     conditions.add(new Condition.Permission(Client.class, clientId, Device.class).excludeGroups());
                 }
             }
-
-
             return storage.getObjects(baseClass, new Request(
                     new Columns.All(), Condition.merge(conditions), new Order("name")));
         }

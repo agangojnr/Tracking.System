@@ -59,17 +59,18 @@ public class PermissionsResource  extends BaseResource {
     }
 
     private void checkLinkage(Permission permission) throws StorageException, ClassNotFoundException {
-
+        //LOGGER.info("Testing {} --- {}",permission.getOwnerClass().getSimpleName(),permission.getPropertyClass().getSimpleName());
         boolean invalid = simcardPermissionResource.validateLink(permission.getModelClass(permission.getOwnerClass(),permission.getPropertyClass()),
                 ""+permission.getColumnName(permission.getOwnerClass())+"", permission.getOwnerId(),
                 ""+permission.getColumnName(permission.getPropertyClass())+"", permission.getPropertyId()
         );
+
         if (invalid) {
             throw new StorageException(
                     "Invalid Link: "
                             + permission.getOwnerClass().getSimpleName() + "(" + permission.getOwnerId() + ") and "
                             + permission.getPropertyClass().getSimpleName() + "(" + permission.getPropertyId() + "), " +
-                            "Device already linked to a simcard."
+                            "The entities are already linked."
             );
 
         }

@@ -96,30 +96,30 @@
                              onDelete="CASCADE"/>
   </changeSet>
 
-  <changeSet id="create-tc-asset-device" author="walter">
-    <createTable tableName="tc_asset_device">
-      <column name="assetid" type="INT">
-        <constraints nullable="false"/>
-      </column>
-      <column name="deviceid" type="INT">
-        <constraints nullable="false"/>
-      </column>
-    </createTable>
+<!--  <changeSet id="create-tc-asset-device" author="walter">-->
+<!--    <createTable tableName="tc_asset_device">-->
+<!--      <column name="assetid" type="INT">-->
+<!--        <constraints nullable="false"/>-->
+<!--      </column>-->
+<!--      <column name="deviceid" type="INT">-->
+<!--        <constraints nullable="false"/>-->
+<!--      </column>-->
+<!--    </createTable>-->
 
-    <addForeignKeyConstraint baseTableName="tc_asset_device"
-                             baseColumnNames="assetid"
-                             constraintName="fk_asset_asset_device"
-                             referencedTableName="tc_assets"
-                             referencedColumnNames="id"
-                             onDelete="CASCADE"/>
+<!--    <addForeignKeyConstraint baseTableName="tc_asset_device"-->
+<!--                             baseColumnNames="assetid"-->
+<!--                             constraintName="fk_asset_asset_device"-->
+<!--                             referencedTableName="tc_assets"-->
+<!--                             referencedColumnNames="id"-->
+<!--                             onDelete="CASCADE"/>-->
 
-    <addForeignKeyConstraint baseTableName="tc_asset_device"
-                             baseColumnNames="deviceid"
-                             constraintName="fk_asset_device_device"
-                             referencedTableName="tc_devices"
-                             referencedColumnNames="id"
-                             onDelete="CASCADE"/>
-  </changeSet>
+<!--    <addForeignKeyConstraint baseTableName="tc_asset_device"-->
+<!--                             baseColumnNames="deviceid"-->
+<!--                             constraintName="fk_asset_device_device"-->
+<!--                             referencedTableName="tc_devices"-->
+<!--                             referencedColumnNames="id"-->
+<!--                             onDelete="CASCADE"/>-->
+<!--  </changeSet>-->
 
 
   <changeSet id="create-tc-asset-assettype" author="walter">
