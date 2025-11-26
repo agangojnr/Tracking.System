@@ -67,26 +67,6 @@ public class SimcardResource extends ExtendedObjectResource<Simcard> {
             if (permissionsService.notAdmin(getUserId())) {
                 conditions.add(new Condition.Permission(User.class, getUserId(), baseClass));
             }
-//        } else if ("linked".equals(linked)) {
-//            //conditions.add(new Condition.Permission(Device.class, deviceid, Simcard.class).excludeGroups());
-//            LOGGER.info("Testing joins - 1");
-//            return storage.getObjects(baseClass, new Request(
-//                    new Columns.All(),
-//                            Condition.merger(
-//                                    new Condition.Join(
-//                                            Device.class, "id",
-//                                            DeviceSimcard.class, "deviceid"
-//                                    ),
-//                                    new Condition.Join(
-//                                            Device.class, "id",
-//                                            DeviceSimcard.class, "simcardid"
-//                                    )
-//                            )
-//
-//            ));
-//
-//        } else if ("unlinked".equals(linked)) {
-//            conditions.add(new Condition.Permission(Device.class, deviceid, Simcard.class).excludeGroups());
         } else if (deviceid != null && deviceid > 0) {
             conditions.add(new Condition.Permission(Device.class, deviceid, Simcard.class).excludeGroups());
         } else if (resellerid != null && resellerid > 0) {
@@ -100,7 +80,6 @@ public class SimcardResource extends ExtendedObjectResource<Simcard> {
             return storage.getObjects(baseClass, new Request(
                     new Columns.All(), Condition.merge(conditions), new Order("phonenumber")
             ));
-
 
     }
 

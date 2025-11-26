@@ -55,11 +55,26 @@ public class MemoryStorage extends Storage {
     }
 
     @Override
+    public <T> List<T> getJointObjects(Class<T> clazz, Request request) {
+        try (var objects = getObjectsStream(clazz, request)) {
+            return objects.toList();
+        }
+    }
+
+    @Override
     public <T> Stream<T> getObjectsStream(Class<T> clazz, Request request) {
         return objects.computeIfAbsent(clazz, key -> new HashMap<>()).values().stream()
                 .filter(object -> checkCondition(request.getCondition(), object))
                 .map(object -> (T) object);
     }
+
+    @Override
+    public <T> Stream<T> getJointObjectStream(Class<T> clazz, Request request) {
+        return objects.computeIfAbsent(clazz, key -> new HashMap<>()).values().stream()
+                .filter(object -> checkCondition(request.getCondition(), object))
+                .map(object -> (T) object);
+    }
+
 
     private boolean checkCondition(Condition genericCondition, Object object) {
         if (genericCondition == null) {

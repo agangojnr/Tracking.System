@@ -148,7 +148,6 @@ public class DeviceResource extends BaseObjectResource<Device> {
 
     }
 
-
     @Path("create/{clientId}")
     @POST
     public Response add(Device entity,@PathParam("clientId") Long clientId) throws Exception {

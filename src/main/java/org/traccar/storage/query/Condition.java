@@ -19,25 +19,13 @@ public interface Condition {
         return result;
     }
 
-    static Condition merger(Condition join, Condition where) {
-        if (join == null && where == null) {
-            return null;
-        }
-        if (join == null) {
-            return where;
-        }
-        if (where == null) {
-            return join;
-        }
-
-        return new Condition.And(join, where);
-    }
 
     class Equals extends Compare {
         public Equals(String column, Object value) {
             super(column, "=", value);
         }
     }
+
 
     class Compare implements Condition {
         private final String column;
@@ -128,27 +116,36 @@ public interface Condition {
         private final long ownerId;
         private final Class<?> propertyClass;
         private final long propertyId;
+        private final String ownerColumn;
+        private final String pivotColumn;
         private final boolean excludeGroups;
 
         private Permission(
-                Class<?> ownerClass, long ownerId, Class<?> propertyClass, long propertyId, boolean excludeGroups) {
+                Class<?> ownerClass, long ownerId, Class<?> propertyClass, String ownerColumn, String pivotColumn, long propertyId, boolean excludeGroups) {
             this.ownerClass = ownerClass;
             this.ownerId = ownerId;
             this.propertyClass = propertyClass;
+            this.ownerColumn = ownerColumn;
+            this.pivotColumn = pivotColumn;
             this.propertyId = propertyId;
             this.excludeGroups = excludeGroups;
         }
 
         public Permission(Class<?> ownerClass, long ownerId, Class<?> propertyClass) {
-            this(ownerClass, ownerId, propertyClass, 0, false);
+            this(ownerClass, ownerId, propertyClass, null, null,0, false);
         }
 
         public Permission(Class<?> ownerClass, Class<?> propertyClass, long propertyId) {
-            this(ownerClass, 0, propertyClass, propertyId, false);
+            this(ownerClass, 0, propertyClass,null,null, propertyId, false);
         }
 
+        public Permission(Class<?> ownerClass, String ownerColumn, Class<?> propertyClass, String pivotColumn) {
+            this(ownerClass,0, propertyClass, ownerColumn, pivotColumn,0,false);
+        }
+
+
         public Permission excludeGroups() {
-            return new Permission(this.ownerClass, this.ownerId, this.propertyClass, this.propertyId, true);
+            return new Permission(this.ownerClass, this.ownerId, this.propertyClass, this.ownerColumn, this.pivotColumn, this.propertyId, true);
         }
 
         public Class<?> getOwnerClass() {
@@ -166,6 +163,10 @@ public interface Condition {
         public long getPropertyId() {
             return propertyId;
         }
+
+        public String geOwnerColumn() { return ownerColumn;}
+
+        public String getPivotColumn() { return pivotColumn;}
 
         public boolean getIncludeGroups() {
             boolean ownerGroupModel = GroupedModel.class.isAssignableFrom(ownerClass);
@@ -190,47 +191,87 @@ public interface Condition {
         }
     }
 
-    class Join implements Condition {
-        private final Class<?> leftClass;
-        private final String leftColumn;
-        private final Class<?> rightClass;
-        private final String rightColumn;
 
-        public Join(Class<?> leftClass, String leftColumn, Class<?> rightClass, String rightColumn) {
-            this.leftClass = leftClass;
-            this.leftColumn = leftColumn;
-            this.rightClass = rightClass;
-            this.rightColumn = rightColumn;
+    class InnerJoin implements Condition {
+        private final Class<?> ownerClass;
+        private final Class<?> pivotClass;
+        private final String ownerColumn;
+        private final String pivotColumn;
+        // Constructor
+        public InnerJoin(Class<?> ownerClass, String ownerColumn, Class<?> pivotClass, String pivotColumn) {
+            this.ownerClass = ownerClass;
+            this.ownerColumn = ownerColumn;
+            this.pivotClass = pivotClass;
+            this.pivotColumn = pivotColumn;
         }
-
-        public Class<?> getLeftClass() {
-            return leftClass;
-        }
-
-        public String getLeftColumn() {
-            return leftColumn;
-        }
-
-        public Class<?> getRightClass() {
-            return rightClass;
-        }
-
-        public String getRightColumn() {
-            return rightColumn;
-        }
+        public Class<?> getOwnerClass() { return ownerClass; }
+        public Class<?> getPivotClass() { return pivotClass; }
+        public String getOwnerColumn() { return ownerColumn; }
+        public String getPivotColumn() { return pivotColumn; }
     }
-//
-//    class Raw implements Condition {
-//
-//        private final String expression;
-//
-//        public Raw(String expression) {
-//            this.expression = expression;
+    class LeftJoin implements Condition {
+        private final Class<?> ownerClass;
+        private final Class<?> pivotClass;
+        private final String ownerColumn;
+        private final String pivotColumn;
+        // Constructor
+        public LeftJoin(Class<?> ownerClass, String ownerColumn, Class<?> pivotClass, String pivotColumn) {
+            this.ownerClass = ownerClass;
+            this.ownerColumn = ownerColumn;
+            this.pivotClass = pivotClass;
+            this.pivotColumn = pivotColumn;
+        }
+        public Class<?> getOwnerClass() { return ownerClass; }
+        public Class<?> getPivotClass() { return pivotClass; }
+        public String getOwnerColumn() { return ownerColumn; }
+        public String getPivotColumn() { return pivotColumn; }
+    }
+
+
+
+//    class InnerJoin implements Condition {
+//        public Class<?> getOwnerClass() {
+//            return ownerClass;
 //        }
 //
-//        public String getExpression() {
-//            return expression;
+//        public long getOwnerId() {
+//            return ownerId;
 //        }
 //
+//        public Class<?> getPropertyClass() {
+//            return propertyClass;
+//        }
+//
+//        public long getPropertyId() {
+//            return propertyId;
+//        }
 //    }
+
+
+//    class InnerJoin implements Condition {
+//        private final String leftColumn;
+//        private final Object fromValue;
+//        private final Object toValue;
+//
+//        public Between(String column, Object fromValue, Object toValue) {
+//            this.column = column;
+//            this.fromValue = fromValue;
+//            this.toValue = toValue;
+//        }
+//
+//        public String getColumn() {
+//            return column;
+//        }
+//
+//        public Object getFromValue() {
+//            return fromValue;
+//        }
+//
+//        public Object getToValue() {
+//            return toValue;
+//        }
+//    }
+
+
+
 }

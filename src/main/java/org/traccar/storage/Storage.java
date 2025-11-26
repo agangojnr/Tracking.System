@@ -12,7 +12,11 @@ public abstract class Storage {
 
     public abstract <T> List<T> getObjects(Class<T> clazz, Request request) throws StorageException;
 
+    public abstract <T> List<T> getJointObjects(Class<T> clazz, Request request) throws StorageException;
+
     public abstract <T> Stream<T> getObjectsStream(Class<T> clazz, Request request) throws StorageException;
+
+    public abstract <T> Stream<T> getJointObjectStream(Class<T> clazz, Request request) throws StorageException;
 
     public abstract <T> long addObject(T entity, Request request) throws StorageException;
 

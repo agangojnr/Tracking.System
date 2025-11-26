@@ -1,27 +1,9 @@
-/*
- * Copyright 2022 - 2025 Anton Tananaev (anton@traccar.org)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+
 package org.traccar.storage;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.traccar.config.Config;
-import org.traccar.model.BaseModel;
-import org.traccar.model.Device;
-import org.traccar.model.Group;
-import org.traccar.model.GroupedModel;
-import org.traccar.model.Permission;
+import org.traccar.model.*;
 import org.traccar.storage.query.Columns;
 import org.traccar.storage.query.Condition;
 import org.traccar.storage.query.Order;
@@ -69,6 +51,13 @@ public class DatabaseStorage extends Storage {
     }
 
     @Override
+    public <T> List<T> getJointObjects(Class<T> clazz, Request request) throws StorageException {
+        try (var objects = getJointObjectStream(clazz, request)) {
+            return objects.toList();
+        }
+    }
+
+    @Override
     public <T> Stream<T> getObjectsStream(Class<T> clazz, Request request) throws StorageException {
         StringBuilder query = new StringBuilder("SELECT ");
         if (request.getColumns() instanceof Columns.All) {
@@ -77,6 +66,7 @@ public class DatabaseStorage extends Storage {
             query.append(formatColumns(request.getColumns().getColumns(clazz, "set"), c -> c));
         }
         query.append(" FROM ").append(getStorageName(clazz));
+        //Here is the join conditions
         query.append(formatCondition(request.getCondition()));
         query.append(formatOrder(request.getOrder()));
         try {
@@ -87,7 +77,34 @@ public class DatabaseStorage extends Storage {
             }
             return builder.executeQueryStreamed(clazz);
         } catch (SQLException e) {
-            throw new StorageException(e);
+            throw new StorageException(e.getMessage());
+        }
+    }
+    @Override
+    public <T> Stream<T> getJointObjectStream(Class<T> clazz, Request request) throws StorageException {
+        StringBuilder query = new StringBuilder("SELECT ");
+        if (request.getColumns() instanceof Columns.All) {
+            query.append('*');
+        } else {
+            query.append(formatColumns(request.getColumns().getColumns(clazz, "set"), c -> c));
+        }
+
+        query.append(" FROM ").append(getStorageName(clazz));
+        //Here is the join conditions
+
+        query.append(formatJoin(request.getCondition(),true));
+        //logger.info("SQL - {}", query);
+        //query.append(formatOrder(request.getOrder()));
+
+        try {
+            QueryBuilder builder = QueryBuilder.create(config, dataSource, objectMapper, query.toString());
+            List<Object> values = getConditionVariables(request.getCondition());
+            for (int index = 0; index < values.size(); index++) {
+                builder.setValue(index, values.get(index));
+            }
+            return builder.executeQueryStreamed(clazz);
+        } catch (SQLException e) {
+            throw new StorageException(e.getMessage());
         }
     }
 
@@ -298,6 +315,49 @@ public class DatabaseStorage extends Storage {
                     result.append(" WHERE id = ?");
                 }
                 result.append(")");
+
+            }
+        }
+        return result.toString();
+    }
+
+    private String formatJoin(Condition genericCondition, boolean appendJoin) throws StorageException {
+        StringBuilder result = new StringBuilder();
+        if (genericCondition != null) {
+            if (appendJoin) {
+                if (genericCondition instanceof Condition.InnerJoin condition) {
+
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass()));
+
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn());
+
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn());
+                }else if(genericCondition instanceof Condition.LeftJoin condition){
+                    result.append(" LEFT JOIN ");
+                    result.append(getStorageName(condition.getPivotClass()));
+
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn());
+
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn());
+                    result.append(" WHERE ");
+                    result.append(getStorageName(condition.getPivotClass()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn());
+                    result.append(" IS NULL ");
+                }
 
             }
         }
