@@ -86,7 +86,7 @@ public class DeviceResource extends BaseObjectResource<Device> {
     @GET
     public Collection<Device> get(@QueryParam("all") boolean all,
                                   @QueryParam("userId") long userId,
-                                  @QueryParam("clientId") long clientId,
+                                  @QueryParam("clientId") Long clientId,
                                   @QueryParam("uniqueId") List<String> uniqueIds,
                                   @QueryParam("id") List<Long> deviceIds) throws StorageException {
 
@@ -102,23 +102,14 @@ public class DeviceResource extends BaseObjectResource<Device> {
                 )));
             }
 
-            for (Long deviceId : deviceIds) {
-                result.addAll(storage.getObjects(Device.class, new Request(
-                        new Columns.All(),
-                        new Condition.And(
-                                new Condition.Equals("id", deviceId),
-                                new Condition.Permission(User.class, getUserId(), Device.class)))));
-            }
-            return result;
-
-        } else {
-            if(permissionsService.isAdmin(getUserId())){
-                return storage.getObjects(
-                        Device.class,
-                        new Request(
-                                new Columns.All()
-                        )
-                );
+                for (Long deviceId : deviceIds) {
+                    result.addAll(storage.getObjects(Device.class, new Request(
+                            new Columns.All(),
+                            new Condition.And(
+                                    new Condition.Equals("id", deviceId),
+                                    new Condition.Permission(User.class, getUserId(), Device.class)))));
+                }
+                return result;
             }else{
             var conditions = new LinkedList<Condition>();
 
@@ -128,22 +119,20 @@ public class DeviceResource extends BaseObjectResource<Device> {
                 }
             } else {
                 if (userId == 0) {
-                    LOGGER.info("All devices - user 0");
-                    //conditions.add(new Condition.Permission(User.class, getUserId(), baseClass));
-
+                    conditions.add(new Condition.Permission(User.class, getUserId(), baseClass));
                 } else {
                     permissionsService.checkUser(getUserId(), userId);
                     conditions.add(new Condition.Permission(User.class, userId, baseClass).excludeGroups());
-
                 }
 //
-              if(clientId > 0){
+              if(clientId  != null && clientId > 0){
                     conditions.add(new Condition.Permission(Client.class, clientId, Device.class).excludeGroups());
                 }
             }
+
             return storage.getObjects(baseClass, new Request(
                     new Columns.All(), Condition.merge(conditions), new Order("name")));
-        }
+
         }
 
     }
