@@ -159,6 +159,7 @@ public class DeviceResource extends BaseObjectResource<Device> {
                 entity.setId(deviceId);
                 storage.addPermission(new Permission(User.class, getUserId(), baseClass, entity.getId()));
                 permissionsService.link(LinkType.CLIENT_DEVICE, clientId, deviceId);
+                permissionsService.link(LinkType.GROUP_DEVICE, entity.getGroupId(), deviceId);
                 cacheManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
                 connectionManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
                 actionLogger.create(request, getUserId(), entity);

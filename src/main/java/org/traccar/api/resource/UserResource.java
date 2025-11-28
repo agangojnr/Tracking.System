@@ -124,6 +124,7 @@ public class UserResource extends BaseObjectResource<User> {
     public Response addUser(User entity, @PathParam("accesslevelid") Long accesslevelid, @PathParam("levelid") Long levelid) throws StorageException {
         User currentUser = getUserId() > 0 ? permissionsService.getUser(getUserId()) : null;
 
+
         if (currentUser == null || !currentUser.getAdministrator()) {
             permissionsService.checkUserUpdate(getUserId(), new User(), entity);
             if (currentUser != null && currentUser.getUserLimit() != 0) {

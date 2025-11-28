@@ -30,8 +30,21 @@
                              referencedTableName="tc_assets"
                              referencedColumnNames="id"
                              onDelete="CASCADE"/>
+  </changeSet>
 
+  <!-- Add-defaultclientid-column-to-table-tc-users-->
 
+  <changeSet id="add-defaultclientid-fk-to-tc_users" author="walter">
+    <addColumn tableName="tc_users">
+      <column name="defaultclientid" type="BIGINT"/>
+    </addColumn>
+
+    <addForeignKeyConstraint
+            baseTableName="tc_users"
+            baseColumnNames="defaultclientid"
+            referencedTableName="tc_clients"
+            referencedColumnNames="id"
+            constraintName="fk_users_defaultclientid"/>
   </changeSet>
 
 </databaseChangeLog>
