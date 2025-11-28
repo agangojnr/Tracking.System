@@ -91,7 +91,6 @@ public class DatabaseStorage extends Storage {
 
         query.append(" FROM ").append(getStorageName(clazz));
         //Here is the join conditions
-
         query.append(formatJoin(request.getCondition(),true));
         //logger.info("SQL - {}", query);
         //query.append(formatOrder(request.getOrder()));

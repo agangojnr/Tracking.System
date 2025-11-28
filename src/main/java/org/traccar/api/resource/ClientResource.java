@@ -88,7 +88,7 @@ public class ClientResource extends ExtendedObjectResource<Client> {
 
     @Path("create/{subresellerId}")
     @POST
-    public Response add(Client entity, @PathParam("subresellerId") Long subresellerId) throws Exception {
+    public Response add(Client entity,  @PathParam("subresellerId") Long subresellerId) throws Exception {
 
         permissionsService.checkEdit(getUserId(), entity, true, false);
 
@@ -100,8 +100,16 @@ public class ClientResource extends ExtendedObjectResource<Client> {
             entity.setId(clientId);
             actionLogger.create(request, getUserId(), entity);
 
+            Group defaultGroupEntity = new Group();
+            defaultGroupEntity.setId(0);
+            defaultGroupEntity.setName("Default Group");
+            Long groupId = storage.addObject(defaultGroupEntity, new Request(new Columns.Exclude("id")));
+            permissionsService.link(LinkType.CLIENT_GROUP, clientId, groupId);
+            defaultGroupEntity.setId(groupId);
+
             if (getUserId() != ServiceAccountUser.ID) {
                 storage.addPermission(new Permission(User.class, getUserId(), baseClass, entity.getId()));
+                //storage.addPermission(new Permission(User.class, getUserId(), baseClass, entity.getId()));
                 cacheManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
                 connectionManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
                 actionLogger.link(request, getUserId(), User.class, getUserId(), baseClass, entity.getId());

@@ -143,7 +143,6 @@ public interface Condition {
             this(ownerClass,0, propertyClass, ownerColumn, pivotColumn,0,false);
         }
 
-
         public Permission excludeGroups() {
             return new Permission(this.ownerClass, this.ownerId, this.propertyClass, this.ownerColumn, this.pivotColumn, this.propertyId, true);
         }
@@ -226,52 +225,6 @@ public interface Condition {
         public String getOwnerColumn() { return ownerColumn; }
         public String getPivotColumn() { return pivotColumn; }
     }
-
-
-
-//    class InnerJoin implements Condition {
-//        public Class<?> getOwnerClass() {
-//            return ownerClass;
-//        }
-//
-//        public long getOwnerId() {
-//            return ownerId;
-//        }
-//
-//        public Class<?> getPropertyClass() {
-//            return propertyClass;
-//        }
-//
-//        public long getPropertyId() {
-//            return propertyId;
-//        }
-//    }
-
-
-//    class InnerJoin implements Condition {
-//        private final String leftColumn;
-//        private final Object fromValue;
-//        private final Object toValue;
-//
-//        public Between(String column, Object fromValue, Object toValue) {
-//            this.column = column;
-//            this.fromValue = fromValue;
-//            this.toValue = toValue;
-//        }
-//
-//        public String getColumn() {
-//            return column;
-//        }
-//
-//        public Object getFromValue() {
-//            return fromValue;
-//        }
-//
-//        public Object getToValue() {
-//            return toValue;
-//        }
-//    }
-
 
 
 }
