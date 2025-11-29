@@ -133,9 +133,7 @@ public class DeviceResource extends BaseObjectResource<Device> {
 
             return storage.getObjects(baseClass, new Request(
                     new Columns.All(), Condition.merge(conditions), new Order("name")));
-
         }
-
     }
 
     @Path("create/{clientId}")
@@ -149,7 +147,7 @@ public class DeviceResource extends BaseObjectResource<Device> {
                 entity.setId(deviceId);
                 storage.addPermission(new Permission(User.class, getUserId(), baseClass, entity.getId()));
                 permissionsService.link(LinkType.CLIENT_DEVICE, clientId, deviceId);
-                LOGGER.info("Info here - {} --- {}",getDefaultGroupId(clientId),deviceId);
+                //LOGGER.info("Info here - {} --- {}",getDefaultGroupId(clientId),deviceId);
                 permissionsService.link(LinkType.GROUP_DEVICE, getDefaultGroupId(clientId), deviceId);
                 cacheManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
                 connectionManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
@@ -162,7 +160,6 @@ public class DeviceResource extends BaseObjectResource<Device> {
             return Response.status(Response.Status.FOUND).build();
         }
     }
-
 
     public int getDefaultGroupId(long clientId) throws StorageException {
         String defaultName = "Default_Group";

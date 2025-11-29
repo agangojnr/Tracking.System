@@ -95,7 +95,13 @@ public class PermissionsResource  extends BaseResource {
         for (LinkedHashMap<String, Long> entity: entities) {
             Permission permission = new Permission(entity);
             checkPermission(permission);
-            checkLinkage(permission);
+            String oneToOne = permission.getOwnerClass().getSimpleName()+""+permission.getPropertyClass().getSimpleName();
+            if(oneToOne == "DeviceSimcard" || oneToOne == "DeviceAsset" ){
+                checkLinkage(permission);
+                //LOGGER.info("One to one -- {}", oneToOne);
+            }
+
+
             storage.addPermission(permission);
             cacheManager.invalidatePermission(
                     true,
