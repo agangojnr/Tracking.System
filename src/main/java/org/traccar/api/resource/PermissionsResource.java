@@ -66,12 +66,12 @@ public class PermissionsResource  extends BaseResource {
         );
 
         if (invalid) {
-            throw new StorageException(
-                    "Invalid Link: "
-                            + permission.getOwnerClass().getSimpleName() + "(" + permission.getOwnerId() + ") and "
-                            + permission.getPropertyClass().getSimpleName() + "(" + permission.getPropertyId() + "), " +
-                            "The entities are already linked."
-            );
+            throw new StorageException("Already linked.");
+//                    "Invalid Link: "
+//                            + permission.getOwnerClass().getSimpleName() + "(" + permission.getOwnerId() + ") and "
+//                            + permission.getPropertyClass().getSimpleName() + "(" + permission.getPropertyId() + "), " +
+//                            "The entities are already linked."
+//            );
 
         }
     }
@@ -96,9 +96,11 @@ public class PermissionsResource  extends BaseResource {
             Permission permission = new Permission(entity);
             checkPermission(permission);
             String oneToOne = permission.getOwnerClass().getSimpleName()+""+permission.getPropertyClass().getSimpleName();
-            if(oneToOne == "DeviceSimcard" || oneToOne == "DeviceAsset" ){
+
+            //LOGGER.info("One to one -- {}", oneToOne);
+
+            if ("DeviceSimcard".equals(oneToOne) || "DeviceAsset".equals(oneToOne)) {
                 checkLinkage(permission);
-                //LOGGER.info("One to one -- {}", oneToOne);
             }
 
 
