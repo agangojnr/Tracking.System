@@ -90,6 +90,22 @@ public class UserResource extends BaseObjectResource<User> {
         return result;
     }
 
+    @Path("level/{levelId}/{levelgroupId}")
+    @GET
+    public Collection<User> get(@PathParam("levelId") long levelId, @PathParam("levelgroupId") long levelgroupId) throws StorageException {
+        //LOGGER.info("Testing user by levelID = {}.", levelId);
+        permissionsService.checkManager(getUserId());
+        Collection<User>  result = storage.getJointObjects(
+                User.class,
+                new Request(
+                        new Columns.All(),
+                        new Condition.JoinTwoWhere(User.class,"id",UserLevel.class,"userid","levelid",levelId, "levelgroupid", levelgroupId)
+                )
+        );
+
+        return result;
+    }
+
     @Override
     @PermitAll
     @POST

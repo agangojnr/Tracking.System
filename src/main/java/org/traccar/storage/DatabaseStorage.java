@@ -401,6 +401,31 @@ public class DatabaseStorage extends Storage {
                     result.append(" = ");result.append("'");
                     result.append(condition.getValue2());result.append("'");
 
+                }else if(genericCondition instanceof Condition.JoinTwoWhere condition){
+                    result.append(" JOIN ");
+                    result.append(getStorageName(condition.getPivotClass()));
+
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn());
+
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn());
+                    result.append(" WHERE ");
+                    result.append(getStorageName(condition.getPivotClass()));
+                    result.append(".");
+                    result.append(condition.getColumn1());
+                    result.append(" = ");result.append("'");
+                    result.append(condition.getValue1());result.append("'");
+                    result.append(" AND ");
+                    result.append(getStorageName(condition.getPivotClass()));
+                    result.append(".");
+                    result.append(condition.getColumn2());
+                    result.append(" = ");
+                    result.append(condition.getValue2());
                 }
 
             }
