@@ -56,7 +56,7 @@ public class UserResource extends BaseObjectResource<User> {
 
     @GET
     public Collection<User> get(
-            @QueryParam("userId") long userId, @QueryParam("deviceId") long deviceId) throws StorageException {
+            @QueryParam("userId") long userId, @QueryParam("deviceId") long deviceId, @QueryParam("levelId") long levelId) throws StorageException {
         var conditions = new LinkedList<Condition>();
         if (userId > 0) {
             permissionsService.checkUser(getUserId(), userId);
@@ -64,12 +64,30 @@ public class UserResource extends BaseObjectResource<User> {
         } else if (permissionsService.notAdmin(getUserId())) {
             conditions.add(new Condition.Permission(User.class, getUserId(), ManagedUser.class).excludeGroups());
         }
-        if (deviceId > 0) {
-            permissionsService.checkManager(getUserId());
-            conditions.add(new Condition.Permission(User.class, Device.class, deviceId).excludeGroups());
-        }
+//        if (deviceId > 0) {
+//            permissionsService.checkManager(getUserId());
+//            conditions.add(new Condition.Permission(User.class, Device.class, deviceId).excludeGroups());
+//        }
+
+
         return storage.getObjects(baseClass, new Request(
                 new Columns.All(), Condition.merge(conditions), new Order("name")));
+    }
+
+    @Path("level/{levelId}")
+    @GET
+    public Collection<User> get(@PathParam("levelId") long levelId) throws StorageException {
+        //LOGGER.info("Testing user by levelID = {}.", levelId);
+            permissionsService.checkManager(getUserId());
+            Collection<User>  result = storage.getJointObjects(
+                    User.class,
+                    new Request(
+                            new Columns.All(),
+                            new Condition.JoinOneWhere(User.class,"id",UserLevel.class,"userid","levelid",levelId)
+                    )
+            );
+
+        return result;
     }
 
     @Override

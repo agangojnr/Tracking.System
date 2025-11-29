@@ -92,7 +92,7 @@ public class DatabaseStorage extends Storage {
         query.append(" FROM ").append(getStorageName(clazz));
         //Here is the join conditions
         query.append(formatJoin(request.getCondition(),true));
-        logger.info("SQL - {}", query);
+        //logger.info("SQL - {}", query);
         //query.append(formatOrder(request.getOrder()));
 
         try {
@@ -381,6 +381,26 @@ public class DatabaseStorage extends Storage {
                     result.append(condition.getColumn2());
                     result.append(" = ");
                     result.append(condition.getValue2());
+                }else if(genericCondition instanceof Condition.JoinOneWhere condition){
+                    result.append(" JOIN ");
+                    result.append(getStorageName(condition.getPivotClass()));
+
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn());
+
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn());
+                    result.append(" WHERE ");
+                    result.append(getStorageName(condition.getPivotClass()));
+                    result.append(".");
+                    result.append(condition.getColumn2());
+                    result.append(" = ");result.append("'");
+                    result.append(condition.getValue2());result.append("'");
+
                 }
 
             }
