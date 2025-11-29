@@ -102,7 +102,7 @@ public class ClientResource extends ExtendedObjectResource<Client> {
 
             Group defaultGroupEntity = new Group();
             defaultGroupEntity.setId(0);
-            defaultGroupEntity.setName("Default Group");
+            defaultGroupEntity.setName("Default_Group");
             Long groupId = storage.addObject(defaultGroupEntity, new Request(new Columns.Exclude("id")));
             permissionsService.link(LinkType.CLIENT_GROUP, clientId, groupId);
             defaultGroupEntity.setId(groupId);

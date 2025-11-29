@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
+import org.h2.table.Column;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.traccar.api.BaseObjectResource;
@@ -148,7 +149,8 @@ public class DeviceResource extends BaseObjectResource<Device> {
                 entity.setId(deviceId);
                 storage.addPermission(new Permission(User.class, getUserId(), baseClass, entity.getId()));
                 permissionsService.link(LinkType.CLIENT_DEVICE, clientId, deviceId);
-                permissionsService.link(LinkType.GROUP_DEVICE, entity.getGroupId(), deviceId);
+                LOGGER.info("Info here - {} --- {}",getDefaultGroupId(clientId),deviceId);
+                permissionsService.link(LinkType.GROUP_DEVICE, getDefaultGroupId(clientId), deviceId);
                 cacheManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
                 connectionManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
                 actionLogger.create(request, getUserId(), entity);
@@ -159,6 +161,25 @@ public class DeviceResource extends BaseObjectResource<Device> {
         }else{
             return Response.status(Response.Status.FOUND).build();
         }
+    }
+
+
+    public int getDefaultGroupId(long clientId) throws StorageException {
+        String defaultName = "Default_Group";
+
+        Collection<ClientGroup> result = storage.getJointObjects(
+                ClientGroup.class,
+                new Request(
+                        new Columns.All(),
+                        new Condition.JoinWhere(ClientGroup.class,"groupid", Group.class,"id","name", defaultName, "clientid", clientId)
+                )
+        );
+
+        if (!result.isEmpty()) {
+            return result.iterator().next().getGroupId();
+        }
+
+        return 0; // or throw exception if required
     }
 
 
