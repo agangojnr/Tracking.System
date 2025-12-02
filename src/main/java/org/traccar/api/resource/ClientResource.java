@@ -63,7 +63,8 @@ public class ClientResource extends ExtendedObjectResource<Client> {
                                   @QueryParam("userId") Long userId,
                                   @QueryParam("groupid") Long groupid,
                                   @QueryParam("deviceid") Long deviceid,
-                                  @QueryParam("subresellerId") Long subresellerId) throws StorageException {
+                                  @QueryParam("subresellerId") Long subresellerId,
+                                  @QueryParam("resellerId") Long resellerId) throws StorageException {
         var conditions = new LinkedList<Condition>();
 
         if (Boolean.TRUE.equals(all)) {
@@ -79,10 +80,28 @@ public class ClientResource extends ExtendedObjectResource<Client> {
             conditions.add(new Condition.Permission(Client.class, Device.class, deviceid).excludeGroups());
         }else if(userId != null && userId > 0){
             conditions.add(new Condition.Permission(User.class, userId, Client.class).excludeGroups());
+        }else if(resellerId != null && resellerId > 0){
+            conditions.add(new Condition.Permission(User.class, userId, Client.class).excludeGroups());
         }
+
         return storage.getObjects(baseClass, new Request(
                 new Columns.All(), Condition.merge(conditions), new Order("name")
         ));
+    }
+
+    @GET
+    @Path("reseller/{resellerid}")
+    public Collection<Client> get(@PathParam("resellerid") Long resellerId) throws StorageException {
+
+        Collection<Client> result = storage.getJointObjects(
+                Client.class,
+                new Request(
+                        new Columns.All(),
+                        new Condition.ThreeJoinWhere(Client.class, "id",SubresellerClient.class, "clientid","subresellerid", ResellerSubreseller.class, "subresellerid","resellerid", resellerId)
+                )
+        );
+
+        return result;
     }
 
 

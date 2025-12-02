@@ -426,6 +426,36 @@ public class DatabaseStorage extends Storage {
                     result.append(condition.getColumn2());
                     result.append(" = ");
                     result.append(condition.getValue2());
+                }if(genericCondition instanceof Condition.ThreeJoinWhere condition){
+                    result.append(" JOIN ");
+                    result.append(getStorageName(condition.getPivotClass()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn());
+
+                    result.append(" JOIN ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn1());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn2());
+
+                    result.append(" WHERE ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn3());
+                    result.append(" = ");
+                    result.append(condition.getValue1());
+
                 }
 
             }

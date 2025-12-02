@@ -312,5 +312,42 @@ public interface Condition {
         public long getValue2() { return value2; }
     }
 
+    class ThreeJoinWhere implements Condition {
+        private final Class<?> ownerClass;
+        private final String ownerColumn;
+        private final Class<?> pivotClass;
+        private final String pivotColumn;
+        private final String pivotColumn1;
+        private final Class<?> pivotClass2;
+        private final String pivotColumn2;
+        private final String pivotColumn3;
+        private final long value1;
+
+        // Constructor
+        public ThreeJoinWhere(Class<?> ownerClass, String ownerColumn,
+                              Class<?> pivotClass, String pivotColumn, String pivotColumn1,
+                              Class<?> pivotClass2,String pivotColumn2,String pivotColumn3, long value1) {
+            this.ownerClass = ownerClass;
+            this.ownerColumn = ownerColumn;
+            this.pivotClass = pivotClass;
+            this.pivotColumn = pivotColumn;
+            this.pivotColumn1 = pivotColumn1;
+            this.pivotClass2 = pivotClass2;
+            this.pivotColumn2 = pivotColumn2;
+            this.pivotColumn3 = pivotColumn3;
+            this.value1 = value1;
+        }
+        public Class<?> getOwnerClass() { return ownerClass; }
+        public String getOwnerColumn() { return ownerColumn; }
+        public Class<?> getPivotClass() { return pivotClass; }
+        public String getPivotColumn() { return pivotColumn; }
+        public String getPivotColumn1() { return pivotColumn1; }
+        public Class<?> getPivotClass2() { return pivotClass2; }
+        public String getPivotColumn2() { return pivotColumn2; }
+        public String getPivotColumn3() { return pivotColumn3; }
+        public long getValue1() { return value1; }
+
+    }
+
 
 }
