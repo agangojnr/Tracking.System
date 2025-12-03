@@ -85,6 +85,20 @@ public class DeviceResource extends BaseObjectResource<Device> {
     }
 
     @GET
+    @Path("query")
+    public Collection<Device> get() throws Exception{
+        long defaultClientId = permissionsService.getDefaultClientId(getUserId());
+        //LOGGER.info("User Id: {} - Default culient id - {}",getUserId(), defaultClientId);
+        return storage.getJointObjects(
+                Device.class,
+                new Request(
+                        new Columns.All(),
+                        new Condition.ThreeJoinWhere(Device.class, "id",GroupDevice.class, "deviceid","groupid", ClientGroup.class, "groupid","clientid", defaultClientId)
+                )
+        );
+    }
+
+    @GET
     public Collection<Device> get(@QueryParam("all") boolean all,
                                   @QueryParam("userId") long userId,
                                   @QueryParam("clientId") Long clientId,
@@ -122,19 +136,9 @@ public class DeviceResource extends BaseObjectResource<Device> {
                 if (userId == 0) {
                     conditions.add(new Condition.Permission(User.class, getUserId(), baseClass));
                 } else {
-                    long level = permissionsService.getUserAccessLevel(userId);
-                    long defaultClientId = permissionsService.getDefaultClientId(userId);
-
-                    return storage.getJointObjects(
-                            Device.class,
-                            new Request(
-                                    new Columns.All(),
-                                    new Condition.ThreeJoinWhere(Device.class, "id",GroupDevice.class, "deviceid","groupid", ClientGroup.class, "groupid","clientid", defaultClientId)
-                            )
-                    );
-
-                    //permissionsService.checkUser(getUserId(), userId);
-                    //conditions.add(new Condition.Permission(User.class, userId, baseClass).excludeGroups());
+//                    long level = permissionsService.getUserAccessLevel(userId);
+                    permissionsService.checkUser(getUserId(), userId);
+                    conditions.add(new Condition.Permission(User.class, userId, baseClass).excludeGroups());
                 }
 //
               if(clientId  != null && clientId > 0){
