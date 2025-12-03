@@ -89,7 +89,7 @@ public class DeviceResource extends BaseObjectResource<Device> {
                                   @QueryParam("userId") long userId,
                                   @QueryParam("clientId") Long clientId,
                                   @QueryParam("uniqueId") List<String> uniqueIds,
-                                  @QueryParam("id") List<Long> deviceIds) throws StorageException {
+                                  @QueryParam("id") List<Long> deviceIds) throws Exception {
 
         if (!uniqueIds.isEmpty() || !deviceIds.isEmpty()) {
             List<Device> result = new LinkedList<>();
@@ -122,8 +122,19 @@ public class DeviceResource extends BaseObjectResource<Device> {
                 if (userId == 0) {
                     conditions.add(new Condition.Permission(User.class, getUserId(), baseClass));
                 } else {
-                    permissionsService.checkUser(getUserId(), userId);
-                    conditions.add(new Condition.Permission(User.class, userId, baseClass).excludeGroups());
+                    long level = permissionsService.getUserAccessLevel(userId);
+                    long defaultClientId = permissionsService.getDefaultClientId(userId);
+
+                    return storage.getJointObjects(
+                            Device.class,
+                            new Request(
+                                    new Columns.All(),
+                                    new Condition.ThreeJoinWhere(Device.class, "id",GroupDevice.class, "deviceid","groupid", ClientGroup.class, "groupid","clientid", defaultClientId)
+                            )
+                    );
+
+                    //permissionsService.checkUser(getUserId(), userId);
+                    //conditions.add(new Condition.Permission(User.class, userId, baseClass).excludeGroups());
                 }
 //
               if(clientId  != null && clientId > 0){
@@ -188,7 +199,6 @@ public class DeviceResource extends BaseObjectResource<Device> {
                 new Condition.And(
                         new Condition.Equals("name", name),
                         new Condition.Permission(User.class, getUserId(), Device.class))));
-
         return device == null;
     }
 

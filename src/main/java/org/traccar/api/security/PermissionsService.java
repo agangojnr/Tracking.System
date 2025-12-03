@@ -16,6 +16,7 @@ import org.traccar.helper.LogAction;
 import org.traccar.model.LinkType;
 
 import java.beans.Introspector;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -65,6 +66,35 @@ public class PermissionsService {
         cacheManager.invalidatePermission(false, permission.getOwnerClass(), ownerId, permission.getPropertyClass(), propertyId, false);
         connectionManager.invalidatePermission(false, permission.getOwnerClass(), ownerId,permission.getPropertyClass(), propertyId, false);
         //actionLogger.unlink(type.getTableName(), ownerId, propertyId);
+    }
+    public long getUserAccessLevel(long userId) throws Exception{
+        Collection<UserLevel> result = storage.getObjects(
+                UserLevel.class,
+                new Request(
+                        new Columns.All(),
+                        new Condition.Equals("userid", userId)
+                )
+        );
+
+        if (!result.isEmpty()) {
+            return result.iterator().next().getLevelid();
+        }
+        return 0;
+    }
+
+    public long getDefaultClientId(long userId) throws Exception{
+        Collection<User> result = storage.getObjects(
+                User.class,
+                new Request(
+                        new Columns.All(),
+                        new Condition.Equals("id", userId)
+                )
+        );
+
+        if (!result.isEmpty()) {
+            return result.iterator().next().getDefaultClientId();
+        }
+        return 0;
     }
 
     public Server getServer() throws StorageException {
