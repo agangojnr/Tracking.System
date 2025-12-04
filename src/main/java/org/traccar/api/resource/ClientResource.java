@@ -114,7 +114,7 @@ public class ClientResource extends ExtendedObjectResource<Client> {
             long subresellerid = permissionsService.getLevelGroupId(getUserId(), 2);
             return storage.getJointObjects(baseClass, new Request(
                     new Columns.All(),
-                    new Condition.JoinOneWhere(Client.class,"id", SubresellerClient.class,"clientid","resellerid",subresellerid)));
+                    new Condition.JoinOneWhere(Client.class,"id", SubresellerClient.class,"clientid","subresellerid",subresellerid)));
         }else if(level == 3){
             long clientid = permissionsService.getLevelGroupId(getUserId(), 3);
             return storage.getObjects(baseClass, new Request(

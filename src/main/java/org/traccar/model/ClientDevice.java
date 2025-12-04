@@ -3,7 +3,7 @@ package org.traccar.model;
 
 import org.traccar.storage.StorageName;
 
-@StorageName("tc_group_device")
+@StorageName("tc_client_device")
 public class ClientDevice {
     private int clientid;
     private int deviceid;

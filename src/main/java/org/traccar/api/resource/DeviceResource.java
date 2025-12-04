@@ -151,6 +151,36 @@ public class DeviceResource extends BaseObjectResource<Device> {
         }
     }
 
+    @GET
+    @Path("level")
+    public Collection<Device> getDevice() throws Exception{
+        long level = permissionsService.getUserAccessLevel(getUserId());
+        var conditions = new LinkedList<Condition>();
+
+        if(level == 4){
+            return storage.getObjects(baseClass, new Request(
+                    new Columns.All(), Condition.merge(conditions), new Order("name")
+            ));
+        }else if(level == 1){
+            long resellerid = permissionsService.getLevelGroupId(getUserId(), 1);
+            //LOGGER.info("Testing - {}", resellerid);
+            return storage.getJointObjects(baseClass, new Request(
+                    new Columns.All(),
+                    new Condition.FourJoinWhere(Device.class, "id", ClientDevice.class, "deviceid","clientid" ,SubresellerClient.class, "clientid", ResellerSubreseller.class, "subresellerid", "resellerid", resellerid)));
+        }else if(level == 2){
+            long subresellerid = permissionsService.getLevelGroupId(getUserId(), 2);
+            return storage.getJointObjects(baseClass, new Request(
+                    new Columns.All(),
+                    new Condition.ThreeJoinWhere(Device.class, "id", ClientDevice.class, "deviceid","clientid" ,SubresellerClient.class, "clientid","subresellerid", subresellerid)));
+        }else if(level == 3){
+            long clientid = permissionsService.getLevelGroupId(getUserId(), 3);
+            return storage.getObjects(baseClass, new Request(
+                    new Columns.All(),
+                    new Condition.JoinOneWhere(Device.class, "id", ClientDevice.class, "deviceid","clientid", clientid)));
+        }
+        return null;
+    }
+
     @Path("create/{clientId}")
     @POST
     public Response add(Device entity,@PathParam("clientId") Long clientId) throws Exception {
