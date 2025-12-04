@@ -46,24 +46,26 @@ public class ResellerResource extends ExtendedObjectResource<Reseller> {
         super(Reseller.class, "name");
     }
 
-
     @GET
     @Path("query")
     public Collection<Reseller> get(@QueryParam("all") Boolean all,
                                   @QueryParam("userId") Long userId,
-                                  @QueryParam("subresellerid") Long subresellerid) throws StorageException {
+                                  @QueryParam("subresellerid") Long subresellerid) throws Exception {
         var conditions = new LinkedList<Condition>();
 
         if (Boolean.TRUE.equals(all)) {
             if (permissionsService.notAdmin(getUserId())) {
+                permissionsService.checkSuperAdmin(getUserId());
                 conditions.add(new Condition.Permission(Reseller.class, getUserId(), baseClass));
             }
         } else if (subresellerid != null && subresellerid > 0) {
-            //LOGGER.info("Received POST request -> subresellerId: {}", subresellerId);
+            permissionsService.checkSuperAdmin(getUserId());
             conditions.add(new Condition.Permission(Reseller.class, Subreseller.class, subresellerid).excludeGroups());
         }else if(userId != null && userId > 0){
+            permissionsService.checkSuperAdmin(getUserId());
             conditions.add(new Condition.Permission(User.class, userId, Client.class).excludeGroups());
         }
+        permissionsService.checkSuperAdmin(getUserId());
         return storage.getObjects(baseClass, new Request(
                 new Columns.All(), Condition.merge(conditions), new org.traccar.storage.query.Order("name")
         ));

@@ -1,6 +1,7 @@
 
 package org.traccar.storage;
 
+import org.apache.poi.ss.formula.functions.T;
 import org.traccar.model.BaseModel;
 import org.traccar.model.Permission;
 import org.traccar.storage.query.Request;
@@ -27,6 +28,7 @@ public abstract class Storage {
     public abstract List<Permission> getPermissions(
             Class<? extends BaseModel> ownerClass, long ownerId,
             Class<? extends BaseModel> propertyClass, long propertyId) throws StorageException;
+
 
     public abstract void addPermission(Permission permission) throws StorageException;
 

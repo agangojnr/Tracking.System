@@ -7,6 +7,8 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.apache.poi.ss.formula.functions.T;
+import org.checkerframework.checker.units.qual.C;
 import org.eclipse.jetty.websocket.core.server.internal.UpgradeHttpServletRequest;
 import org.traccar.api.ExtendedObjectResource;
 import org.traccar.api.security.PermissionsService;
@@ -64,29 +66,62 @@ public class ClientResource extends ExtendedObjectResource<Client> {
                                   @QueryParam("groupid") Long groupid,
                                   @QueryParam("deviceid") Long deviceid,
                                   @QueryParam("subresellerId") Long subresellerId,
-                                  @QueryParam("resellerId") Long resellerId) throws StorageException {
+                                  @QueryParam("resellerId") Long resellerId) throws Exception {
         var conditions = new LinkedList<Condition>();
 
         if (Boolean.TRUE.equals(all)) {
             if (permissionsService.notAdmin(getUserId())) {
+                permissionsService.checkSubreseller(getUserId());
                 conditions.add(new Condition.Permission(User.class, getUserId(), baseClass));
             }
         } else if (subresellerId != null && subresellerId > 0) {
-            //LOGGER.info("Received POST request -> subresellerId: {}", subresellerId);
+            permissionsService.checkSubreseller(getUserId());
             conditions.add(new Condition.Permission(Subreseller.class, subresellerId, Client.class).excludeGroups());
         } else if (groupid != null && groupid > 0) {
+            permissionsService.checkSubreseller(getUserId());
             conditions.add(new Condition.Permission(Client.class, Group.class, groupid).excludeGroups());
         } else if (deviceid != null && deviceid > 0) {
+            permissionsService.checkSubreseller(getUserId());
             conditions.add(new Condition.Permission(Client.class, Device.class, deviceid).excludeGroups());
         }else if(userId != null && userId > 0){
+            permissionsService.checkSubreseller(getUserId());
             conditions.add(new Condition.Permission(User.class, userId, Client.class).excludeGroups());
         }else if(resellerId != null && resellerId > 0){
             conditions.add(new Condition.Permission(User.class, userId, Client.class).excludeGroups());
         }
-
+        permissionsService.checkSubreseller(getUserId());
         return storage.getObjects(baseClass, new Request(
                 new Columns.All(), Condition.merge(conditions), new Order("name")
         ));
+    }
+
+    @GET
+    @Path("level")
+    public Collection<Client> get() throws Exception{
+        long level = permissionsService.getUserAccessLevel(getUserId());
+        var conditions = new LinkedList<Condition>();
+
+        if(level == 4){
+            return storage.getObjects(baseClass, new Request(
+                    new Columns.All(), Condition.merge(conditions), new Order("name")
+            ));
+        }else if(level == 1){
+            long resellerid = permissionsService.getLevelGroupId(getUserId(), 1);
+            return storage.getJointObjects(baseClass, new Request(
+                    new Columns.All(),
+                    new Condition.ThreeJoinWhere(Client.class, "id",SubresellerClient.class, "clientid","subresellerid", ResellerSubreseller.class, "subresellerid","resellerid", resellerid)));
+        }else if(level == 2){
+            long subresellerid = permissionsService.getLevelGroupId(getUserId(), 2);
+            return storage.getJointObjects(baseClass, new Request(
+                    new Columns.All(),
+                    new Condition.JoinOneWhere(Client.class,"id", SubresellerClient.class,"clientid","resellerid",subresellerid)));
+        }else if(level == 3){
+            long clientid = permissionsService.getLevelGroupId(getUserId(), 3);
+            return storage.getObjects(baseClass, new Request(
+                    new Columns.All(),
+                    new Condition.Equals("id",clientid)));
+        }
+        return null;
     }
 
     @GET

@@ -82,6 +82,22 @@ public class PermissionsService {
         return 0;
     }
 
+    public long getLevelGroupId(long userId, long levelid) throws Exception{
+        Collection<UserLevel> result = storage.getObjects(
+                UserLevel.class,
+                new Request(
+                        new Columns.All(),
+                        new Condition.And(
+                                new Condition.Equals("userid", userId),
+                                new Condition.Equals("levelid",levelid))
+                )
+        );
+        if (!result.isEmpty()) {
+            return result.iterator().next().getLevelgroupid();
+        }
+        return 0;
+    }
+
     public long getDefaultClientId(long userId) throws Exception{
         Collection<User> result = storage.getObjects(
                 User.class,
@@ -96,6 +112,34 @@ public class PermissionsService {
         }
         return 0;
     }
+
+    public void checkSuperAdmin(long userId) throws Exception, SecurityException {
+        long levelid  = getUserAccessLevel(userId);
+        if (levelid != 4) {
+            throw new SecurityException("SuperAdmin access required");
+        }
+    }
+    public void checkReseller(long userId) throws Exception, SecurityException {
+        long levelid  = getUserAccessLevel(userId);
+        if (levelid != 1 && levelid != 4) {
+            throw new SecurityException("Reseller access required");
+        }
+    }
+
+    public void checkSubreseller(long userId) throws Exception, SecurityException {
+        long levelid  = getUserAccessLevel(userId);
+        if (levelid != 1 && levelid != 4 && levelid != 2) {
+            throw new SecurityException("Subreseller access required");
+        }
+    }
+    public void checkClient(long userId) throws Exception, SecurityException {
+        long levelid  = getUserAccessLevel(userId);
+        if (levelid != 1 && levelid != 4 && levelid != 2 && levelid != 3) {
+            throw new SecurityException("Client access required");
+        }
+    }
+
+
 
     public Server getServer() throws StorageException {
         if (server == null) {

@@ -52,22 +52,26 @@ public class SubResellerResource extends ExtendedObjectResource<Subreseller> {
     public Collection<Subreseller> get(@QueryParam("all") Boolean all,
                                        @QueryParam("resellerId") Long resellerId,
                                        @QueryParam("clientid") Long clientid,
-                                       @QueryParam("userId") Long userId) throws StorageException{
+                                       @QueryParam("userId") Long userId) throws Exception {
 
         var conditions = new LinkedList<Condition>();
 
         if (Boolean.TRUE.equals(all)) {
             if (permissionsService.notAdmin(getUserId())) {
+                permissionsService.checkReseller(getUserId());
                 conditions.add(new Condition.Permission(User.class, getUserId(), baseClass));
             }
         } else if (resellerId != null && resellerId > 0) {
+            permissionsService.checkReseller(getUserId());
             conditions.add(new Condition.Permission(Reseller.class, resellerId, Subreseller.class).excludeGroups());
         } else if (clientid != null && clientid > 0) {
+            permissionsService.checkReseller(getUserId());
             conditions.add(new Condition.Permission(Subreseller.class, Client.class, clientid).excludeGroups());
         }else if(userId != null && userId > 0){
+            permissionsService.checkReseller(getUserId());
             conditions.add(new Condition.Permission(User.class, userId, Subreseller.class).excludeGroups());
         }
-
+        permissionsService.checkReseller(getUserId());
         return storage.getObjects(baseClass, new Request(
                 new Columns.All(), Condition.merge(conditions), new Order("name")
         ));

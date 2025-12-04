@@ -190,6 +190,14 @@ public interface Condition {
         }
     }
 
+    class All implements Condition {
+        private final Class<?> ownerClass;
+        // Constructor
+        public All(Class<?> ownerClass) {
+            this.ownerClass = ownerClass;
+        }
+        public Class<?> getOwnerClass() { return ownerClass; }
+    }
 
     class InnerJoin implements Condition {
         private final Class<?> ownerClass;

@@ -69,6 +69,7 @@ public class DatabaseStorage extends Storage {
         //Here is the join conditions
         query.append(formatCondition(request.getCondition()));
         query.append(formatOrder(request.getOrder()));
+
         try {
             QueryBuilder builder = QueryBuilder.create(config, dataSource, objectMapper, query.toString());
             List<Object> values = getConditionVariables(request.getCondition());
@@ -92,7 +93,7 @@ public class DatabaseStorage extends Storage {
         query.append(" FROM ").append(getStorageName(clazz));
         //Here is the join conditions
         query.append(formatJoin(request.getCondition(),true));
-        logger.info("SQL - {}", query);
+        //logger.info("SQL - {}", query);
         //query.append(formatOrder(request.getOrder()));
 
         try {
@@ -190,6 +191,8 @@ public class DatabaseStorage extends Storage {
             throw new StorageException(e);
         }
     }
+
+
 
     @Override
     public void addPermission(Permission permission) throws StorageException {
