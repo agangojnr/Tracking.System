@@ -174,7 +174,8 @@ public class DeviceResource extends BaseObjectResource<Device> {
                     new Condition.ThreeJoinWhere(Device.class, "id", ClientDevice.class, "deviceid","clientid" ,SubresellerClient.class, "clientid","subresellerid", subresellerid)));
         }else if(level == 3){
             long clientid = permissionsService.getLevelGroupId(getUserId(), 3);
-            return storage.getObjects(baseClass, new Request(
+            //LOGGER.info("Testing - {}", clientid);
+            return storage.getJointObjects(baseClass, new Request(
                     new Columns.All(),
                     new Condition.JoinOneWhere(Device.class, "id", ClientDevice.class, "deviceid","clientid", clientid)));
         }
