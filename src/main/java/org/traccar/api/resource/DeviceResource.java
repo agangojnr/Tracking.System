@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
+import org.apache.commons.compress.archivers.sevenz.CLI;
 import org.h2.table.Column;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -141,9 +142,12 @@ public class DeviceResource extends BaseObjectResource<Device> {
                     conditions.add(new Condition.Permission(User.class, userId, baseClass).excludeGroups());
                 }
 //
-              if(clientId  != null && clientId > 0){
-                    conditions.add(new Condition.Permission(Client.class, clientId, Device.class).excludeGroups());
-                }
+              if(clientId > 0){
+                  //LOGGER.info("TESTING - {}", clientId);
+                  return storage.getJointObjects(baseClass, new Request(
+                          new Columns.All(),
+                          new Condition.ThreeJoinWhere(Device.class,"id", GroupDevice.class,"deviceid","groupid",ClientGroup.class,"groupid","clientid",clientId)));
+              }
             }
 
             return storage.getObjects(baseClass, new Request(
@@ -163,7 +167,6 @@ public class DeviceResource extends BaseObjectResource<Device> {
             ));
         }else if(level == 1){
             long resellerid = permissionsService.getLevelGroupId(getUserId(), 1);
-            //LOGGER.info("Testing - {}", resellerid);
             return storage.getJointObjects(baseClass, new Request(
                     new Columns.All(),
                     new Condition.FourJoinWhere(Device.class, "id", ClientDevice.class, "deviceid","clientid" ,SubresellerClient.class, "clientid", ResellerSubreseller.class, "subresellerid", "resellerid", resellerid)));
@@ -174,7 +177,6 @@ public class DeviceResource extends BaseObjectResource<Device> {
                     new Condition.ThreeJoinWhere(Device.class, "id", ClientDevice.class, "deviceid","clientid" ,SubresellerClient.class, "clientid","subresellerid", subresellerid)));
         }else if(level == 3){
             long clientid = permissionsService.getLevelGroupId(getUserId(), 3);
-            //LOGGER.info("Testing - {}", clientid);
             return storage.getJointObjects(baseClass, new Request(
                     new Columns.All(),
                     new Condition.JoinOneWhere(Device.class, "id", ClientDevice.class, "deviceid","clientid", clientid)));
