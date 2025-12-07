@@ -321,7 +321,7 @@ public interface Condition {
     }
 
 
-    class TwoJoinTwoWhere implements Condition {
+    class TwoJoinWhere implements Condition {
         private final Class<?> ownerClass;
         private final Class<?> pivotClass;
         private final String ownerColumn;
@@ -329,18 +329,14 @@ public interface Condition {
         private final String pivotColumn1;
         private final String column1;
         private final long value1;
-        private final String column2;
-        private final long value2;
 
         // Constructor
-        public TwoJoinTwoWhere(Class<?> ownerClass, String ownerColumn, Class<?> pivotClass, String pivotColumn, String pivotColumn1, String column1, long value1, String column2, long value2) {
+        public TwoJoinWhere(Class<?> ownerClass, String ownerColumn, Class<?> pivotClass, String pivotColumn, String pivotColumn1, String column1, long value1) {
             this.ownerClass = ownerClass;
             this.ownerColumn = ownerColumn;
             this.pivotClass = pivotClass;
-            this.column1 = column1;
             this.value1 = value1;
-            this.column2 = column2;
-            this.value2 = value2;
+            this.column1 = column1;
             this.pivotColumn = pivotColumn;
             this.pivotColumn1 = pivotColumn1;
         }
@@ -351,8 +347,6 @@ public interface Condition {
         public String getPivotColumn1() { return pivotColumn1; }
         public String getColumn1() { return column1; }
         public long getValue1() { return value1; }
-        public String getColumn2() { return column2; }
-        public long getValue2() { return value2; }
     }
 
     class ThreeJoinWhere implements Condition {

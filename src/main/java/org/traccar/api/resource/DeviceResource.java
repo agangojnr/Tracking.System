@@ -142,7 +142,7 @@ public class DeviceResource extends BaseObjectResource<Device> {
                     conditions.add(new Condition.Permission(User.class, userId, baseClass).excludeGroups());
                 }
 //
-              if(clientId > 0){
+              if(clientId != null && clientId > 0){
                   //LOGGER.info("TESTING - {}", clientId);
                   return storage.getJointObjects(baseClass, new Request(
                           new Columns.All(),

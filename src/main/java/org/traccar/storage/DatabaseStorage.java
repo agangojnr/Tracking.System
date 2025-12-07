@@ -69,7 +69,7 @@ public class DatabaseStorage extends Storage {
         //Here is the join conditions
         query.append(formatCondition(request.getCondition()));
         query.append(formatOrder(request.getOrder()));
-
+        //logger.info("SQL Query - {}",query);
         try {
             QueryBuilder builder = QueryBuilder.create(config, dataSource, objectMapper, query.toString());
             List<Object> values = getConditionVariables(request.getCondition());
@@ -93,7 +93,7 @@ public class DatabaseStorage extends Storage {
         query.append(" FROM ").append(getStorageName(clazz));
         //Here is the join conditions
         query.append(formatJoin(request.getCondition(),true));
-        logger.info("SQL - {}", query);
+        //logger.info("SQL - {}", query);
         //query.append(formatOrder(request.getOrder()));
 
         try {
@@ -429,7 +429,7 @@ public class DatabaseStorage extends Storage {
                     result.append(condition.getColumn2());
                     result.append(" = ");
                     result.append(condition.getValue2());
-                }else if(genericCondition instanceof Condition.TwoJoinTwoWhere condition){
+                }else if(genericCondition instanceof Condition.TwoJoinWhere condition){
                     result.append(" JOIN ");
                     result.append(getStorageName(condition.getPivotClass()));
                     result.append(" ON ");
@@ -454,12 +454,12 @@ public class DatabaseStorage extends Storage {
                     result.append(condition.getColumn1());
                     result.append(" = ");result.append("'");
                     result.append(condition.getValue1());result.append("'");
-                    result.append(" AND ");
-                    result.append(getStorageName(condition.getPivotClass()));
-                    result.append(".");
-                    result.append(condition.getColumn2());
-                    result.append(" = ");
-                    result.append(condition.getValue2());
+//                    result.append(" AND ");
+//                    result.append(getStorageName(condition.getPivotClass()));
+//                    result.append(".");
+//                    result.append(condition.getColumn2());
+//                    result.append(" = ");
+//                    result.append(condition.getValue2());
                 }if(genericCondition instanceof Condition.ThreeJoinWhere condition){
                     result.append(" JOIN ");
                     result.append(getStorageName(condition.getPivotClass()));

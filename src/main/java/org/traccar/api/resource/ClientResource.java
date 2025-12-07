@@ -74,6 +74,7 @@ public class ClientResource extends ExtendedObjectResource<Client> {
                 permissionsService.checkSubreseller(getUserId());
                 conditions.add(new Condition.Permission(User.class, getUserId(), baseClass));
             }
+
         } else if (subresellerId != null && subresellerId > 0) {
             permissionsService.checkSubreseller(getUserId());
             conditions.add(new Condition.Permission(Subreseller.class, subresellerId, Client.class).excludeGroups());
@@ -87,7 +88,11 @@ public class ClientResource extends ExtendedObjectResource<Client> {
             permissionsService.checkSubreseller(getUserId());
             conditions.add(new Condition.Permission(User.class, userId, Client.class).excludeGroups());
         }else if(resellerId != null && resellerId > 0){
-            conditions.add(new Condition.Permission(User.class, userId, Client.class).excludeGroups());
+            //conditions.add(new Condition.Permission(User.class, userId, Client.class).excludeGroups());
+            return storage.getJointObjects(baseClass, new Request(
+                    new Columns.All(),
+                    new Condition.ThreeJoinWhere(Client.class,"id", SubresellerClient.class,"clientid","subresellerid",ResellerSubreseller.class,"subresellerid","resellerid",resellerId)));
+
         }
         permissionsService.checkSubreseller(getUserId());
         return storage.getObjects(baseClass, new Request(
