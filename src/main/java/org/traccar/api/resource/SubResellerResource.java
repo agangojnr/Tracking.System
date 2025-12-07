@@ -78,6 +78,35 @@ public class SubResellerResource extends ExtendedObjectResource<Subreseller> {
     }
 
 
+
+    @GET
+    @Path("level")
+    public Collection<Subreseller> get() throws Exception{
+        long level = permissionsService.getUserAccessLevel(getUserId());
+        var conditions = new LinkedList<Condition>();
+
+        if(level == 4){
+            return storage.getObjects(baseClass, new Request(
+                    new Columns.All(), Condition.merge(conditions), new Order("name")
+            ));
+        }else if(level == 1){
+            long resellerid = permissionsService.getLevelGroupId(getUserId(), 1);
+            return storage.getJointObjects(baseClass, new Request(
+                    new Columns.All(),
+                    new Condition.TwoJoinWhere(Subreseller.class, "id",ResellerSubreseller.class, "subresellerid", "resellerid", resellerid)));
+        }else if(level == 2){
+            long subresellerid = permissionsService.getLevelGroupId(getUserId(), 2);
+            return storage.getObjects(baseClass, new Request(
+                    new Columns.All(),
+                    new Condition.Equals("id",subresellerid)));
+        }else if(level == 3){
+            throw new SecurityException("Unauthorized access - Higher permission required");
+        }
+        return null;
+    }
+
+
+
     @Path("create/{resellerId}")
     @POST
     public Response add(Subreseller entity, @PathParam("resellerId") Long resellerId) throws Exception {
