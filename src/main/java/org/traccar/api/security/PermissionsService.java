@@ -140,7 +140,6 @@ public class PermissionsService {
     }
 
 
-
     public Server getServer() throws StorageException {
         if (server == null) {
             server = storage.getObject(
