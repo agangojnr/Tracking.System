@@ -18,6 +18,7 @@ import org.traccar.session.cache.CacheManager;
 import org.traccar.storage.StorageException;
 import org.traccar.storage.query.Columns;
 import org.traccar.storage.query.Condition;
+import org.traccar.storage.query.Order;
 import org.traccar.storage.query.Request;
 
 import java.util.Collection;
@@ -127,6 +128,30 @@ public class ResellerResource extends ExtendedObjectResource<Reseller> {
                         new Condition.Equals("name", name),
                         new Condition.Permission(User.class, getUserId(), Reseller.class))));
         return reseller == null;
+    }
+
+
+    @GET
+    @Path("level")
+    public Collection<Reseller> get() throws Exception{
+        long level = permissionsService.getUserAccessLevel(getUserId());
+        var conditions = new LinkedList<Condition>();
+
+        if(level == 4){
+            return storage.getObjects(baseClass, new Request(
+                    new Columns.All(), Condition.merge(conditions), new Order("name")
+            ));
+        }else if(level == 1){
+            long resellerid = permissionsService.getLevelGroupId(getUserId(), 1);
+            return storage.getObjects(baseClass, new Request(
+                    new Columns.All(),
+                    new Condition.Equals("id",resellerid)));
+        }else if(level == 2){
+            throw new SecurityException("Unauthorized access - Higher permission required");
+        }else if(level == 3){
+            throw new SecurityException("Unauthorized access - Higher permission required");
+        }
+        return null;
     }
 
 }
