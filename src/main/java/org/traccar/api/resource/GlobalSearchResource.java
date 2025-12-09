@@ -114,14 +114,45 @@ public class GlobalSearchResource extends BaseObjectResource<Device> {
     @Path("asset")
     @GET
     public Collection<Device> searchLinkedAssets(@QueryParam("assetname") String assetname) throws Exception {
-        //LOGGER.info("Asset name - {}", assetname);
-        return storage.getJointObjects(
-                Device.class,
-                new Request(
-                        new Columns.All(),
-                        new Condition.FiveJoinWhereSearch(Device.class,"id", DeviceAsset.class,"deviceid","assetid", ClientDevice.class,"clientid", SubresellerClient.class,"clientid",Asset.class,"id","name",assetname)
-                )
-        );
+        long level = permissionsService.getUserAccessLevel(getUserId());
+
+        if (level == 4) {
+            return storage.getJointObjects(
+                    Device.class,
+                    new Request(
+                            new Columns.All(),
+                            new Condition.FiveJoinWhereSearch(Device.class, "id", DeviceAsset.class, "deviceid", "assetid", ClientDevice.class, "clientid", SubresellerClient.class, "clientid", Asset.class, "id", "name", assetname)
+                    )
+            );
+        }else if(level == 1){
+            long resellerid = permissionsService.getLevelGroupId(getUserId(),1);
+            return storage.getJointObjects(
+                    Device.class,
+                    new Request(
+                            new Columns.All(),
+                            new Condition.SixJoinTwoWhereSearch(Device.class, "id", DeviceAsset.class, "deviceid", "assetid", ClientDevice.class, "clientid",Asset.class, SubresellerClient.class,ResellerSubreseller.class,"subresellerid", "resellerid", resellerid, "name", assetname)
+                    )
+            );
+        }else if(level == 2){
+            long subresellerid = permissionsService.getLevelGroupId(getUserId(),2);
+            return storage.getJointObjects(
+                    Device.class,
+                    new Request(
+                            new Columns.All(),
+                            new Condition.FiveJoinTwoWhereSearch1(Device.class, "id", DeviceAsset.class, "deviceid", "assetid", ClientDevice.class, "clientid",Asset.class, SubresellerClient.class,"subresellerid", subresellerid, "name", assetname)
+                    )
+            );
+        }else if(level == 3){
+            long clientid = permissionsService.getLevelGroupId(getUserId(),3);
+            return storage.getJointObjects(
+                    Device.class,
+                    new Request(
+                            new Columns.All(),
+                            new Condition.FourJoinTwoWhereSearch1(Device.class, "id", DeviceAsset.class, "deviceid", "assetid", ClientDevice.class, "clientid",Asset.class, clientid, "name", assetname)
+                    )
+            );
+        }
+        return null;
     }
 
     @Path("client")
