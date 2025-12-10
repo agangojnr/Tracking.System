@@ -40,6 +40,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,7 +90,6 @@ public class DeviceResource extends BaseObjectResource<Device> {
     @Path("query")
     public Collection<Device> get() throws Exception{
         long defaultClientId = permissionsService.getDefaultClientId(getUserId());
-        //LOGGER.info("User Id: {} - Default culient id - {}",getUserId(), defaultClientId);
         return storage.getJointObjects(
                 Device.class,
                 new Request(
@@ -100,60 +100,116 @@ public class DeviceResource extends BaseObjectResource<Device> {
     }
 
     @GET
-    public Collection<Device> get(@QueryParam("all") boolean all,
-                                  @QueryParam("userId") long userId,
-                                  @QueryParam("clientId") Long clientId,
-                                  @QueryParam("uniqueId") List<String> uniqueIds,
-                                  @QueryParam("id") List<Long> deviceIds) throws Exception {
+    public Stream<Device> get(
+            @QueryParam("all") boolean all, @QueryParam("userId") long userId,
+            @QueryParam("clientId") Long clientId,
+            @QueryParam("uniqueId") List<String> uniqueIds,
+            @QueryParam("id") List<Long> deviceIds,
+            @QueryParam("excludeAttributes") boolean excludeAttributes) throws StorageException {
+
+        Columns columns = excludeAttributes ? new Columns.Exclude("attributes") : new Columns.All();
 
         if (!uniqueIds.isEmpty() || !deviceIds.isEmpty()) {
+
             List<Device> result = new LinkedList<>();
             for (String uniqueId : uniqueIds) {
                 result.addAll(storage.getObjects(Device.class, new Request(
-                        new Columns.All(),
+                        columns,
                         new Condition.And(
                                 new Condition.Equals("uniqueId", uniqueId),
-                                new Condition.Permission(User.class, getUserId(), Device.class)
-                        )
-                )));
+                                new Condition.Permission(User.class, getUserId(), Device.class)))));
             }
+            for (Long deviceId : deviceIds) {
+                result.addAll(storage.getObjects(Device.class, new Request(
+                        columns,
+                        new Condition.And(
+                                new Condition.Equals("id", deviceId),
+                                new Condition.Permission(User.class, getUserId(), Device.class)))));
+            }
+            return result.stream();
 
-                for (Long deviceId : deviceIds) {
-                    result.addAll(storage.getObjects(Device.class, new Request(
-                            new Columns.All(),
-                            new Condition.And(
-                                    new Condition.Equals("id", deviceId),
-                                    new Condition.Permission(User.class, getUserId(), Device.class)))));
-                }
-                return result;
-            }else{
+        } else {
+
             var conditions = new LinkedList<Condition>();
 
+//            if (all) {
+//                if (permissionsService.notAdmin(getUserId())) {
+//                    conditions.add(new Condition.Permission(User.class, getUserId(), baseClass));
+//                }
+//            } else {
+//                if (userId == 0) {
+//                    conditions.add(new Condition.Permission(User.class, getUserId(), baseClass));
+//                } else {
+//                    permissionsService.checkUser(getUserId(), userId);
+//                    conditions.add(new Condition.Permission(User.class, userId, baseClass).excludeGroups());
+//                }
+//            }
             if (all) {
                 if (permissionsService.notAdmin(getUserId())) {
                     conditions.add(new Condition.Permission(User.class, getUserId(), baseClass));
+
+                    return storage.getObjectsStream(baseClass, new Request(
+                            new Columns.All(), Condition.merge(conditions), new Order("name")));
                 }
-            } else {
-                if (userId == 0) {
-                    conditions.add(new Condition.Permission(User.class, getUserId(), baseClass));
-                } else {
-//                    long level = permissionsService.getUserAccessLevel(userId);
-                    permissionsService.checkUser(getUserId(), userId);
-                    conditions.add(new Condition.Permission(User.class, userId, baseClass).excludeGroups());
-                }
-//
-              if(clientId != null && clientId > 0){
-                  //LOGGER.info("TESTING - {}", clientId);
-                  return storage.getJointObjects(baseClass, new Request(
-                          new Columns.All(),
-                          new Condition.ThreeJoinWhere(Device.class,"id", GroupDevice.class,"deviceid","groupid",ClientGroup.class,"groupid","clientid",clientId)));
-              }
+            } else if (clientId != null && clientId > 0) {
+                return storage.getJointObjectStream(baseClass, new Request(
+                        new Columns.All(),
+                        new Condition.ThreeJoinWhere(Device.class, "id", GroupDevice.class, "deviceid", "groupid", ClientGroup.class, "groupid", "clientid", clientId)));
             }
 
-            return storage.getObjects(baseClass, new Request(
-                    new Columns.All(), Condition.merge(conditions), new Order("name")));
+            return storage.getObjectsStream(baseClass, new Request(
+                    columns, Condition.merge(conditions), new Order("name")));
+
         }
     }
+
+//    @GET
+//    public Collection<Device> get(@QueryParam("all") boolean all,
+//                                  @QueryParam("userId") long userId,
+//                                  @QueryParam("clientid") Long clientid,
+//                                  @QueryParam("uniqueId") List<String> uniqueIds,
+//                                  @QueryParam("id") List<Long> deviceIds) throws Exception {
+//
+//        if (!uniqueIds.isEmpty() || !deviceIds.isEmpty()) {
+//            List<Device> result = new LinkedList<>();
+//            for (String uniqueId : uniqueIds) {
+//                result.addAll(storage.getObjects(Device.class, new Request(
+//                        new Columns.All(),
+//                        new Condition.And(
+//                                new Condition.Equals("uniqueId", uniqueId),
+//                                new Condition.Permission(User.class, getUserId(), Device.class)
+//                        )
+//                )));
+//            }
+//
+//            for (Long deviceId : deviceIds) {
+//                result.addAll(storage.getObjects(Device.class, new Request(
+//                        new Columns.All(),
+//                        new Condition.And(
+//                                new Condition.Equals("id", deviceId),
+//                                new Condition.Permission(User.class, getUserId(), Device.class)))));
+//            }
+//            return result;
+//        } else {
+//
+//            var conditions = new LinkedList<Condition>();
+//
+//            if (all) {
+//                if (permissionsService.notAdmin(getUserId())) {
+//                    conditions.add(new Condition.Permission(User.class, getUserId(), baseClass));
+//
+//                    return storage.getObjects(baseClass, new Request(
+//                            new Columns.All(), Condition.merge(conditions), new Order("name")));
+//                }
+//            } else if (clientid != null && clientid > 0) {
+//                return storage.getJointObjects(baseClass, new Request(
+//                        new Columns.All(),
+//                        new Condition.ThreeJoinWhere(Device.class, "id", GroupDevice.class, "deviceid", "groupid", ClientGroup.class, "groupid", "clientid", clientid)));
+//            }
+//        }
+//        return null;
+//    }
+
 
     @GET
     @Path("level")
