@@ -106,4 +106,21 @@ public class AccesslevelResource extends ExtendedObjectResource<Accesslevel> {
         return accesslevel == null;
     }
 
+    @Path("level")
+    @GET
+    public long getUserAccessLevel(@QueryParam("userid") Long userid) throws Exception{
+        Collection<UserLevel> result = storage.getObjects(
+                UserLevel.class,
+                new Request(
+                        new Columns.All(),
+                        new Condition.Equals("userid", userid)
+                )
+        );
+
+        if (!result.isEmpty()) {
+            return result.iterator().next().getLevelid();
+        }
+        return 0;
+    }
+
 }
