@@ -86,19 +86,9 @@ public class AssettypeResource extends SimpleObjectResource<Assettype> {
 
     @GET
     @Path("query")
-    public Collection<Assettype> get(@QueryParam("all") Boolean all,
-                                       @QueryParam("userId") Long userId) throws StorageException{
+    public Collection<Assettype> get() throws StorageException{
         //LOGGER.info("This is it");
         var conditions = new LinkedList<Condition>();
-
-        if (Boolean.TRUE.equals(all)) {
-            if (permissionsService.notAdmin(getUserId())) {
-                conditions.add(new Condition.Permission(User.class, getUserId(), baseClass));
-            }
-
-        }else if(userId != null && userId > 0){
-            conditions.add(new Condition.Permission(User.class, userId, Client.class).excludeGroups());
-        }
 
         return storage.getObjects(baseClass, new Request(
                 new Columns.All(), Condition.merge(conditions), new Order("name")
