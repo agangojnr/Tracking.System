@@ -56,22 +56,13 @@ public class NetworkproviderResource extends ExtendedObjectResource<Networkprovi
 
     @GET
     @Path("query")
-    public Collection<Networkprovider> get(@QueryParam("all") Boolean all,
-                                  @QueryParam("userId") Long userId) throws StorageException {
+    public Collection<Networkprovider> get() throws StorageException {
         var conditions = new LinkedList<Condition>();
 
-        if (Boolean.TRUE.equals(all)) {
-            if (permissionsService.notAdmin(getUserId())) {
-                conditions.add(new Condition.Permission(User.class, getUserId(), baseClass));
-            }
-        } else if(userId != null && userId > 0){
-            conditions.add(new Condition.Permission(User.class, userId, Networkprovider.class).excludeGroups());
-        }
         return storage.getObjects(baseClass, new Request(
                 new Columns.All(), Condition.merge(conditions), new Order("name")
         ));
     }
-
 
     @Path("create")
     @POST
