@@ -84,16 +84,54 @@ public class StockResource extends BaseObjectResource<Device> {
 
     @Path("linkedsimcards")
     @GET
-    public Collection<Simcard> getLinkedSimcards()
-            throws StorageException {
+    public Response getLinkedSimcards() throws Exception {
+        long level = permissionsService.getUserAccessLevel(getUserId());
+        if(level == 4){
+//            return storage.getJointObjects(
+//                    Simcard.class,
+//                    new Request(
+//                            new Columns.All(),
+//                            new Condition.InnerJoin(Simcard.class,"id", DeviceSimcard.class,"simcardid")
+//                    )
+//            );
 
-        return storage.getJointObjects(
-                Simcard.class,
-                new Request(
-                        new Columns.All(),
-                        new Condition.InnerJoin(Simcard.class,"id", DeviceSimcard.class,"simcardid")
-                )
-        );
+            Collection<Simcard> simcards = storage.getJointObjects(
+                    Simcard.class,
+                    new Request(
+                            new Columns.All(),
+                            new Condition.InnerJoin(
+                                    Simcard.class, "id",
+                                    DeviceSimcard.class, "simcardid"
+                            )
+                    )
+            );
+            return Response.ok(simcards).build();
+        } else if (level == 1) {
+            long resellerId = permissionsService.getLevelGroupId(getUserId(), level);
+//            return storage.getJointObjects(
+//                    Simcard.class,
+//                    new Request(
+//                            new Columns.All(),
+//                            new Condition.ThreeJoinWhere(Simcard.class,"id", DeviceSimcard.class,"simcardid","simcardid",ResellerSimcard.class,"simcardid","resellerid",resellerId)
+//                    )
+//            );
+
+            Collection<Simcard> simcards = storage.getJointObjects(
+                    Simcard.class,
+                    new Request(
+                            new Columns.All(),
+                            new Condition.ThreeJoinWhere(Simcard.class,"id", DeviceSimcard.class,"simcardid","simcardid",ResellerSimcard.class,"simcardid","resellerid",resellerId)
+                    )
+            );
+            return Response.ok(simcards).build();
+
+        }else{
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity("{\"status\":\"Unauthorised access.\"}")
+                    .build();
+        }
+
     }
 
     @Path("unlinkedsimcards")
