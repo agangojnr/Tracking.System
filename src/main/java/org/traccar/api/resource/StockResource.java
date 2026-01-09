@@ -397,4 +397,19 @@ public class StockResource extends BaseObjectResource<Device> {
         }
     }
 
+    @Path("unattachedassets")
+    @GET
+    public Response getUnlinkedAssets(@QueryParam("clientId") Long clientId) throws Exception {
+    //LOGGER.info("Client ID: {}", clientId);
+        Collection<Asset> assets = storage.getJointObjects(
+                Asset.class,
+                new Request(
+                        new Columns.All(),
+                        new Condition.ThreeLeftJoinWhere(Asset.class,"id", DeviceAsset.class,"assetid", "assetid", ClientAsset.class,"clientid", clientId)
+                        //new Condition.LeftJoin(Asset.class, "id", DeviceAsset.class, "assetid")
+                )
+        );
+        return Response.ok(assets).build();
+    }
+
 }
