@@ -296,18 +296,71 @@ public class StockResource extends BaseObjectResource<Device> {
 //        );
     }
 
+    @Path("allassets")
+    @GET
+    public Response getAllAssets() throws Exception {
+        long level = permissionsService.getUserAccessLevel(getUserId());
+        
+        if(level == 4){
+            Collection<Asset> assets = storage.getJointObjects(
+                    Asset.class,
+                    new Request(
+                            new Columns.All()
+                            //new Condition.InnerJoin(Asset.class,"id", DeviceAsset.class,"assetid")
+                    )
+            );
+            return Response.ok(assets).build();
+        } else if (level == 1) {
+            long resellerId = permissionsService.getLevelGroupId(getUserId(), level);
+            Collection<Asset> assets = storage.getJointObjects(
+                    Asset.class,
+                    new Request(
+                            new Columns.All(),
+                            new Condition.FourJoinWhere(Asset.class,"id", ClientAsset.class,"assetid", "clientid", SubresellerClient.class, "clientid", ResellerSubreseller.class,"subresellerid", "resellerId",resellerId)
+                    )
+            );
+            return Response.ok(assets).build();
+        }else{
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity("{\"status\":\"Unauthorised access.\"}")
+                    .build();
+        }
+
+    }
+
+
     @Path("linkedassets")
     @GET
-    public Collection<Asset> getLinkedAssets()
-            throws StorageException {
+    public Response getLinkedAssets() throws Exception {
+        long level = permissionsService.getUserAccessLevel(getUserId());
 
-        return storage.getJointObjects(
-                Asset.class,
-                new Request(
-                        new Columns.All(),
-                        new Condition.InnerJoin(Asset.class,"id", DeviceAsset.class,"assetid")
-                )
-        );
+        if(level == 4){
+            Collection<Asset> assets = storage.getJointObjects(
+                    Asset.class,
+                    new Request(
+                            new Columns.All(),
+                            new Condition.InnerJoin(Asset.class,"id", DeviceAsset.class,"assetid")
+                    )
+            );
+            return Response.ok(assets).build();
+        } else if (level == 1) {
+            long resellerId = permissionsService.getLevelGroupId(getUserId(), level);
+            Collection<Asset> assets = storage.getJointObjects(
+                    Asset.class,
+                    new Request(
+                            new Columns.All(),
+                            new Condition.FiveJoinWhere1(Asset.class,"id", DeviceAsset.class,"assetid", "assetid", ClientAsset.class,"clientid", SubresellerClient.class, "subresellerid", ResellerSubreseller.class,"resellerid", "resellerId",resellerId)
+                    )
+            );
+            return Response.ok(assets).build();
+        }else{
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity("{\"status\":\"Unauthorised access.\"}")
+                    .build();
+        }
+
     }
 
     @Path("unlinkedassets")
