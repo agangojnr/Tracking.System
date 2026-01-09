@@ -365,15 +365,36 @@ public class StockResource extends BaseObjectResource<Device> {
 
     @Path("unlinkedassets")
     @GET
-    public Collection<Asset> getUnlinkedAssets()
-            throws StorageException {
-        return storage.getJointObjects(
-                Asset.class,
-                new Request(
-                        new Columns.All(),
-                        new Condition.LeftJoin(Asset.class,"id", DeviceAsset.class,"assetid")
-                )
-        );
+    public Response getUnlinkedAssets() throws Exception {
+
+        long level = permissionsService.getUserAccessLevel(getUserId());
+
+        if(level == 4) {
+            Collection<Asset> assets = storage.getJointObjects(
+                    Asset.class,
+                    new Request(
+                            new Columns.All(),
+                            new Condition.LeftJoin(Asset.class, "id", DeviceAsset.class, "assetid")
+                    )
+            );
+            return Response.ok(assets).build();
+        } else if (level == 1) {
+            long resellerId = permissionsService.getLevelGroupId(getUserId(), level);
+            Collection<Asset> assets = storage.getJointObjects(
+                    Asset.class,
+                    new Request(
+                            new Columns.All(),
+                            new Condition.FiveLeftJoinWhere(Asset.class,"id", DeviceAsset.class,"assetid", "assetid", ClientAsset.class,"clientid", SubresellerClient.class, "subresellerid", ResellerSubreseller.class,"resellerid", "resellerId",resellerId)
+                            //new Condition.LeftJoin(Asset.class, "id", DeviceAsset.class, "assetid")
+                    )
+            );
+            return Response.ok(assets).build();
+        }else {
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity("{\"status\":\"Unauthorised access.\"}")
+                    .build();
+        }
     }
 
 }
