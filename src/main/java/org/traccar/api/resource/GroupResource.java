@@ -92,16 +92,17 @@ public class GroupResource extends SimpleObjectResource<Group> {
 
     public boolean validate(Group entity) throws StorageException {
         String name = entity.getName();
+        if("Default_Group".equals(name)){
+            return true;
+        }
 
         Group group = storage.getObject(Group.class, new Request(
                 new Columns.All(),
                 new Condition.And(
                         new Condition.Equals("name", name),
                         new Condition.Permission(User.class, getUserId(), Group.class))));
-
         return group == null;
     }
-
 
     @GET
     @Path("query")
