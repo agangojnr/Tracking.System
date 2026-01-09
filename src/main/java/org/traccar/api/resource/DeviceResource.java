@@ -243,7 +243,7 @@ public class DeviceResource extends BaseObjectResource<Device> {
     @Path("create/{clientId}")
     @POST
     public Response add(Device entity,@PathParam("clientId") Long clientId) throws Exception {
-
+        LOGGER.info("Inserted entity with ID: {}", clientId);
         if(validate(entity)){
             if (getUserId() != ServiceAccountUser.ID) {
                 entity.setId(0);
@@ -257,7 +257,7 @@ public class DeviceResource extends BaseObjectResource<Device> {
                 connectionManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
                 actionLogger.create(request, getUserId(), entity);
             }
-            //LOGGER.info("Inserted entity with ID: {}", deviceId);
+
 
             return Response.ok(entity).build();
         }else{
@@ -285,13 +285,15 @@ public class DeviceResource extends BaseObjectResource<Device> {
 
 
     public boolean validate(Device entity) throws StorageException {
-        String name = entity.getName();
+        String uniqueid = entity.getUniqueId();
 
         Device device = storage.getObject(Device.class, new Request(
                 new Columns.All(),
                 new Condition.And(
-                        new Condition.Equals("name", name),
-                        new Condition.Permission(User.class, getUserId(), Device.class))));
+                        new Condition.Equals("uniqueid", uniqueid),
+                        new Condition.Permission(User.class, getUserId(), Device.class))
+            )
+        );
         return device == null;
     }
 
