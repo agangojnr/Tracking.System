@@ -82,6 +82,40 @@ public class StockResource extends BaseObjectResource<Device> {
         return null;
     }
 
+    @Path("allsimcards")
+    @GET
+    public Response getAllSimcards() throws Exception {
+        long level = permissionsService.getUserAccessLevel(getUserId());
+
+        if(level == 4){
+            Collection<Simcard> simcards = storage.getJointObjects(
+                    Simcard.class,
+                    new Request(
+                            new Columns.All()
+                            //new Condition.InnerJoin(Device.class,"id", DeviceAsset.class,"deviceid")
+                    )
+            );
+            return Response.ok(simcards).build();
+        } else if (level == 1) {
+            long resellerId = permissionsService.getLevelGroupId(getUserId(), level);
+            Collection<Simcard> simcards = storage.getJointObjects(
+                    Simcard.class,
+                    new Request(
+                            new Columns.All(),
+                            new Condition.OneJoinWhere(Simcard.class,"id", ResellerSimcard.class,"simcardid","resellerid",resellerId)
+                    )
+            );
+            return Response.ok(simcards).build();
+        }else{
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity("{\"status\":\"Unauthorised access.\"}")
+                    .build();
+        }
+
+    }
+
+
     @Path("linkedsimcards")
     @GET
     public Response getLinkedSimcards() throws Exception {
@@ -120,30 +154,70 @@ public class StockResource extends BaseObjectResource<Device> {
 
     @Path("unlinkedsimcards")
     @GET
-    public Collection<Simcard> getUnlinkedSimcards()
-            throws StorageException {
-        return storage.getJointObjects(
-                Simcard.class,
-                new Request(
-                        new Columns.All(),
-                        new Condition.LeftJoin(Simcard.class,"id", DeviceSimcard.class,"simcardid")
-                )
-        );
+    public Response getUnlinkedSimcards() throws Exception {
+        long level = permissionsService.getUserAccessLevel(getUserId());
+        if(level == 4){
+            Collection<Simcard> simcards = storage.getJointObjects(
+                    Simcard.class,
+                    new Request(
+                            new Columns.All(),
+                            new Condition.LeftJoin(Simcard.class,"id", DeviceSimcard.class,"simcardid")
+                    )
+            );
+            return Response.ok(simcards).build();
+        }else if(level == 1){
+            long resellerId = permissionsService.getLevelGroupId(getUserId(), level);
+            Collection<Simcard> simcards = storage.getJointObjects(
+                    Simcard.class,
+                    new Request(
+                            new Columns.All(),
+                            new Condition.LeftJoinOneJoinWhere(Simcard.class,"id", DeviceSimcard.class,"simcardid", ResellerSimcard.class, "resellerid", resellerId)
+                    )
+            );
+            return Response.ok(simcards).build();
+        }else{
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity("{\"status\":\"Unauthorised access.\"}")
+                    .build();
+        }
+
+
     }
-//
-//    @Path("linkeddevices")
-//    @GET
-//    public Collection<Device> getLinkedDevices()
-//            throws StorageException {
-//
-//        return storage.getJointObjects(
-//                Device.class,
-//                new Request(
-//                        new Columns.All(),
-//                        new Condition.InnerJoin(Device.class,"id", DeviceAsset.class,"deviceid")
-//                )
-//        );
-//    }
+
+    @Path("alldevices")
+    @GET
+    public Response getAllDevices() throws Exception {
+        long level = permissionsService.getUserAccessLevel(getUserId());
+
+        if(level == 4){
+            Collection<Device> devices = storage.getJointObjects(
+                    Device.class,
+                    new Request(
+                            new Columns.All()
+                            //new Condition.InnerJoin(Device.class,"id", DeviceAsset.class,"deviceid")
+                    )
+            );
+            return Response.ok(devices).build();
+        } else if (level == 1) {
+            long resellerId = permissionsService.getLevelGroupId(getUserId(), level);
+            Collection<Device> devices = storage.getJointObjects(
+                    Device.class,
+                    new Request(
+                            new Columns.All(),
+                            //new Condition.InnerJoin(Device.class,"id", DeviceAsset.class,"deviceid")
+                            new Condition.FourJoinWhere1(Device.class,"id",  ClientDevice.class, "deviceid", "clientid", SubresellerClient.class, "subresellerid", ResellerSubreseller.class, "resellerid", "resellerid", resellerId)
+                    )
+            );
+            return Response.ok(devices).build();
+        }else{
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity("{\"status\":\"Unauthorised access.\"}")
+                    .build();
+        }
+
+    }
 
     @Path("linkeddevices")
     @GET
