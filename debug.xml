@@ -34,8 +34,11 @@
     <entry key='intellitrac.port'>6037</entry>
 
     <entry key='geocoder.enable'>true</entry>
-    <entry key='geocoder.type'>google</entry>
-    <entry key='geocoder.key'>AIzaSyDaCYZsF7pIk5Tk3WQkcaNcBXfUm5Gjadc</entry>
 
+<!--    <entry key='geocoder.type'>google</entry>-->
+<!--    <entry key='geocoder.key'>AIzaSyDaCYZsF7pIk5Tk3WQkcaNcBXfUm5Gjadc</entry>-->
+
+    <entry key='geocoder.type'>locationiq</entry>
+    <entry key='geocoder.key'>pk.d18f554c7c57fff1b15d0d7f9ac82985</entry>
 
 </properties>

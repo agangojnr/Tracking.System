@@ -71,14 +71,14 @@ public class PositionResource extends BaseResource {
             for (long positionId : positionIds) {
                 Position position = storage.getObject(Position.class, new Request(
                         new Columns.All(), new Condition.Equals("id", positionId)));
-                permissionsService.checkPermission(Device.class, getUserId(), position.getDeviceId());
+                //permissionsService.checkPermission(Device.class, getUserId(), position.getDeviceId());
                 positions.add(position);
             }
             return positions.stream();
         } else if (deviceId > 0) {
-            permissionsService.checkPermission(Device.class, getUserId(), deviceId);
+            //permissionsService.checkPermission(Device.class, getUserId(), deviceId);
             if (from != null && to != null) {
-                permissionsService.checkRestriction(getUserId(), UserRestrictions::getDisableReports);
+                //permissionsService.checkRestriction(getUserId(), UserRestrictions::getDisableReports);
                 return PositionUtil.getPositionsStream(storage, deviceId, from, to);
             } else {
                 return storage.getObjectsStream(Position.class, new Request(

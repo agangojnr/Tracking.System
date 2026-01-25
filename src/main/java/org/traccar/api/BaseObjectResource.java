@@ -122,15 +122,41 @@ public abstract class BaseObjectResource<T extends BaseModel> extends BaseResour
     @Path("{id}")
     @DELETE
     public Response remove(@PathParam("id") long id) throws Exception {
+        //LOGGER.info("Checking for testing error");
+
+        try{
         permissionsService.checkPermission(baseClass, getUserId(), id);
         permissionsService.checkEdit(getUserId(), baseClass, false, false);
 
         storage.removeObject(baseClass, new Request(new Condition.Equals("id", id)));
+
         cacheManager.invalidateObject(true, baseClass, id, ObjectOperation.DELETE);
 
         actionLogger.remove(request, getUserId(), baseClass, id);
         //return Response.noContent().build();
         return Response.ok("{\"status\":\"Deleted Successfully\"}").build();
+        } catch (StorageException e) {
+            Throwable rootCause = e.getCause();
+
+            // Handle SQL Server FK constraint violation
+            if (rootCause instanceof com.microsoft.sqlserver.jdbc.SQLServerException) {
+                String message = rootCause.getMessage();
+
+                if (message != null && message.contains("REFERENCE constraint")) {
+                    LOGGER.warn(
+                            "Delete failed due to FK constraint. {} id={}",
+                            baseClass.getSimpleName(),
+                            id,
+                            e
+                    );
+
+                    return Response.status(Response.Status.CONFLICT)
+                            .entity("{\"error\":\"Cannot delete this record because it is referenced by other records.\"}")
+                            .build();
+                }
+            }
+        }
+        return null;
     }
 
 }
