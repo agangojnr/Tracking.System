@@ -15,10 +15,7 @@
  */
 package org.traccar.helper.model;
 
-import org.traccar.model.BaseModel;
-import org.traccar.model.Device;
-import org.traccar.model.Position;
-import org.traccar.model.User;
+import org.traccar.model.*;
 import org.traccar.session.cache.CacheManager;
 import org.traccar.storage.Storage;
 import org.traccar.storage.StorageException;
@@ -82,10 +79,25 @@ public final class PositionUtil {
                 new Order("fixTime", end, 1)));
     }
 
-    public static List<Position> getLatestPositions(Storage storage, long userId) throws StorageException {
+    public static List<Position> getLatestPositionPerclient(Storage storage, long clientId) throws StorageException {
         var devices = storage.getObjects(Device.class, new Request(
                 new Columns.Include("id"),
-                new Condition.Permission(User.class, userId, Device.class)));
+                new Condition.Permission(Client.class, clientId, Device.class)
+        ));
+        var deviceIds = devices.stream().map(BaseModel::getId).collect(Collectors.toUnmodifiableSet());
+
+        var positions = storage.getObjects(Position.class, new Request(
+                new Columns.All(), new Condition.LatestPositions()));
+        return positions.stream()
+                .filter(position -> deviceIds.contains(position.getDeviceId()))
+                .toList();
+    }
+
+    public static List<Position> getLatestPositions(Storage storage, long userId) throws StorageException {
+        var devices = storage.getObjects(Device.class, new Request(
+                new Columns.Include("id")
+                //new Condition.Permission(User.class, userId, Device.class)
+        ));
         var deviceIds = devices.stream().map(BaseModel::getId).collect(Collectors.toUnmodifiableSet());
 
         var positions = storage.getObjects(Position.class, new Request(

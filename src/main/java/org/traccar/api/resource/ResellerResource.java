@@ -52,6 +52,9 @@ public class ResellerResource extends ExtendedObjectResource<Reseller> {
     public Collection<Reseller> get(@QueryParam("all") Boolean all,
                                   @QueryParam("userId") Long userId,
                                   @QueryParam("subresellerid") Long subresellerid) throws Exception {
+
+        //LOGGER.info("Checking userid - {}", getUserId());
+
         var conditions = new LinkedList<Condition>();
 
         if (Boolean.TRUE.equals(all)) {
@@ -134,6 +137,7 @@ public class ResellerResource extends ExtendedObjectResource<Reseller> {
     @GET
     @Path("level")
     public Collection<Reseller> get() throws Exception{
+        //LOGGER.info("Checking userid - {}", getUserId());
         long level = permissionsService.getUserAccessLevel(getUserId());
         var conditions = new LinkedList<Condition>();
 

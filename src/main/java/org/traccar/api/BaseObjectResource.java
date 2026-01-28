@@ -122,7 +122,7 @@ public abstract class BaseObjectResource<T extends BaseModel> extends BaseResour
     @Path("{id}")
     @DELETE
     public Response remove(@PathParam("id") long id) throws Exception {
-        //LOGGER.info("Checking for testing error");
+        //LOGGER.info("Checking for testing error, - {}", id);
 
         try{
         permissionsService.checkPermission(baseClass, getUserId(), id);
@@ -155,6 +155,17 @@ public abstract class BaseObjectResource<T extends BaseModel> extends BaseResour
                             .build();
                 }
             }
+        } catch (Exception e) {
+            LOGGER.error(
+                    "Unexpected error while deleting {} id={}",
+                    baseClass.getSimpleName(),
+                    id,
+                    e
+            );
+
+            return Response.serverError()
+                    .entity("{\"error\":\"Unexpected error occurred.\"}")
+                    .build();
         }
         return null;
     }

@@ -1,0 +1,24 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+  <!-- Add foreign  create-tc-device-asset -->
+
+  <changeSet id="add-fk-tc-simcards-networkprovider" author="walter">
+
+    <addForeignKeyConstraint
+            baseTableName="tc_simcards"
+            baseColumnNames="networkproviderid"
+            constraintName="FK__simcard_networkprovider"
+            referencedTableName="tc_networkproviders"
+            referencedColumnNames="id"
+            onDelete="CASCADE"
+            onUpdate="NO ACTION"/>
+
+  </changeSet>
+
+</databaseChangeLog>
+

@@ -7,6 +7,8 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.traccar.api.ExtendedObjectResource;
 import org.traccar.api.security.PermissionsService;
 import org.traccar.api.security.ServiceAccountUser;
@@ -47,6 +49,8 @@ public class SubResellerResource extends ExtendedObjectResource<Subreseller> {
         super(Subreseller.class, "name");
     }
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(SubResellerResource.class);
+
     @GET
     @Path("query")
     public Collection<Subreseller> get(@QueryParam("all") Boolean all,
@@ -84,7 +88,7 @@ public class SubResellerResource extends ExtendedObjectResource<Subreseller> {
     public Collection<Subreseller> get() throws Exception{
         long level = permissionsService.getUserAccessLevel(getUserId());
         var conditions = new LinkedList<Condition>();
-
+        //LOGGER.info("User ID here ------------------------------- : {}", getUserId());
         if(level == 4){
             return storage.getObjects(baseClass, new Request(
                     new Columns.All(), Condition.merge(conditions), new Order("name")

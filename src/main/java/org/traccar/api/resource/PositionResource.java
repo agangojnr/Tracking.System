@@ -15,6 +15,8 @@
  */
 package org.traccar.api.resource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.traccar.api.BaseResource;
 import org.traccar.helper.model.PositionUtil;
 import org.traccar.model.Device;
@@ -61,9 +63,11 @@ public class PositionResource extends BaseResource {
     @Inject
     private GpxExportProvider gpxExportProvider;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(PositionResource.class);
+
     @GET
     public Stream<Position> getJson(
-            @QueryParam("deviceId") long deviceId, @QueryParam("id") List<Long> positionIds,
+            @QueryParam("deviceId") long deviceId, @QueryParam("clientId") long clientId, @QueryParam("id") List<Long> positionIds,
             @QueryParam("from") Date from, @QueryParam("to") Date to)
             throws StorageException {
         if (!positionIds.isEmpty()) {
@@ -84,7 +88,9 @@ public class PositionResource extends BaseResource {
                 return storage.getObjectsStream(Position.class, new Request(
                         new Columns.All(), new Condition.LatestPositions(deviceId)));
             }
-        } else {
+        } else if (clientId > 0) {
+            return PositionUtil.getLatestPositionPerclient(storage, clientId).stream();
+        }else {
             return PositionUtil.getLatestPositions(storage, getUserId()).stream();
         }
     }
