@@ -7,8 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.traccar.api.BaseResource;
 import org.traccar.helper.LogAction;
-import org.traccar.model.Permission;
-import org.traccar.model.UserRestrictions;
+import org.traccar.model.*;
 import org.traccar.session.cache.CacheManager;
 import org.traccar.storage.StorageException;
 
@@ -21,6 +20,10 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.traccar.storage.query.Columns;
+import org.traccar.storage.query.Condition;
+import org.traccar.storage.query.Request;
+
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -59,7 +62,7 @@ public class PermissionsResource  extends BaseResource {
     }
 
     private void checkLinkage(Permission permission) throws StorageException, ClassNotFoundException {
-        //LOGGER.info("Testing {} --- {}",permission.getOwnerClass().getSimpleName(),permission.getPropertyClass().getSimpleName());
+        //LOGGER.info("Testing  {}",permission.getPropertyClass().getSimpleName());
         boolean invalid = simcardPermissionResource.validateLink(permission.getModelClass(permission.getOwnerClass(),permission.getPropertyClass()),
                 ""+permission.getColumnName(permission.getOwnerClass())+"", permission.getOwnerId(),
                 ""+permission.getColumnName(permission.getPropertyClass())+"", permission.getPropertyId()
@@ -67,15 +70,41 @@ public class PermissionsResource  extends BaseResource {
 
         if (invalid) {
             throw new StorageException("Already linked.");
-//                    "Invalid Link: "
-//                            + permission.getOwnerClass().getSimpleName() + "(" + permission.getOwnerId() + ") and "
-//                            + permission.getPropertyClass().getSimpleName() + "(" + permission.getPropertyId() + "), " +
-//                            "The entities are already linked."
-//            );
+        }
 
+        if(permission.getPropertyClass().getSimpleName().equals("Asset")){
+            //LOGGER.info("Device ID:  {}",permission.getOwnerId());
+
+            Asset asset = storage.getObject(
+                    Asset.class,
+                    new Request(
+                            new Columns.Include("name"),
+                            new Condition.Equals("id", permission.getPropertyId())
+                    )
+            );
+
+            String newName = asset != null ? asset.getName() : null;
+            Device device = storage.getObject(
+                    Device.class,
+                    new Request(
+                            new Columns.All(),
+                            new Condition.Equals("id", permission.getOwnerId())
+                    )
+            );
+
+            if (device != null) {
+                device.setName(newName); // 👈 update specific column
+
+                storage.updateObject(
+                        device,
+                        new Request(
+                                new Columns.Include("name"),
+                                new Condition.Equals("id", device.getId())
+                        )
+                );
+            }
         }
     }
-
 
     private void checkPermissionTypes(List<LinkedHashMap<String, Long>> entities) {
         Set<String> keys = null;
