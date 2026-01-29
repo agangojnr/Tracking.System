@@ -151,6 +151,58 @@ public class SimcardResource extends ExtendedObjectResource<Simcard> {
     }
 
 
+    @Path("{id}")
+    @DELETE
+    public Response remove(@PathParam("id") long id) throws Exception {
+        if(validateReference(id)){
+            try{
+                permissionsService.checkPermission(baseClass, getUserId(), id);
+                permissionsService.checkEdit(getUserId(), baseClass, false, false);
+
+                storage.removeObject(baseClass, new Request(new Condition.Equals("id", id)));
+
+                cacheManager.invalidateObject(true, baseClass, id, ObjectOperation.DELETE);
+
+                actionLogger.remove(request, getUserId(), baseClass, id);
+                //return Response.noContent().build();
+                return Response.ok("{\"status\":\"Deleted Successfully\"}").build();
+
+            } catch (Exception e) {
+                LOGGER.error(
+                        "Unexpected error while deleting {} id={}",
+                        baseClass.getSimpleName(),
+                        id,
+                        e
+                );
+
+                return Response.serverError()
+                        .entity("{\"error\":\"Unexpected error occurred.\"}")
+                        .build();
+            }
+        }else{
+            return Response.status(Response.Status.CONFLICT)
+                    .entity("{\"error\":\"Cannot delete this record because it is referenced by other records.\"}")
+                    .build();
+        }
+
+    }
+
+    public boolean validateReference(long simcardId) throws StorageException {
+        //String name = Simcard entity.getNetworkproviderid();
+
+        Collection<DeviceSimcard> device = storage.getObjects(DeviceSimcard.class,
+                new Request(
+                        new Columns.All(),
+                        new Condition.Equals("simcardid", simcardId)
+                )
+        );
+        if (!device.isEmpty()) {
+            return false;
+        }
+        return true;
+    }
+
+
 }
 
 
