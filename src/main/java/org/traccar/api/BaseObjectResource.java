@@ -122,7 +122,7 @@ public abstract class BaseObjectResource<T extends BaseModel> extends BaseResour
     @Path("{id}")
     @DELETE
     public Response remove(@PathParam("id") long id) throws Exception {
-        //LOGGER.info("Checking for testing error, - {}", id);
+        LOGGER.info("Checking for testing error, - {}", id);
 
         try{
         permissionsService.checkPermission(baseClass, getUserId(), id);

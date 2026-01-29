@@ -163,6 +163,8 @@ public class DeviceResource extends BaseObjectResource<Device> {
         }
     }
 
+
+
 //    @GET
 //    public Collection<Device> get(@QueryParam("all") boolean all,
 //                                  @QueryParam("userId") long userId,
@@ -442,4 +444,62 @@ public class DeviceResource extends BaseObjectResource<Device> {
                 new Columns.All(), Condition.merge(conditions), new Order("name")));
    }
 
+
+    @Path("{id}")
+    @DELETE
+    public Response remove(@PathParam("id") long id) throws Exception {
+        if(validateReference(id)){
+            try{
+                permissionsService.checkPermission(baseClass, getUserId(), id);
+                permissionsService.checkEdit(getUserId(), baseClass, false, false);
+
+                storage.removeObject(baseClass, new Request(new Condition.Equals("id", id)));
+
+                cacheManager.invalidateObject(true, baseClass, id, ObjectOperation.DELETE);
+
+                actionLogger.remove(request, getUserId(), baseClass, id);
+                //return Response.noContent().build();
+                return Response.ok("{\"status\":\"Deleted Successfully\"}").build();
+
+            } catch (Exception e) {
+                LOGGER.error(
+                        "Unexpected error while deleting {} id={}",
+                        baseClass.getSimpleName(),
+                        id,
+                        e
+                );
+
+                return Response.serverError()
+                        .entity("{\"error\":\"Unexpected error occurred.\"}")
+                        .build();
+            }
+    }else{
+        return Response.status(Response.Status.CONFLICT)
+                .entity("{\"error\":\"Cannot delete this record because it is referenced by other records.\"}")
+                .build();
+    }
+
 }
+
+public boolean validateReference(long deviceId) throws StorageException {
+    //String name = Simcard entity.getNetworkproviderid();
+    Collection<DeviceAsset> asset = storage.getObjects(DeviceAsset.class,
+            new Request(
+                    new Columns.All(),
+                    new Condition.Equals("deviceid", deviceId)
+            )
+    );
+    Collection<DeviceSimcard> simcard = storage.getObjects(DeviceSimcard.class,
+            new Request(
+                    new Columns.All(),
+                    new Condition.Equals("deviceid", deviceId)
+            )
+    );
+    if (!asset.isEmpty() || !simcard.isEmpty()) {
+        return false;
+    }
+    return true;
+}
+
+
+    }
