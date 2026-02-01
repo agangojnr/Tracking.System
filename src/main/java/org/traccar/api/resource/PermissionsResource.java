@@ -161,6 +161,9 @@ public class PermissionsResource  extends BaseResource {
             Permission permission = new Permission(entity);
             checkPermission(permission);
             storage.removePermission(permission);
+            if(permission.getPropertyClass().getSimpleName().equals("Asset")){
+                updateNoAsset(permission);
+            }
             cacheManager.invalidatePermission(
                     true,
                     permission.getOwnerClass(), permission.getOwnerId(),
@@ -176,6 +179,31 @@ public class PermissionsResource  extends BaseResource {
     @DELETE
     public Response remove(LinkedHashMap<String, Long> entity) throws Exception {
         return remove(Collections.singletonList(entity));
+    }
+
+    private void updateNoAsset(Permission permission) throws StorageException, ClassNotFoundException {
+            //LOGGER.info("Device ID:  {}",permission.getOwnerId());
+            String newName = "No Asset";
+            Device device = storage.getObject(
+                    Device.class,
+                    new Request(
+                            new Columns.All(),
+                            new Condition.Equals("id", permission.getOwnerId())
+                    )
+            );
+
+            if (device != null) {
+                device.setName(newName); // 👈 update specific column
+
+                storage.updateObject(
+                        device,
+                        new Request(
+                                new Columns.Include("name"),
+                                new Condition.Equals("id", device.getId())
+                        )
+                );
+            }
+
     }
 
 }
