@@ -93,9 +93,10 @@ public class GroupResource extends SimpleObjectResource<Group> {
     public boolean validate(Group entity) throws StorageException {
         String name = entity.getName();
         if("Default_Group".equals(name)){
-            return true;
+            LOGGER.info("This is it");
+            return false;
         }
-
+        LOGGER.info("This is it - new one");
         Group group = storage.getObject(Group.class, new Request(
                 new Columns.All(),
                 new Condition.And(
