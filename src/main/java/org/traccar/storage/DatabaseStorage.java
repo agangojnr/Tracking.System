@@ -69,7 +69,7 @@ public class DatabaseStorage extends Storage {
         //Here is the join conditions
         query.append(formatCondition(request.getCondition()));
         query.append(formatOrder(request.getOrder()));
-        //logger.info("SQL Query - {}",query);
+        logger.info("SQL Query - {}",query);
         try {
             QueryBuilder builder = QueryBuilder.create(config, dataSource, objectMapper, query.toString());
             List<Object> values = getConditionVariables(request.getCondition());

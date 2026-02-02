@@ -15,13 +15,14 @@
  */
 package org.traccar.helper.model;
 
-import org.traccar.model.Device;
-import org.traccar.model.Group;
-import org.traccar.model.User;
+import jakarta.inject.Inject;
+import org.traccar.api.security.PermissionsService;
+import org.traccar.model.*;
 import org.traccar.storage.Storage;
 import org.traccar.storage.StorageException;
 import org.traccar.storage.query.Columns;
 import org.traccar.storage.query.Condition;
+import org.traccar.storage.query.Order;
 import org.traccar.storage.query.Request;
 
 import java.util.Collection;
@@ -35,10 +36,46 @@ public final class DeviceUtil {
     private DeviceUtil() {
     }
 
+    @Inject
+    private PermissionsService permissionsService;
+
     public static void resetStatus(Storage storage) throws StorageException {
         storage.updateObject(new Device(), new Request(new Columns.Include("status")));
     }
 
+//    public Collection<Device> getAccessibleDevicesOnReports(
+//            Storage storage, long userId,
+//            Collection<Long> deviceIds, Collection<Long> groupIds) throws Exception {
+//
+//        long level = permissionsService.getUserAccessLevel(userId);
+//        var conditions = new LinkedList<Condition>();
+//
+//        if(level == 4){
+//            var results = storage.getObjects(Device.class, new Request(
+//                    new Columns.All(), Condition.merge(conditions), new Order("name")
+//            ));
+//            return results;
+//        }else if(level == 1){
+//            long resellerid = permissionsService.getLevelGroupId(userId, 1);
+//            var results = storage.getJointObjects(Device.class, new Request(
+//                    new Columns.All(),
+//                    new Condition.FourJoinWhere(Device.class, "id", ClientDevice.class, "deviceid","clientid" , SubresellerClient.class, "clientid", ResellerSubreseller.class, "subresellerid", "resellerid", resellerid)));
+//            return results;
+//        }else if(level == 2){
+//            long subresellerid = permissionsService.getLevelGroupId(userId, 2);
+//            var results = storage.getJointObjects(Device.class, new Request(
+//                    new Columns.All(),
+//                    new Condition.ThreeJoinWhere(Device.class, "id", ClientDevice.class, "deviceid","clientid" ,SubresellerClient.class, "clientid","subresellerid", subresellerid)));
+//            return results;
+//        }else if(level == 3){
+//            long clientid = permissionsService.getLevelGroupId(userId, 3);
+//            var results = storage.getJointObjects(Device.class, new Request(
+//                    new Columns.All(),
+//                    new Condition.JoinOneWhere(Device.class, "id", ClientDevice.class, "deviceid","clientid", clientid)));
+//            return results;
+//        }
+//        return null;
+//    }
 
     public static Collection<Device> getAccessibleDevices(
             Storage storage, long userId,
