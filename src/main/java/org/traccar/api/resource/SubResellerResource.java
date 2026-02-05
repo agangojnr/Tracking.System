@@ -91,7 +91,7 @@ public class SubResellerResource extends ExtendedObjectResource<Subreseller> {
         //LOGGER.info("User ID here ------------------------------- : {}", getUserId());
         if(level == 4){
             return storage.getObjects(baseClass, new Request(
-                    new Columns.All(), Condition.merge(conditions), new Order("name")
+                    new Columns.All(), Condition.merge(conditions), new Order("subresellername")
             ));
         }else if(level == 1){
             long resellerid = permissionsService.getLevelGroupId(getUserId(), 1);
@@ -115,7 +115,7 @@ public class SubResellerResource extends ExtendedObjectResource<Subreseller> {
     @POST
     public Response add(Subreseller entity, @PathParam("resellerId") Long resellerId) throws Exception {
         permissionsService.checkEdit(getUserId(), entity, true, false);
-
+        //LOGGER.info("User ID here ------------------------------- ");
         if(validate(entity)){
             entity.setId(0);
             Long subresellerId = storage.addObject(entity, new Request(new Columns.Exclude("id")));
@@ -157,16 +157,15 @@ public class SubResellerResource extends ExtendedObjectResource<Subreseller> {
     }
 
     public boolean validate(Subreseller entity) throws StorageException {
-        String name = entity.getName();
-
+        String name = entity.getSubResellerName();
+        //LOGGER.info("User ID here and there -------------------------------{} ", name);
         Subreseller subreseller = storage.getObject(Subreseller.class, new Request(
                 new Columns.All(),
                 new Condition.And(
-                        new Condition.Equals("name", name),
+                        new Condition.Equals("subresellername", name),
                         new Condition.Permission(User.class, getUserId(), Subreseller.class))));
 
         return subreseller == null;
     }
-
 
 }

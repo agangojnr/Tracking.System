@@ -15,6 +15,7 @@ public class CompanyDevices {
     private String deviceModel;
     private String simcardNo;
     private Date lastReportDate;
+    private String status;
 
 
     // Getters and setters
@@ -65,6 +66,13 @@ public class CompanyDevices {
     }
     public void setResellerName(String resellerName) {
         this.resellerName = resellerName;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public Date lastReportDate() {

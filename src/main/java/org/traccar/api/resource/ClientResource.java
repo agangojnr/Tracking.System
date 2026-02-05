@@ -55,7 +55,7 @@ public class ClientResource extends ExtendedObjectResource<Client> {
     private static final Logger LOGGER = LoggerFactory.getLogger(ClientResource.class);
 
     public ClientResource() {
-        super(Client.class, "name");
+        super(Client.class, "clientname");
     }
 
 
@@ -96,7 +96,7 @@ public class ClientResource extends ExtendedObjectResource<Client> {
         }
         permissionsService.checkSubreseller(getUserId());
         return storage.getObjects(baseClass, new Request(
-                new Columns.All(), Condition.merge(conditions), new Order("name")
+                new Columns.All(), Condition.merge(conditions), new Order("clientname")
         ));
     }
 
@@ -108,7 +108,7 @@ public class ClientResource extends ExtendedObjectResource<Client> {
 
         if(level == 4){
             return storage.getObjects(baseClass, new Request(
-                    new Columns.All(), Condition.merge(conditions), new Order("name")
+                    new Columns.All(), Condition.merge(conditions), new Order("clientname")
             ));
         }else if(level == 1){
             long resellerid = permissionsService.getLevelGroupId(getUserId(), 1);
@@ -200,12 +200,12 @@ public class ClientResource extends ExtendedObjectResource<Client> {
     }
 
     public boolean validate(Client entity) throws StorageException {
-        String name = entity.getName();
+        String name = entity.getClientName();
 
         Client client = storage.getObject(Client.class, new Request(
                 new Columns.All(),
                 new Condition.And(
-                        new Condition.Equals("name", name),
+                        new Condition.Equals("clientname", name),
                         new Condition.Permission(User.class, getUserId(), Client.class))));
         return client == null;
     }

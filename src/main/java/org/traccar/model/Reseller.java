@@ -6,14 +6,14 @@ import org.traccar.storage.StorageName;
 @StorageName("tc_resellers")
 public class Reseller extends ExtendedModel {
 
-    private String name;
+    private String resellerName;
 
-    public String getName() {
-        return name;
+    public String getResellerName() {
+        return resellerName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setResellerName(String resellerName) {
+        this.resellerName = resellerName;
     }
 
 }

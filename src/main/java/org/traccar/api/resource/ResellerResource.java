@@ -123,12 +123,12 @@ public class ResellerResource extends ExtendedObjectResource<Reseller> {
     }
 
     public boolean validate(Reseller entity) throws StorageException {
-        String name = entity.getName();
+        String name = entity.getResellerName();
 
         Reseller reseller = storage.getObject(Reseller.class, new Request(
                 new Columns.All(),
                 new Condition.And(
-                        new Condition.Equals("name", name),
+                        new Condition.Equals("resellername", name),
                         new Condition.Permission(User.class, getUserId(), Reseller.class))));
         return reseller == null;
     }
@@ -143,7 +143,7 @@ public class ResellerResource extends ExtendedObjectResource<Reseller> {
 
         if(level == 4){
             return storage.getObjects(baseClass, new Request(
-                    new Columns.All(), Condition.merge(conditions), new Order("name")
+                    new Columns.All(), Condition.merge(conditions), new Order("resellername")
             ));
         }else if(level == 1){
             long resellerid = permissionsService.getLevelGroupId(getUserId(), 1);
