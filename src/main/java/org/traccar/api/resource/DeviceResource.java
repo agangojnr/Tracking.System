@@ -245,7 +245,7 @@ public class DeviceResource extends BaseObjectResource<Device> {
     @Path("create/{clientId}")
     @POST
     public Response add(Device entity,@PathParam("clientId") Long clientId) throws Exception {
-        LOGGER.info("Inserted entity with ID: {}", clientId);
+        //LOGGER.info("Inserted entity with ID: {}", clientId);
         if(validate(entity)){
             if (getUserId() != ServiceAccountUser.ID) {
                 entity.setId(0);

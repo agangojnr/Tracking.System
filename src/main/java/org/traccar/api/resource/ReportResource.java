@@ -2,6 +2,8 @@ package org.traccar.api.resource;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.core.Context;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.traccar.api.SimpleObjectResource;
 import org.traccar.helper.LogAction;
 import org.traccar.model.Event;
@@ -76,6 +78,8 @@ public class ReportResource extends SimpleObjectResource<Report> {
     @Context
     private HttpServletRequest request;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(DeviceResource.class);
+
     public ReportResource() {
         super(Report.class, "description");
     }
@@ -103,8 +107,9 @@ public class ReportResource extends SimpleObjectResource<Report> {
             @QueryParam("deviceId") List<Long> deviceIds,
             @QueryParam("groupId") List<Long> groupIds,
             @QueryParam("from") Date from,
-            @QueryParam("to") Date to) throws StorageException {
-        permissionsService.checkRestriction(getUserId(), UserRestrictions::getDisableReports);
+            @QueryParam("to") Date to) throws Exception {
+        //LOGGER.info("THIS IS THE COMBINED REPORT ");
+        //permissionsService.checkRestriction(getUserId(), UserRestrictions::getDisableReports);
         actionLogger.report(request, getUserId(), false, "combined", from, to, deviceIds, groupIds);
         return combinedReportProvider.getObjects(getUserId(), deviceIds, groupIds, from, to);
     }
@@ -115,8 +120,8 @@ public class ReportResource extends SimpleObjectResource<Report> {
             @QueryParam("deviceId") List<Long> deviceIds,
             @QueryParam("groupId") List<Long> groupIds,
             @QueryParam("from") Date from,
-            @QueryParam("to") Date to) throws StorageException {
-        permissionsService.checkRestriction(getUserId(), UserRestrictions::getDisableReports);
+            @QueryParam("to") Date to) throws Exception {
+        //permissionsService.checkRestriction(getUserId(), UserRestrictions::getDisableReports);
         actionLogger.report(request, getUserId(), false, "route", from, to, deviceIds, groupIds);
         return routeReportProvider.getObjects(getUserId(), deviceIds, groupIds, from, to);
     }

@@ -60,12 +60,15 @@ public class RouteReportProvider {
         this.storage = storage;
     }
 
+    @Inject
+    private DeviceUtil deviceUtil;
+
     public Collection<Position> getObjects(long userId, Collection<Long> deviceIds, Collection<Long> groupIds,
-            Date from, Date to) throws StorageException {
+            Date from, Date to) throws Exception {
         reportUtils.checkPeriodLimit(from, to);
 
         ArrayList<Position> result = new ArrayList<>();
-        for (Device device: DeviceUtil.getAccessibleDevices(storage, userId, deviceIds, groupIds)) {
+        for (Device device: deviceUtil.getAccessibleDevices(storage, userId, deviceIds, groupIds)) {
             result.addAll(PositionUtil.getPositions(storage, device.getId(), from, to));
         }
         return result;

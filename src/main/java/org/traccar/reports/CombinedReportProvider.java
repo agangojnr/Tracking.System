@@ -1,20 +1,9 @@
-/*
- * Copyright 2023 Anton Tananaev (anton@traccar.org)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+
 package org.traccar.reports;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.traccar.api.resource.DeviceResource;
 import org.traccar.helper.model.DeviceUtil;
 import org.traccar.helper.model.PositionUtil;
 import org.traccar.model.Device;
@@ -48,13 +37,19 @@ public class CombinedReportProvider {
         this.storage = storage;
     }
 
+    @Inject
+    private DeviceUtil deviceUtil;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CombinedReportItem.class);
+
     public Collection<CombinedReportItem> getObjects(
             long userId, Collection<Long> deviceIds, Collection<Long> groupIds,
-            Date from, Date to) throws StorageException {
+            Date from, Date to) throws Exception {
         reportUtils.checkPeriodLimit(from, to);
 
         ArrayList<CombinedReportItem> result = new ArrayList<>();
-        for (Device device: DeviceUtil.getAccessibleDevices(storage, userId, deviceIds, groupIds)) {
+        //LOGGER.info("THIS IS THE COMBINED REPORT 11");
+        for (Device device: deviceUtil.getAccessibleDevicesOnReports(storage, userId, deviceIds, groupIds)) {
             CombinedReportItem item = new CombinedReportItem();
             item.setDeviceId(device.getId());
             var positions = PositionUtil.getPositions(storage, device.getId(), from, to);
@@ -80,4 +75,37 @@ public class CombinedReportProvider {
         }
         return result;
     }
+
+//    public Collection<CombinedReportItem> getObjects(
+//            long userId, Collection<Long> deviceIds, Collection<Long> groupIds,
+//            Date from, Date to) throws StorageException {
+//        reportUtils.checkPeriodLimit(from, to);
+//
+//        ArrayList<CombinedReportItem> result = new ArrayList<>();
+//        for (Device device: DeviceUtil.getAccessibleDevices(storage, userId, deviceIds, groupIds)) {
+//            CombinedReportItem item = new CombinedReportItem();
+//            item.setDeviceId(device.getId());
+//            var positions = PositionUtil.getPositions(storage, device.getId(), from, to);
+//            item.setRoute(positions.stream()
+//                    .map(p -> new double[] {p.getLongitude(), p.getLatitude()})
+//                    .toList());
+//            var events = storage.getObjects(Event.class, new Request(
+//                    new Columns.All(),
+//                    new Condition.And(
+//                            new Condition.Equals("deviceId", device.getId()),
+//                            new Condition.Between("eventTime", from, to)),
+//                    new Order("eventTime")));
+//            item.setEvents(events.stream()
+//                    .filter(e -> e.getPositionId() > 0 && !EXCLUDE_TYPES.contains(e.getType()))
+//                    .toList());
+//            var eventPositions = events.stream()
+//                    .map(Event::getPositionId)
+//                    .collect(Collectors.toSet());
+//            item.setPositions(positions.stream()
+//                    .filter(p -> eventPositions.contains(p.getId()))
+//                    .toList());
+//            result.add(item);
+//        }
+//        return result;
+//    }
 }

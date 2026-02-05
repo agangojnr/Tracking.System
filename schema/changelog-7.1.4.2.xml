@@ -5,18 +5,45 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
 
-  <!-- Add foreign  create-tc-device-asset -->
+  <!-- Rename tc_clients.name to clientname -->
 
-  <changeSet id="add-fk-tc-simcards-networkprovider" author="walter">
+  <changeSet id="rename-tc-clients-name-to-clientname" author="walter">
 
-    <addForeignKeyConstraint
-            baseTableName="tc_simcards"
-            baseColumnNames="networkproviderid"
-            constraintName="FK__simcard_networkprovider"
-            referencedTableName="tc_networkproviders"
-            referencedColumnNames="id"
-            onDelete="CASCADE"
-            onUpdate="NO ACTION"/>
+    <renameColumn
+            tableName="tc_clients"
+            oldColumnName="name"
+            newColumnName="clientname"
+            columnDataType="VARCHAR(255)"/>
+
+  </changeSet>
+
+  <changeSet id="rename-tc-subresellers-name-to-subresellername" author="walter">
+
+    <renameColumn
+            tableName="tc_subresellers"
+            oldColumnName="name"
+            newColumnName="subresellername"
+            columnDataType="VARCHAR(255)"/>
+
+  </changeSet>
+
+  <changeSet id="rename-tc-devices-name-to-subresellername" author="walter">
+
+    <renameColumn
+            tableName="tc_devices"
+            oldColumnName="model"
+            newColumnName="oldmodelname"
+            columnDataType="VARCHAR(255)"/>
+
+  </changeSet>
+
+  <changeSet id="rename-tc-resellers-name-to-resellername" author="walter">
+
+    <renameColumn
+            tableName="tc_resellers"
+            oldColumnName="name"
+            newColumnName="resellername"
+            columnDataType="VARCHAR(255)"/>
 
   </changeSet>
 
