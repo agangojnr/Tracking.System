@@ -46,7 +46,7 @@ public class SubResellerResource extends ExtendedObjectResource<Subreseller> {
     private PermissionsService permissionsService;
 
     public SubResellerResource() {
-        super(Subreseller.class, "name");
+        super(Subreseller.class, "subresellername");
     }
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SubResellerResource.class);
@@ -77,7 +77,7 @@ public class SubResellerResource extends ExtendedObjectResource<Subreseller> {
         }
         permissionsService.checkReseller(getUserId());
         return storage.getObjects(baseClass, new Request(
-                new Columns.All(), Condition.merge(conditions), new Order("name")
+                new Columns.All(), Condition.merge(conditions), new Order("subresellername")
         ));
     }
 

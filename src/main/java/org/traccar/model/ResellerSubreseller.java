@@ -20,7 +20,7 @@ public class ResellerSubreseller {
     public int getResellerid() {
         return resellerid;
     }
-    public void setResellerid(int id) {
+    public void setResellerid(int resellerid) {
         this.resellerid = resellerid;
     }
 }
