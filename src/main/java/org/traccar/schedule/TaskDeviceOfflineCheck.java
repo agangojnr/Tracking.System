@@ -29,7 +29,7 @@ public class TaskDeviceOfflineCheck extends SingleScheduleTask {
     private static final String STATUS_OFFLINE = "offline";
     private static final String STATUS_ONLINE = "online";
 
-    private static final long CHECK_PERIOD_MINUTES = 1;
+    private static final long CHECK_PERIOD_MINUTES = 5;
 
     private final Storage storage;
     private final NotificationManager notificationManager;

@@ -1481,18 +1481,6 @@ public class DatabaseStorage extends Storage {
                     result.append(".");
                     result.append(condition.getPivotColumn5a());
 
-
-                    result.append(" INNER JOIN ");
-                    result.append(getStorageName(condition.getPivotClass10()));
-                    result.append(" ON ");
-                    result.append(getStorageName(condition.getPivotClass10()));
-                    result.append(".");
-                    result.append(condition.getPivotColumn10());
-                    result.append(" = ");
-                    result.append(getStorageName(condition.getOwnerClass()));
-                    result.append(".");
-                    result.append(condition.getOwnerColumn());
-
                 }
 
             }

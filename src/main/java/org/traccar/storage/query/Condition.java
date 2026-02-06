@@ -1234,8 +1234,8 @@ public interface Condition {
         private final Class<?> pivotClass9;
         private final String pivotColumn9;
 
-        private final Class<?> pivotClass10;
-        private final String pivotColumn10;
+//        private final Class<?> pivotClass10;
+//        private final String pivotColumn10;
 
         // Constructor
         public NineJoin(Class<?> ownerClass, String ownerColumn,String ownerColumn1,
@@ -1248,8 +1248,8 @@ public interface Condition {
                             Class<?> pivotClass6,String pivotColumn6a,String pivotColumn6b,
                             Class<?> pivotClass7,String pivotColumn7,
                             Class<?> pivotClass8,String pivotColumn8,
-                            Class<?> pivotClass9,String pivotColumn9,
-                            Class<?> pivotClass10,String pivotColumn10
+                            Class<?> pivotClass9,String pivotColumn9
+                            //Class<?> pivotClass10,String pivotColumn10
                             ) {
             this.ownerClass = ownerClass;
             this.ownerColumn = ownerColumn;
@@ -1279,8 +1279,8 @@ public interface Condition {
             this.pivotColumn8 = pivotColumn8;
             this.pivotClass9 = pivotClass9;
             this.pivotColumn9 = pivotColumn9;
-            this.pivotClass10 = pivotClass10;
-            this.pivotColumn10 = pivotColumn10;
+//            this.pivotClass10 = pivotClass10;
+//            this.pivotColumn10 = pivotColumn10;
         }
         public Class<?> getOwnerClass() { return ownerClass; }
         public String getOwnerColumn() { return ownerColumn; }
@@ -1309,8 +1309,8 @@ public interface Condition {
         public String getPivotColumn8() { return pivotColumn8; }
         public Class<?> getPivotClass9() { return pivotClass9; }
         public String getPivotColumn9() { return pivotColumn9; }
-        public Class<?> getPivotClass10() { return pivotClass10; }
-        public String getPivotColumn10() { return pivotColumn10; }
+//        public Class<?> getPivotClass10() { return pivotClass10; }
+//        public String getPivotColumn10() { return pivotColumn10; }
 
 
     }
