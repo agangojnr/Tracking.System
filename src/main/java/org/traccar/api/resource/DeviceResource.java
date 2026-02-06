@@ -391,7 +391,7 @@ public class DeviceResource extends BaseObjectResource<Device> {
     public String shareDevice(
             @FormParam("deviceId") long deviceId,
             @FormParam("expiration") Date expiration) throws StorageException, GeneralSecurityException, IOException {
-        LOGGER.info("Info here --- {}", deviceId);
+        //LOGGER.info("Info here --- {}", deviceId);
         User user = permissionsService.getUser(getUserId());
         if (permissionsService.getServer().getBoolean(Keys.DEVICE_SHARE_DISABLE.getKey())) {
             throw new SecurityException("Sharing is disabled");

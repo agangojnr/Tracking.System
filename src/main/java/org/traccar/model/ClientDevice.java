@@ -5,21 +5,21 @@ import org.traccar.storage.StorageName;
 
 @StorageName("tc_client_device")
 public class ClientDevice {
-    private int clientid;
-    private int deviceid;
+    private Long clientid;
+    private Long deviceid;
 
     // Getters and setters
-    public int getClientid() {
+    public Long getClientid() {
         return clientid;
     }
-    public void setClientid(int clientid) {
+    public void setClientid(Long clientid) {
         this.clientid = clientid;
     }
 
-    public int getDeviceid() {
+    public Long getDeviceid() {
         return deviceid;
     }
-    public void setDeviceid(int deviceid) {
+    public void setDeviceid(Long deviceid) {
         this.deviceid = deviceid;
     }
 }

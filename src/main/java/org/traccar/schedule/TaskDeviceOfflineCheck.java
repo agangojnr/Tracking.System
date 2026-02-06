@@ -1,14 +1,10 @@
-
 package org.traccar.schedule;
 
 import jakarta.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.traccar.database.NotificationManager;
-import org.traccar.model.Device;
-import org.traccar.model.Event;
-import org.traccar.model.Group;
-import org.traccar.model.Position;
+import org.traccar.model.*;
 import org.traccar.storage.Storage;
 import org.traccar.storage.StorageException;
 import org.traccar.storage.query.Columns;
@@ -22,13 +18,18 @@ import java.util.stream.Collectors;
 
 public class TaskDeviceOfflineCheck extends SingleScheduleTask {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TaskDeviceOfflineCheck.class);
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(TaskDeviceOfflineCheck.class);
 
     public static final String ATTRIBUTE_DEVICE_INACTIVITY_START = "deviceInactivityStart";
     public static final String ATTRIBUTE_DEVICE_INACTIVITY_PERIOD = "deviceInactivityPeriod";
     public static final String ATTRIBUTE_LAST_UPDATE = "lastUpdate";
 
-    private static final long CHECK_PERIOD_MINUTES = 15;
+    private static final String STATUS_NOT_CONNECTED = "not_con";
+    private static final String STATUS_OFFLINE = "offline";
+    private static final String STATUS_ONLINE = "online";
+
+    private static final long CHECK_PERIOD_MINUTES = 1;
 
     private final Storage storage;
     private final NotificationManager notificationManager;
@@ -41,7 +42,7 @@ public class TaskDeviceOfflineCheck extends SingleScheduleTask {
 
     @Override
     public void schedule(ScheduledExecutorService executor) {
-        executor.scheduleAtFixedRate(this, CHECK_PERIOD_MINUTES, CHECK_PERIOD_MINUTES, TimeUnit.MINUTES);
+        executor.scheduleAtFixedRate( this, 0, CHECK_PERIOD_MINUTES, TimeUnit.MINUTES );
     }
 
     @Override
@@ -52,63 +53,80 @@ public class TaskDeviceOfflineCheck extends SingleScheduleTask {
         Map<Event, Position> events = new HashMap<>();
 
         try {
-            Map<Long, Group> groups = storage.getObjects(Group.class, new Request(new Columns.All()))
-                    .stream().collect(Collectors.toMap(Group::getId, group -> group));
-            for (Device device : storage.getObjects(Device.class, new Request(new Columns.All()))) {
-                if (device.getLastUpdate() != null && checkDevice(device, groups, currentTime, checkPeriod)) {
-                    Event event = new Event(Event.TYPE_DEVICE_INACTIVE, device.getId());
-                    event.set(ATTRIBUTE_LAST_UPDATE, device.getLastUpdate().getTime());
-                    events.put(event, null);
+            // Load all clients
+            Map<Long, Client> clients = storage.getObjects(Client.class, new Request(new Columns.All()))
+                            .stream()
+                            .collect(Collectors.toMap(Client::getId, c -> c));
+
+            // Load device → client relationship
+            Map<Long, Long> clientByDevice = storage.getObjects(ClientDevice.class, new Request(new Columns.All()))
+                            .stream()
+                            .collect(Collectors.toMap( ClientDevice::getDeviceid,ClientDevice::getClientid));
+
+            // Process devices
+            for (Device device :
+                    storage.getObjects(Device.class, new Request(new Columns.All()))) {
+                String newStatus;
+                String currentStatus = device.getStatus();
+
+                if (device.getLastUpdate() == null){
+                    newStatus = STATUS_NOT_CONNECTED;
+                } else if (checkOfflineDevice(device,clients,clientByDevice,currentTime,checkPeriod)) {
+                    newStatus = STATUS_OFFLINE;
+                } else {
+                    newStatus = STATUS_ONLINE;
+                }
+                // 🔒 Update ONLY if status has changed
+                if (!newStatus.equals(currentStatus)) {
+                    device.setStatus(newStatus);
+                    storage.updateObject(device,
+                            new Request(
+                                    new Columns.Include("status")
+                            )
+                    );
+                    LOGGER.info("Device {} status changed from {} to {}", device.getId(), currentStatus, newStatus);
                 }
             }
+
         } catch (StorageException e) {
             LOGGER.warn("Database error", e);
         }
-
         notificationManager.updateEvents(events);
     }
 
-    private long getAttribute(Device device, Map<Long, Group> groups, String key) {
-        long deviceValue = device.getLong(key);
-        if (deviceValue > 0) {
-            return deviceValue;
-        } else {
-            long groupId = device.getGroupId();
-            while (groupId > 0) {
-                Group group = groups.get(groupId);
-                if (group == null) {
-                    return 0;
-                }
-                long groupValue = group.getLong(key);
-                if (groupValue > 0) {
-                    return groupValue;
-                }
-                groupId = group.getGroupId();
-            }
-            return 0;
-        }
+
+    /**
+     * Checks whether a device became inactive
+     * within the current monitoring window.
+     */
+    private boolean checkOfflineDevice(Device device, Map<Long, Client> clients, Map<Long, Long> clientByDevice, long currentTime, long checkPeriod) {
+        long graceOfflinePeriod = TimeUnit.MINUTES.toMillis(86400);
+        //getAttribute(device, clients, clientByDevice, ATTRIBUTE_DEVICE_INACTIVITY_START);
+        return currentTime - device.getLastUpdate().getTime() >= graceOfflinePeriod;
     }
-
-    private boolean checkDevice(Device device, Map<Long, Group> groups, long currentTime, long checkPeriod) {
-        long deviceInactivityStart = getAttribute(device, groups, ATTRIBUTE_DEVICE_INACTIVITY_START);
-        if (deviceInactivityStart > 0) {
-            long timeThreshold = device.getLastUpdate().getTime() + deviceInactivityStart;
-            if (currentTime >= timeThreshold) {
-
-                if (currentTime - checkPeriod < timeThreshold) {
-                    return true;
-                }
-
-                long deviceInactivityPeriod = getAttribute(device, groups, ATTRIBUTE_DEVICE_INACTIVITY_PERIOD);
-                if (deviceInactivityPeriod > 0) {
-                    long count = (currentTime - timeThreshold - 1) / deviceInactivityPeriod;
-                    timeThreshold += count * deviceInactivityPeriod;
-                    return currentTime - checkPeriod < timeThreshold;
-                }
-
-            }
-        }
-        return false;
-    }
-
 }
+
+
+/**
+ //     * Resolves attribute value with priority:
+ //     * Device → Client → default (0)
+ //     */
+//    private long getAttribute(Device device,  Map<Long, Client> clients, Map<Long, Long> clientByDevice, String key) {
+//
+//        long deviceValue = device.getLong(key);
+//        if (deviceValue > 0) {
+//            return deviceValue;
+//        }
+//
+//        Long clientId = clientByDevice.get(device.getId());
+//        if (clientId == null) {
+//            return 0;
+//        }
+//
+//        Client client = clients.get(clientId);
+//        if (client == null) {
+//            return 0;
+//        }
+//
+//        return client.getLong(key);
+//    }

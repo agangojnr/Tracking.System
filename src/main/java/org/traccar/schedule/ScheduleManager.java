@@ -50,6 +50,7 @@ public class ScheduleManager implements LifecycleObject {
                 TaskDeleteTemporary.class,
                 TaskReports.class,
                 TaskDeviceInactivityCheck.class,
+                        TaskDeviceOfflineCheck.class,
                 TaskWebSocketKeepalive.class)
                 .forEachOrdered(taskClass -> {
                     var task = injector.getInstance(taskClass);
@@ -66,5 +67,4 @@ public class ScheduleManager implements LifecycleObject {
             executor = null;
         }
     }
-
 }

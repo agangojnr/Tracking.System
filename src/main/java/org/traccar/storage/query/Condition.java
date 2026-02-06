@@ -1345,35 +1345,38 @@ public interface Condition {
     class ThreeJoinWhereSearch implements Condition {
         private final Class<?> ownerClass;
         private final String ownerColumn;
-        private final Class<?> pivotClass;
-        private final String pivotColumn;
-        private final String pivotColumn1;
+        private final Class<?> pivotClass1;
+        private final String pivotColumn1a;
+        private final String pivotColumn1b;
         private final Class<?> pivotClass2;
         private final String pivotColumn2;
-        private final String value1;
+        private final String searchColumn;
+        private final String searchValue;
 
         // Constructor
         public ThreeJoinWhereSearch(Class<?> ownerClass, String ownerColumn,
-                                   Class<?> pivotClass, String pivotColumn, String pivotColumn1,
-                                   Class<?> pivotClass2,String pivotColumn2,
-                                   String value1) {
+                                   Class<?> pivotClass1, String pivotColumn1a, String pivotColumn1b,
+                                   Class<?> pivotClass2,String pivotColumn2, String searchColumn,
+                                   String searchValue) {
             this.ownerClass = ownerClass;
             this.ownerColumn = ownerColumn;
-            this.pivotClass = pivotClass;
-            this.pivotColumn = pivotColumn;
-            this.pivotColumn1 = pivotColumn1;
+            this.pivotClass1 = pivotClass1;
+            this.pivotColumn1a = pivotColumn1a;
+            this.pivotColumn1b = pivotColumn1b;
             this.pivotClass2 = pivotClass2;
             this.pivotColumn2 = pivotColumn2;
-            this.value1 = value1;
+            this.searchColumn = searchColumn;
+            this.searchValue = searchValue;
         }
         public Class<?> getOwnerClass() { return ownerClass; }
         public String getOwnerColumn() { return ownerColumn; }
-        public Class<?> getPivotClass() { return pivotClass; }
-        public String getPivotColumn() { return pivotColumn; }
-        public String getPivotColumn1() { return pivotColumn1; }
+        public Class<?> getPivotClass1() { return pivotClass1; }
+        public String getPivotColumn1a() { return pivotColumn1a; }
+        public String getPivotColumn1b() { return pivotColumn1b; }
         public Class<?> getPivotClass2() { return pivotClass2; }
         public String getPivotColumn2() { return pivotColumn2; }
-        public String getValue1() { return value1; }
+        public String searchColumn() { return searchColumn; }
+        public String searchValue() { return searchValue; }
 
     }
 

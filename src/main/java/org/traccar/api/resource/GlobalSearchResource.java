@@ -163,7 +163,7 @@ public class GlobalSearchResource extends BaseObjectResource<Device> {
                 Client.class,
                 new Request(
                         new Columns.All(),
-                        new Condition.ThreeJoinWhereSearch(Client.class,"id", SubresellerClient.class,"clientid","subresellerid", ResellerSubreseller.class,"name",clientname)
+                        new Condition.ThreeJoinWhereSearch(Client.class,"id", SubresellerClient.class,"subresellerid", "clientid", Subreseller.class,"id","clientname", clientname)
                 )
         );
     }
