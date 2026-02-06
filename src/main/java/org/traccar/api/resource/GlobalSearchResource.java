@@ -157,13 +157,17 @@ public class GlobalSearchResource extends BaseObjectResource<Device> {
 
     @Path("client")
     @GET
-    public Collection<Client> searchClient(@QueryParam("clientname") String clientname) throws Exception {
+    public Collection<ClientSearchResult> searchClient(@QueryParam("clientname") String clientname) throws Exception {
         //LOGGER.info("Search term - {}", clientname);
         return storage.getJointObjects(
-                Client.class,
+                ClientSearchResult.class,
                 new Request(
-                        new Columns.All(),
-                        new Condition.ThreeJoinWhereSearch(Client.class,"id", SubresellerClient.class,"subresellerid", "clientid", Subreseller.class,"id","clientname", clientname)
+                    new Columns.Include(
+                            "resellername AS ResellerName",
+                            "subresellername AS SubresellerName",
+                            "clientname AS clientName"
+                    ),
+                    new Condition.ThreeJoinWhereSearch(Client.class,"id", SubresellerClient.class,"subresellerid", "clientid", Subreseller.class,"id",ResellerSubreseller.class, "resellerid","subresellerid", Reseller.class,"id","clientname", clientname)
                 )
         );
     }
