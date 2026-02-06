@@ -933,161 +933,354 @@ public interface Condition {
     }
 
     class FourJoinTwoWhereSearch implements Condition {
-        private final Class<?> ownerClass;        private final String ownerColumn;
-        private final Class<?> pivotClass;        private final String pivotColumn;        private final String pivotColumn1;
-        private final Class<?> pivotClass2;       private final String pivotColumn2;
-        private final Class<?> pivotClass3;        private final String pivotColumn3;
-        private final String column1;              private final long value1;
-        private final String column2;              private final String value2;
+        private final Class<?> ownerClass;
+        private final String ownerColumn;
+        private final Class<?> pivotClass1;
+        private final String pivotColumn1;
+
+        private final Class<?> pivotClass2;
+        private final String pivotColumn2a;
+        private final String pivotColumn2b;
+        private final Class<?> pivotClass3;
+        private final String pivotColumn3;
+        private final Class<?> pivotClass4;
+        private final String pivotColumn4a;
+        private final String pivotColumn4b;
+        private final Class<?> pivotClass5;
+        private final String pivotColumn5;
+
+        private final Class<?> pivotClass6;
+        private final String pivotColumn6a;
+        private final String pivotColumn6b;
+        private final Class<?> pivotClass7;
+        private final String pivotColumn7;
+
+        private final String searchLevel;
+        private final String searchColumn;
+        private final String searchValue;
 
         // Constructor
         public FourJoinTwoWhereSearch(Class<?> ownerClass, String ownerColumn,
-                                      Class<?> pivotClass, String pivotColumn, String pivotColumn1,
-                                      Class<?> pivotClass2,String pivotColumn2,
-                                      Class<?> pivotClass3,String pivotColumn3,
-                                      String column1, long value1,
-                                      String column2, String value2) {
-            this.ownerClass = ownerClass;            this.ownerColumn = ownerColumn;
-            this.pivotClass = pivotClass;            this.pivotColumn = pivotColumn;            this.pivotColumn1 = pivotColumn1;
-            this.pivotClass2 = pivotClass2;            this.pivotColumn2 = pivotColumn2;
-            this.pivotClass3 = pivotClass3;            this.pivotColumn3 = pivotColumn3;
-            this.column1 = column1;                    this.value1 = value1;
-            this.column2 = column2;                    this.value2 = value2;
+                                   Class<?> pivotClass1, String pivotColumn1,
+                                   Class<?> pivotClass2,String pivotColumn2a,String pivotColumn2b,
+                                   Class<?> pivotClass3,String pivotColumn3,
+                                   Class<?> pivotClass4,String pivotColumn4a,String pivotColumn4b,
+                                   Class<?> pivotClass5,String pivotColumn5,
+                                   Class<?> pivotClass6,String pivotColumn6a,String pivotColumn6b,
+                                   Class<?> pivotClass7,String pivotColumn7,
+                                   String searchLevel, String searchColumn,String searchValue) {
+            this.ownerClass = ownerClass;
+            this.ownerColumn = ownerColumn;
+            this.pivotClass1 = pivotClass1;
+            this.pivotColumn1 = pivotColumn1;
+            this.pivotClass2 = pivotClass2;
+            this.pivotColumn2a = pivotColumn2a;
+            this.pivotColumn2b = pivotColumn2b;
+            this.pivotClass3 = pivotClass3;
+            this.pivotColumn3 = pivotColumn3;
+            this.pivotClass4 = pivotClass4;
+            this.pivotColumn4a = pivotColumn4a;
+            this.pivotColumn4b = pivotColumn4b;
+            this.pivotClass5 = pivotClass5;
+            this.pivotColumn5 = pivotColumn5;
+            this.pivotClass6 = pivotClass6;
+            this.pivotColumn6a = pivotColumn6a;
+            this.pivotColumn6b = pivotColumn6b;
+            this.pivotClass7 = pivotClass7;
+            this.pivotColumn7 = pivotColumn7;
+
+            this.searchLevel = searchLevel;
+            this.searchColumn = searchColumn;
+            this.searchValue = searchValue;
         }
         public Class<?> getOwnerClass() { return ownerClass; }
         public String getOwnerColumn() { return ownerColumn; }
-        public Class<?> getPivotClass() { return pivotClass; }
-        public String getPivotColumn() { return pivotColumn; }
+        public Class<?> getPivotClass1() { return pivotClass1; }
         public String getPivotColumn1() { return pivotColumn1; }
         public Class<?> getPivotClass2() { return pivotClass2; }
-        public String getPivotColumn2() { return pivotColumn2; }
+        public String getPivotColumn2a() { return pivotColumn2a; }
+        public String getPivotColumn2b() { return pivotColumn2b; }
         public Class<?> getPivotClass3() { return pivotClass3; }
         public String getPivotColumn3() { return pivotColumn3; }
-        public String getColumn1() { return column1; }
-        public String getColumn2() { return column2; }
-        public long getValue1() { return value1; }
-        public String getValue2() { return value2; }
+
+        public Class<?> getPivotClass4() { return pivotClass4; }
+        public String getPivotColumn4a() { return pivotColumn4a; }
+        public String getPivotColumn4b() { return pivotColumn4b; }
+        public Class<?> getPivotClass5() { return pivotClass5; }
+        public String getPivotColumn5() { return pivotColumn5; }
+        public Class<?> getPivotClass6() { return pivotClass6; }
+        public String getPivotColumn6a() { return pivotColumn6a; }
+        public String getPivotColumn6b() { return pivotColumn6b; }
+        public Class<?> getPivotClass7() { return pivotClass7; }
+        public String getPivotColumn7() { return pivotColumn7; }
+        public String getSearchColumn() { return searchColumn; }
+        public String getSearchValue() { return searchValue; }
+
+
     }
 
     class FourJoinTwoWhereSearch1 implements Condition {
-        private final Class<?> ownerClass;        private final String ownerColumn;
-        private final Class<?> pivotClass;        private final String pivotColumn;        private final String pivotColumn1;
-        private final Class<?> pivotClass2;       private final String pivotColumn2;
+        private final Class<?> ownerClass;
+        private final String ownerColumn;
+        private final Class<?> pivotClass1;
+        private final String pivotColumn1;
+
+        private final Class<?> pivotClass2;
+        private final String pivotColumn2a;
+        private final String pivotColumn2b;
         private final Class<?> pivotClass3;
-        private final long value1;
-        private final String column2;              private final String value2;
+        private final String pivotColumn3;
+        private final Class<?> pivotClass4;
+        private final String pivotColumn4a;
+        private final String pivotColumn4b;
+        private final Class<?> pivotClass5;
+        private final String pivotColumn5;
+
+        private final Class<?> pivotClass6;
+        private final String pivotColumn6a;
+        private final String pivotColumn6b;
+        private final Class<?> pivotClass7;
+        private final String pivotColumn7;
+
+        private final long searchLevelValue;
+        private final String searchColumn;
+        private final String searchValue;
 
         // Constructor
         public FourJoinTwoWhereSearch1(Class<?> ownerClass, String ownerColumn,
-                                      Class<?> pivotClass, String pivotColumn, String pivotColumn1,
-                                      Class<?> pivotClass2,String pivotColumn2,
-                                      Class<?> pivotClass3, long value1,
-                                      String column2, String value2) {
-            this.ownerClass = ownerClass;            this.ownerColumn = ownerColumn;
-            this.pivotClass = pivotClass;            this.pivotColumn = pivotColumn;            this.pivotColumn1 = pivotColumn1;
-            this.pivotClass2 = pivotClass2;            this.pivotColumn2 = pivotColumn2;
+                                       Class<?> pivotClass1, String pivotColumn1,
+                                       Class<?> pivotClass2,String pivotColumn2a,String pivotColumn2b,
+                                       Class<?> pivotClass3,String pivotColumn3,
+                                       Class<?> pivotClass4,String pivotColumn4a,String pivotColumn4b,
+                                       Class<?> pivotClass5,String pivotColumn5,
+                                       Class<?> pivotClass6,String pivotColumn6a,String pivotColumn6b,
+                                       Class<?> pivotClass7,String pivotColumn7,
+                                       long searchLevelValue,String searchColumn,String searchValue) {
+            this.ownerClass = ownerClass;
+            this.ownerColumn = ownerColumn;
+            this.pivotClass1 = pivotClass1;
+            this.pivotColumn1 = pivotColumn1;
+            this.pivotClass2 = pivotClass2;
+            this.pivotColumn2a = pivotColumn2a;
+            this.pivotColumn2b = pivotColumn2b;
             this.pivotClass3 = pivotClass3;
-            this.value1 = value1;
-            this.column2 = column2;                    this.value2 = value2;
+            this.pivotColumn3 = pivotColumn3;
+            this.pivotClass4 = pivotClass4;
+            this.pivotColumn4a = pivotColumn4a;
+            this.pivotColumn4b = pivotColumn4b;
+            this.pivotClass5 = pivotClass5;
+            this.pivotColumn5 = pivotColumn5;
+            this.pivotClass6 = pivotClass6;
+            this.pivotColumn6a = pivotColumn6a;
+            this.pivotColumn6b = pivotColumn6b;
+            this.pivotClass7 = pivotClass7;
+            this.pivotColumn7 = pivotColumn7;
+
+            this.searchLevelValue = searchLevelValue;
+            this.searchColumn = searchColumn;
+            this.searchValue = searchValue;
         }
         public Class<?> getOwnerClass() { return ownerClass; }
         public String getOwnerColumn() { return ownerColumn; }
-        public Class<?> getPivotClass() { return pivotClass; }
-        public String getPivotColumn() { return pivotColumn; }
+        public Class<?> getPivotClass1() { return pivotClass1; }
         public String getPivotColumn1() { return pivotColumn1; }
         public Class<?> getPivotClass2() { return pivotClass2; }
-        public String getPivotColumn2() { return pivotColumn2; }
+        public String getPivotColumn2a() { return pivotColumn2a; }
+        public String getPivotColumn2b() { return pivotColumn2b; }
         public Class<?> getPivotClass3() { return pivotClass3; }
-        //public String getColumn1() { return column1; }
-        public String getColumn2() { return column2; }
-        public long getValue1() { return value1; }
-        public String getValue2() { return value2; }
+        public String getPivotColumn3() { return pivotColumn3; }
+
+        public Class<?> getPivotClass4() { return pivotClass4; }
+        public String getPivotColumn4a() { return pivotColumn4a; }
+        public String getPivotColumn4b() { return pivotColumn4b; }
+        public Class<?> getPivotClass5() { return pivotClass5; }
+        public String getPivotColumn5() { return pivotColumn5; }
+        public Class<?> getPivotClass6() { return pivotClass6; }
+        public String getPivotColumn6a() { return pivotColumn6a; }
+        public String getPivotColumn6b() { return pivotColumn6b; }
+        public Class<?> getPivotClass7() { return pivotClass7; }
+        public String getPivotColumn7() { return pivotColumn7; }
+        public long getSearchLevelValue() { return searchLevelValue; }
+        public String getSearchColumn() { return searchColumn; }
+        public String getSearchValue() { return searchValue; }
+
 
     }
 
 
     class FiveJoinTwoWhereSearch1 implements Condition {
-        private final Class<?> ownerClass;        private final String ownerColumn;
-        private final Class<?> pivotClass;        private final String pivotColumn;        private final String pivotColumn1;
-        private final Class<?> pivotClass2;       private final String pivotColumn2;
+        private final Class<?> ownerClass;
+        private final String ownerColumn;
+        private final Class<?> pivotClass1;
+        private final String pivotColumn1;
+
+        private final Class<?> pivotClass2;
+        private final String pivotColumn2a;
+        private final String pivotColumn2b;
         private final Class<?> pivotClass3;
+        private final String pivotColumn3;
         private final Class<?> pivotClass4;
-        private final String column1; private final long value1;
-        private final String column2;              private final String value2;
+        private final String pivotColumn4a;
+        private final String pivotColumn4b;
+        private final Class<?> pivotClass5;
+        private final String pivotColumn5;
+
+        private final Class<?> pivotClass6;
+        private final String pivotColumn6a;
+        private final String pivotColumn6b;
+        private final Class<?> pivotClass7;
+        private final String pivotColumn7;
+
+        private final long searchLevelValue;
+        private final String searchColumn;
+        private final String searchValue;
 
         // Constructor
         public FiveJoinTwoWhereSearch1(Class<?> ownerClass, String ownerColumn,
-                                       Class<?> pivotClass, String pivotColumn, String pivotColumn1,
-                                       Class<?> pivotClass2,String pivotColumn2,
-                                       Class<?> pivotClass3,
-                                       Class<?> pivotClass4,
-                                       String column1, long value1, String column2, String value2) {
-            this.ownerClass = ownerClass;            this.ownerColumn = ownerColumn;
-            this.pivotClass = pivotClass;            this.pivotColumn = pivotColumn;            this.pivotColumn1 = pivotColumn1;
-            this.pivotClass2 = pivotClass2;            this.pivotColumn2 = pivotColumn2;
+                                   Class<?> pivotClass1, String pivotColumn1,
+                                   Class<?> pivotClass2,String pivotColumn2a,String pivotColumn2b,
+                                   Class<?> pivotClass3,String pivotColumn3,
+                                   Class<?> pivotClass4,String pivotColumn4a,String pivotColumn4b,
+                                   Class<?> pivotClass5,String pivotColumn5,
+                                   Class<?> pivotClass6,String pivotColumn6a,String pivotColumn6b,
+                                   Class<?> pivotClass7,String pivotColumn7,
+                                       long searchLevelValue,String searchColumn,String searchValue) {
+            this.ownerClass = ownerClass;
+            this.ownerColumn = ownerColumn;
+            this.pivotClass1 = pivotClass1;
+            this.pivotColumn1 = pivotColumn1;
+            this.pivotClass2 = pivotClass2;
+            this.pivotColumn2a = pivotColumn2a;
+            this.pivotColumn2b = pivotColumn2b;
             this.pivotClass3 = pivotClass3;
+            this.pivotColumn3 = pivotColumn3;
             this.pivotClass4 = pivotClass4;
-            this.column1 = column1;                    this.value1 = value1;
-            this.column2 = column2;                    this.value2 = value2;
+            this.pivotColumn4a = pivotColumn4a;
+            this.pivotColumn4b = pivotColumn4b;
+            this.pivotClass5 = pivotClass5;
+            this.pivotColumn5 = pivotColumn5;
+            this.pivotClass6 = pivotClass6;
+            this.pivotColumn6a = pivotColumn6a;
+            this.pivotColumn6b = pivotColumn6b;
+            this.pivotClass7 = pivotClass7;
+            this.pivotColumn7 = pivotColumn7;
+
+            this.searchLevelValue = searchLevelValue;
+            this.searchColumn = searchColumn;
+            this.searchValue = searchValue;
         }
         public Class<?> getOwnerClass() { return ownerClass; }
         public String getOwnerColumn() { return ownerColumn; }
-        public Class<?> getPivotClass() { return pivotClass; }
-        public String getPivotColumn() { return pivotColumn; }
+        public Class<?> getPivotClass1() { return pivotClass1; }
         public String getPivotColumn1() { return pivotColumn1; }
         public Class<?> getPivotClass2() { return pivotClass2; }
-        public String getPivotColumn2() { return pivotColumn2; }
+        public String getPivotColumn2a() { return pivotColumn2a; }
+        public String getPivotColumn2b() { return pivotColumn2b; }
         public Class<?> getPivotClass3() { return pivotClass3; }
+        public String getPivotColumn3() { return pivotColumn3; }
+
         public Class<?> getPivotClass4() { return pivotClass4; }
-        public String getColumn1() { return column1; }
-        public String getColumn2() { return column2; }
-        public long getValue1() { return value1; }
-        public String getValue2() { return value2; }
+        public String getPivotColumn4a() { return pivotColumn4a; }
+        public String getPivotColumn4b() { return pivotColumn4b; }
+        public Class<?> getPivotClass5() { return pivotClass5; }
+        public String getPivotColumn5() { return pivotColumn5; }
+        public Class<?> getPivotClass6() { return pivotClass6; }
+        public String getPivotColumn6a() { return pivotColumn6a; }
+        public String getPivotColumn6b() { return pivotColumn6b; }
+        public Class<?> getPivotClass7() { return pivotClass7; }
+        public String getPivotColumn7() { return pivotColumn7; }
+        public long getSearchLevelValue() { return searchLevelValue; }
+        public String getSearchColumn() { return searchColumn; }
+        public String getSearchValue() { return searchValue; }
+
 
     }
 
     class SixJoinTwoWhereSearch implements Condition {
-        private final Class<?> ownerClass;        private final String ownerColumn;
-        private final Class<?> pivotClass;        private final String pivotColumn;        private final String pivotColumn1;
-        private final Class<?> pivotClass2;       private final String pivotColumn2;
+        private final Class<?> ownerClass;
+        private final String ownerColumn;
+        private final Class<?> pivotClass1;
+        private final String pivotColumn1;
+
+        private final Class<?> pivotClass2;
+        private final String pivotColumn2a;
+        private final String pivotColumn2b;
         private final Class<?> pivotClass3;
+        private final String pivotColumn3;
         private final Class<?> pivotClass4;
-        private final Class<?> pivotClass5; private final String pivotColumn3;
-        private final String column1; private final long value1;
-        private final String column2;              private final String value2;
+        private final String pivotColumn4a;
+        private final String pivotColumn4b;
+        private final Class<?> pivotClass5;
+        private final String pivotColumn5;
+
+        private final Class<?> pivotClass6;
+        private final String pivotColumn6a;
+        private final String pivotColumn6b;
+        private final Class<?> pivotClass7;
+        private final String pivotColumn7;
+
+        private final Long searchLevel;
+        private final String searchColumn;
+        private final String searchValue;
 
         // Constructor
         public SixJoinTwoWhereSearch(Class<?> ownerClass, String ownerColumn,
-                                       Class<?> pivotClass, String pivotColumn, String pivotColumn1,
-                                       Class<?> pivotClass2,String pivotColumn2,
-                                       Class<?> pivotClass3,
-                                       Class<?> pivotClass4,
-                                       Class<?> pivotClass5,String pivotColumn3,
-                                       String column1, long value1, String column2, String value2) {
-            this.ownerClass = ownerClass;             this.ownerColumn = ownerColumn;
-            this.pivotClass = pivotClass;             this.pivotColumn = pivotColumn;            this.pivotColumn1 = pivotColumn1;
-            this.pivotClass2 = pivotClass2;           this.pivotColumn2 = pivotColumn2;
+                                   Class<?> pivotClass1, String pivotColumn1,
+                                   Class<?> pivotClass2,String pivotColumn2a,String pivotColumn2b,
+                                   Class<?> pivotClass3,String pivotColumn3,
+                                   Class<?> pivotClass4,String pivotColumn4a,String pivotColumn4b,
+                                   Class<?> pivotClass5,String pivotColumn5,
+                                   Class<?> pivotClass6,String pivotColumn6a,String pivotColumn6b,
+                                   Class<?> pivotClass7,String pivotColumn7,
+                                     Long searchLevel,String searchColumn,String searchValue) {
+            this.ownerClass = ownerClass;
+            this.ownerColumn = ownerColumn;
+            this.pivotClass1 = pivotClass1;
+            this.pivotColumn1 = pivotColumn1;
+            this.pivotClass2 = pivotClass2;
+            this.pivotColumn2a = pivotColumn2a;
+            this.pivotColumn2b = pivotColumn2b;
             this.pivotClass3 = pivotClass3;
+            this.pivotColumn3 = pivotColumn3;
             this.pivotClass4 = pivotClass4;
-            this.pivotClass5 = pivotClass5;            this.pivotColumn3 = pivotColumn3;
-            this.column1 = column1;                    this.value1 = value1;
-            this.column2 = column2;                    this.value2 = value2;
+            this.pivotColumn4a = pivotColumn4a;
+            this.pivotColumn4b = pivotColumn4b;
+            this.pivotClass5 = pivotClass5;
+            this.pivotColumn5 = pivotColumn5;
+            this.pivotClass6 = pivotClass6;
+            this.pivotColumn6a = pivotColumn6a;
+            this.pivotColumn6b = pivotColumn6b;
+            this.pivotClass7 = pivotClass7;
+            this.pivotColumn7 = pivotColumn7;
+
+            this.searchLevel = searchLevel;
+            this.searchColumn = searchColumn;
+            this.searchValue = searchValue;
         }
         public Class<?> getOwnerClass() { return ownerClass; }
         public String getOwnerColumn() { return ownerColumn; }
-        public Class<?> getPivotClass() { return pivotClass; }
-        public String getPivotColumn() { return pivotColumn; }
+        public Class<?> getPivotClass1() { return pivotClass1; }
         public String getPivotColumn1() { return pivotColumn1; }
         public Class<?> getPivotClass2() { return pivotClass2; }
-        public String getPivotColumn2() { return pivotColumn2; }
-        public String getPivotColumn3() { return pivotColumn3; }
+        public String getPivotColumn2a() { return pivotColumn2a; }
+        public String getPivotColumn2b() { return pivotColumn2b; }
         public Class<?> getPivotClass3() { return pivotClass3; }
+        public String getPivotColumn3() { return pivotColumn3; }
+
         public Class<?> getPivotClass4() { return pivotClass4; }
+        public String getPivotColumn4a() { return pivotColumn4a; }
+        public String getPivotColumn4b() { return pivotColumn4b; }
         public Class<?> getPivotClass5() { return pivotClass5; }
-        public String getColumn1() { return column1; }
-        public String getColumn2() { return column2; }
-        public long getValue1() { return value1; }
-        public String getValue2() { return value2; }
+        public String getPivotColumn5() { return pivotColumn5; }
+        public Class<?> getPivotClass6() { return pivotClass6; }
+        public String getPivotColumn6a() { return pivotColumn6a; }
+        public String getPivotColumn6b() { return pivotColumn6b; }
+        public Class<?> getPivotClass7() { return pivotClass7; }
+        public String getPivotColumn7() { return pivotColumn7; }
+        public Long getSearchLevel() { return searchLevel; }
+        public String getSearchColumn() { return searchColumn; }
+        public String getSearchValue() { return searchValue; }
+
 
     }
 
