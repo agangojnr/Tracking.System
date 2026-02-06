@@ -113,15 +113,20 @@ public class GlobalSearchResource extends BaseObjectResource<Device> {
 
     @Path("asset")
     @GET
-    public Collection<Device> searchLinkedAssets(@QueryParam("assetname") String assetname) throws Exception {
+    public Collection<AssetSearchResult> searchLinkedAssets(@QueryParam("assetname") String assetname) throws Exception {
         long level = permissionsService.getUserAccessLevel(getUserId());
 
         if (level == 4) {
             return storage.getJointObjects(
-                    Device.class,
+                    AssetSearchResult.class,
                     new Request(
-                            new Columns.All(),
-                            new Condition.FiveJoinWhereSearch(Device.class, "id", DeviceAsset.class, "deviceid", "assetid", ClientDevice.class, "clientid", SubresellerClient.class, "clientid", Asset.class, "id", "name", assetname)
+                            new Columns.Include(
+                                    "resellername AS ResellerName",
+                                    "subresellername AS SubresellerName",
+                                    "clientname AS clientName",
+                                    "name AS AssetName"
+                            ),
+                            new Condition.FiveJoinWhereSearch(Device.class, "id", DeviceAsset.class, "deviceid", ClientDevice.class, "clientid","deviceid", Client.class, "id", SubresellerClient.class, "subresellerid","clientid",Subreseller.class,"id",ResellerSubreseller.class,"resellerid","subresellerid",Reseller.class,"id", "name", assetname)
                     )
             );
         }else if(level == 1){
@@ -130,7 +135,7 @@ public class GlobalSearchResource extends BaseObjectResource<Device> {
                     Device.class,
                     new Request(
                             new Columns.All(),
-                            new Condition.SixJoinTwoWhereSearch(Device.class, "id", DeviceAsset.class, "deviceid", "assetid", ClientDevice.class, "clientid",Asset.class, SubresellerClient.class,ResellerSubreseller.class,"subresellerid", "resellerid", resellerid, "name", assetname)
+                            new Condition.SixJoinTwoWhereSearch(Device.class, "id", DeviceAsset.class, "deviceid", ClientDevice.class, "clientid","deviceid", Asset.class, SubresellerClient.class,ResellerSubreseller.class,"subresellerid", "resellerid", resellerid, "name", assetname)
                     )
             );
         }else if(level == 2){
