@@ -95,7 +95,7 @@ public class DatabaseStorage extends Storage {
                 .append(getStorageName(clazz));
         //query.append(formatCondition(request.getCondition()));
         query.append(formatJoin(request.getCondition(),true));
-        logger.info("SQL - {}", query);
+        //logger.info("SQL - {}", query);
         try {
             QueryBuilder builder = QueryBuilder.create(
                     config, dataSource, objectMapper, query.toString()
@@ -127,7 +127,7 @@ public class DatabaseStorage extends Storage {
         query.append(" FROM ").append(getStorageName(clazz));
         //Here is the join conditions
         query.append(formatJoin(request.getCondition(),true));
-        //logger.info("SQL - {}", query);
+        logger.info("SQL - {}", query);
         //query.append(formatOrder(request.getOrder()));
 
         try {
@@ -759,6 +759,93 @@ public class DatabaseStorage extends Storage {
                     result.append(condition.getValue1());
                     result.append("%'");
 
+                }else if(genericCondition instanceof Condition.AdminImeiGlobalSearch condition){
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass1()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass1()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn1());
+
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn2b());
+
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass3()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn2a());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass3()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn3());
+
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass4()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass4()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn4b());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn2a());
+
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass5()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass5()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn5());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass4()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn4a());
+
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass6()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass6()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn6b());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass4()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn4a());
+
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass7()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass7()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn7());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass6()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn6a());
+
+                    result.append(" WHERE ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getSearchColumn());
+                    result.append(" LIKE ");
+                    result.append("'%");
+                    result.append(condition.getSearchValue());
+                    result.append("%'");
+
                 }else if (genericCondition instanceof Condition.FiveJoinWhereSearch condition){
                     result.append(" INNER JOIN ");
                     result.append(getStorageName(condition.getPivotClass1()));
@@ -847,6 +934,99 @@ public class DatabaseStorage extends Storage {
                     result.append("%'");
 
                 }else if (genericCondition instanceof Condition.SixJoinTwoWhereSearch condition){
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass1()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass1()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn1());
+
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn2b());
+
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass3()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn2a());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass3()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn3());
+
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass4()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass4()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn4b());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn2a());
+
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass5()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass5()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn5());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass4()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn4a());
+
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass6()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass6()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn6b());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass4()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn4a());
+
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass7()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass7()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn7());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass6()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn6a());
+
+                    result.append(" WHERE ");
+                    result.append(getStorageName(condition.getPivotClass6()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn6a());
+                    result.append(" = ");
+                    result.append(condition.getSearchLevel());
+                    result.append(" AND ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getSearchColumn());
+                    result.append(" LIKE ");
+                    result.append("'%");
+                    result.append(condition.getSearchValue());
+                    result.append("%'");
+
+                }else if (genericCondition instanceof Condition.ResellerImeiGlobalSearch condition){
                     result.append(" INNER JOIN ");
                     result.append(getStorageName(condition.getPivotClass1()));
                     result.append(" ON ");
@@ -1340,6 +1520,100 @@ public class DatabaseStorage extends Storage {
                     result.append(condition.getSearchValue());
                     result.append("%'");
 
+                }else if (genericCondition instanceof Condition.ClientImeiGlobalSearch condition){
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass1()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass1()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn1());
+
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn2b());
+
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass3()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn2a());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass3()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn3());
+
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass4()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass4()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn4b());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn2a());
+
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass5()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass5()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn5());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass4()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn4a());
+
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass6()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass6()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn6b());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass4()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn4a());
+
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass7()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass7()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn7());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass6()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn6a());
+
+                    result.append(" WHERE ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn2a());
+                    result.append(" = ");
+                    result.append(condition.getSearchLevelValue());
+                    result.append(" AND ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getSearchColumn());
+                    result.append(" LIKE ");
+                    result.append("'%");
+                    result.append(condition.getSearchValue());
+                    result.append("%'");
+
+
                 }else if (genericCondition instanceof Condition.FiveJoinTwoWhereSearch1 condition){
                     result.append(" INNER JOIN ");
                     result.append(getStorageName(condition.getPivotClass1()));
@@ -1432,6 +1706,100 @@ public class DatabaseStorage extends Storage {
                     result.append("'%");
                     result.append(condition.getSearchValue());
                     result.append("%'");
+
+                }else if (genericCondition instanceof Condition.SubResellerImeiGlobalSearch condition){
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass1()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass1()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn1());
+
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn2b());
+
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass3()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn2a());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass3()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn3());
+
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass4()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass4()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn4b());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn2a());
+
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass5()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass5()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn5());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass4()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn4a());
+
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass6()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass6()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn6b());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass4()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn4a());
+
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass7()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass7()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn7());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass6()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn6a());
+
+                    result.append(" WHERE ");
+                    result.append(getStorageName(condition.getPivotClass4()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn4a());
+                    result.append(" = ");
+                    result.append(condition.getSearchLevelValue());
+                    result.append(" AND ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getSearchColumn());
+                    result.append(" LIKE ");
+                    result.append("'%");
+                    result.append(condition.getSearchValue());
+                    result.append("%'");
+
 
                 }else if (genericCondition instanceof Condition.ThreeJoinTwoWhereSearch condition){
                     result.append(" INNER JOIN ");
