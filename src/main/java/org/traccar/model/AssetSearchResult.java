@@ -9,9 +9,17 @@ public class AssetSearchResult {
     private String subresellerName;
     private String clientName;
     private String assetName;
+    private String imei;
 
 
     // Getters and setters
+    public String getImei() {
+        return imei;
+    }
+    public void setImei(String imei) {
+        this.imei = imei;
+    }
+
     public String getAssetName() {
         return assetName;
     }

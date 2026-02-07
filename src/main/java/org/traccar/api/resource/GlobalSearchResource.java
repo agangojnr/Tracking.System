@@ -124,7 +124,8 @@ public class GlobalSearchResource extends BaseObjectResource<Device> {
                                     "resellername AS ResellerName",
                                     "subresellername AS SubresellerName",
                                     "clientname AS clientName",
-                                    "name AS AssetName"
+                                    "name AS AssetName",
+                                    "uniqueid AS Imei"
                             ),
                             new Condition.FiveJoinWhereSearch(Device.class, "id", DeviceAsset.class, "deviceid", ClientDevice.class, "clientid","deviceid", Client.class, "id", SubresellerClient.class, "subresellerid","clientid",Subreseller.class,"id",ResellerSubreseller.class,"resellerid","subresellerid",Reseller.class,"id", "name", assetname)
                     )
@@ -138,7 +139,8 @@ public class GlobalSearchResource extends BaseObjectResource<Device> {
                                     "resellername AS ResellerName",
                                     "subresellername AS SubresellerName",
                                     "clientname AS clientName",
-                                    "name AS AssetName"
+                                    "name AS AssetName",
+                                    "uniqueid AS Imei"
                             ),
                             new Condition.SixJoinTwoWhereSearch(Device.class, "id", DeviceAsset.class, "deviceid", ClientDevice.class, "clientid","deviceid", Client.class, "id", SubresellerClient.class, "subresellerid","clientid",Subreseller.class,"id",ResellerSubreseller.class,"resellerid","subresellerid",Reseller.class,"id", resellerid,"name", assetname)
                     )
@@ -152,7 +154,8 @@ public class GlobalSearchResource extends BaseObjectResource<Device> {
                                     "resellername AS ResellerName",
                                     "subresellername AS SubresellerName",
                                     "clientname AS clientName",
-                                    "name AS AssetName"
+                                    "name AS AssetName",
+                                    "uniqueid AS Imei"
                             ),
                             new Condition.FiveJoinTwoWhereSearch1(Device.class, "id", DeviceAsset.class, "deviceid", ClientDevice.class, "clientid","deviceid", Client.class, "id", SubresellerClient.class, "subresellerid","clientid",Subreseller.class,"id",ResellerSubreseller.class,"resellerid","subresellerid",Reseller.class,"id", subresellerid,"name", assetname)
                     )
@@ -166,7 +169,8 @@ public class GlobalSearchResource extends BaseObjectResource<Device> {
                                     "resellername AS ResellerName",
                                     "subresellername AS SubresellerName",
                                     "clientname AS clientName",
-                                    "name AS AssetName"
+                                    "name AS AssetName",
+                                    "uniqueid AS Imei"
                             ),
                             new Condition.FourJoinTwoWhereSearch1(Device.class, "id", DeviceAsset.class, "deviceid", ClientDevice.class, "clientid","deviceid", Client.class, "id", SubresellerClient.class, "subresellerid","clientid",Subreseller.class,"id",ResellerSubreseller.class,"resellerid","subresellerid",Reseller.class,"id", clientid, "name", assetname)
                     )
