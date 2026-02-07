@@ -1626,4 +1626,338 @@ public interface Condition {
 
     }
 
+    class CountResellerDevice implements Condition {
+        private final Class<?> ownerClass;
+        private final String ownerColumn;
+        private final Class<?> pivotClass1;
+        private final String pivotColumn1a;
+        private final String pivotColumn1b;
+        private final Class<?> pivotClass2;
+        private final String pivotColumn2a;
+        private final String pivotColumn2b;
+        private final Class<?> pivotClass3;
+        private final String pivotColumn3a;
+        private final String pivotColumn3b;
+        private final Class<?> pivotClass4;
+        private final String pivotColumn4;
+
+        private final String searchColumn;
+        private final long searchValue;
+
+        // Constructor
+        public CountResellerDevice(Class<?> ownerClass, String ownerColumn,
+                                    Class<?> pivotClass1, String pivotColumn1a, String pivotColumn1b,
+                                    Class<?> pivotClass2,String pivotColumn2a,String pivotColumn2b,
+                                    Class<?> pivotClass3,String pivotColumn3a, String pivotColumn3b,
+                                    Class<?> pivotClass4,String pivotColumn4,
+
+                                    String searchColumn,
+                                   long searchValue) {
+            this.ownerClass = ownerClass;
+            this.ownerColumn = ownerColumn;
+            this.pivotClass1 = pivotClass1;
+            this.pivotColumn1a = pivotColumn1a;
+            this.pivotColumn1b = pivotColumn1b;
+            this.pivotClass2 = pivotClass2;
+            this.pivotColumn2a = pivotColumn2a;
+            this.pivotColumn2b = pivotColumn2b;
+            this.pivotClass3 = pivotClass3;
+            this.pivotColumn3a = pivotColumn3a;
+            this.pivotColumn3b = pivotColumn3b;
+            this.pivotClass4 = pivotClass4;
+            this.pivotColumn4 = pivotColumn4;
+            this.searchColumn = searchColumn;
+            this.searchValue = searchValue;
+        }
+        public Class<?> getOwnerClass() { return ownerClass; }
+        public String getOwnerColumn() { return ownerColumn; }
+        public Class<?> getPivotClass1() { return pivotClass1; }
+        public String getPivotColumn1a() { return pivotColumn1a; }
+        public String getPivotColumn1b() { return pivotColumn1b; }
+        public Class<?> getPivotClass2() { return pivotClass2; }
+        public String getPivotColumn2a() { return pivotColumn2a; }
+        public String getPivotColumn2b() { return pivotColumn2b; }
+        public Class<?> getPivotClass3() { return pivotClass3; }
+        public String getPivotColumn3a() { return pivotColumn3a; }
+        public String getPivotColumn3b() { return pivotColumn3b; }
+        public Class<?> getPivotClass4() { return pivotClass4; }
+        public String getPivotColumn4() { return pivotColumn4; }
+        public String searchColumn() { return searchColumn; }
+        public long searchValue() { return searchValue; }
+
+    }
+
+    class CountSubResellerDevice implements Condition {
+        private final Class<?> ownerClass;
+        private final String ownerColumn;
+        private final Class<?> pivotClass1;
+        private final String pivotColumn1a;
+        private final String pivotColumn1b;
+        private final Class<?> pivotClass2;
+        private final String pivotColumn2a;
+        private final String pivotColumn2b;
+        private final Class<?> pivotClass3;
+        private final String pivotColumn3;
+
+
+        private final String searchColumn;
+        private final long searchValue;
+
+        // Constructor
+        public CountSubResellerDevice(Class<?> ownerClass, String ownerColumn,
+                                   Class<?> pivotClass1, String pivotColumn1a, String pivotColumn1b,
+                                   Class<?> pivotClass2,String pivotColumn2a,String pivotColumn2b,
+                                   Class<?> pivotClass3,String pivotColumn3,
+
+                                   String searchColumn,
+                                   long searchValue) {
+            this.ownerClass = ownerClass;
+            this.ownerColumn = ownerColumn;
+            this.pivotClass1 = pivotClass1;
+            this.pivotColumn1a = pivotColumn1a;
+            this.pivotColumn1b = pivotColumn1b;
+            this.pivotClass2 = pivotClass2;
+            this.pivotColumn2a = pivotColumn2a;
+            this.pivotColumn2b = pivotColumn2b;
+            this.pivotClass3 = pivotClass3;
+            this.pivotColumn3 = pivotColumn3;
+            this.searchColumn = searchColumn;
+            this.searchValue = searchValue;
+        }
+        public Class<?> getOwnerClass() { return ownerClass; }
+        public String getOwnerColumn() { return ownerColumn; }
+        public Class<?> getPivotClass1() { return pivotClass1; }
+        public String getPivotColumn1a() { return pivotColumn1a; }
+        public String getPivotColumn1b() { return pivotColumn1b; }
+        public Class<?> getPivotClass2() { return pivotClass2; }
+        public String getPivotColumn2a() { return pivotColumn2a; }
+        public String getPivotColumn2b() { return pivotColumn2b; }
+        public Class<?> getPivotClass3() { return pivotClass3; }
+        public String getPivotColumn3() { return pivotColumn3; }
+        public String searchColumn() { return searchColumn; }
+        public long searchValue() { return searchValue; }
+
+    }
+
+    class CountClientDevice implements Condition {
+        private final Class<?> ownerClass;
+        private final String ownerColumn;
+        private final Class<?> pivotClass1;
+        private final String pivotColumn1a;
+        private final String pivotColumn1b;
+        private final Class<?> pivotClass2;
+        private final String pivotColumn2;
+        private final String searchColumn;
+        private final long searchValue;
+
+        // Constructor
+        public CountClientDevice(Class<?> ownerClass, String ownerColumn,
+                                      Class<?> pivotClass1, String pivotColumn1a, String pivotColumn1b,
+                                      Class<?> pivotClass2, String pivotColumn2,
+
+                                      String searchColumn,
+                                      long searchValue) {
+            this.ownerClass = ownerClass;
+            this.ownerColumn = ownerColumn;
+            this.pivotClass1 = pivotClass1;
+            this.pivotColumn1a = pivotColumn1a;
+            this.pivotColumn1b = pivotColumn1b;
+            this.pivotClass2 = pivotClass2;
+            this.pivotColumn2 = pivotColumn2;
+            this.searchColumn = searchColumn;
+            this.searchValue = searchValue;
+        }
+        public Class<?> getOwnerClass() { return ownerClass; }
+        public String getOwnerColumn() { return ownerColumn; }
+        public Class<?> getPivotClass1() { return pivotClass1; }
+        public String getPivotColumn1a() { return pivotColumn1a; }
+        public String getPivotColumn1b() { return pivotColumn1b; }
+        public String searchColumn() { return searchColumn; }
+        public Class<?> getPivotClass2() { return pivotClass2; }
+        public String getPivotColumn2() { return pivotColumn2; }
+        public long searchValue() { return searchValue; }
+
+    }
+
+    class CountResellerOnlineDevice implements Condition {
+        private final Class<?> ownerClass;
+        private final String ownerColumn;
+        private final Class<?> pivotClass1;
+        private final String pivotColumn1a;
+        private final String pivotColumn1b;
+        private final Class<?> pivotClass2;
+        private final String pivotColumn2a;
+        private final String pivotColumn2b;
+        private final Class<?> pivotClass3;
+        private final String pivotColumn3a;
+        private final String pivotColumn3b;
+        private final Class<?> pivotClass4;
+        private final String pivotColumn4;
+
+        private final String searchColumn;
+        private final long searchValue;
+
+        private final String searchColumn1;
+        private final String searchValue1;
+
+        // Constructor
+        public CountResellerOnlineDevice(Class<?> ownerClass, String ownerColumn,
+                                   Class<?> pivotClass1, String pivotColumn1a, String pivotColumn1b,
+                                   Class<?> pivotClass2,String pivotColumn2a,String pivotColumn2b,
+                                   Class<?> pivotClass3,String pivotColumn3a, String pivotColumn3b,
+                                   Class<?> pivotClass4,String pivotColumn4,
+
+                                   String searchColumn,
+                                   long searchValue,
+                                         String searchColumn1,
+                                         String searchValue1) {
+            this.ownerClass = ownerClass;
+            this.ownerColumn = ownerColumn;
+            this.pivotClass1 = pivotClass1;
+            this.pivotColumn1a = pivotColumn1a;
+            this.pivotColumn1b = pivotColumn1b;
+            this.pivotClass2 = pivotClass2;
+            this.pivotColumn2a = pivotColumn2a;
+            this.pivotColumn2b = pivotColumn2b;
+            this.pivotClass3 = pivotClass3;
+            this.pivotColumn3a = pivotColumn3a;
+            this.pivotColumn3b = pivotColumn3b;
+            this.pivotClass4 = pivotClass4;
+            this.pivotColumn4 = pivotColumn4;
+            this.searchColumn = searchColumn;
+            this.searchValue = searchValue;
+            this.searchColumn1 = searchColumn1;
+            this.searchValue1 = searchValue1;
+        }
+        public Class<?> getOwnerClass() { return ownerClass; }
+        public String getOwnerColumn() { return ownerColumn; }
+        public Class<?> getPivotClass1() { return pivotClass1; }
+        public String getPivotColumn1a() { return pivotColumn1a; }
+        public String getPivotColumn1b() { return pivotColumn1b; }
+        public Class<?> getPivotClass2() { return pivotClass2; }
+        public String getPivotColumn2a() { return pivotColumn2a; }
+        public String getPivotColumn2b() { return pivotColumn2b; }
+        public Class<?> getPivotClass3() { return pivotClass3; }
+        public String getPivotColumn3a() { return pivotColumn3a; }
+        public String getPivotColumn3b() { return pivotColumn3b; }
+        public Class<?> getPivotClass4() { return pivotClass4; }
+        public String getPivotColumn4() { return pivotColumn4; }
+        public String searchColumn() { return searchColumn; }
+        public long searchValue() { return searchValue; }
+        public String searchColumn1() { return searchColumn1; }
+        public String searchValue1() { return searchValue1; }
+
+    }
+
+    class CountSubResellerOnlineDevice implements Condition {
+        private final Class<?> ownerClass;
+        private final String ownerColumn;
+        private final Class<?> pivotClass1;
+        private final String pivotColumn1a;
+        private final String pivotColumn1b;
+        private final Class<?> pivotClass2;
+        private final String pivotColumn2a;
+        private final String pivotColumn2b;
+        private final Class<?> pivotClass3;
+        private final String pivotColumn3;
+
+
+        private final String searchColumn;
+        private final long searchValue;
+
+        private final String searchColumn1;
+        private final String searchValue1;
+
+        // Constructor
+        public CountSubResellerOnlineDevice(Class<?> ownerClass, String ownerColumn,
+                                      Class<?> pivotClass1, String pivotColumn1a, String pivotColumn1b,
+                                      Class<?> pivotClass2,String pivotColumn2a,String pivotColumn2b,
+                                      Class<?> pivotClass3,String pivotColumn3,
+
+                                      String searchColumn,
+                                      long searchValue,
+                                       String searchColumn1,
+                                            String searchValue1) {
+            this.ownerClass = ownerClass;
+            this.ownerColumn = ownerColumn;
+            this.pivotClass1 = pivotClass1;
+            this.pivotColumn1a = pivotColumn1a;
+            this.pivotColumn1b = pivotColumn1b;
+            this.pivotClass2 = pivotClass2;
+            this.pivotColumn2a = pivotColumn2a;
+            this.pivotColumn2b = pivotColumn2b;
+            this.pivotClass3 = pivotClass3;
+            this.pivotColumn3 = pivotColumn3;
+            this.searchColumn = searchColumn;
+            this.searchValue = searchValue;
+            this.searchColumn1 = searchColumn1;
+            this.searchValue1 = searchValue1;
+        }
+        public Class<?> getOwnerClass() { return ownerClass; }
+        public String getOwnerColumn() { return ownerColumn; }
+        public Class<?> getPivotClass1() { return pivotClass1; }
+        public String getPivotColumn1a() { return pivotColumn1a; }
+        public String getPivotColumn1b() { return pivotColumn1b; }
+        public Class<?> getPivotClass2() { return pivotClass2; }
+        public String getPivotColumn2a() { return pivotColumn2a; }
+        public String getPivotColumn2b() { return pivotColumn2b; }
+        public Class<?> getPivotClass3() { return pivotClass3; }
+        public String getPivotColumn3() { return pivotColumn3; }
+        public String searchColumn() { return searchColumn; }
+        public long searchValue() { return searchValue; }
+        public String searchColumn1() { return searchColumn1; }
+        public String searchValue1() { return searchValue1; }
+
+    }
+
+    class CountClientOnlineDevice implements Condition {
+        private final Class<?> ownerClass;
+        private final String ownerColumn;
+        private final Class<?> pivotClass1;
+        private final String pivotColumn1a;
+        private final String pivotColumn1b;
+        private final Class<?> pivotClass2;
+        private final String pivotColumn2;
+        private final String searchColumn;
+        private final long searchValue;
+        private final String searchColumn1;
+        private final String searchValue1;
+
+        // Constructor
+        public CountClientOnlineDevice(Class<?> ownerClass, String ownerColumn,
+                                 Class<?> pivotClass1, String pivotColumn1a, String pivotColumn1b,
+                                 Class<?> pivotClass2, String pivotColumn2,
+
+                                 String searchColumn,
+                                 long searchValue,
+                                       String searchColumn1,
+                                       String searchValue1) {
+            this.ownerClass = ownerClass;
+            this.ownerColumn = ownerColumn;
+            this.pivotClass1 = pivotClass1;
+            this.pivotColumn1a = pivotColumn1a;
+            this.pivotColumn1b = pivotColumn1b;
+            this.pivotClass2 = pivotClass2;
+            this.pivotColumn2 = pivotColumn2;
+            this.searchColumn = searchColumn;
+            this.searchValue = searchValue;
+            this.searchColumn1 = searchColumn1;
+            this.searchValue1 = searchValue1;
+        }
+        public Class<?> getOwnerClass() { return ownerClass; }
+        public String getOwnerColumn() { return ownerColumn; }
+        public Class<?> getPivotClass1() { return pivotClass1; }
+        public String getPivotColumn1a() { return pivotColumn1a; }
+        public String getPivotColumn1b() { return pivotColumn1b; }
+
+        public Class<?> getPivotClass2() { return pivotClass2; }
+        public String getPivotColumn2() { return pivotColumn2; }
+        public String searchColumn() { return searchColumn; }
+        public long searchValue() { return searchValue; }
+        public String searchColumn1() { return searchColumn1; }
+        public String searchValue1() { return searchValue1; }
+
+    }
+
+
 }

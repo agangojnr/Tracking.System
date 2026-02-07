@@ -55,6 +55,13 @@ public class MemoryStorage extends Storage {
     }
 
     @Override
+    public long getCountObjects(Class<?> clazz, Request request)
+            throws StorageException {
+        // Reuse existing filtering logic
+        return getObjects(clazz, request).size();
+    }
+
+    @Override
     public <T> List<T> getJointObjects(Class<T> clazz, Request request) {
         try (var objects = getObjectsStream(clazz, request)) {
             return objects.toList();
