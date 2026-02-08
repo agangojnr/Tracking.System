@@ -93,8 +93,8 @@ public class DashboardResource extends SimpleObjectResource<Group> {
         if (Boolean.TRUE.equals(all)) {
 
             return storage.getCountObjects(Device.class, new Request(
-                    new Columns.All()
-            ));
+                    new Columns.All(),
+                    new Condition.CountAllOnlineDevice(Device.class, "id", ClientDevice.class,"clientid", "deviceid",SubresellerClient.class, "subresellerid", "clientid", ResellerSubreseller.class, "resellerid","subresellerid", DeviceAsset.class,"deviceid",  "status","online")));
 
         }else if (resellerid != null && resellerid > 0) {
             return storage.getCountObjects(Device.class, new Request(
