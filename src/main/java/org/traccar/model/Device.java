@@ -111,14 +111,14 @@ public class Device extends GroupedModel implements Disableable, Schedulable {
         this.phone = phone != null ? phone.trim() : null;
     }
 
-    private String model;
+    private String oldModelName;
 
-    public String getModel() {
-        return model;
+    public String getOldModelName() {
+        return oldModelName;
     }
 
-    public void setModel(String model) {
-        this.model = model;
+    public void setOldModelName(String oldModelName) {
+        this.oldModelName = oldModelName;
     }
 
     private String contact;

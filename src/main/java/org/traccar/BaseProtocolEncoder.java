@@ -75,7 +75,7 @@ public abstract class BaseProtocolEncoder extends ChannelOutboundHandlerAdapter 
     }
 
     public String getDeviceModel(long deviceId) {
-        String model = getCacheManager().getObject(Device.class, deviceId).getModel();
+        String model = getCacheManager().getObject(Device.class, deviceId).getOldModelName();
         return modelOverride != null ? modelOverride : model;
     }
 

@@ -134,7 +134,7 @@ public class ConnectionManager implements BroadcastInterface {
             }
 
             DeviceSession deviceSession = new DeviceSession(
-                    device.getId(), device.getUniqueId(), device.getModel(), protocol, channel, remoteAddress);
+                    device.getId(), device.getUniqueId(), device.getOldModelName(), protocol, channel, remoteAddress);
             endpointSessions.put(device.getUniqueId(), deviceSession);
             sessionsByEndpoint.put(connectionKey, endpointSessions);
             sessionsByDeviceId.put(device.getId(), deviceSession);
