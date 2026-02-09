@@ -181,7 +181,7 @@ public class ConnectionManager implements BroadcastInterface {
             if (endpointSessions != null) {
                 for (DeviceSession deviceSession : endpointSessions.values()) {
                     if (supportsOffline) {
-                        updateDevice(deviceSession.getDeviceId(), Device.STATUS_OFFLINE, null);
+                        //updateDevice(deviceSession.getDeviceId(), Device.STATUS_OFFLINE, null);
                     }
                     sessionsByDeviceId.remove(deviceSession.getDeviceId());
                     cacheManager.removeDevice(deviceSession.getDeviceId(), connectionKey);

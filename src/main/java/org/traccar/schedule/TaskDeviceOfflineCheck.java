@@ -25,7 +25,7 @@ public class TaskDeviceOfflineCheck extends SingleScheduleTask {
     public static final String ATTRIBUTE_DEVICE_INACTIVITY_PERIOD = "deviceInactivityPeriod";
     public static final String ATTRIBUTE_LAST_UPDATE = "lastUpdate";
 
-    private static final String STATUS_NOT_CONNECTED = "not_con";
+    private static final String STATUS_NOT_CONNECTED = "not_connected";
     private static final String STATUS_OFFLINE = "offline";
     private static final String STATUS_ONLINE = "online";
 
@@ -45,54 +45,103 @@ public class TaskDeviceOfflineCheck extends SingleScheduleTask {
         executor.scheduleAtFixedRate( this, 0, CHECK_PERIOD_MINUTES, TimeUnit.MINUTES );
     }
 
+//    @Override
+//    public void run() {
+//        long currentTime = System.currentTimeMillis();
+//        long checkPeriod = TimeUnit.MINUTES.toMillis(CHECK_PERIOD_MINUTES);
+//
+//        Map<Event, Position> events = new HashMap<>();
+//
+//        try {
+//            // Load all clients
+//            Map<Long, Client> clients = storage.getObjects(Client.class, new Request(new Columns.All()))
+//                            .stream()
+//                            .collect(Collectors.toMap(Client::getId, c -> c));
+//
+//            // Load device → client relationship
+//            Map<Long, Long> clientByDevice = storage.getObjects(ClientDevice.class, new Request(new Columns.All()))
+//                            .stream()
+//                            .collect(Collectors.toMap( ClientDevice::getDeviceid,ClientDevice::getClientid));
+//
+//            // Process devices
+//            for (Device device :
+//                    storage.getObjects(Device.class, new Request(new Columns.All()))) {
+//                String newStatus;
+//                String currentStatus = device.getStatus();
+//
+//                if (device.getLastUpdate() == null){
+//                    newStatus = STATUS_NOT_CONNECTED;
+//                } else if (checkOfflineDevice(device,clients,clientByDevice,currentTime,checkPeriod)) {
+//                    newStatus = STATUS_OFFLINE;
+//                } else {
+//                    newStatus = STATUS_ONLINE;
+//                }
+//                // 🔒 Update ONLY if status has changed
+//                if (!newStatus.equals(currentStatus)) {
+//                    device.setStatus(newStatus);
+//                    storage.updateObject(device,
+//                            new Request(
+//                                    new Columns.Include("status")
+//                            )
+//                    );
+//                    LOGGER.info("Device {} status changed from {} to {}", device.getId(), currentStatus, newStatus);
+//                }
+//            }
+//
+//        } catch (StorageException e) {
+//            LOGGER.warn("Database error", e);
+//        }
+//        notificationManager.updateEvents(events);
+//    }
+
     @Override
     public void run() {
-        long currentTime = System.currentTimeMillis();
-        long checkPeriod = TimeUnit.MINUTES.toMillis(CHECK_PERIOD_MINUTES);
-
-        Map<Event, Position> events = new HashMap<>();
+        long now = System.currentTimeMillis();
 
         try {
-            // Load all clients
-            Map<Long, Client> clients = storage.getObjects(Client.class, new Request(new Columns.All()))
-                            .stream()
-                            .collect(Collectors.toMap(Client::getId, c -> c));
+            for (Device device : storage.getObjects(Device.class, new Request(new Columns.All()))) {
 
-            // Load device → client relationship
-            Map<Long, Long> clientByDevice = storage.getObjects(ClientDevice.class, new Request(new Columns.All()))
-                            .stream()
-                            .collect(Collectors.toMap( ClientDevice::getDeviceid,ClientDevice::getClientid));
-
-            // Process devices
-            for (Device device :
-                    storage.getObjects(Device.class, new Request(new Columns.All()))) {
-                String newStatus;
                 String currentStatus = device.getStatus();
+                String newStatus = resolveStatus(device, now);
 
-                if (device.getLastUpdate() == null){
-                    newStatus = STATUS_NOT_CONNECTED;
-                } else if (checkOfflineDevice(device,clients,clientByDevice,currentTime,checkPeriod)) {
-                    newStatus = STATUS_OFFLINE;
-                } else {
-                    newStatus = STATUS_ONLINE;
-                }
-                // 🔒 Update ONLY if status has changed
+                // 🔒 Update ONLY on real transition
                 if (!newStatus.equals(currentStatus)) {
                     device.setStatus(newStatus);
-                    storage.updateObject(device,
-                            new Request(
-                                    new Columns.Include("status")
-                            )
+                    storage.updateObject(
+                            device,
+                            new Request(new Columns.Include("status"))
                     );
-                    LOGGER.info("Device {} status changed from {} to {}", device.getId(), currentStatus, newStatus);
+
+                    LOGGER.info(
+                            "Device {} status changed from {} to {}",device.getId(),currentStatus,newStatus
+                    );
                 }
             }
-
         } catch (StorageException e) {
-            LOGGER.warn("Database error", e);
+            LOGGER.warn("Device status check failed", e);
         }
-        notificationManager.updateEvents(events);
     }
+
+
+    private String resolveStatus(Device device, long now) {
+
+        // 1. Never connected
+        if (device.getLastUpdate() == null) {
+            return STATUS_NOT_CONNECTED;
+        }
+
+        // 2. Offline check
+        long offlineThreshold = TimeUnit.HOURS.toMillis(24); // adjust if needed
+        long lastUpdateTime = device.getLastUpdate().getTime();
+
+        if (now - lastUpdateTime >= offlineThreshold) {
+            return STATUS_OFFLINE;
+        }
+
+        // 3. Otherwise online
+        return STATUS_ONLINE;
+    }
+
 
 
     /**

@@ -47,5 +47,29 @@
 
   </changeSet>
 
+  <changeSet id="20260208-01-update-status-to-varchar64" author="walter">
+    <modifyDataType
+            tableName="tc_devices"
+            columnName="status"
+            newDataType="varchar(64)"/>
+  </changeSet>
+
+  <changeSet id="add-tc-devices-offlinestatus" author="walter">
+    <addColumn tableName="tc_devices">
+      <column name="offlinestatus" type="varchar(64)">
+        <constraints nullable="true"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
+<!--  <changeSet id="rename-tc-devices-offlinestatus-to-offline" author="walter">-->
+<!--    <renameColumn-->
+<!--            tableName="tc_devices"-->
+<!--            oldColumnName="offlinestatus"-->
+<!--            newColumnName="offline"-->
+<!--            columnDataType="varchar(64)"/>-->
+<!--  </changeSet>-->
+
+
 </databaseChangeLog>
 

@@ -253,7 +253,8 @@ public class StockResource extends BaseObjectResource<Device> {
                                     "name AS deviceName",
                                     "uniqueid AS imei",
                                     "phonenumber AS simcardNo",
-                                    "model AS deviceModel"
+                                    "model AS deviceModel",
+                                    "status AS status"
                                     ),
                             new Condition.SixJoinWhere(Device.class,"id","devicetypeid", DeviceAsset.class,"deviceid", ClientDevice.class,"clientid", "deviceid", Client.class,"id", SubresellerClient.class, "subresellerid",  "clientid", Subreseller.class, "id", ResellerSubreseller.class, "subresellerid", DeviceSimcard.class, "deviceid","simcardid", Simcard.class, "id", Devicetype.class, "id", resellerId)
                             //new Condition.ThreeJoinWhere(Device.class,"id", DeviceAsset.class,"simcardid","simcardid",ResellerSimcard.class,"simcardid","resellerid",resellerId)
@@ -276,10 +277,18 @@ public class StockResource extends BaseObjectResource<Device> {
         long level = permissionsService.getUserAccessLevel(getUserId());
 
         if(level == 4){
-            Collection<Device> devices =  storage.getJointObjects(
-                    Device.class,
+            Collection<CompanyDevices> devices =  storage.getJointObjects(
+                    CompanyDevices.class,
                     new Request(
-                            new Columns.All(),
+                            new Columns.Include(
+                                    "subresellername AS SubresellerName",
+                                    "clientname AS clientName",
+                                    "name AS deviceName",
+                                    "uniqueid AS imei",
+                                    "phonenumber AS simcardNo",
+                                    "model AS deviceModel",
+                                    "status AS status"
+                            ),
                             //new Condition.FiveJoinWhere(Device.class,"id", DeviceAsset.class,"deviceid", "clientid", ClientDevice.class,  "subresellerid", SubresellerClient.class, "subresellerid", ResellerSubreseller.class, "resellerid", "resellerid", resellerId)
                             new Condition.LeftJoin(Device.class,"id", DeviceAsset.class,"deviceid")
                 )
@@ -288,10 +297,18 @@ public class StockResource extends BaseObjectResource<Device> {
         }else if (level == 1) {
             //LOGGER.info("Testing testing query.");
             long resellerId = permissionsService.getLevelGroupId(getUserId(), level);
-            Collection<Device> devices =  storage.getJointObjects(
-                    Device.class,
+            Collection<CompanyDevices> devices =  storage.getJointObjects(
+                    CompanyDevices.class,
                     new Request(
-                            new Columns.All(),
+                            new Columns.Include(
+                                    "subresellername AS SubresellerName",
+                                    "clientname AS clientName",
+                                    "name AS deviceName",
+                                    "uniqueid AS imei",
+                                    "phonenumber AS simcardNo",
+                                    "model AS deviceModel",
+                                    "status AS status"
+                            ),
                             new Condition.LeftJoinFourJoinWhere(Device.class,"id", DeviceAsset.class,"deviceid", "clientid", ClientDevice.class,  "subresellerid", SubresellerClient.class, "subresellerid", ResellerSubreseller.class, "resellerid", "resellerid", resellerId)
                             //new Condition.LeftJoin(Device.class,"id", DeviceAsset.class,"deviceid")
                     )

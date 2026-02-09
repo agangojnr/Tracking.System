@@ -121,6 +121,16 @@ public class Device extends GroupedModel implements Disableable, Schedulable {
         this.oldModelName = oldModelName;
     }
 
+//    private String offline;
+//
+//    public String getOffline() {
+//        return offline;
+//    }
+//
+//    public void setOffline(String offline) {
+//        this.offline = offline;
+//    }
+
     private String contact;
 
     public String getContact() {
