@@ -95,7 +95,7 @@ public class DatabaseStorage extends Storage {
                 .append(getStorageName(clazz));
         //query.append(formatCondition(request.getCondition()));
         query.append(formatJoin(request.getCondition(),true));
-        logger.info("SQL - {}", query);
+        //logger.info("SQL - {}", query);
         try {
             QueryBuilder builder = QueryBuilder.create(
                     config, dataSource, objectMapper, query.toString()

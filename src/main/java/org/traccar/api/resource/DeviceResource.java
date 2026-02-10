@@ -86,12 +86,24 @@ public class DeviceResource extends BaseObjectResource<Device> {
         super(Device.class);
     }
 
+
     @GET
     @Path("query")
-    public Collection<Device> get() throws Exception{
-
-        long defaultClientId = permissionsService.getDefaultClientId(getUserId());
+    public Collection<Device> get(@QueryParam("clientId") Long clientId) throws Exception{
         //LOGGER.info("Testing here - {}", defaultClientId);
+        /*QUERYING LINKED DEVICES BY CLIENTID*/
+        if (clientId != null && clientId > 0) {
+            return storage.getJointObjects(
+                    Device.class,
+                    new Request(
+                            new Columns.All(),
+                            new Condition.LinkedDevicesbyClient(Device.class, "id",DeviceAsset.class, "deviceid", "assetid", ClientDevice.class,"clientid", "deviceid", clientId)
+                    )
+            );
+        }
+
+        /*QUERYING LINKED DEVICES FROM DEFAULT CLIENT*/
+        long defaultClientId = permissionsService.getDefaultClientId(getUserId());
         return storage.getJointObjects(
                 Device.class,
                 new Request(
@@ -101,6 +113,7 @@ public class DeviceResource extends BaseObjectResource<Device> {
         );
     }
 
+    /*QUERYING ALL DEVICES*/
     @GET
     public Stream<Device> get(
             @QueryParam("all") boolean all, @QueryParam("userId") long userId,
@@ -152,6 +165,7 @@ public class DeviceResource extends BaseObjectResource<Device> {
 
         }
     }
+
 
     @GET
     @Path("level")
