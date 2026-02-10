@@ -95,7 +95,7 @@ public class DatabaseStorage extends Storage {
                 .append(getStorageName(clazz));
         //query.append(formatCondition(request.getCondition()));
         query.append(formatJoin(request.getCondition(),true));
-        //logger.info("SQL - {}", query);
+        logger.info("SQL - {}", query);
         try {
             QueryBuilder builder = QueryBuilder.create(
                     config, dataSource, objectMapper, query.toString()
@@ -606,32 +606,92 @@ public class DatabaseStorage extends Storage {
                     result.append(condition.getValue());result.append("'");
 
                 }if(genericCondition instanceof Condition.ThreeJoinWhere condition){
-                    result.append(" JOIN ");
-                    result.append(getStorageName(condition.getPivotClass()));
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass1()));
                     result.append(" ON ");
                     result.append(getStorageName(condition.getOwnerClass()));
                     result.append(".");
                     result.append(condition.getOwnerColumn());
                     result.append(" = ");
-                    result.append(getStorageName(condition.getPivotClass()));
+                    result.append(getStorageName(condition.getPivotClass1()));
                     result.append(".");
-                    result.append(condition.getPivotColumn());
+                    result.append(condition.getPivotColumn1b());
 
-                    result.append(" JOIN ");
+                    result.append(" INNER JOIN ");
                     result.append(getStorageName(condition.getPivotClass2()));
                     result.append(" ON ");
-                    result.append(getStorageName(condition.getPivotClass()));
-                    result.append(".");
-                    result.append(condition.getPivotColumn1());
-                    result.append(" = ");
                     result.append(getStorageName(condition.getPivotClass2()));
                     result.append(".");
-                    result.append(condition.getPivotColumn2());
+                    result.append(condition.getPivotColumn2b());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn());
 
                     result.append(" WHERE ");
                     result.append(getStorageName(condition.getPivotClass2()));
                     result.append(".");
-                    result.append(condition.getPivotColumn3());
+                    result.append(condition.getPivotColumn2a());
+                    result.append(" = ");
+                    result.append(condition.getValue1());
+
+                }if(genericCondition instanceof Condition.LinkedDevicesbyClient condition){
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass1()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass1()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn1a());
+
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn2b());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn());
+
+                    result.append(" WHERE ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn2a());
+                    result.append(" = ");
+                    result.append(condition.getValue1());
+
+                }if(genericCondition instanceof Condition.ClientsByResellerId condition){
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass1()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass1()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn1b());
+
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn2b());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass1()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn1a());
+
+                    result.append(" WHERE ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn2a());
                     result.append(" = ");
                     result.append(condition.getValue1());
 
@@ -2050,6 +2110,20 @@ public class DatabaseStorage extends Storage {
                     result.append(condition.searchColumn());
                     result.append(" = ");result.append("'");
                     result.append(condition.searchValue());result.append("'");
+
+                }else if (genericCondition instanceof Condition.CountAllDevice condition){
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass1()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass1()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn1());
+
+
                 }else if (genericCondition instanceof Condition.CountSubResellerDevice condition){
                     result.append(" INNER JOIN ");
                     result.append(getStorageName(condition.getPivotClass1()));

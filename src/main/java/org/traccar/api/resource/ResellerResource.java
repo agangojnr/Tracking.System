@@ -109,6 +109,7 @@ public class ResellerResource extends ExtendedObjectResource<Reseller> {
         permissionsService.checkEdit(getUserId(), entity, false, false);
 
         if(validate(entity)){
+            LOGGER.info("Checking reseller update new");
             storage.updateObject(entity, new Request(
                     new Columns.Exclude("id"),
                     new Condition.Equals("id", entity.getId())));
@@ -123,12 +124,12 @@ public class ResellerResource extends ExtendedObjectResource<Reseller> {
     }
 
     public boolean validate(Reseller entity) throws StorageException {
-        String name = entity.getResellerName();
+        String resellername = entity.getResellerName();
 
         Reseller reseller = storage.getObject(Reseller.class, new Request(
                 new Columns.All(),
                 new Condition.And(
-                        new Condition.Equals("resellername", name),
+                        new Condition.Equals("resellername", resellername),
                         new Condition.Permission(User.class, getUserId(), Reseller.class))));
         return reseller == null;
     }

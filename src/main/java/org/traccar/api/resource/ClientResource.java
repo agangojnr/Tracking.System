@@ -91,7 +91,7 @@ public class ClientResource extends ExtendedObjectResource<Client> {
             //conditions.add(new Condition.Permission(User.class, userId, Client.class).excludeGroups());
             return storage.getJointObjects(baseClass, new Request(
                     new Columns.All(),
-                    new Condition.ThreeJoinWhere(Client.class,"id", SubresellerClient.class,"clientid","subresellerid",ResellerSubreseller.class,"subresellerid","resellerid",resellerId)));
+                    new Condition.ClientsByResellerId(Client.class,"id", SubresellerClient.class,"subresellerid","clientid",ResellerSubreseller.class,"resellerid","subresellerid",resellerId)));
 
         }
         permissionsService.checkSubreseller(getUserId());
@@ -114,7 +114,7 @@ public class ClientResource extends ExtendedObjectResource<Client> {
             long resellerid = permissionsService.getLevelGroupId(getUserId(), 1);
             return storage.getJointObjects(baseClass, new Request(
                     new Columns.All(),
-                    new Condition.ThreeJoinWhere(Client.class, "id",SubresellerClient.class, "clientid","subresellerid", ResellerSubreseller.class, "subresellerid","resellerid", resellerid)));
+                    new Condition.ClientsByResellerId(Client.class,"id", SubresellerClient.class,"subresellerid","clientid",ResellerSubreseller.class,"resellerid","subresellerid",resellerid)));
         }else if(level == 2){
             long subresellerid = permissionsService.getLevelGroupId(getUserId(), 2);
             return storage.getJointObjects(baseClass, new Request(
@@ -137,7 +137,7 @@ public class ClientResource extends ExtendedObjectResource<Client> {
                 Client.class,
                 new Request(
                         new Columns.All(),
-                        new Condition.ThreeJoinWhere(Client.class, "id",SubresellerClient.class, "clientid","subresellerid", ResellerSubreseller.class, "subresellerid","resellerid", resellerId)
+                        new Condition.ClientsByResellerId(Client.class,"id", SubresellerClient.class,"subresellerid","clientid",ResellerSubreseller.class,"resellerid","subresellerid",resellerId)
                 )
         );
 

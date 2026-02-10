@@ -59,11 +59,8 @@ public class DashboardResource extends SimpleObjectResource<Group> {
                       @QueryParam("clientid") Long clientid) throws Exception {
 
         if (Boolean.TRUE.equals(all)) {
-
             return storage.getCountObjects(Device.class, new Request(
-                    new Columns.All()
-            ));
-
+                    new Condition.CountAllDevice(Device.class, "id", DeviceAsset.class,"deviceid")));
         }else if (resellerid != null && resellerid > 0) {
             return storage.getCountObjects(Device.class, new Request(
                     new Columns.All(),
