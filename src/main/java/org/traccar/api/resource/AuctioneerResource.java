@@ -124,6 +124,37 @@ public class AuctioneerResource extends SimpleObjectResource<Auctioneer> {
 
     /*DELETE AUCTIONEERS*/
 
+    @Path("{id}")
+    @DELETE
+    public Response remove(@PathParam("id") long id) throws Exception {
+
+            try{
+                //permissionsService.checkPermission(baseClass, getUserId(), id);
+                //permissionsService.checkEdit(getUserId(), baseClass, false, false);
+                storage.removeObject(baseClass, new Request(new Condition.Equals("id", id)));
+                cacheManager.invalidateObject(true, baseClass, id, ObjectOperation.DELETE);
+                actionLogger.remove(request, getUserId(), baseClass, id);
+                //return Response.noContent().build();
+                return Response.ok("{\"status\":\"Deleted Successfully\"}").build();
+
+            } catch (Exception e) {
+                LOGGER.error(
+                        "Unexpected error while deleting {} id={}",
+                        baseClass.getSimpleName(),
+                        id,
+                        e
+                );
+
+                return Response.serverError()
+                        .entity("{\"error\":\"Unexpected error occurred or Reference constraint.\"}")
+                        .build();
+            }
+
+    }
+
+    /* ACUTIONEER ID VALIDATION DURING DELETE */
+
+
     /* LINK DEVICES TO AUCTIONEERS*/
     @POST
     @Path("link")
