@@ -1,0 +1,147 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+  <!-- Create table tc_drus -->
+  <changeSet id="create-tc-drus-table" author="walter">
+    <createTable tableName="tc_drus">
+      <column name="id" type="int">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="druname" type="varchar(64)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="create-tc-auctioneers-table" author="walter">
+    <createTable tableName="tc_auctioneers">
+      <column name="id" type="int">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="auctioneername" type="varchar(64)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+
+  <changeSet id="create-tc-subreseller-dru" author="walter">
+    <createTable tableName="tc_subreseller_dru">
+      <column name="subresellerid" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="druid" type="int">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint
+            baseTableName="tc_subreseller_dru"
+            baseColumnNames="subresellerid"
+            referencedTableName="tc_subresellers"
+            referencedColumnNames="id"
+            constraintName="fk_subreseller_dru_subreseller"
+            onDelete="RESTRICT"/>
+
+    <addForeignKeyConstraint
+            baseTableName="tc_subreseller_dru"
+            baseColumnNames="druid"
+            referencedTableName="tc_drus"
+            referencedColumnNames="id"
+            constraintName="fk_subreseller_dru_dru"
+            onDelete="RESTRICT"/>
+  </changeSet>
+
+
+  <changeSet id="create-tc-dru-auctioneer" author="walter">
+    <createTable tableName="tc_dru_auctioneer">
+      <column name="druid" type="int">
+        <constraints nullable="false"/>
+      </column>
+      <column name="auctioneerid" type="int">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+
+    <addForeignKeyConstraint
+            baseTableName="tc_dru_auctioneer"
+            baseColumnNames="druid"
+            referencedTableName="tc_drus"
+            referencedColumnNames="id"
+            constraintName="fk_dru_auctioneer_dru"
+            onDelete="RESTRICT"/>
+
+    <addForeignKeyConstraint
+            baseTableName="tc_dru_auctioneer"
+            baseColumnNames="auctioneerid"
+            referencedTableName="tc_auctioneers"
+            referencedColumnNames="id"
+            constraintName="fk_dru_auctioneer_auctioneer"
+            onDelete="RESTRICT"/>
+  </changeSet>
+
+  <changeSet id="create-tc-auctioneer-device" author="walter">
+    <createTable tableName="tc_auctioneer_device">
+      <column name="auctioneerid" type="int">
+        <constraints nullable="false"/>
+      </column>
+      <column name="deviceid" type="int">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+
+    <addForeignKeyConstraint
+            baseTableName="tc_auctioneer_device"
+            baseColumnNames="auctioneerid"
+            referencedTableName="tc_auctioneers"
+            referencedColumnNames="id"
+            constraintName="fk_auctioneer_device_auctioneer"
+            onDelete="RESTRICT"/>
+
+    <addForeignKeyConstraint
+            baseTableName="tc_auctioneer_device"
+            baseColumnNames="deviceid"
+            referencedTableName="tc_devices"
+            referencedColumnNames="id"
+            constraintName="fk_auctioneer_device_device"
+            onDelete="RESTRICT"/>
+  </changeSet>
+
+  <changeSet id="create-tc-auctioneer-user" author="walter">
+    <createTable tableName="tc_auctioneer_user">
+      <column name="auctioneerid" type="int">
+        <constraints nullable="false"/>
+      </column>
+      <column name="userid" type="int">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+
+    <addForeignKeyConstraint
+            baseTableName="tc_auctioneer_user"
+            baseColumnNames="auctioneerid"
+            referencedTableName="tc_auctioneers"
+            referencedColumnNames="id"
+            constraintName="fk_auctioneer_user_auctioneer"
+            onDelete="RESTRICT"/>
+
+    <addForeignKeyConstraint
+            baseTableName="tc_auctioneer_user"
+            baseColumnNames="userid"
+            referencedTableName="tc_users"
+            referencedColumnNames="id"
+            constraintName="fk_auctioneer_user_user"
+            onDelete="RESTRICT"/>
+  </changeSet>
+
+
+
+</databaseChangeLog>
+
