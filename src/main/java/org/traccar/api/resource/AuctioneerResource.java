@@ -102,7 +102,25 @@ public class AuctioneerResource extends SimpleObjectResource<Auctioneer> {
         }
 
     }
+
+
     /* UPDATE/EDIT AUCTIONEERS */
+    @Path("update/{id}")
+    @PUT
+    public Response update(Auctioneer entity) throws Exception {
+
+        if(validate(entity)){
+            storage.updateObject(entity, new Request(
+                    new Columns.Exclude("id","attributes"),
+                    new Condition.Equals("id", entity.getId())));
+
+            cacheManager.invalidateObject(true, entity.getClass(), entity.getId(), ObjectOperation.UPDATE);
+            actionLogger.edit(request, getUserId(), entity);
+            return Response.ok(entity).build();
+        }else{
+            return Response.status(Response.Status.FOUND).build();
+        }
+    }
 
     /*DELETE AUCTIONEERS*/
 
