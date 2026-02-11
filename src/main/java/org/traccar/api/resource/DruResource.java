@@ -27,7 +27,7 @@ import java.util.LinkedList;
 @Path("drus")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class DruResource extends SimpleObjectResource<Devicetype> {
+public class DruResource extends SimpleObjectResource<Dru> {
 
     @Inject
     private LogAction actionLogger;
@@ -45,7 +45,7 @@ public class DruResource extends SimpleObjectResource<Devicetype> {
     private PermissionsService permissionsService;
 
     public DruResource() {
-        super(Devicetype.class, "druname");
+        super(Dru.class, "druname");
     }
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Dru.class);
@@ -68,7 +68,7 @@ public class DruResource extends SimpleObjectResource<Devicetype> {
                 return Response.ok(dru).build();
 
             } catch (StorageException e) {
-                LOGGER.warn("Device status check failed", e);
+                LOGGER.warn("Initialization of DRU Unit failed.", e);
                 return null;
             }
         }else{

@@ -400,6 +400,38 @@ public interface Condition {
         public long getValue() { return value; }
     }
 
+    class GetOneJoinWhere implements Condition {
+        private final Class<?> ownerClass;
+        private final String ownerColumn;
+        private final Class<?> pivotClass1;
+        private final String pivotColumn1a;
+        private final String pivotColumn1b;
+        private final String searchColumn;
+        private final long searchValue;
+
+        // Constructor
+        public GetOneJoinWhere(Class<?> ownerClass, String ownerColumn,
+                               Class<?> pivotClass1, String pivotColumn1a, String pivotColumn1b,
+                               String searchColumn, long searchValue) {
+            this.ownerClass = ownerClass;
+            this.ownerColumn = ownerColumn;
+            this.pivotClass1 = pivotClass1;
+
+            this.pivotColumn1a = pivotColumn1a;
+            this.pivotColumn1b = pivotColumn1b;
+            this.searchColumn = searchColumn;
+            this.searchValue = searchValue;
+        }
+        public Class<?> getOwnerClass() { return ownerClass; }
+        public String getOwnerColumn() { return ownerColumn; }
+        public Class<?> getPivotClass1() { return pivotClass1; }
+
+        public String getPivotColumn1a() { return pivotColumn1a; }
+        public String getPivotColumn1b() { return pivotColumn1b; }
+        public String getSearchColumn() { return searchColumn; }
+        public long getSearchValue() { return searchValue; }
+    }
+
 
     class ClientsByResellerId implements Condition {
         private final Class<?> ownerClass;
