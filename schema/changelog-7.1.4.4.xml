@@ -172,7 +172,6 @@
 
   </changeSet>
 
-
   <changeSet id="create-tc-user-auctioneer" author="walter">
     <createTable tableName="tc_user_auctioneer">
       <column name="userid" type="int">
@@ -189,7 +188,7 @@
             baseColumnNames="userid"
             referencedTableName="tc_users"
             referencedColumnNames="id"
-            constraintName="fk_user_auctioneer_auctioneer"
+            constraintName="fk_user_auctioneer_user"
             onDelete="RESTRICT"/>
 
     <addForeignKeyConstraint
@@ -197,7 +196,7 @@
             baseColumnNames="auctioneerid"
             referencedTableName="tc_auctioneers"
             referencedColumnNames="id"
-            constraintName="fk_auctioneer_user_auctioneer"
+            constraintName="fk_user_auctioneer_auctioneer"
             onDelete="RESTRICT"/>
   </changeSet>
 

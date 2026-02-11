@@ -15,7 +15,8 @@ public enum LinkType {
     USER_DEVICEGROUP(User.class, Devicegroup.class, "tc_user_devicegroup"),
     DEVICE_SIMCARD(Device.class, Simcard.class, "tc_device_simcard"),
     DEVICE_ASSET(Device.class, Asset.class, "tc_device_asset"),
-    CLIENT_ASSET(Client.class, Asset.class, "tc_client_asset");
+    CLIENT_ASSET(Client.class, Asset.class, "tc_client_asset"),
+    SUBRESELLER_DRU(Subreseller.class, Dru.class, "tc_subreseller_dru");
 
     private final Class<? extends BaseModel> ownerClass;
     private final Class<? extends BaseModel> propertyClass;
