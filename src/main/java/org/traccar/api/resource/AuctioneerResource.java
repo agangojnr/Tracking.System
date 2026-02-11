@@ -49,6 +49,8 @@ public class AuctioneerResource extends SimpleObjectResource<Auctioneer> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Auctioneer.class);
 
+
+    /*CREATION OF AUCTIONEER BY DRU ID*/
     @Path("create")
     @POST
     public Response add(Auctioneer entity, @QueryParam("druId") long druId) throws Exception {
@@ -72,6 +74,8 @@ public class AuctioneerResource extends SimpleObjectResource<Auctioneer> {
 
     }
 
+
+    /* VALIDATION TO AVOID DUPLICATE AUCTIONEER NAMES*/
     public boolean validate(Auctioneer entity) throws StorageException {
         String auctioneerName = entity.getAuctioneerName();
 
@@ -83,13 +87,12 @@ public class AuctioneerResource extends SimpleObjectResource<Auctioneer> {
         return auctioneer == null ? true : false;
     }
 
-
+/* QUERYING/LISTING AUCTIONEERS BY DRU ID*/
     @GET
     @Path("query")
     public Collection<Auctioneer> get(@QueryParam("druId") Long druId) throws StorageException{
         //LOGGER.info("This is it");
         if (druId != null && druId > 0) {
-            LOGGER.info("This is it");
             return storage.getJointObjects(baseClass, new Request(
                     new Columns.All(),
                     new Condition.GetOneJoinWhere(Auctioneer.class, "id", DruAuctioneer.class,"druid", "auctioneerid",  "druid", druId)));
@@ -98,6 +101,50 @@ public class AuctioneerResource extends SimpleObjectResource<Auctioneer> {
             return null;
         }
 
+    }
+    /* UPDATE/EDIT AUCTIONEERS */
+
+    /*DELETE AUCTIONEERS*/
+
+    /* LINK DEVICES TO AUCTIONEERS*/
+    @POST
+    @Path("link")
+    public Response linkGroupDevice(@QueryParam("auctioneerId") long auctioneerId, @QueryParam("deviceId") long deviceId) throws Exception{
+        //LOGGER.info("Received POST request -> auctioneerId: {}, deviceId: {}", auctioneerId, deviceId);
+        if(validateAuctioneerDeviceLink(auctioneerId,deviceId)){
+            permissionsService.link(LinkType.AUCTIONEER_DEVICE, auctioneerId, deviceId);
+            return Response.ok("{\"status\":\"Linked successfully\"}").build();
+        }else{
+            return Response.ok("{\"status\":\"Device already linked to the Auctioneer.\"}").build();
+        }
+
+    }
+
+
+    /* UNLINK AUCTIONEER TO DEVICES */
+    @DELETE
+    @Path("unlink")
+    public Response unlinkAuctioneerDevice(@QueryParam("auctioneerId") long auctioneerId, @QueryParam("deviceId") long deviceId) throws Exception{
+        if(!validateAuctioneerDeviceLink(auctioneerId,deviceId)) {
+            permissionsService.unlink(LinkType.AUCTIONEER_DEVICE, auctioneerId, deviceId);
+            return Response.ok("{\"status\":\"Unlinked successfully.\"}").build();
+        }else{
+            return Response.ok("{\"status\":\"The auctioneer-device link doesnot exist.\"}").build();
+        }
+    }
+
+    /* CHECKING IF LINK BETWEEN AUCTIONEER AND DEVICE EXIST*/
+    public boolean validateAuctioneerDeviceLink(long auctioneerId, long deviceId) throws StorageException {
+        // Query the database for a record matching both groupId and deviceId
+        AuctioneerDevice link = storage.getObject(AuctioneerDevice.class, new Request(
+                new Columns.All(),
+                new Condition.And(
+                        new Condition.Equals("auctioneerid", auctioneerId),
+                        new Condition.Equals("deviceid", deviceId)
+                )));
+
+        // If the record exists, return true; otherwise, false
+        return link == null ? true : false;
     }
 
 }
