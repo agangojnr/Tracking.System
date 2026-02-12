@@ -1,0 +1,83 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+  <changeSet id="modify-fk-subreseller-client-cascade" author="walter">
+
+    <!-- Drop existing foreign key -->
+    <dropForeignKeyConstraint
+            baseTableName="tc_subreseller_client"
+            constraintName="fk_subreseller_client_client"/>
+
+    <!-- Recreate with ON DELETE CASCADE -->
+    <addForeignKeyConstraint
+            baseTableName="tc_subreseller_client"
+            baseColumnNames="clientid"
+            referencedTableName="tc_clients"
+            referencedColumnNames="id"
+            constraintName="fk_subreseller_client_client"
+            onDelete="CASCADE"/>
+
+  </changeSet>
+
+  <changeSet id="rename-tc-group-name-to-groupname" author="walter">
+
+    <renameColumn
+            tableName="tc_groups"
+            oldColumnName="name"
+            newColumnName="groupname"
+            columnDataType="VARCHAR(255)"/>
+
+  </changeSet>
+
+  <changeSet id="add-fk-client-device" author="walter">
+
+    <!-- Drop if already exists -->
+    <preConditions onFail="MARK_RAN">
+      <foreignKeyConstraintExists
+              foreignKeyName="fk_client_device_device"/>
+    </preConditions>
+
+    <dropForeignKeyConstraint
+            baseTableName="tc_client_device"
+            constraintName="fk_client_device_device"/>
+
+    <dropForeignKeyConstraint
+            baseTableName="tc_client_device"
+            constraintName="fk_client_device_client"/>
+
+    <!-- Add device FK (CASCADE) -->
+    <addForeignKeyConstraint
+            baseTableName="tc_client_device"
+            baseColumnNames="deviceid"
+            referencedTableName="tc_devices"
+            referencedColumnNames="id"
+            constraintName="fk_client_device_device"
+            onDelete="CASCADE"/>
+
+    <!-- Add client FK (RESTRICT) -->
+    <addForeignKeyConstraint
+            baseTableName="tc_client_device"
+            baseColumnNames="clientid"
+            referencedTableName="tc_clients"
+            referencedColumnNames="id"
+            constraintName="fk_client_device_client"
+            onDelete="RESTRICT"/>
+
+  </changeSet>
+
+  <changeSet id="rename-tc-group-name-to-name" author="walter">
+
+    <renameColumn
+            tableName="tc_groups"
+            oldColumnName="groupname"
+            newColumnName="name"
+            columnDataType="VARCHAR(255)"/>
+
+  </changeSet>
+
+</databaseChangeLog>
+

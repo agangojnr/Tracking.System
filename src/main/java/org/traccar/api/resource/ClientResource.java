@@ -210,4 +210,76 @@ public class ClientResource extends ExtendedObjectResource<Client> {
         return client == null;
     }
 
+
+    @Path("{id}")
+    @DELETE
+    public Response remove(@PathParam("id") long id) throws Exception {
+
+        if(validateReference(id)){
+            LOGGER.info("testing delete");
+            try{
+                permissionsService.checkPermission(baseClass, getUserId(), id);
+                permissionsService.checkEdit(getUserId(), baseClass, false, false);
+
+                storage.removeObject(baseClass, new Request(new Condition.Equals("id", id)));
+
+                cacheManager.invalidateObject(true, baseClass, id, ObjectOperation.DELETE);
+
+                actionLogger.remove(request, getUserId(), baseClass, id);
+                //return Response.noContent().build();
+                return Response.ok("{\"status\":\"Deleted Successfully\"}").build();
+
+            } catch (Exception e) {
+                LOGGER.error("Unexpected error while deleting {} id={}",
+                        baseClass.getSimpleName(),id,e
+                );
+
+                return Response.serverError()
+                        .entity("{\"error\":\"Unexpected error occurred.\"}")
+                        .build();
+            }
+        }else{
+            return Response.status(Response.Status.CONFLICT)
+                    .entity("{\"error\":\"Cannot delete this record because it is referenced by other records.\"}")
+                    .build();
+        }
+
+    }
+
+    public boolean validateReference(long clientId) throws StorageException {
+
+        Long group = storage.getCountObjects(ClientGroup.class,
+                new Request(
+                        new Columns.All(),
+                        new Condition.CountGroupsinClient(ClientGroup.class, "clientid",clientId)
+                )
+        );
+
+        if (group <= 1){
+            Collection<ClientAsset> asset = storage.getObjects(ClientAsset.class,
+                    new Request(
+                            new Columns.All(),
+                            new Condition.Equals("clientid", clientId)
+                    )
+            );
+            //LOGGER.info("Group is 1 or less - groups = {}",group);
+            if (asset.isEmpty()){
+                //LOGGER.info("Asset is empty. Client Id = {}", clientId);
+                Collection<ClientDevice> device = storage.getObjects(ClientDevice.class,
+                        new Request(
+                                new Columns.All(),
+                                new Condition.Equals("clientid", clientId)
+                        )
+                );
+                if(device.isEmpty()){
+                    //LOGGER.info("device is empty");
+                    return true;
+                }
+                return false;
+            }
+            return false;
+        }
+
+        return false;
+    }
 }

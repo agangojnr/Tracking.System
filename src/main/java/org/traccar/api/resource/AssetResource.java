@@ -153,9 +153,7 @@ public class AssetResource extends SimpleObjectResource<Asset> {
             } catch (Exception e) {
                 LOGGER.error(
                         "Unexpected error while deleting {} id={}",
-                        baseClass.getSimpleName(),
-                        id,
-                        e
+                        baseClass.getSimpleName(),id, e
                 );
 
                 return Response.serverError()
@@ -171,8 +169,6 @@ public class AssetResource extends SimpleObjectResource<Asset> {
     }
 
     public boolean validateReference(long assetId) throws StorageException {
-        //String name = Simcard entity.getNetworkproviderid();
-
         Collection<DeviceAsset> asset = storage.getObjects(DeviceAsset.class,
                 new Request(
                         new Columns.All(),
@@ -180,7 +176,7 @@ public class AssetResource extends SimpleObjectResource<Asset> {
                 )
         );
         if (!asset.isEmpty()) {
-            return false;
+            return true;
         }
         return true;
     }

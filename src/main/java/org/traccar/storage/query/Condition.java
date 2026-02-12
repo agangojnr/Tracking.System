@@ -400,6 +400,36 @@ public interface Condition {
         public long getValue() { return value; }
     }
 
+    class OneJoinStrWhere implements Condition {
+        private final Class<?> ownerClass;
+        private final Class<?> pivotClass;
+        private final String ownerColumn;
+        private final String pivotColumn;
+        private final String pivotColumn1;
+        private final String searchColumn;
+        private final String value;
+
+        // Constructor
+        public OneJoinStrWhere(Class<?> ownerClass, String ownerColumn,
+                               Class<?> pivotClass, String pivotColumn, String pivotColumn1,
+                               String searchColumn, String value) {
+            this.ownerClass = ownerClass;
+            this.ownerColumn = ownerColumn;
+            this.pivotClass = pivotClass;
+            this.pivotColumn1 = pivotColumn1;
+            this.pivotColumn = pivotColumn;
+            this.searchColumn = searchColumn;
+            this.value = value;
+        }
+        public Class<?> getOwnerClass() { return ownerClass; }
+        public Class<?> getPivotClass() { return pivotClass; }
+        public String getOwnerColumn() { return ownerColumn; }
+        public String getPivotColumn() { return pivotColumn; }
+        public String getPivotColumn1() { return pivotColumn1; }
+        public String getSearchColumn() { return searchColumn; }
+        public String getValue() { return value; }
+    }
+
     class GetOneJoinWhere implements Condition {
         private final Class<?> ownerClass;
         private final String ownerColumn;
@@ -2315,6 +2345,23 @@ public interface Condition {
         public String getOwnerColumn() { return ownerColumn; }
         public Class<?> getPivotClass1() { return pivotClass1; }
         public String getPivotColumn1() { return pivotColumn1;}
+
+    }
+
+    class CountGroupsinClient implements Condition {
+        private final Class<?> ownerClass;
+        private final String searchColumn;
+        private final long searchValue;
+
+        // Constructor
+        public CountGroupsinClient(Class<?> ownerClass, String searchColumn, long searchValue){
+            this.ownerClass = ownerClass;
+            this.searchColumn = searchColumn;
+            this.searchValue = searchValue;
+        }
+        public Class<?> getOwnerClass() { return ownerClass; }
+        public String getSearchColumn() { return searchColumn; }
+        public long getSearchValue() { return searchValue;}
 
     }
 

@@ -127,7 +127,7 @@ public class DatabaseStorage extends Storage {
         query.append(" FROM ").append(getStorageName(clazz));
         //Here is the join conditions
         query.append(formatJoin(request.getCondition(),true));
-        logger.info("SQL - {}", query);
+        //logger.info("SQL - {}", query);
         //query.append(formatOrder(request.getOrder()));
 
         try {
@@ -602,6 +602,25 @@ public class DatabaseStorage extends Storage {
                     result.append(getStorageName(condition.getPivotClass()));
                     result.append(".");
                     result.append(condition.getPivotColumn1());
+                    result.append(" = ");result.append("'");
+                    result.append(condition.getValue());result.append("'");
+
+                }else if(genericCondition instanceof Condition.OneJoinStrWhere condition){
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn());
+
+                    result.append(" WHERE ");
+                    result.append(getStorageName(condition.getPivotClass()));
+                    result.append(".");
+                    result.append(condition.getSearchColumn());
                     result.append(" = ");result.append("'");
                     result.append(condition.getValue());result.append("'");
 
@@ -1262,7 +1281,6 @@ public class DatabaseStorage extends Storage {
                     result.append(getStorageName(condition.getPivotClass6()));
                     result.append(".");
                     result.append(condition.getPivotColumn6());
-                    //search
 
                     //Search clientid
                     result.append(" WHERE ");
@@ -2730,6 +2748,14 @@ public class DatabaseStorage extends Storage {
                     result.append(getStorageName(condition.getPivotClass1()));
                     result.append(".");
                     result.append(condition.getPivotColumn1());
+
+                }else if (genericCondition instanceof Condition.CountGroupsinClient condition){
+                    result.append(" WHERE ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getSearchColumn());
+                    result.append(" = ");result.append("'");
+                    result.append(condition.getSearchValue());result.append("'");
 
 
                 }else if (genericCondition instanceof Condition.CountSubResellerDevice condition){

@@ -460,7 +460,9 @@ public class DeviceResource extends BaseObjectResource<Device> {
     @Path("{id}")
     @DELETE
     public Response remove(@PathParam("id") long id) throws Exception {
+
         if(validateReference(id)){
+            LOGGER.info("testing delete");
             try{
                 permissionsService.checkPermission(baseClass, getUserId(), id);
                 permissionsService.checkEdit(getUserId(), baseClass, false, false);
