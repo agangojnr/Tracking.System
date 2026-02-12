@@ -89,7 +89,8 @@ public class DeviceResource extends BaseObjectResource<Device> {
 
     @GET
     @Path("query")
-    public Collection<Device> get(@QueryParam("clientId") Long clientId) throws Exception{
+    public Collection<Device> get(@QueryParam("clientId") Long clientId,
+                                  @QueryParam("subresellerId") Long subresellerId) throws Exception{
         //LOGGER.info("Testing here - {}", defaultClientId);
         /*QUERYING LINKED DEVICES BY CLIENTID*/
         if (clientId != null && clientId > 0) {
@@ -98,6 +99,17 @@ public class DeviceResource extends BaseObjectResource<Device> {
                     new Request(
                             new Columns.All(),
                             new Condition.LinkedDevicesbyClient(Device.class, "id",DeviceAsset.class, "deviceid", "assetid", ClientDevice.class,"clientid", "deviceid", clientId)
+                    )
+            );
+        }
+
+        /* QUERYING OF LINKED DEVICES BY SUBRESELLER */
+        else if (subresellerId != null && subresellerId > 0) {
+            return storage.getJointObjects(
+                    Device.class,
+                    new Request(
+                            new Columns.All(),
+                            new Condition.LinkedDevicesbySubreseller_UnlinkedtoAuctioneer(Device.class, "id",DeviceAsset.class, "deviceid", "assetid", AuctioneerDevice.class, "auctioneerid", "deviceid", ClientDevice.class,"clientid", "deviceid", Client.class, "id" ,SubresellerClient.class,"subresellerid","clientid", subresellerId)
                     )
             );
         }

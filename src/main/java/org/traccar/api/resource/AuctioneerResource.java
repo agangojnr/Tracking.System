@@ -152,9 +152,6 @@ public class AuctioneerResource extends SimpleObjectResource<Auctioneer> {
 
     }
 
-    /* ACUTIONEER ID VALIDATION DURING DELETE */
-
-
     /* LINK DEVICES TO AUCTIONEERS*/
     @POST
     @Path("link")

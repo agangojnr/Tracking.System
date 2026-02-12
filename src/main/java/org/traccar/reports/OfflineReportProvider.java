@@ -1,6 +1,7 @@
 
 package org.traccar.reports;
 
+import jakarta.inject.Inject;
 import org.apache.poi.ss.util.WorkbookUtil;
 import org.traccar.config.Config;
 import org.traccar.config.Keys;
@@ -16,25 +17,20 @@ import org.traccar.storage.query.Columns;
 import org.traccar.storage.query.Condition;
 import org.traccar.storage.query.Request;
 
-import jakarta.inject.Inject;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
-public class StopsReportProvider {
+public class OfflineReportProvider {
 
     private final Config config;
     private final ReportUtils reportUtils;
     private final Storage storage;
 
     @Inject
-    public StopsReportProvider(Config config, ReportUtils reportUtils, Storage storage) {
+    public OfflineReportProvider(Config config, ReportUtils reportUtils, Storage storage) {
         this.config = config;
         this.reportUtils = reportUtils;
         this.storage = storage;

@@ -82,6 +82,7 @@ public class StockResource extends BaseObjectResource<Device> {
         return null;
     }
 
+    /* GET ALL SIMCARDS BASED ON THE USER LEVEL - SUPER ADMIN AND RESELLER */
     @Path("allsimcards")
     @GET
     public Response getAllSimcards() throws Exception {
@@ -115,7 +116,7 @@ public class StockResource extends BaseObjectResource<Device> {
 
     }
 
-
+    /* QUERYING LINKED SIMCARDS BY LEVEL - SUPER ADMIN AND RESELLER */
     @Path("linkedsimcards")
     @GET
     public Response getLinkedSimcards() throws Exception {
@@ -152,6 +153,7 @@ public class StockResource extends BaseObjectResource<Device> {
 
     }
 
+    /* QUERYING UNLINKED SIMCARDS BY LEVEL - SUPER ADMIN AND RESELLER */
     @Path("unlinkedsimcards")
     @GET
     public Response getUnlinkedSimcards() throws Exception {
@@ -185,28 +187,49 @@ public class StockResource extends BaseObjectResource<Device> {
 
     }
 
+    /* GET ALL DEVICES BASED ON THE USER LEVEL - SUPER ADMIN AND RESELLER */
     @Path("alldevices")
     @GET
     public Response getAllDevices() throws Exception {
         long level = permissionsService.getUserAccessLevel(getUserId());
 
         if(level == 4){
-            Collection<Device> devices = storage.getJointObjects(
-                    Device.class,
+            /* All devices under super admin */
+            Collection<CompanyDevices> devices = storage.getJointObjects(
+                    CompanyDevices.class,
                     new Request(
-                            new Columns.All()
-                            //new Condition.InnerJoin(Device.class,"id", DeviceAsset.class,"deviceid")
+                            new Columns.Include(
+                                    "resellername AS ResellerName",
+                                    "subresellername AS SubresellerName",
+                                    "clientname AS clientName",
+                                    "name AS deviceName",
+                                    "uniqueid AS imei",
+                                    "phonenumber AS simcardNo",
+                                    "model AS deviceModel",
+                                    "status AS status"
+                            ),
+                            new Condition.GetAllDevices(Device.class,"id", "devicetypeid", ClientDevice.class,"clientid","deviceid", Client.class,"id", SubresellerClient.class, "subresellerid", "clientid", Subreseller.class, "id", ResellerSubreseller.class, "resellerid", "subresellerid", Reseller.class, "id",Devicetype.class, "id", DeviceSimcard.class,"deviceid", "simcardid", Simcard.class,"id")
                     )
             );
             return Response.ok(devices).build();
         } else if (level == 1) {
+
+            /* All devices under a reseller */
             long resellerId = permissionsService.getLevelGroupId(getUserId(), level);
-            Collection<Device> devices = storage.getJointObjects(
-                    Device.class,
+            Collection<CompanyDevices> devices = storage.getJointObjects(
+                    CompanyDevices.class,
                     new Request(
-                            new Columns.All(),
-                            //new Condition.InnerJoin(Device.class,"id", DeviceAsset.class,"deviceid")
-                            new Condition.FourJoinWhere1(Device.class,"id",  ClientDevice.class, "deviceid", "clientid", SubresellerClient.class, "subresellerid", ResellerSubreseller.class, "resellerid", "resellerid", resellerId)
+                            new Columns.Include(
+                                    "resellername AS ResellerName",
+                                    "subresellername AS SubresellerName",
+                                    "clientname AS clientName",
+                                    "name AS deviceName",
+                                    "uniqueid AS imei",
+                                    "phonenumber AS simcardNo",
+                                    "model AS deviceModel",
+                                    "status AS status"
+                            ),
+                            new Condition.GetResellerDevices(Device.class,"id", "devicetypeid", ClientDevice.class,"clientid","deviceid", Client.class,"id", SubresellerClient.class, "subresellerid", "clientid", Subreseller.class, "id", ResellerSubreseller.class, "resellerid", "subresellerid", Reseller.class, "id", Devicetype.class, "id", DeviceSimcard.class,"deviceid", "simcardid", Simcard.class,"id", resellerId)
                     )
             );
             return Response.ok(devices).build();
@@ -218,7 +241,7 @@ public class StockResource extends BaseObjectResource<Device> {
         }
 
     }
-
+    /* GET LINKED DEVICES BASED ON THE USER LEVEL - SUPER ADMIN AND RESELLER */
     @Path("linkeddevices")
     @GET
     public Response getLinkedDevices() throws Exception {

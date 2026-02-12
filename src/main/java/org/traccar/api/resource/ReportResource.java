@@ -10,19 +10,10 @@ import org.traccar.model.Event;
 import org.traccar.model.Position;
 import org.traccar.model.Report;
 import org.traccar.model.UserRestrictions;
-import org.traccar.reports.CombinedReportProvider;
-import org.traccar.reports.DevicesReportProvider;
-import org.traccar.reports.EventsReportProvider;
-import org.traccar.reports.RouteReportProvider;
-import org.traccar.reports.StopsReportProvider;
-import org.traccar.reports.SummaryReportProvider;
-import org.traccar.reports.TripsReportProvider;
+import org.traccar.reports.*;
 import org.traccar.reports.common.ReportExecutor;
 import org.traccar.reports.common.ReportMailer;
-import org.traccar.reports.model.CombinedReportItem;
-import org.traccar.reports.model.StopReportItem;
-import org.traccar.reports.model.SummaryReportItem;
-import org.traccar.reports.model.TripReportItem;
+import org.traccar.reports.model.*;
 import org.traccar.storage.StorageException;
 
 import jakarta.inject.Inject;
@@ -59,6 +50,9 @@ public class ReportResource extends SimpleObjectResource<Report> {
 
     @Inject
     private StopsReportProvider stopsReportProvider;
+
+    @Inject
+    private OfflineReportProvider offlineReportProvider;
 
     @Inject
     private SummaryReportProvider summaryReportProvider;
@@ -333,5 +327,27 @@ public class ReportResource extends SimpleObjectResource<Report> {
             devicesReportProvider.getExcel(stream, getUserId());
         });
     }
+
+//    @Path("offline")
+//    @GET
+//    public Collection<OfflineReportItem> getStops(
+//            @QueryParam("clientId") Long clientId,
+//            @QueryParam("subresellerId") Long subresellerId,
+//            @QueryParam("resellerId") Long resellerId,
+//            @QueryParam("from") Date from,
+//            @QueryParam("to") Date to) throws StorageException {
+//        //permissionsService.checkRestriction(getUserId(), UserRestrictions::getDisableReports);
+//        //actionLogger.report(request, getUserId(), false, "stops", from, to, deviceIds, groupIds);
+//        if (clientId != null && clientId > 0) {
+//            return offlineReportProvider.getObjects(getUserId(), from, to);
+//        } else if (subresellerId != null && subresellerId > 0) {
+//            return offlineReportProvider.getObjects(getUserId(), from, to);
+//        }else if (resellerId != null && resellerId > 0){
+//            return offlineReportProvider.getObjects(getUserId(), from, to);
+//        }else {
+//            return null;
+//        }
+//
+//    }
 
 }
