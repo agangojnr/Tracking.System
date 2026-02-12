@@ -966,6 +966,125 @@ public class DatabaseStorage extends Storage {
                     result.append(".");
                     result.append(condition.getPivotColumn9());
 
+                }else if (genericCondition instanceof Condition.GetAllUnlinkedDevices condition){
+                    //device_asset
+                    result.append(" LEFT JOIN ");
+                    result.append(getStorageName(condition.getPivotClass()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn());
+                    //client_device
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass1()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass1()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn1b());
+                    //Clients
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn2());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass1()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn1a());
+                    //subreseller_client
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass3()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass3()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn3b());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass1()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn1a());
+                    //subresellers
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass4()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass4()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn4());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass3()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn3a());
+                    //reseller_subreseller
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass5()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass5()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn5b());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass3()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn3a());
+                    //device_simcard
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass6()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass6()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn6a());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn());
+                    //simcard
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass7()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass7()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn7());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass6()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn6b());
+                    //device_simcard
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass8()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass8()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn8());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn1());
+
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass9()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass9()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn9());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass5()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn5a());
+
+                    //Unlinked assets
+                    result.append(" WHERE ");
+                    result.append(getStorageName(condition.getPivotClass()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn());
+                    result.append(" IS NULL");
+
                 }if(genericCondition instanceof Condition.GetResellerDevices condition){
                     //Client_device
                     result.append(" INNER JOIN ");
@@ -1075,6 +1194,83 @@ public class DatabaseStorage extends Storage {
                     result.append("'%");
                     result.append(condition.getSearchValue());
                     result.append("%'");
+
+                }if(genericCondition instanceof Condition.GetAllDevicesbyClient condition){
+                    //device_asset
+                    result.append(" LEFT JOIN ");
+                    result.append(getStorageName(condition.getPivotClass1()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass1()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn1a());
+                    //Assets
+                    result.append(" LEFT JOIN ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass1()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn1b());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn2());
+                    //device_simcards
+                    result.append(" LEFT JOIN ");
+                    result.append(getStorageName(condition.getPivotClass3()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass3()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn3a());
+                    //Simcards
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass4()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass3()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn3b());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass4()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn4());
+                    //Client_device
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass5()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass5()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn5b());
+                    //devicetype
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass6()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn1());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass6()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn6());
+                    //search
+
+                    //Search clientid
+                    result.append(" WHERE ");
+                    result.append(getStorageName(condition.getPivotClass5()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn5a());
+                    result.append(" = ");
+                    result.append(condition.getSearchValue());
 
                 }else if(genericCondition instanceof Condition.FourJoinWhereSearch condition){
                     result.append(" INNER JOIN ");
@@ -2358,6 +2554,118 @@ public class DatabaseStorage extends Storage {
                     result.append(condition.getPivotColumn5());
                     result.append(" = ");result.append("'");
                     result.append(condition.getValue1());result.append("'");
+
+                }else if (genericCondition instanceof Condition.GetResellerUnlinkedDevices condition){
+                    result.append(" LEFT JOIN ");
+                    result.append(getStorageName(condition.getPivotClass()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn());
+
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass1()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass1()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn1b());
+
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn2());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass1()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn1a());
+
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass3()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass3()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn3b());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass1()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn1a());
+
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass4()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass4()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn4());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass3()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn3a());
+
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass5()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass5()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn5());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass3()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn3a());
+                    //Device_simcards
+                    result.append(" LEFT JOIN ");
+                    result.append(getStorageName(condition.getPivotClass6()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass6()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn6a());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn());
+                    //Simcards
+                    result.append(" LEFT JOIN ");
+                    result.append(getStorageName(condition.getPivotClass7()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass7()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn7());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass6()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn6b());
+                    //Devicetypes
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass8()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass8()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn8());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn1());
+
+                    result.append(" WHERE ");
+                    result.append(getStorageName(condition.getPivotClass5()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn5());
+                    result.append(" = ");result.append("'");
+                    result.append(condition.getValue1());result.append("'");
+                    result.append(" AND ");
+                    result.append(getStorageName(condition.getPivotClass()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn());
+                    result.append(" IS NULL ");
 
                 }else if (genericCondition instanceof Condition.CountResellerDevice condition){
                     result.append(" INNER JOIN ");

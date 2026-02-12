@@ -127,56 +127,101 @@ public class DeviceResource extends BaseObjectResource<Device> {
 
     /*QUERYING ALL DEVICES*/
     @GET
-    public Stream<Device> get(
-            @QueryParam("all") boolean all, @QueryParam("userId") long userId,
-            @QueryParam("clientId") Long clientId,
-            @QueryParam("uniqueId") List<String> uniqueIds,
-            @QueryParam("id") List<Long> deviceIds,
-            @QueryParam("excludeAttributes") boolean excludeAttributes) throws StorageException {
+    public Stream<DevicesOnClient> get(@QueryParam("clientId") Long clientId)
+            throws StorageException {
 
-        Columns columns = excludeAttributes ? new Columns.Exclude("attributes") : new Columns.All();
-
-        if (!uniqueIds.isEmpty() || !deviceIds.isEmpty()) {
-
-            List<Device> result = new LinkedList<>();
-            for (String uniqueId : uniqueIds) {
-                result.addAll(storage.getObjects(Device.class, new Request(
-                        columns,
-                        new Condition.And(
-                                new Condition.Equals("uniqueId", uniqueId),
-                                new Condition.Permission(User.class, getUserId(), Device.class)))));
-            }
-            for (Long deviceId : deviceIds) {
-                result.addAll(storage.getObjects(Device.class, new Request(
-                        columns,
-                        new Condition.And(
-                                new Condition.Equals("id", deviceId),
-                                new Condition.Permission(User.class, getUserId(), Device.class)))));
-            }
-            return result.stream();
-
-        } else {
-
-            var conditions = new LinkedList<Condition>();
-
-            if (all) {
-                if (permissionsService.notAdmin(getUserId())) {
-                    conditions.add(new Condition.Permission(User.class, getUserId(), baseClass));
-
-                    return storage.getObjectsStream(baseClass, new Request(
-                            new Columns.All(), Condition.merge(conditions), new Order("name")));
-                }
-            } else if (clientId != null && clientId > 0) {
-                return storage.getJointObjectStream(baseClass, new Request(
-                        new Columns.All(),
-                        new Condition.TwoJoinWhere(Device.class, "id",  ClientDevice.class, "deviceid","clientid", clientId)));
-            }
-
-            return storage.getObjectsStream(baseClass, new Request(
-                    columns, Condition.merge(conditions), new Order("name")));
-
+        if (clientId == null || clientId <= 0) {
+            return Stream.empty();
         }
+        return storage.getJointObjectStream(
+                DevicesOnClient.class,
+                new Request(
+                        new Columns.Include(
+                                "assetname AS deviceName",
+                                "uniqueid AS imei",
+                                "phonenumber AS simcardNo",
+                                "model AS deviceModel",
+                                "status AS status",
+                                "expirationtime AS expirationTime"
+                        ),
+                        new Condition.GetAllDevicesbyClient(
+                                Device.class, "id", "devicetypeid",
+                                DeviceAsset.class, "deviceid", "assetid",
+                                Asset.class, "id",
+                                DeviceSimcard.class, "deviceid", "simcardid",
+                                Simcard.class, "id",
+                                ClientDevice.class, "clientid", "deviceid",
+                                Devicetype.class, "id",
+                                clientId
+                        )
+                )
+        );
     }
+
+//    @GET
+//    public Stream<Device> get(
+//            @QueryParam("all") boolean all, @QueryParam("userId") long userId,
+//            @QueryParam("clientId") Long clientId,
+//            @QueryParam("uniqueId") List<String> uniqueIds,
+//            @QueryParam("id") List<Long> deviceIds,
+//            @QueryParam("excludeAttributes") boolean excludeAttributes) throws StorageException {
+//
+//        Columns columns = excludeAttributes ? new Columns.Exclude("attributes") : new Columns.All();
+//
+//        if (!uniqueIds.isEmpty() || !deviceIds.isEmpty()) {
+//
+//            List<Device> result = new LinkedList<>();
+//            for (String uniqueId : uniqueIds) {
+//                result.addAll(storage.getObjects(Device.class, new Request(
+//                        columns,
+//                        new Condition.And(
+//                                new Condition.Equals("uniqueId", uniqueId),
+//                                new Condition.Permission(User.class, getUserId(), Device.class)))));
+//            }
+//            for (Long deviceId : deviceIds) {
+//                result.addAll(storage.getObjects(Device.class, new Request(
+//                        columns,
+//                        new Condition.And(
+//                                new Condition.Equals("id", deviceId),
+//                                new Condition.Permission(User.class, getUserId(), Device.class)))));
+//            }
+//            return result.stream();
+//
+//
+//        } else {
+//
+//            var conditions = new LinkedList<Condition>();
+//
+//            if (all) {
+//                if (permissionsService.notAdmin(getUserId())) {
+//                    conditions.add(new Condition.Permission(User.class, getUserId(), baseClass));
+//                    return storage.getObjectsStream(baseClass, new Request(
+//                            new Columns.All(), Condition.merge(conditions), new Order("name")));
+//                }
+//            } else if (clientId != null && clientId > 0) {
+//                Stream<CompanyDevices> result = storage.getJointObjectStream(
+//                        CompanyDevices.class,
+//                        new Request(
+//                                new Columns.Include(
+//                                        "subresellername AS SubresellerName",
+//                                        "clientname AS clientName",
+//                                        "assetname AS deviceName",
+//                                        "uniqueid AS imei",
+//                                        "phonenumber AS simcardNo",
+//                                        "model AS deviceModel",
+//                                        "status AS status",
+//                                        "expirationtime AS Expiration"
+//
+//                                ),
+//                        new Condition.GetAllDevicesbyClient(Device.class, "id", DeviceAsset.class, "deviceid", "assetid", Asset.class, "id", DeviceSimcard.class, "deviceid", "simcardid", Simcard.class, "id",  ClientDevice.class, "clientid", "deviceid", clientId)));
+//                return result.stream();
+//            }
+//
+//            return storage.getObjectsStream(baseClass, new Request(
+//                    columns, Condition.merge(conditions), new Order("name")));
+//
+//        }
+//    }
 
 
     @GET

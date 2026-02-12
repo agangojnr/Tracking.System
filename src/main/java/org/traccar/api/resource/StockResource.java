@@ -294,6 +294,7 @@ public class StockResource extends BaseObjectResource<Device> {
 
     }
 
+    /* GET UNLINKED DEVICES BASED ON THE USER LEVEL - SUPER ADMIN AND RESELLER */
     @Path("unlinkeddevices")
     @GET
     public Response getUnlinkedDevices() throws Exception {
@@ -313,7 +314,7 @@ public class StockResource extends BaseObjectResource<Device> {
                                     "status AS status"
                             ),
                             //new Condition.FiveJoinWhere(Device.class,"id", DeviceAsset.class,"deviceid", "clientid", ClientDevice.class,  "subresellerid", SubresellerClient.class, "subresellerid", ResellerSubreseller.class, "resellerid", "resellerid", resellerId)
-                            new Condition.LeftJoin(Device.class,"id", DeviceAsset.class,"deviceid")
+                            new Condition.GetAllUnlinkedDevices(Device.class,"id","devicetypeid", DeviceAsset.class,"deviceid", ClientDevice.class,"clientid", "deviceid", Client.class,"id", SubresellerClient.class, "subresellerid",  "clientid", Subreseller.class, "id", ResellerSubreseller.class, "resellerid", "subresellerid", DeviceSimcard.class, "deviceid","simcardid", Simcard.class, "id", Devicetype.class, "id", Reseller.class, "id")
                 )
             );
             return Response.ok(devices).build();
@@ -332,8 +333,7 @@ public class StockResource extends BaseObjectResource<Device> {
                                     "model AS deviceModel",
                                     "status AS status"
                             ),
-                            new Condition.LeftJoinFourJoinWhere(Device.class,"id", DeviceAsset.class,"deviceid", "clientid", ClientDevice.class,  "subresellerid", SubresellerClient.class, "subresellerid", ResellerSubreseller.class, "resellerid", "resellerid", resellerId)
-                            //new Condition.LeftJoin(Device.class,"id", DeviceAsset.class,"deviceid")
+                            new Condition.GetResellerUnlinkedDevices(Device.class,"id","devicetypeid", DeviceAsset.class,"deviceid", ClientDevice.class,"clientid", "deviceid", Client.class,"id", SubresellerClient.class, "subresellerid",  "clientid", Subreseller.class, "id", ResellerSubreseller.class, "subresellerid", DeviceSimcard.class, "deviceid","simcardid", Simcard.class, "id", Devicetype.class, "id", resellerId)
                     )
             );
             return Response.ok(devices).build();

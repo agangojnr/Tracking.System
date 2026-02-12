@@ -6,17 +6,14 @@ import org.traccar.storage.StorageName;
 import java.util.Date;
 
 @StorageName("tc_devices")
-public class CompanyDevices {
-    private String resellerName;
-    private String subresellerName;
-    private String clientName;
+public class DevicesOnClient {;
     private String deviceName;
     private String imei;
     private String deviceModel;
     private String simcardNo;
     private Date lastReportDate;
     private String status;
-    private Date expirationTime;
+    private String expirationTime;
 
 
     // Getters and setters
@@ -34,20 +31,6 @@ public class CompanyDevices {
         this.deviceName = deviceName;
     }
 
-    public String getSubresellerName() {
-        return subresellerName;
-    }
-    public void setSubresellerName(String subresellerName) {
-        this.subresellerName = subresellerName;
-    }
-
-    public String getClientName() {
-        return clientName;
-    }
-    public void setClientName(String clientName) {
-        this.clientName = clientName;
-    }
-
     public String getDeviceModel() {
         return deviceModel;
     }
@@ -60,13 +43,6 @@ public class CompanyDevices {
     }
     public void setSimcardNo(String simcardNo) {
         this.simcardNo = simcardNo;
-    }
-
-    public String getResellerName() {
-        return resellerName;
-    }
-    public void setResellerName(String resellerName) {
-        this.resellerName = resellerName;
     }
 
     public String getStatus() {
@@ -83,10 +59,10 @@ public class CompanyDevices {
         this.lastReportDate = lastReportDate;
     }
 
-    public Date getExpirationTime() {
+    public String getExpirationTime() {
         return expirationTime;
     }
-    public void setExpirationTime(Date expirationTime) {
+    public void setExpirationTime(String expirationTime) {
         this.expirationTime = expirationTime;
     }
 }
