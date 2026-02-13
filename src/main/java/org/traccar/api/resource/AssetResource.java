@@ -75,12 +75,12 @@ public class AssetResource extends SimpleObjectResource<Asset> {
     }
 
     public boolean validate(Asset entity) throws StorageException {
-        String name = entity.getName();
+        String assetName = entity.getAssetName();
 
         Asset asset = storage.getObject(Asset.class, new Request(
                 new Columns.All(),
                 new Condition.And(
-                        new Condition.Equals("name", name),
+                        new Condition.Equals("assetname", assetName),
                         new Condition.Permission(User.class, getUserId(), Asset.class))));
 
         return asset == null;

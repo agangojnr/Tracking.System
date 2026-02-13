@@ -6,14 +6,14 @@ import org.traccar.storage.StorageName;
 @StorageName("tc_assets")
 public class Asset extends ExtendedModel {
 
-    private String name;
+    private String assetName;
 
-    public String getName() {
-        return name;
+    public String getAssetName() {
+        return assetName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setAssetName(String assetName) {
+        this.assetName = assetName;
     }
 
     private Long assettypeid;

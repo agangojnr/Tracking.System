@@ -78,12 +78,12 @@ public class PermissionsResource  extends BaseResource {
             Asset asset = storage.getObject(
                     Asset.class,
                     new Request(
-                            new Columns.Include("name"),
+                            new Columns.Include("assetname"),
                             new Condition.Equals("id", permission.getPropertyId())
                     )
             );
 
-            String newName = asset != null ? asset.getName() : null;
+            String newName = asset != null ? asset.getAssetName() : null;
             Device device = storage.getObject(
                     Device.class,
                     new Request(
