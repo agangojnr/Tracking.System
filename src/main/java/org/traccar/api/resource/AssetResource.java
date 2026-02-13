@@ -108,7 +108,7 @@ public class AssetResource extends SimpleObjectResource<Asset> {
             conditions.add(new Condition.Permission(User.class, userId, Asset.class).excludeGroups());
         }
         return storage.getObjects(baseClass, new Request(
-                new Columns.All(), Condition.merge(conditions), new Order("name")));
+                new Columns.All(), Condition.merge(conditions), new Order("assetname")));
     }
 
     @Path("update/{id}")
