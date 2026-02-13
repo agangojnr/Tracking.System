@@ -200,15 +200,15 @@
             onDelete="RESTRICT"/>
   </changeSet>
 
-<!--  <changeSet id="rename-tc-asset-name-to-assetname" author="walter">-->
+  <changeSet id="rename-tc-asset-name-to-assetname" author="walter">
 
-<!--    <renameColumn-->
-<!--            tableName="tc_assets"-->
-<!--            oldColumnName="name"-->
-<!--            newColumnName="assetname"-->
-<!--            columnDataType="VARCHAR(255)"/>-->
+    <renameColumn
+            tableName="tc_assets"
+            oldColumnName="name"
+            newColumnName="assetname"
+            columnDataType="VARCHAR(255)"/>
 
-<!--  </changeSet>-->
+  </changeSet>
 
 </databaseChangeLog>
 

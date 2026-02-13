@@ -137,12 +137,13 @@ public class DeviceResource extends BaseObjectResource<Device> {
                 DevicesOnClient.class,
                 new Request(
                         new Columns.Include(
-                                "assetname AS deviceName",
-                                "uniqueid AS imei",
-                                "phonenumber AS simcardNo",
-                                "model AS deviceModel",
-                                "status AS status",
-                                "expirationtime AS expirationTime"
+                                "tc_devices.id AS id",
+                                "tc_assets.assetname AS deviceName",
+                                "tc_devices.uniqueid AS imei",
+                                "tc_simcards.phonenumber AS simcardNo",
+                                "tc_devicetypes.model AS deviceModel",
+                                "tc_devices.status AS status",
+                                "tc_devices.expirationtime AS expirationTime"
                         ),
                         new Condition.GetAllDevicesbyClient(
                                 Device.class, "id", "devicetypeid",

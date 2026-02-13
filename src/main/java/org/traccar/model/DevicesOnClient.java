@@ -8,6 +8,7 @@ import java.util.Date;
 @StorageName("tc_devices")
 public class DevicesOnClient {;
     private String deviceName;
+    private long id;
     private String imei;
     private String deviceModel;
     private String simcardNo;
@@ -17,6 +18,13 @@ public class DevicesOnClient {;
 
 
     // Getters and setters
+    public long getId() {
+        return id;
+    }
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public String getImei() {
         return imei;
     }

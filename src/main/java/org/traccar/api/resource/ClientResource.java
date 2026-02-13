@@ -216,7 +216,7 @@ public class ClientResource extends ExtendedObjectResource<Client> {
     public Response remove(@PathParam("id") long id) throws Exception {
 
         if(validateReference(id)){
-            LOGGER.info("testing delete");
+            //LOGGER.info("testing delete");
             try{
                 permissionsService.checkPermission(baseClass, getUserId(), id);
                 permissionsService.checkEdit(getUserId(), baseClass, false, false);
