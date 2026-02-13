@@ -463,12 +463,12 @@ public class DeviceResource extends BaseObjectResource<Device> {
     public Response remove(@PathParam("id") long id) throws Exception {
 
         if(validateReference(id)){
-            LOGGER.info("testing delete");
             try{
                 permissionsService.checkPermission(baseClass, getUserId(), id);
                 permissionsService.checkEdit(getUserId(), baseClass, false, false);
 
                 storage.removeObject(baseClass, new Request(new Condition.Equals("id", id)));
+                storage.removeObject(ClientDevice.class, new Request(new Condition.Equals("deviceid", id)));
 
                 cacheManager.invalidateObject(true, baseClass, id, ObjectOperation.DELETE);
 
@@ -479,9 +479,7 @@ public class DeviceResource extends BaseObjectResource<Device> {
             } catch (Exception e) {
                 LOGGER.error(
                         "Unexpected error while deleting {} id={}",
-                        baseClass.getSimpleName(),
-                        id,
-                        e
+                        baseClass.getSimpleName(), id, e
                 );
 
                 return Response.serverError()

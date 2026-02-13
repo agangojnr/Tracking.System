@@ -30,7 +30,7 @@ public class AssetPermissionResource extends BaseResource {
 
     @POST
     public Response linkDeviceAsset(@QueryParam("assetId") long assetId, @QueryParam("deviceId") long deviceId) throws Exception{
-        LOGGER.info("Received POST request -> assetId: {}, deviceId: {}", assetId, deviceId);
+        //LOGGER.info("Received POST request -> assetId: {}, deviceId: {}", assetId, deviceId);
         if(!validateDeviceAssetLink(assetId,deviceId)){
             permissionsService.link(LinkType.DEVICE_ASSET, deviceId,assetId);
             /* Updating device name on tc_devices table*/
@@ -44,7 +44,7 @@ public class AssetPermissionResource extends BaseResource {
 
             String newName = asset != null ? asset.getAssetName() : null;
 
-            LOGGER.info("Asset name = {}", newName);
+            //LOGGER.info("Asset name = {}", newName);
             Device device = storage.getObject(
                     Device.class,
                     new Request(

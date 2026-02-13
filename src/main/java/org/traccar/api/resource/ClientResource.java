@@ -262,6 +262,16 @@ public class ClientResource extends ExtendedObjectResource<Client> {
                             new Condition.Equals("clientid", clientId)
                     )
             );
+            if(group == 1){
+                Collection<ClientGroup> result = storage.getObjects(ClientGroup.class,
+                        new Request(
+                                new Columns.Include("groupid"),
+                                new Condition.Equals("clientid", clientId)
+                        )
+                );
+                long groupId = result.isEmpty() ? 0 : result.iterator().next().getGroupId();
+                storage.removeObject(Group.class, new Request(new Condition.Equals("id", groupId)));
+            }
             //LOGGER.info("Group is 1 or less - groups = {}",group);
             if (asset.isEmpty()){
                 //LOGGER.info("Asset is empty. Client Id = {}", clientId);
