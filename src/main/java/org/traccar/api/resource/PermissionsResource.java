@@ -82,8 +82,10 @@ public class PermissionsResource  extends BaseResource {
                             new Condition.Equals("id", permission.getPropertyId())
                     )
             );
+            LOGGER.info("Testing linkage - {}",asset.getAssetName());
 
             String newName = asset != null ? asset.getAssetName() : null;
+            LOGGER.info("Testing linkage - {}", newName);
             Device device = storage.getObject(
                     Device.class,
                     new Request(

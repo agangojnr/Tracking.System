@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.traccar.api.BaseResource;
 import org.traccar.api.security.PermissionsService;
+import org.traccar.model.Asset;
+import org.traccar.model.Device;
 import org.traccar.model.DeviceAsset;
 import org.traccar.model.LinkType;
 import org.traccar.storage.StorageException;
@@ -28,9 +30,40 @@ public class AssetPermissionResource extends BaseResource {
 
     @POST
     public Response linkDeviceAsset(@QueryParam("assetId") long assetId, @QueryParam("deviceId") long deviceId) throws Exception{
-        //LOGGER.info("Received POST request -> clientId: {}, deviceId: {}", clientId, deviceId);
+        LOGGER.info("Received POST request -> assetId: {}, deviceId: {}", assetId, deviceId);
         if(!validateDeviceAssetLink(assetId,deviceId)){
             permissionsService.link(LinkType.DEVICE_ASSET, deviceId,assetId);
+            /* Updating device name on tc_devices table*/
+            Asset asset = storage.getObject(
+                    Asset.class,
+                    new Request(
+                            new Columns.Include("assetname"),
+                            new Condition.Equals("id", assetId)
+                    )
+            );
+
+            String newName = asset != null ? asset.getAssetName() : null;
+
+            LOGGER.info("Asset name = {}", newName);
+            Device device = storage.getObject(
+                    Device.class,
+                    new Request(
+                            new Columns.All(),
+                            new Condition.Equals("id", deviceId)
+                    )
+            );
+
+            if (device != null) {
+                device.setName(newName); // 👈 update specific column
+
+                storage.updateObject(
+                        device,
+                        new Request(
+                                new Columns.Include("name"),
+                                new Condition.Equals("id", device.getId())
+                        )
+                );
+            }
             return Response.ok("{\"status\":\"Linked successfully.\"}").build();
         }else{
             return Response.ok("{\"status\":\"Asset already linked to the device.\"}").build();
@@ -41,6 +74,26 @@ public class AssetPermissionResource extends BaseResource {
     public Response unlinkDeviceAsset(@QueryParam("assetId") long assetId, @QueryParam("deviceId") long deviceId) throws Exception{
         if(validateDeviceAssetunLink(assetId,deviceId)){
         permissionsService.unlink(LinkType.DEVICE_ASSET, deviceId,assetId);
+            String newName = "No Asset";
+            Device device = storage.getObject(
+                    Device.class,
+                    new Request(
+                            new Columns.All(),
+                            new Condition.Equals("id", deviceId)
+                    )
+            );
+
+            if (device != null) {
+                device.setName(newName); // 👈 update specific column
+
+                storage.updateObject(
+                        device,
+                        new Request(
+                                new Columns.Include("name"),
+                                new Condition.Equals("id", device.getId())
+                        )
+                );
+            }
             return Response.ok("{\"status\":\"Link deleted successfully.\"}").build();
         }else{
             return Response.ok("{\"status\":\"Asset already linked to the device.\"}").build();
