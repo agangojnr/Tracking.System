@@ -4,13 +4,13 @@ import org.traccar.storage.StorageName;
 
 @StorageName("tc_networkproviders")
 public class Networkprovider extends ExtendedModel{
-    private String name;
+    private String networkproviderName;
 
-    public String getName() {
-        return name;
+    public String getNetworkprovidername() {
+        return networkproviderName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNetworkprovidername(String networkproviderName) {
+        this.networkproviderName = networkproviderName;
     }
 }

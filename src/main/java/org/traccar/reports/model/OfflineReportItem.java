@@ -1,14 +1,17 @@
 
 package org.traccar.reports.model;
 
-public class OfflineReportItem extends BaseReportItem {
+import org.traccar.storage.StorageName;
+
+@StorageName("tc_devices")
+public class OfflineReportItem {
     private String resellerName;
     private String subresellerName;
     private String clientName;
     private String assetName;
     private String deviceType;
     private String imei;
-    private String simcardType;
+    //private String simcardType;
     private String simcard;
 
 
@@ -44,7 +47,7 @@ public class OfflineReportItem extends BaseReportItem {
     public String getImei() {
         return imei;
     }
-    public void setImei(String positionId) {
+    public void setImei(String imei) {
         this.imei = imei;
     }
 
@@ -62,10 +65,10 @@ public class OfflineReportItem extends BaseReportItem {
         this.simcard = simcard;
     }
 
-    public String getSimcardType() {
-        return simcardType;
-    }
-    public void setSimcardType(String simcardType) {
-        this.simcardType = simcardType;
-    }
+//    public String getSimcardType() {
+//        return simcardType;
+//    }
+//    public void setSimcardType(String simcardType) {
+//        this.simcardType = simcardType;
+//    }
 }

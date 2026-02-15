@@ -2589,6 +2589,435 @@ public interface Condition {
 
     }
 
+    class getResellerOfflineDevice implements Condition {
+        private final Class<?> ownerClass;
+        private final String ownerColumn;
+        private final String ownerColumn1;
+        private final Class<?> pivotClass1;
+        private final String pivotColumn1a;
+        private final String pivotColumn1b;
+        private final Class<?> pivotClass2;
+        private final String pivotColumn2;
+        private final Class<?> pivotClass3;
+        private final String pivotColumn3a;
+        private final String pivotColumn3b;
+
+        private final Class<?> pivotClass4;
+        private final String pivotColumn4;
+        private final Class<?> pivotClass5;
+        private final String pivotColumn5a;
+        private final String pivotColumn5b;
+        private final Class<?> pivotClass6;
+        private final String pivotColumn6;
+        private final Class<?> pivotClass7;
+        private final String pivotColumn7;
+        private final Class<?> pivotClass8;
+        private final String pivotColumn8;
+        private final Class<?> pivotClass9;
+        private final String pivotColumn9a;
+        private final String pivotColumn9b;
+        private final Class<?> pivotClass10;
+        private final String pivotColumn10a;
+        private final String pivotColumn10b;
+        private final Class<?> pivotClass11;
+        private final String pivotColumn11;
+
+        private final String searchColumn;
+        private final long searchValue;
+        private final String fromValue;
+        private final String toValue;
+        private final String dateColumn;
+
+        private final String searchColumn1;
+        private final String searchValue1;
+
+        // Constructor
+        public getResellerOfflineDevice(Class<?> ownerClass, String ownerColumn,String ownerColumn1,
+                                         Class<?> pivotClass1, String pivotColumn1a, String pivotColumn1b,
+                                         Class<?> pivotClass2, String pivotColumn2,
+                                         Class<?> pivotClass3,String pivotColumn3a,String pivotColumn3b,
+                                         Class<?> pivotClass4,String pivotColumn4,
+                                         Class<?> pivotClass5,String pivotColumn5a,String pivotColumn5b,
+                                        Class<?> pivotClass6,String pivotColumn6,
+                                        Class<?> pivotClass7,String pivotColumn7,
+                                        Class<?> pivotClass8,String pivotColumn8,
+                                        Class<?> pivotClass9,String pivotColumn9a,String pivotColumn9b,
+                                        Class<?> pivotClass10,String pivotColumn10a,String pivotColumn10b,
+                                        Class<?> pivotClass11,String pivotColumn11,
+
+                                         String searchColumn,
+                                         long searchValue,
+                                         String searchColumn1,
+                                         String searchValue1,
+                                         String fromValue,
+                                         String toValue,
+                                         String dateColumn ) {
+            this.ownerClass = ownerClass;
+            this.ownerColumn = ownerColumn;
+            this.ownerColumn1 = ownerColumn1;
+            this.pivotClass1 = pivotClass1;
+            this.pivotColumn1a = pivotColumn1a;
+            this.pivotColumn1b = pivotColumn1b;
+            this.pivotClass2 = pivotClass2;
+            this.pivotColumn2 = pivotColumn2;
+            this.pivotClass3 = pivotClass3;
+            this.pivotColumn3a = pivotColumn3a;
+            this.pivotColumn3b = pivotColumn3b;
+            this.pivotClass4 = pivotClass4;
+            this.pivotColumn4 = pivotColumn4;
+            this.pivotClass5 = pivotClass5;
+            this.pivotColumn5a = pivotColumn5a;
+            this.pivotColumn5b = pivotColumn5b;
+            this.pivotClass6 = pivotClass6;
+            this.pivotColumn6 = pivotColumn6;
+            this.pivotClass7 = pivotClass7;
+            this.pivotColumn7 = pivotColumn7;
+            this.pivotClass8 = pivotClass8;
+            this.pivotColumn8 = pivotColumn8;
+            this.pivotClass9 = pivotClass9;
+            this.pivotColumn9a = pivotColumn9a;
+            this.pivotColumn9b = pivotColumn9b;
+            this.pivotClass10 = pivotClass10;
+            this.pivotColumn10a = pivotColumn10a;
+            this.pivotColumn10b = pivotColumn10b;
+            this.pivotClass11 = pivotClass11;
+            this.pivotColumn11 = pivotColumn11;
+
+            this.searchColumn = searchColumn;
+            this.searchValue = searchValue;
+            this.searchColumn1 = searchColumn1;
+            this.searchValue1 = searchValue1;
+            this.fromValue = fromValue;
+            this.toValue = toValue;
+            this.dateColumn = dateColumn;
+
+        }
+        public Class<?> getOwnerClass() { return ownerClass; }
+        public String getOwnerColumn() { return ownerColumn; }
+        public String getOwnerColumn1() { return ownerColumn1; }
+        public Class<?> getPivotClass1() { return pivotClass1; }
+        public String getPivotColumn1a() { return pivotColumn1a; }
+        public String getPivotColumn1b() { return pivotColumn1b; }
+        public Class<?> getPivotClass2() { return pivotClass2; }
+        public String getPivotColumn2() { return pivotColumn2; }
+        public Class<?> getPivotClass3() { return pivotClass3; }
+        public String getPivotColumn3a() { return pivotColumn3a; }
+        public String getPivotColumn3b() { return pivotColumn3b; }
+        public Class<?> getPivotClass4() { return pivotClass4; }
+        public String getPivotColumn4() { return pivotColumn4; }
+        public Class<?> getPivotClass5() { return pivotClass5; }
+        public String getPivotColumn5a() { return pivotColumn5a; }
+        public String getPivotColumn5b() { return pivotColumn5b; }
+        public Class<?> getPivotClass6() { return pivotClass6; }
+        public String getPivotColumn6() { return pivotColumn6; }
+        public Class<?> getPivotClass7() { return pivotClass7; }
+        public String getPivotColumn7() { return pivotColumn7; }
+        public Class<?> getPivotClass8() { return pivotClass8; }
+        public String getPivotColumn8() { return pivotColumn8; }
+        public Class<?> getPivotClass9() { return pivotClass9; }
+        public String getPivotColumn9a() { return pivotColumn9a; }
+        public String getPivotColumn9b() { return pivotColumn9b; }
+        public Class<?> getPivotClass10() { return pivotClass10; }
+        public String getPivotColumn10a() { return pivotColumn10a; }
+        public String getPivotColumn10b() { return pivotColumn10b; }
+        public Class<?> getPivotClass11() { return pivotClass11; }
+        public String getPivotColumn11() { return pivotColumn11; }
+        public String searchColumn() { return searchColumn; }
+        public long searchValue() { return searchValue; }
+        public String searchColumn1() { return searchColumn1; }
+        public String searchValue1() { return searchValue1; }
+        public String fromValue() { return fromValue; }
+        public String toValue() { return toValue; }
+        public String dateColumn() { return dateColumn; }
+    }
+
+    class getSubresellerOfflineDevice implements Condition {
+        private final Class<?> ownerClass;
+        private final String ownerColumn;
+        private final String ownerColumn1;
+        private final Class<?> pivotClass1;
+        private final String pivotColumn1a;
+        private final String pivotColumn1b;
+        private final Class<?> pivotClass2;
+        private final String pivotColumn2;
+        private final Class<?> pivotClass3;
+        private final String pivotColumn3a;
+        private final String pivotColumn3b;
+
+        private final Class<?> pivotClass4;
+        private final String pivotColumn4;
+//        private final Class<?> pivotClass5;
+//        private final String pivotColumn5a;
+//        private final String pivotColumn5b;
+//        private final Class<?> pivotClass6;
+//        private final String pivotColumn6;
+        private final Class<?> pivotClass7;
+        private final String pivotColumn7;
+        private final Class<?> pivotClass8;
+        private final String pivotColumn8;
+        private final Class<?> pivotClass9;
+        private final String pivotColumn9a;
+        private final String pivotColumn9b;
+        private final Class<?> pivotClass10;
+        private final String pivotColumn10a;
+        private final String pivotColumn10b;
+        private final Class<?> pivotClass11;
+        private final String pivotColumn11;
+
+        private final String searchColumn;
+        private final long searchValue;
+        private final String fromValue;
+        private final String toValue;
+        private final String dateColumn;
+
+        private final String searchColumn1;
+        private final String searchValue1;
+
+        // Constructor
+        public getSubresellerOfflineDevice(Class<?> ownerClass, String ownerColumn,String ownerColumn1,
+                                        Class<?> pivotClass1, String pivotColumn1a, String pivotColumn1b,
+                                        Class<?> pivotClass2, String pivotColumn2,
+                                        Class<?> pivotClass3,String pivotColumn3a,String pivotColumn3b,
+                                        Class<?> pivotClass4,String pivotColumn4,
+//                                        Class<?> pivotClass5,String pivotColumn5a,String pivotColumn5b,
+//                                        Class<?> pivotClass6,String pivotColumn6,
+                                        Class<?> pivotClass7,String pivotColumn7,
+                                        Class<?> pivotClass8,String pivotColumn8,
+                                        Class<?> pivotClass9,String pivotColumn9a,String pivotColumn9b,
+                                        Class<?> pivotClass10,String pivotColumn10a,String pivotColumn10b,
+                                        Class<?> pivotClass11,String pivotColumn11,
+
+                                        String searchColumn,
+                                        long searchValue,
+                                        String searchColumn1,
+                                        String searchValue1,
+                                        String fromValue,
+                                        String toValue,
+                                        String dateColumn ) {
+            this.ownerClass = ownerClass;
+            this.ownerColumn = ownerColumn;
+            this.ownerColumn1 = ownerColumn1;
+            this.pivotClass1 = pivotClass1;
+            this.pivotColumn1a = pivotColumn1a;
+            this.pivotColumn1b = pivotColumn1b;
+            this.pivotClass2 = pivotClass2;
+            this.pivotColumn2 = pivotColumn2;
+            this.pivotClass3 = pivotClass3;
+            this.pivotColumn3a = pivotColumn3a;
+            this.pivotColumn3b = pivotColumn3b;
+            this.pivotClass4 = pivotClass4;
+            this.pivotColumn4 = pivotColumn4;
+//            this.pivotClass5 = pivotClass5;
+//            this.pivotColumn5a = pivotColumn5a;
+//            this.pivotColumn5b = pivotColumn5b;
+//            this.pivotClass6 = pivotClass6;
+//            this.pivotColumn6 = pivotColumn6;
+            this.pivotClass7 = pivotClass7;
+            this.pivotColumn7 = pivotColumn7;
+            this.pivotClass8 = pivotClass8;
+            this.pivotColumn8 = pivotColumn8;
+            this.pivotClass9 = pivotClass9;
+            this.pivotColumn9a = pivotColumn9a;
+            this.pivotColumn9b = pivotColumn9b;
+            this.pivotClass10 = pivotClass10;
+            this.pivotColumn10a = pivotColumn10a;
+            this.pivotColumn10b = pivotColumn10b;
+            this.pivotClass11 = pivotClass11;
+            this.pivotColumn11 = pivotColumn11;
+
+            this.searchColumn = searchColumn;
+            this.searchValue = searchValue;
+            this.searchColumn1 = searchColumn1;
+            this.searchValue1 = searchValue1;
+            this.fromValue = fromValue;
+            this.toValue = toValue;
+            this.dateColumn = dateColumn;
+
+        }
+        public Class<?> getOwnerClass() { return ownerClass; }
+        public String getOwnerColumn() { return ownerColumn; }
+        public String getOwnerColumn1() { return ownerColumn1; }
+        public Class<?> getPivotClass1() { return pivotClass1; }
+        public String getPivotColumn1a() { return pivotColumn1a; }
+        public String getPivotColumn1b() { return pivotColumn1b; }
+        public Class<?> getPivotClass2() { return pivotClass2; }
+        public String getPivotColumn2() { return pivotColumn2; }
+        public Class<?> getPivotClass3() { return pivotClass3; }
+        public String getPivotColumn3a() { return pivotColumn3a; }
+        public String getPivotColumn3b() { return pivotColumn3b; }
+        public Class<?> getPivotClass4() { return pivotClass4; }
+        public String getPivotColumn4() { return pivotColumn4; }
+//        public Class<?> getPivotClass5() { return pivotClass5; }
+//        public String getPivotColumn5a() { return pivotColumn5a; }
+//        public String getPivotColumn5b() { return pivotColumn5b; }
+//        public Class<?> getPivotClass6() { return pivotClass6; }
+//        public String getPivotColumn6() { return pivotColumn6; }
+        public Class<?> getPivotClass7() { return pivotClass7; }
+        public String getPivotColumn7() { return pivotColumn7; }
+        public Class<?> getPivotClass8() { return pivotClass8; }
+        public String getPivotColumn8() { return pivotColumn8; }
+        public Class<?> getPivotClass9() { return pivotClass9; }
+        public String getPivotColumn9a() { return pivotColumn9a; }
+        public String getPivotColumn9b() { return pivotColumn9b; }
+        public Class<?> getPivotClass10() { return pivotClass10; }
+        public String getPivotColumn10a() { return pivotColumn10a; }
+        public String getPivotColumn10b() { return pivotColumn10b; }
+        public Class<?> getPivotClass11() { return pivotClass11; }
+        public String getPivotColumn11() { return pivotColumn11; }
+        public String searchColumn() { return searchColumn; }
+        public long searchValue() { return searchValue; }
+        public String searchColumn1() { return searchColumn1; }
+        public String searchValue1() { return searchValue1; }
+        public String fromValue() { return fromValue; }
+        public String toValue() { return toValue; }
+        public String dateColumn() { return dateColumn; }
+
+    }
+
+    class getClientOfflineDevice implements Condition {
+        private final Class<?> ownerClass;
+        private final String ownerColumn;
+        private final String ownerColumn1;
+        private final Class<?> pivotClass1;
+        private final String pivotColumn1a;
+        private final String pivotColumn1b;
+        private final Class<?> pivotClass2;
+        private final String pivotColumn2;
+//        private final Class<?> pivotClass3;
+//        private final String pivotColumn3a;
+//        private final String pivotColumn3b;
+//
+//        private final Class<?> pivotClass4;
+//        private final String pivotColumn4;
+        //        private final Class<?> pivotClass5;
+//        private final String pivotColumn5a;
+//        private final String pivotColumn5b;
+//        private final Class<?> pivotClass6;
+//        private final String pivotColumn6;
+        private final Class<?> pivotClass7;
+        private final String pivotColumn7;
+        private final Class<?> pivotClass8;
+        private final String pivotColumn8;
+        private final Class<?> pivotClass9;
+        private final String pivotColumn9a;
+        private final String pivotColumn9b;
+        private final Class<?> pivotClass10;
+        private final String pivotColumn10a;
+        private final String pivotColumn10b;
+        private final Class<?> pivotClass11;
+        private final String pivotColumn11;
+
+        private final String searchColumn;
+        private final long searchValue;
+        private final String fromValue;
+        private final String toValue;
+        private final String dateColumn;
+
+        private final String searchColumn1;
+        private final String searchValue1;
+
+        // Constructor
+        public getClientOfflineDevice(Class<?> ownerClass, String ownerColumn,String ownerColumn1,
+                                           Class<?> pivotClass1, String pivotColumn1a, String pivotColumn1b,
+                                           Class<?> pivotClass2, String pivotColumn2,
+//                                           Class<?> pivotClass3,String pivotColumn3a,String pivotColumn3b,
+//                                           Class<?> pivotClass4,String pivotColumn4,
+//                                        Class<?> pivotClass5,String pivotColumn5a,String pivotColumn5b,
+//                                        Class<?> pivotClass6,String pivotColumn6,
+                                           Class<?> pivotClass7,String pivotColumn7,
+                                           Class<?> pivotClass8,String pivotColumn8,
+                                           Class<?> pivotClass9,String pivotColumn9a,String pivotColumn9b,
+                                           Class<?> pivotClass10,String pivotColumn10a,String pivotColumn10b,
+                                           Class<?> pivotClass11,String pivotColumn11,
+
+                                           String searchColumn,
+                                           long searchValue,
+                                           String searchColumn1,
+                                           String searchValue1,
+                                           String fromValue,
+                                           String toValue,
+                                           String dateColumn ) {
+            this.ownerClass = ownerClass;
+            this.ownerColumn = ownerColumn;
+            this.ownerColumn1 = ownerColumn1;
+            this.pivotClass1 = pivotClass1;
+            this.pivotColumn1a = pivotColumn1a;
+            this.pivotColumn1b = pivotColumn1b;
+            this.pivotClass2 = pivotClass2;
+            this.pivotColumn2 = pivotColumn2;
+//            this.pivotClass3 = pivotClass3;
+//            this.pivotColumn3a = pivotColumn3a;
+//            this.pivotColumn3b = pivotColumn3b;
+//            this.pivotClass4 = pivotClass4;
+//            this.pivotColumn4 = pivotColumn4;
+//            this.pivotClass5 = pivotClass5;
+//            this.pivotColumn5a = pivotColumn5a;
+//            this.pivotColumn5b = pivotColumn5b;
+//            this.pivotClass6 = pivotClass6;
+//            this.pivotColumn6 = pivotColumn6;
+            this.pivotClass7 = pivotClass7;
+            this.pivotColumn7 = pivotColumn7;
+            this.pivotClass8 = pivotClass8;
+            this.pivotColumn8 = pivotColumn8;
+            this.pivotClass9 = pivotClass9;
+            this.pivotColumn9a = pivotColumn9a;
+            this.pivotColumn9b = pivotColumn9b;
+            this.pivotClass10 = pivotClass10;
+            this.pivotColumn10a = pivotColumn10a;
+            this.pivotColumn10b = pivotColumn10b;
+            this.pivotClass11 = pivotClass11;
+            this.pivotColumn11 = pivotColumn11;
+
+            this.searchColumn = searchColumn;
+            this.searchValue = searchValue;
+            this.searchColumn1 = searchColumn1;
+            this.searchValue1 = searchValue1;
+            this.fromValue = fromValue;
+            this.toValue = toValue;
+            this.dateColumn = dateColumn;
+
+        }
+        public Class<?> getOwnerClass() { return ownerClass; }
+        public String getOwnerColumn() { return ownerColumn; }
+        public String getOwnerColumn1() { return ownerColumn1; }
+        public Class<?> getPivotClass1() { return pivotClass1; }
+        public String getPivotColumn1a() { return pivotColumn1a; }
+        public String getPivotColumn1b() { return pivotColumn1b; }
+        public Class<?> getPivotClass2() { return pivotClass2; }
+        public String getPivotColumn2() { return pivotColumn2; }
+//        public Class<?> getPivotClass3() { return pivotClass3; }
+//        public String getPivotColumn3a() { return pivotColumn3a; }
+//        public String getPivotColumn3b() { return pivotColumn3b; }
+//        public Class<?> getPivotClass4() { return pivotClass4; }
+//        public String getPivotColumn4() { return pivotColumn4; }
+        //        public Class<?> getPivotClass5() { return pivotClass5; }
+//        public String getPivotColumn5a() { return pivotColumn5a; }
+//        public String getPivotColumn5b() { return pivotColumn5b; }
+//        public Class<?> getPivotClass6() { return pivotClass6; }
+//        public String getPivotColumn6() { return pivotColumn6; }
+        public Class<?> getPivotClass7() { return pivotClass7; }
+        public String getPivotColumn7() { return pivotColumn7; }
+        public Class<?> getPivotClass8() { return pivotClass8; }
+        public String getPivotColumn8() { return pivotColumn8; }
+        public Class<?> getPivotClass9() { return pivotClass9; }
+        public String getPivotColumn9a() { return pivotColumn9a; }
+        public String getPivotColumn9b() { return pivotColumn9b; }
+        public Class<?> getPivotClass10() { return pivotClass10; }
+        public String getPivotColumn10a() { return pivotColumn10a; }
+        public String getPivotColumn10b() { return pivotColumn10b; }
+        public Class<?> getPivotClass11() { return pivotClass11; }
+        public String getPivotColumn11() { return pivotColumn11; }
+        public String searchColumn() { return searchColumn; }
+        public long searchValue() { return searchValue; }
+        public String searchColumn1() { return searchColumn1; }
+        public String searchValue1() { return searchValue1; }
+        public String fromValue() { return fromValue; }
+        public String toValue() { return toValue; }
+        public String dateColumn() { return dateColumn; }
+
+    }
+
+
     class CountSubResellerOnlineDevice implements Condition {
         private final Class<?> ownerClass;
         private final String ownerColumn;

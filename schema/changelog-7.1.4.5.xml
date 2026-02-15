@@ -79,5 +79,15 @@
 
   </changeSet>
 
+  <changeSet id="rename-tc-networkprovider-name-to-networkprovidername" author="walter">
+
+    <renameColumn
+            tableName="tc_networkproviders"
+            oldColumnName="name"
+            newColumnName="networkprovidername"
+            columnDataType="VARCHAR(255)"/>
+
+  </changeSet>
+
 </databaseChangeLog>
 

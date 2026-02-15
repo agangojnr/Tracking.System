@@ -108,11 +108,11 @@ public class NetworkproviderResource extends ExtendedObjectResource<Networkprovi
     }
 
     public boolean validate(Networkprovider entity) throws StorageException {
-        String name = entity.getName();
+        String name = entity.getNetworkprovidername();
         Networkprovider networkprovider = storage.getObject(Networkprovider.class, new Request(
                 new Columns.All(),
                 new Condition.And(
-                        new Condition.Equals("name", name),
+                        new Condition.Equals("networkprovidername", name),
                         new Condition.Permission(User.class, getUserId(), Networkprovider.class))));
         return networkprovider == null;
     }

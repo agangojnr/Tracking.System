@@ -282,6 +282,7 @@ public class ClientResource extends ExtendedObjectResource<Client> {
                         )
                 );
                 if(device.isEmpty()){
+
                     //LOGGER.info("device is empty");
                     return true;
                 }

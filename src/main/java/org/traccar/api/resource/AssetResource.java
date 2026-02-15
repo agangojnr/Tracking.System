@@ -45,7 +45,7 @@ public class AssetResource extends SimpleObjectResource<Asset> {
     private PermissionsService permissionsService;
 
     public AssetResource() {
-        super(Asset.class, "name");
+        super(Asset.class, "assetname");
     }
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Asset.class);

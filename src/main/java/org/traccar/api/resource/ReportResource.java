@@ -28,6 +28,8 @@ import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.StreamingOutput;
+
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -73,6 +75,7 @@ public class ReportResource extends SimpleObjectResource<Report> {
     private HttpServletRequest request;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DeviceResource.class);
+    //private static final Logger LOGGER = LoggerFactory.getLogger(OfflineReportItem.class);
 
     public ReportResource() {
         super(Report.class, "description");
@@ -328,26 +331,81 @@ public class ReportResource extends SimpleObjectResource<Report> {
         });
     }
 
-//    @Path("offline")
-//    @GET
-//    public Collection<OfflineReportItem> getStops(
-//            @QueryParam("clientId") Long clientId,
-//            @QueryParam("subresellerId") Long subresellerId,
-//            @QueryParam("resellerId") Long resellerId,
-//            @QueryParam("from") Date from,
-//            @QueryParam("to") Date to) throws StorageException {
-//        //permissionsService.checkRestriction(getUserId(), UserRestrictions::getDisableReports);
-//        //actionLogger.report(request, getUserId(), false, "stops", from, to, deviceIds, groupIds);
-//        if (clientId != null && clientId > 0) {
-//            return offlineReportProvider.getObjects(getUserId(), from, to);
-//        } else if (subresellerId != null && subresellerId > 0) {
-//            return offlineReportProvider.getObjects(getUserId(), from, to);
-//        }else if (resellerId != null && resellerId > 0){
-//            return offlineReportProvider.getObjects(getUserId(), from, to);
-//        }else {
-//            return null;
-//        }
-//
-//    }
+    @Path("offline")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Collection<OfflineReportItem> getOfflines(
+            @QueryParam("clientId") Long clientId,
+            @QueryParam("subresellerId") Long subresellerId,
+            @QueryParam("resellerId") Long resellerId,
+            @QueryParam("from") String fromStr,
+            @QueryParam("to") String toStr)
+            throws Exception {
+
+        if (resellerId != null && resellerId > 0) {
+            return offlineReportProvider.getResellerOfflineReport(resellerId, fromStr, toStr);
+        }else if (subresellerId != null && subresellerId > 0) {
+            return offlineReportProvider.getSubresellerOfflineReport(subresellerId, fromStr, toStr);
+        }else if (clientId != null && clientId > 0) {
+            return offlineReportProvider.getClientOfflineReport(clientId, fromStr, toStr);
+        }else{
+            throw new WebApplicationException(
+                    "resellerId, subresellerid or clientid is required",
+                    Response.Status.BAD_REQUEST);
+        }
+
+
+    }
+
+    @Path("/offline/{type:xlsx|mail}")
+    @GET
+    //@Produces(EXCEL)
+    @Produces("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    public Response getOfflineExcel(
+
+            @QueryParam("resellerId") Long resellerId,
+            @QueryParam("subresellerId") Long subresellerId,
+            @QueryParam("clientId") Long clientId,
+            @QueryParam("from") String from,
+            @QueryParam("to") String to,
+            @PathParam("type") String type
+
+    ) throws StorageException {
+
+        StreamingOutput stream = outputStream -> {
+            try {
+                offlineReportProvider.getExcel(outputStream,resellerId,from,to);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        };
+
+        // ✅ Excel download response
+        if ("xlsx".equals(type)) {
+
+            String fileName = "offline-report.xlsx";
+
+            return Response.ok(
+                            stream,
+                            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    )
+                    .header("Content-Disposition",
+                            "attachment; filename=\"offline-report.xlsx\"")
+                    .header("Cache-Control", "no-cache, no-store, must-revalidate")
+                    .build();
+        }
+
+        // ✅ Optional MAIL mode (example placeholder)
+        if ("mail".equals(type)) {
+
+            // here you could generate file to memory and send email
+            return Response.ok("Mail request received").build();
+        }
+
+        return Response.status(Response.Status.BAD_REQUEST).build();
+    }
+
+
+
 
 }
