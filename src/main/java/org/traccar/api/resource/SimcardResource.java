@@ -61,6 +61,7 @@ public class SimcardResource extends ExtendedObjectResource<Simcard> {
                                   @QueryParam("deviceid") Long deviceid,
                                   @QueryParam("resellerid") Long resellerid,
                                   @QueryParam("networkproviderid") Long networkproviderid) throws StorageException {
+        //LOGGER.info("Testing sim providers.");
         var conditions = new LinkedList<Condition>();
 
         if (Boolean.TRUE.equals(all)) {
@@ -70,6 +71,7 @@ public class SimcardResource extends ExtendedObjectResource<Simcard> {
         } else if (deviceid != null && deviceid > 0) {
             conditions.add(new Condition.Permission(Device.class, deviceid, Simcard.class).excludeGroups());
         } else if (resellerid != null && resellerid > 0) {
+
             conditions.add(new Condition.Permission(Reseller.class, resellerid, Simcard.class).excludeGroups());
         } else if (networkproviderid != null && networkproviderid > 0) {
             conditions.add(new Condition.Permission(Simcard.class, Networkprovider.class, networkproviderid).excludeGroups());
@@ -81,6 +83,25 @@ public class SimcardResource extends ExtendedObjectResource<Simcard> {
                     new Columns.All(), Condition.merge(conditions), new Order("phonenumber")
             ));
 
+    }
+
+    @GET
+    @Path("reseller")
+    public Collection<SimcardList> getResellerSimcards(@QueryParam("resellerid") Long resellerid) throws StorageException {
+        return storage.getJointObjects(
+                SimcardList.class,
+                new Request(
+                        new Columns.Include("tc_simcards.id AS id",
+                                "tc_simcards.phonenumber AS phonenumber",
+                                "tc_simcards.iccid AS iccid",
+                                "tc_networkproviders.networkprovidername AS networkprovidername"
+                        ),
+                        new Condition.TwoJoinWhereSim(
+                                Simcard.class,"id","networkproviderid",
+                                Networkprovider.class,"id",
+                                ResellerSimcard.class, "resellerid", "simcardid", resellerid)
+                )
+        );
     }
 
 

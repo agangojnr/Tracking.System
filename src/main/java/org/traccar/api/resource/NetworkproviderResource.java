@@ -60,7 +60,7 @@ public class NetworkproviderResource extends ExtendedObjectResource<Networkprovi
         var conditions = new LinkedList<Condition>();
 
         return storage.getObjects(baseClass, new Request(
-                new Columns.All(), Condition.merge(conditions), new Order("name")
+                new Columns.All(), Condition.merge(conditions), new Order("networkprovidername")
         ));
     }
 

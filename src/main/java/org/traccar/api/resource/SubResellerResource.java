@@ -215,7 +215,7 @@ public class SubResellerResource extends ExtendedObjectResource<Subreseller> {
         );
 
         if (client.isEmpty()) {
-            LOGGER.info("client is empty");
+            //LOGGER.info("client is empty");
             Collection<SubresellerDru> dru = storage.getObjects(SubresellerDru.class,
                     new Request(
                             new Columns.All(),
@@ -223,7 +223,7 @@ public class SubResellerResource extends ExtendedObjectResource<Subreseller> {
                     )
             );
             if (client.isEmpty()) {
-                LOGGER.info("dru is empty");
+                //LOGGER.info("dru is empty");
                 return true;
             }
 

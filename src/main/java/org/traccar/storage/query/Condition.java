@@ -245,6 +245,8 @@ public interface Condition {
         public long getValue() { return value; }
     }
 
+
+
     class LeftJoin implements Condition {
         private final Class<?> ownerClass;
         private final Class<?> pivotClass;
@@ -397,6 +399,42 @@ public interface Condition {
         public String getOwnerColumn() { return ownerColumn; }
         public String getPivotColumn() { return pivotColumn; }
         public String getPivotColumn1() { return pivotColumn1; }
+        public long getValue() { return value; }
+    }
+
+    class TwoJoinWhereSim implements Condition {
+        private final Class<?> ownerClass;
+        private final String ownerColumn;
+        private final String ownerColumn1;
+        private final Class<?> pivotClass;
+        private final String pivotColumn;
+        private final Class<?> pivotClass1;
+        private final String pivotColumn1;
+        private final String pivotColumn2;
+        private final long value;
+
+        // Constructor
+        public TwoJoinWhereSim(Class<?> ownerClass, String ownerColumn, String ownerColumn1,
+                               Class<?> pivotClass, String pivotColumn,
+                               Class<?> pivotClass1, String pivotColumn1, String pivotColumn2, long value) {
+            this.ownerClass = ownerClass;
+            this.ownerColumn = ownerColumn;
+            this.ownerColumn1 = ownerColumn1;
+            this.pivotClass = pivotClass;
+            this.pivotColumn = pivotColumn;
+            this.pivotClass1 = pivotClass1;
+            this.pivotColumn1 = pivotColumn1;
+            this.pivotColumn2 = pivotColumn2;
+            this.value = value;
+        }
+        public Class<?> getOwnerClass() { return ownerClass; }
+        public String getOwnerColumn() { return ownerColumn; }
+        public String getOwnerColumn1() { return ownerColumn1; }
+        public Class<?> getPivotClass() { return pivotClass; }
+        public String getPivotColumn() { return pivotColumn; }
+        public Class<?> getPivotClass1() { return pivotClass1; }
+        public String getPivotColumn1() { return pivotColumn1; }
+        public String getPivotColumn2() { return pivotColumn2; }
         public long getValue() { return value; }
     }
 
