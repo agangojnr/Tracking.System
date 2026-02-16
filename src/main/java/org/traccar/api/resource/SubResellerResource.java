@@ -168,4 +168,67 @@ public class SubResellerResource extends ExtendedObjectResource<Subreseller> {
         return subreseller == null;
     }
 
+    @Path("{id}")
+    @DELETE
+    public Response remove(@PathParam("id") long id) throws Exception {
+        LOGGER.info("testing delete");
+        if(validateReference(id)){
+            LOGGER.info("testing delete");
+            try{
+                permissionsService.checkPermission(baseClass, getUserId(), id);
+                permissionsService.checkEdit(getUserId(), baseClass, false, false);
+
+                storage.removeObject(SubresellerDru.class, new Request(new Condition.Equals("subresellerid", id)));
+                storage.removeObject(SubresellerClient.class, new Request(new Condition.Equals("subresellerid", id)));
+                storage.removeObject(baseClass, new Request(new Condition.Equals("id", id)));
+
+                cacheManager.invalidateObject(true, baseClass, id, ObjectOperation.DELETE);
+
+                actionLogger.remove(request, getUserId(), baseClass, id);
+                //return Response.noContent().build();
+                return Response.ok("{\"status\":\"Deleted Successfully\"}").build();
+
+            } catch (Exception e) {
+                LOGGER.error("Unexpected error while deleting {} id={}",
+                        baseClass.getSimpleName(),id,e
+                );
+
+                return Response.serverError()
+                        .entity("{\"error\":\"Unexpected error occurred.\"}")
+                        .build();
+            }
+        }else{
+            return Response.status(Response.Status.CONFLICT)
+                    .entity("{\"error\":\"Cannot delete this record because it is referenced by other records.\"}")
+                    .build();
+        }
+
+    }
+
+    public boolean validateReference(long subresellerId) throws StorageException {
+
+        Collection<SubresellerClient> client = storage.getObjects(SubresellerClient.class,
+                new Request(
+                        new Columns.All(),
+                        new Condition.Equals("subresellerid", subresellerId)
+                )
+        );
+
+        if (client.isEmpty()) {
+            LOGGER.info("client is empty");
+            Collection<SubresellerDru> dru = storage.getObjects(SubresellerDru.class,
+                    new Request(
+                            new Columns.All(),
+                            new Condition.Equals("subresellerid", subresellerId)
+                    )
+            );
+            if (client.isEmpty()) {
+                LOGGER.info("dru is empty");
+                return true;
+            }
+
+            return false;
+        }
+        return false;
+    }
 }

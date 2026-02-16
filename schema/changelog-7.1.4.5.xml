@@ -89,5 +89,23 @@
 
   </changeSet>
 
+  <changeSet id="fk-subreseller-ondelete-cascade" author="walter">
+
+    <!-- Drop existing foreign key -->
+    <dropForeignKeyConstraint
+            baseTableName="tc_reseller_subreseller"
+            constraintName="fk_reseller_subreseller_subreseller"/>
+
+    <!-- Recreate FK with ON DELETE CASCADE -->
+    <addForeignKeyConstraint
+            constraintName="fk_reseller_subreseller_subreseller"
+            baseTableName="tc_reseller_subreseller"
+            baseColumnNames="subresellerid"
+            referencedTableName="tc_subresellers"
+            referencedColumnNames="id"
+            onDelete="CASCADE"
+            onUpdate="NO ACTION"/>
+  </changeSet>
+
 </databaseChangeLog>
 

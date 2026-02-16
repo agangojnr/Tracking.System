@@ -81,7 +81,16 @@ public class GlobalSearchResource extends BaseObjectResource<Device> {
                                     "name AS AssetName",
                                     "uniqueid AS Imei"
                             ),
-                            new Condition.AdminImeiGlobalSearch(Device.class, "id", DeviceAsset.class, "deviceid",  ClientDevice.class,"clientid", "deviceid",Client.class,"id", SubresellerClient.class, "subresellerid","clientid",Subreseller.class,"id",ResellerSubreseller.class, "resellerid","subresellerid", Reseller.class,"id", "uniqueid", imei)
+                            new Condition.AdminImeiGlobalSearch(
+                                    Device.class, "id",
+                                    DeviceAsset.class, "deviceid",
+                                    ClientDevice.class,"clientid", "deviceid",
+                                    Client.class,"id",
+                                    SubresellerClient.class, "subresellerid","clientid",
+                                    Subreseller.class,"id",
+                                    ResellerSubreseller.class, "resellerid","subresellerid",
+                                    Reseller.class,"id",
+                                    "uniqueid", imei)
                     )
             );
         }else if(level == 1) {

@@ -13,6 +13,7 @@ public class OfflineReportItem {
     private String imei;
     //private String simcardType;
     private String simcard;
+    private String status;
 
 
     // Getters and setters
@@ -63,6 +64,13 @@ public class OfflineReportItem {
     }
     public void setSimcard(String simcard) {
         this.simcard = simcard;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+    public void setStatus(String status) {
+        this.status = status;
     }
 
 //    public String getSimcardType() {

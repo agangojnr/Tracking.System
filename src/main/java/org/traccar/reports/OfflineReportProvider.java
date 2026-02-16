@@ -173,7 +173,8 @@ public class OfflineReportProvider {
                                         "tc_devices.name AS assetName",
                                         "tc_devices.uniqueid AS imei",
                                         "tc_simcards.phonenumber AS simcard",
-                                        "tc_devicetypes.model AS deviceType"
+                                        "tc_devicetypes.model AS deviceType",
+                                        "tc_devices.status AS status"
                                         //"tc_networkproviders.networkprovidername AS simcardType"
                                 ),
                                 new Condition.getResellerOfflineDevice(
@@ -207,6 +208,7 @@ public class OfflineReportProvider {
             item.setImei(device.getImei());
             item.setDeviceType(device.getDeviceType());
             item.setSimcard(device.getSimcard());
+            item.setStatus(device.getStatus());
 
             result.add(item);
         }
@@ -230,7 +232,8 @@ public class OfflineReportProvider {
                                         "tc_devices.name AS assetName",
                                         "tc_devices.uniqueid AS imei",
                                         "tc_simcards.phonenumber AS simcard",
-                                        "tc_devicetypes.model AS deviceType"
+                                        "tc_devicetypes.model AS deviceType",
+                                        "tc_devices.status AS status"
                                         //"tc_networkproviders.networkprovidername AS simcardType"
                                 ),
                                 new Condition.getSubresellerOfflineDevice(
@@ -264,6 +267,7 @@ public class OfflineReportProvider {
             item.setImei(device.getImei());
             item.setDeviceType(device.getDeviceType());
             item.setSimcard(device.getSimcard());
+            item.setStatus(device.getStatus());
 
             result.add(item);
         }
@@ -286,7 +290,8 @@ public class OfflineReportProvider {
                                         "tc_devices.name AS assetName",
                                         "tc_devices.uniqueid AS imei",
                                         "tc_simcards.phonenumber AS simcard",
-                                        "tc_devicetypes.model AS deviceType"
+                                        "tc_devicetypes.model AS deviceType",
+                                        "tc_devices.status AS status"
                                         //"tc_networkproviders.networkprovidername AS simcardType"
                                 ),
                                 new Condition.getClientOfflineDevice(
@@ -320,6 +325,7 @@ public class OfflineReportProvider {
             item.setImei(device.getImei());
             item.setDeviceType(device.getDeviceType());
             item.setSimcard(device.getSimcard());
+            item.setStatus(device.getStatus());
 
             result.add(item);
         }
