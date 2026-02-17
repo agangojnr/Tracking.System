@@ -91,7 +91,7 @@ public class DruResource extends SimpleObjectResource<Dru> {
 
     @GET
     @Path("query")
-    public Collection<Dru> getDRU(@PathParam("subresellerId") long subresellerId)
+    public Collection<Dru> getDRU(@QueryParam("subresellerId") long subresellerId)
             throws StorageException {
 
         SubresellerDru subresellerDru = storage.getObject(
@@ -103,7 +103,6 @@ public class DruResource extends SimpleObjectResource<Dru> {
         );
 
         long druid = subresellerDru != null ? subresellerDru.getDruid() : 0;
-
         return storage.getObjects(
                 Dru.class,
                 new Request(
