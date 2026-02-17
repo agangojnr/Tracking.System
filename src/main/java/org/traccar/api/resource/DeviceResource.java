@@ -32,6 +32,7 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -90,7 +91,7 @@ public class DeviceResource extends BaseObjectResource<Device> {
     @GET
     @Path("query")
     public Collection<Device> get(@QueryParam("clientId") Long clientId,
-                                  @QueryParam("subresellerId") Long subresellerId) throws Exception{
+                                  @QueryParam("subresellerId") Long subresellerId) throws Exception {
         //LOGGER.info("Testing here - {}", defaultClientId);
         /*QUERYING LINKED DEVICES BY CLIENTID*/
         if (clientId != null && clientId > 0) {
@@ -98,7 +99,7 @@ public class DeviceResource extends BaseObjectResource<Device> {
                     Device.class,
                     new Request(
                             new Columns.All(),
-                            new Condition.LinkedDevicesbyClient(Device.class, "id",DeviceAsset.class, "deviceid", "assetid", ClientDevice.class,"clientid", "deviceid", clientId)
+                            new Condition.LinkedDevicesbyClient(Device.class, "id", DeviceAsset.class, "deviceid", "assetid", ClientDevice.class, "clientid", "deviceid", clientId)
                     )
             );
         }
@@ -109,7 +110,7 @@ public class DeviceResource extends BaseObjectResource<Device> {
                     Device.class,
                     new Request(
                             new Columns.All(),
-                            new Condition.LinkedDevicesbySubreseller_UnlinkedtoAuctioneer(Device.class, "id",DeviceAsset.class, "deviceid", "assetid", AuctioneerDevice.class, "auctioneerid", "deviceid", ClientDevice.class,"clientid", "deviceid", Client.class, "id" ,SubresellerClient.class,"subresellerid","clientid", subresellerId)
+                            new Condition.LinkedDevicesbySubreseller_UnlinkedtoAuctioneer(Device.class, "id", DeviceAsset.class, "deviceid", "assetid", AuctioneerDevice.class, "auctioneerid", "deviceid", ClientDevice.class, "clientid", "deviceid", Client.class, "id", SubresellerClient.class, "subresellerid", "clientid", subresellerId)
                     )
             );
         }
@@ -120,7 +121,7 @@ public class DeviceResource extends BaseObjectResource<Device> {
                 Device.class,
                 new Request(
                         new Columns.All(),
-                        new Condition.LinkedDevicesbyClient(Device.class, "id",DeviceAsset.class, "deviceid", "assetid", ClientDevice.class,"clientid", "deviceid", defaultClientId)
+                        new Condition.LinkedDevicesbyClient(Device.class, "id", DeviceAsset.class, "deviceid", "assetid", ClientDevice.class, "clientid", "deviceid", defaultClientId)
                 )
         );
     }
@@ -227,38 +228,38 @@ public class DeviceResource extends BaseObjectResource<Device> {
 
     @GET
     @Path("level")
-    public Collection<Device> getDevice() throws Exception{
+    public Collection<Device> getDevice() throws Exception {
         long level = permissionsService.getUserAccessLevel(getUserId());
         var conditions = new LinkedList<Condition>();
 
-        if(level == 4){
+        if (level == 4) {
             return storage.getObjects(baseClass, new Request(
                     new Columns.All(), Condition.merge(conditions), new Order("name")
             ));
-        }else if(level == 1){
+        } else if (level == 1) {
             long resellerid = permissionsService.getLevelGroupId(getUserId(), 1);
             return storage.getJointObjects(baseClass, new Request(
                     new Columns.All(),
-                    new Condition.FourJoinWhere(Device.class, "id", ClientDevice.class, "deviceid","clientid" ,SubresellerClient.class, "clientid", ResellerSubreseller.class, "subresellerid", "resellerid", resellerid)));
-        }else if(level == 2){
+                    new Condition.FourJoinWhere(Device.class, "id", ClientDevice.class, "deviceid", "clientid", SubresellerClient.class, "clientid", ResellerSubreseller.class, "subresellerid", "resellerid", resellerid)));
+        } else if (level == 2) {
             long subresellerid = permissionsService.getLevelGroupId(getUserId(), 2);
             return storage.getJointObjects(baseClass, new Request(
                     new Columns.All(),
                     new Condition.ThreeJoinWhere(Device.class, "id", ClientDevice.class, "clientid", "deviceid", SubresellerClient.class, "subresellerid", "clientid", subresellerid)));
-        }else if(level == 3){
+        } else if (level == 3) {
             long clientid = permissionsService.getLevelGroupId(getUserId(), 3);
             return storage.getJointObjects(baseClass, new Request(
                     new Columns.All(),
-                    new Condition.JoinOneWhere(Device.class, "id", ClientDevice.class, "deviceid","clientid", clientid)));
+                    new Condition.JoinOneWhere(Device.class, "id", ClientDevice.class, "deviceid", "clientid", clientid)));
         }
         return null;
     }
 
     @Path("create/{clientId}")
     @POST
-    public Response add(Device entity,@PathParam("clientId") Long clientId) throws Exception {
+    public Response add(Device entity, @PathParam("clientId") Long clientId) throws Exception {
         //LOGGER.info("Inserted entity with ID: {}", clientId);
-        if(validate(entity)){
+        if (validate(entity)) {
             if (getUserId() != ServiceAccountUser.ID) {
                 entity.setId(0);
                 long deviceId = storage.addObject(entity, new Request(new Columns.Exclude("id")));
@@ -274,7 +275,7 @@ public class DeviceResource extends BaseObjectResource<Device> {
 
 
             return Response.ok(entity).build();
-        }else{
+        } else {
             return Response.status(Response.Status.FOUND).build();
         }
     }
@@ -286,7 +287,7 @@ public class DeviceResource extends BaseObjectResource<Device> {
                 ClientGroup.class,
                 new Request(
                         new Columns.All(),
-                        new Condition.JoinWhere(ClientGroup.class,"groupid", Group.class,"id","name", defaultName, "clientid", clientId)
+                        new Condition.JoinWhere(ClientGroup.class, "groupid", Group.class, "id", "name", defaultName, "clientid", clientId)
                 )
         );
 
@@ -302,11 +303,11 @@ public class DeviceResource extends BaseObjectResource<Device> {
         String uniqueid = entity.getUniqueId();
 
         Device device = storage.getObject(Device.class, new Request(
-                new Columns.All(),
-                new Condition.And(
-                        new Condition.Equals("uniqueid", uniqueid),
-                        new Condition.Permission(User.class, getUserId(), Device.class))
-            )
+                        new Columns.All(),
+                        new Condition.And(
+                                new Condition.Equals("uniqueid", uniqueid),
+                                new Condition.Permission(User.class, getUserId(), Device.class))
+                )
         );
         return device == null;
     }
@@ -379,7 +380,7 @@ public class DeviceResource extends BaseObjectResource<Device> {
             String name = "device";
             String extension = imageExtension(type);
             try (var input = new FileInputStream(file);
-                    var output = mediaManager.createFileStream(device.getUniqueId(), name, extension)) {
+                 var output = mediaManager.createFileStream(device.getUniqueId(), name, extension)) {
 
                 long transferred = 0;
                 byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
@@ -417,8 +418,8 @@ public class DeviceResource extends BaseObjectResource<Device> {
 
         Device device = storage.getObject(Device.class,
                 new Request(
-                    new Columns.All(),
-                    new Condition.Equals("id", deviceId)
+                        new Columns.All(),
+                        new Condition.Equals("id", deviceId)
                 ));
 
 
@@ -446,24 +447,24 @@ public class DeviceResource extends BaseObjectResource<Device> {
 
     @GET
     @Path("bygroup/{groupId}")
-   public Collection<Device> get(@PathParam("groupId") long groupId) throws StorageException{
+    public Collection<Device> get(@PathParam("groupId") long groupId) throws StorageException {
         var conditions = new LinkedList<Condition>();
 
-        if(groupId > 0){
+        if (groupId > 0) {
             conditions.add(new Condition.Permission(Group.class, groupId, Device.class).excludeGroups());
         }
 
         return storage.getObjects(baseClass, new Request(
                 new Columns.All(), Condition.merge(conditions), new Order("name")));
-   }
+    }
 
 
     @Path("{id}")
     @DELETE
     public Response remove(@PathParam("id") long id) throws Exception {
 
-        if(validateReference(id)){
-            try{
+        if (validateReference(id)) {
+            try {
                 permissionsService.checkPermission(baseClass, getUserId(), id);
                 permissionsService.checkEdit(getUserId(), baseClass, false, false);
 
@@ -486,31 +487,86 @@ public class DeviceResource extends BaseObjectResource<Device> {
                         .entity("{\"error\":\"Unexpected error occurred.\"}")
                         .build();
             }
-    }else{
-        return Response.status(Response.Status.CONFLICT)
-                .entity("{\"error\":\"Cannot delete this record because it is referenced by other records.\"}")
+        } else {
+            return Response.status(Response.Status.CONFLICT)
+                    .entity("{\"error\":\"Cannot delete this record because it is referenced by other records.\"}")
+                    .build();
+        }
+
+    }
+
+    public boolean validateReference(long deviceId) throws StorageException {
+        //String name = Simcard entity.getNetworkproviderid();
+        Collection<DeviceAsset> asset = storage.getObjects(DeviceAsset.class,
+                new Request(
+                        new Columns.All(),
+                        new Condition.Equals("deviceid", deviceId)
+                )
+        );
+        Collection<DeviceSimcard> simcard = storage.getObjects(DeviceSimcard.class,
+                new Request(
+                        new Columns.All(),
+                        new Condition.Equals("deviceid", deviceId)
+                )
+        );
+        if (!asset.isEmpty() || !simcard.isEmpty()) {
+            return false;
+        }
+        return true;
+    }
+
+    @POST
+    @Path("move")
+    public Response moveDevice(@PathParam("oldclientid") Long oldclientid,
+                               @PathParam("clientid") Long clientid,
+                               @PathParam("deviceid") Long deviceid,
+                               @PathParam("assetid") Long assetid) throws Exception {
+        //LOGGER.info("Inserted entity with ID: {}", clientId);
+        if (checkDeviceAssetLink(clientid, deviceid, assetid)) {
+            //Link new devices and simcards
+            permissionsService.link(LinkType.CLIENT_DEVICE, clientid, deviceid);
+            permissionsService.link(LinkType.CLIENT_ASSET, clientid, assetid);
+
+            //Unlink existing devices and assets
+            permissionsService.unlink(LinkType.CLIENT_DEVICE, oldclientid, deviceid);
+            permissionsService.unlink(LinkType.CLIENT_ASSET, oldclientid, assetid);
+
+            return Response.ok("{\"status\":\"Moved Successfully\"}").build();
+        }
+        return Response.serverError()
+                .entity("{\"error\":\"Unexpected error occurred.\"}")
                 .build();
     }
 
+    public boolean checkDeviceAssetLink(long deviceId, long oldclientid, long assetId) throws StorageException {
+        //String name = Simcard entity.getNetworkproviderid();
+        Collection<ClientDevice> clientdevice = storage.getObjects(ClientDevice.class,
+                new Request(
+                        new Columns.All(),
+                        new Condition.And(
+                                new Condition.Equals("deviceid", deviceId),
+                                new Condition.Equals("clientid", oldclientid)
+                        )
+                )
+        );
+        if (!clientdevice.isEmpty()) {
+            Collection<ClientAsset> clientasset = storage.getObjects(ClientAsset.class,
+                    new Request(
+                            new Columns.All(),
+                            new Condition.And(
+                                    new Condition.Equals("assetid", assetId),
+                                    new Condition.Equals("clientid", oldclientid)
+                            )
+                    )
+            );
+            if (!clientasset.isEmpty()) {
+                return true;
+            }
+            return false;
+        }
+        return true;
+    }
 }
 
-public boolean validateReference(long deviceId) throws StorageException {
-    //String name = Simcard entity.getNetworkproviderid();
-    Collection<DeviceAsset> asset = storage.getObjects(DeviceAsset.class,
-            new Request(
-                    new Columns.All(),
-                    new Condition.Equals("deviceid", deviceId)
-            )
-    );
-    Collection<DeviceSimcard> simcard = storage.getObjects(DeviceSimcard.class,
-            new Request(
-                    new Columns.All(),
-                    new Condition.Equals("deviceid", deviceId)
-            )
-    );
-    if (!asset.isEmpty() || !simcard.isEmpty()) {
-        return false;
-    }
-    return true;
-}
-    }
+
+

@@ -89,4 +89,29 @@ public class DruResource extends SimpleObjectResource<Dru> {
         return dru == null ? true : false;
     }
 
+    @GET
+    @Path("query")
+    public Collection<Dru> getDRU(@PathParam("subresellerId") long subresellerId)
+            throws StorageException {
+
+        SubresellerDru subresellerDru = storage.getObject(
+                SubresellerDru.class,
+                new Request(
+                        new Columns.All(),
+                        new Condition.Equals("subresellerid", subresellerId)
+                )
+        );
+
+        long druid = subresellerDru != null ? subresellerDru.getDruid() : 0;
+
+        return storage.getObjects(
+                Dru.class,
+                new Request(
+                        new Columns.All(),
+                        new Condition.Equals("id", druid)
+                )
+        );
+    }
+
+
 }
