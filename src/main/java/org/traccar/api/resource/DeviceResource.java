@@ -517,19 +517,24 @@ public class DeviceResource extends BaseObjectResource<Device> {
 
     @POST
     @Path("move")
-    public Response moveDevice(@PathParam("oldclientid") Long oldclientid,
-                               @PathParam("clientid") Long clientid,
-                               @PathParam("deviceid") Long deviceid,
-                               @PathParam("assetid") Long assetid) throws Exception {
+    public Response moveDevice(@QueryParam("oldclientid") Long oldclientid,
+                               @QueryParam("newclientid") Long newclientid,
+                               @QueryParam("deviceid") Long deviceid,
+                               @QueryParam("assetid") Long assetid) throws Exception {
         //LOGGER.info("Inserted entity with ID: {}", clientId);
-        if (checkDeviceAssetLink(clientid, deviceid, assetid)) {
-            //Link new devices and simcards
-            permissionsService.link(LinkType.CLIENT_DEVICE, clientid, deviceid);
-            permissionsService.link(LinkType.CLIENT_ASSET, clientid, assetid);
-
+        if (checkDeviceAssetLink(oldclientid, deviceid)) {
             //Unlink existing devices and assets
             permissionsService.unlink(LinkType.CLIENT_DEVICE, oldclientid, deviceid);
-            permissionsService.unlink(LinkType.CLIENT_ASSET, oldclientid, assetid);
+            //Link new devices and simcards
+            permissionsService.link(LinkType.CLIENT_DEVICE, newclientid, deviceid);
+
+            if(assetid != null && assetid > 0){
+                //Unlink existing devices and assets
+                permissionsService.unlink(LinkType.CLIENT_ASSET, oldclientid, assetid);
+                //Link new devices and simcards
+                permissionsService.link(LinkType.CLIENT_ASSET, newclientid, assetid);
+            }
+
 
             return Response.ok("{\"status\":\"Moved Successfully\"}").build();
         }
@@ -538,7 +543,7 @@ public class DeviceResource extends BaseObjectResource<Device> {
                 .build();
     }
 
-    public boolean checkDeviceAssetLink(long deviceId, long oldclientid, long assetId) throws StorageException {
+    public boolean checkDeviceAssetLink(long oldclientid,long deviceId) throws StorageException {
         //String name = Simcard entity.getNetworkproviderid();
         Collection<ClientDevice> clientdevice = storage.getObjects(ClientDevice.class,
                 new Request(
@@ -550,19 +555,19 @@ public class DeviceResource extends BaseObjectResource<Device> {
                 )
         );
         if (!clientdevice.isEmpty()) {
-            Collection<ClientAsset> clientasset = storage.getObjects(ClientAsset.class,
-                    new Request(
-                            new Columns.All(),
-                            new Condition.And(
-                                    new Condition.Equals("assetid", assetId),
-                                    new Condition.Equals("clientid", oldclientid)
-                            )
-                    )
-            );
-            if (!clientasset.isEmpty()) {
-                return true;
-            }
-            return false;
+//            Collection<ClientAsset> clientasset = storage.getObjects(ClientAsset.class,
+//                    new Request(
+//                            new Columns.All(),
+//                            new Condition.And(
+//                                    new Condition.Equals("assetid", assetId),
+//                                    new Condition.Equals("clientid", oldclientid)
+//                            )
+//                    )
+//            );
+//            if (!clientasset.isEmpty()) {
+//                return true;
+//            }
+            return true;
         }
         return true;
     }
