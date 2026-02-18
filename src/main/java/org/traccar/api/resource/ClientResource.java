@@ -293,4 +293,38 @@ public class ClientResource extends ExtendedObjectResource<Client> {
 
         return false;
     }
+
+
+    /* GET RESELLER ID BY CLIENT ID*/
+    @GET
+    @Path("reseller")
+    public Collection<Client> getResellerClient(@QueryParam("clientid") Long clientid) throws StorageException {
+
+        Collection<ResellerSubreseller> result = storage.getJointObjects(
+                ResellerSubreseller.class,
+                new Request(
+                        new Columns.All(),
+                        new Condition.ResellerClientsByClientId( ResellerSubreseller.class,"resellerid","subresellerid",
+                                SubresellerClient.class,"subresellerid","clientid",
+                                clientid)
+                )
+        );
+        Long resellerId = null;
+
+        if (result != null && !result.isEmpty()) {
+            ResellerSubreseller resellerSubreseller = result.iterator().next();
+            resellerId = ((long) resellerSubreseller.getResellerid());
+        }
+
+        Collection<Client> clients = storage.getJointObjects(
+                Client.class,
+                new Request(
+                        new Columns.All(),
+                        new Condition.ClientsByResellerId(Client.class,"id", SubresellerClient.class,"subresellerid","clientid",ResellerSubreseller.class,"resellerid","subresellerid",resellerId)
+                )
+        );
+
+        return clients;
+
+    }
 }

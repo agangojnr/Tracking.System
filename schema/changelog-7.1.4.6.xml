@@ -107,6 +107,23 @@
 
   </changeSet>
 
+  <changeSet id="rename-location-to-yardlocation" author="walter">
+
+    <preConditions onFail="HALT">
+      <tableExists tableName="tc_yards"/>
+      <columnExists tableName="tc_yards" columnName="location"/>
+    </preConditions>
+
+    <!-- Rename column -->
+    <renameColumn
+            tableName="tc_yards"
+            oldColumnName="location"
+            newColumnName="yardlocation"
+            columnDataType="VARCHAR(255)"/>
+
+  </changeSet>
+
+
 
 </databaseChangeLog>
 

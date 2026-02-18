@@ -199,6 +199,36 @@ public interface Condition {
         public Class<?> getOwnerClass() { return ownerClass; }
     }
 
+    class ResellerClientsByClientId implements Condition {
+        private final Class<?> ownerClass;
+        private final String ownerColumn1;
+        private final String ownerColumn2;
+        private final Class<?> pivotClass;
+        private final String pivotColumn1;
+        private final String pivotColumn2;
+        private final Long searchValue;
+        // Constructor
+        public ResellerClientsByClientId(Class<?> ownerClass, String ownerColumn1, String ownerColumn2,
+                                    Class<?> pivotClass, String pivotColumn1, String pivotColumn2,
+                                    Long searchValue) {
+            this.ownerClass = ownerClass;
+            this.ownerColumn1 = ownerColumn1;
+            this.ownerColumn2 = ownerColumn2;
+            this.pivotClass = pivotClass;
+            this.pivotColumn1 = pivotColumn1;
+            this.pivotColumn2 = pivotColumn2;
+            this.searchValue = searchValue;
+        }
+        public Class<?> getOwnerClass() { return ownerClass; }
+        public Class<?> getPivotClass() { return pivotClass; }
+        public String getOwnerColumn1() { return ownerColumn1; }
+        public String getOwnerColumn2() { return ownerColumn2; }
+        public String getPivotColumn1() { return pivotColumn1; }
+        public String getPivotColumn2() { return pivotColumn2; }
+        public Long getSearchValue() { return searchValue; }
+    }
+
+
     class InnerJoin implements Condition {
         private final Class<?> ownerClass;
         private final Class<?> pivotClass;

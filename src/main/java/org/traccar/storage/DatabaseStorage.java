@@ -515,6 +515,26 @@ public class DatabaseStorage extends Storage {
                     result.append(condition.getColumn2());
                     result.append(" = ");
                     result.append(condition.getValue2());
+
+                }else if(genericCondition instanceof Condition.ResellerClientsByClientId condition){
+                    result.append(" JOIN ");
+                    result.append(getStorageName(condition.getPivotClass()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn2());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn1());
+
+                    result.append(" WHERE ");
+                    result.append(getStorageName(condition.getPivotClass()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn2());
+                    result.append(" = ");
+                    result.append("'");result.append(condition.getSearchValue());result.append("'");
+
                 }else if(genericCondition instanceof Condition.JoinOneWhere condition){
                     result.append(" JOIN ");
                     result.append(getStorageName(condition.getPivotClass()));
