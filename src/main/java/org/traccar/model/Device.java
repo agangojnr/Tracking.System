@@ -41,6 +41,17 @@ public class Device extends GroupedModel implements Disableable, Schedulable {
         this.devicetypeid = devicetypeid;
     }
 
+    private boolean repossessed;
+
+    public boolean isRepossessed() {
+        return repossessed;
+    }
+
+    public void setRepossessed(boolean repossessed) {
+        this.repossessed = repossessed;
+    }
+
+
     private long groupId;
 
     public long getGroupId() {

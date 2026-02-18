@@ -577,20 +577,25 @@ public class DeviceResource extends BaseObjectResource<Device> {
         }
         return false;
     }
+
+
+
+    @GET
+    @Path("auctioneers")
+    public Collection<Device> getDeviceByAuctioneer(
+            @QueryParam("auctioneerid") long auctioneerid
+    ) throws Exception{;
+        var conditions = new LinkedList<Condition>();
+        if (auctioneerid > 0) {
+            conditions.add(new Condition.Permission(Auctioneer.class, auctioneerid, Device.class).excludeGroups());
+        }
+
+        return storage.getObjects(Device.class, new Request(
+                new Columns.All(), Condition.merge(conditions), new Order("name")));
+    }
 }
 
 
 
-//            Collection<ClientAsset> clientasset = storage.getObjects(ClientAsset.class,
-//                    new Request(
-//                            new Columns.All(),
-//                            new Condition.And(
-//                                    new Condition.Equals("assetid", assetId),
-//                                    new Condition.Equals("clientid", oldclientid)
-//                            )
-//                    )
-//            );
-//            if (!clientasset.isEmpty()) {
-//                return true;
-//            }
+
 
