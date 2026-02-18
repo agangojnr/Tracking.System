@@ -107,5 +107,25 @@
             onUpdate="NO ACTION"/>
   </changeSet>
 
+
+  <changeSet id="add-repossessed-column-tc_devices" author="walter">
+
+    <addColumn tableName="tc_devices">
+      <column name="repossessed" type="BOOLEAN" defaultValueBoolean="false"/>
+    </addColumn>
+
+    <update tableName="tc_devices">
+      <column name="repossessed" valueBoolean="false"/>
+      <where>repossessed IS NULL</where>
+    </update>
+
+    <addNotNullConstraint
+            tableName="tc_devices"
+            columnName="repossessed"
+            columnDataType="BOOLEAN"/>
+
+  </changeSet>
+
+
 </databaseChangeLog>
 

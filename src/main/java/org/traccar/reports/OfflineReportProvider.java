@@ -157,7 +157,7 @@ public class OfflineReportProvider {
     // JSON REPORT
     // ==========================================================
     public Collection<OfflineReportItem> getResellerOfflineReport(
-            long resellerId, String from, String to)
+            long resellerId)
             throws StorageException {
 
         ArrayList<OfflineReportItem> result = new ArrayList<>();
@@ -174,7 +174,9 @@ public class OfflineReportProvider {
                                         "tc_devices.uniqueid AS imei",
                                         "tc_simcards.phonenumber AS simcard",
                                         "tc_devicetypes.model AS deviceType",
-                                        "tc_devices.status AS status"
+                                        "tc_devices.status AS status",
+                                        "tc_devices.lastupdate AS lastReportDate",
+                                        "DATEDIFF(DAY, tc_devices.lastupdate, GETDATE()) AS daysoffline"
                                         //"tc_networkproviders.networkprovidername AS simcardType"
                                 ),
                                 new Condition.getResellerOfflineDevice(
@@ -191,8 +193,8 @@ public class OfflineReportProvider {
                                         Simcard.class, "id","networkproviderid",
                                         Networkprovider.class, "id",
                                         "resellerid", resellerId,
-                                        "status", "offline",
-                                        from, to, "lastupdate"
+                                        "status", "offline","not_connected",
+                                         "lastupdate"
                                 )
                         ));
 
@@ -209,7 +211,8 @@ public class OfflineReportProvider {
             item.setDeviceType(device.getDeviceType());
             item.setSimcard(device.getSimcard());
             item.setStatus(device.getStatus());
-
+            item.setLastReportDate(device.getLastReportDate());
+            item.setDaysoffline(device.getDaysOffline());
             result.add(item);
         }
         return result;
@@ -217,7 +220,7 @@ public class OfflineReportProvider {
 
     /* GETTING OFFLINE PER SUBRESELLER */
     public Collection<OfflineReportItem> getSubresellerOfflineReport(
-            long subresellerId, String from, String to)
+            long subresellerId)
             throws StorageException {
 
         ArrayList<OfflineReportItem> result = new ArrayList<>();
@@ -233,7 +236,9 @@ public class OfflineReportProvider {
                                         "tc_devices.uniqueid AS imei",
                                         "tc_simcards.phonenumber AS simcard",
                                         "tc_devicetypes.model AS deviceType",
-                                        "tc_devices.status AS status"
+                                        "tc_devices.status AS status",
+                                        "tc_devices.lastupdate AS lastReportDate",
+                                        "DATEDIFF(DAY, tc_devices.lastupdate, GETDATE()) AS daysoffline"
                                         //"tc_networkproviders.networkprovidername AS simcardType"
                                 ),
                                 new Condition.getSubresellerOfflineDevice(
@@ -250,8 +255,8 @@ public class OfflineReportProvider {
                                         Simcard.class, "id","networkproviderid",
                                         Networkprovider.class, "id",
                                         "subresellerid", subresellerId,
-                                        "status", "offline",
-                                        from, to, "lastupdate"
+                                        "status", "offline","not_connected",
+                                         "lastupdate"
                                 )
                         ));
 
@@ -268,7 +273,8 @@ public class OfflineReportProvider {
             item.setDeviceType(device.getDeviceType());
             item.setSimcard(device.getSimcard());
             item.setStatus(device.getStatus());
-
+            item.setLastReportDate(device.getLastReportDate());
+            item.setDaysoffline(device.getDaysOffline());
             result.add(item);
         }
         return result;
@@ -276,7 +282,7 @@ public class OfflineReportProvider {
 
     /* GETTING OFFLINE PER CLIENT */
     public Collection<OfflineReportItem> getClientOfflineReport(
-            long clientId, String from, String to)
+            long clientId)
             throws StorageException {
 
         ArrayList<OfflineReportItem> result = new ArrayList<>();
@@ -291,7 +297,9 @@ public class OfflineReportProvider {
                                         "tc_devices.uniqueid AS imei",
                                         "tc_simcards.phonenumber AS simcard",
                                         "tc_devicetypes.model AS deviceType",
-                                        "tc_devices.status AS status"
+                                        "tc_devices.status AS status",
+                                        "tc_devices.lastupdate AS lastReportDate",
+                                        "DATEDIFF(DAY, tc_devices.lastupdate, GETDATE()) AS daysoffline"
                                         //"tc_networkproviders.networkprovidername AS simcardType"
                                 ),
                                 new Condition.getClientOfflineDevice(
@@ -308,8 +316,8 @@ public class OfflineReportProvider {
                                         Simcard.class, "id","networkproviderid",
                                         Networkprovider.class, "id",
                                         "clientid", clientId,
-                                        "status", "offline",
-                                        from, to, "lastupdate"
+                                        "status", "offline","not_connected",
+                                        "lastupdate"
                                 )
                         ));
 
@@ -326,6 +334,8 @@ public class OfflineReportProvider {
             item.setDeviceType(device.getDeviceType());
             item.setSimcard(device.getSimcard());
             item.setStatus(device.getStatus());
+            item.setLastReportDate(device.getLastReportDate());
+            item.setDaysoffline(device.getDaysOffline());
 
             result.add(item);
         }
@@ -344,7 +354,7 @@ public class OfflineReportProvider {
             throws StorageException, IOException {
 
         Collection<OfflineReportItem> data =
-                getResellerOfflineReport(resellerId, from, to);
+                getResellerOfflineReport(resellerId);
 
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Offline Devices");
@@ -406,7 +416,7 @@ public class OfflineReportProvider {
             var context = reportUtils.initializeContext(resellerId);
 
             // data passed to Excel template
-            context.putVar("items", getResellerOfflineReport(resellerId, from, to));
+            context.putVar("items", getResellerOfflineReport(resellerId));
 
             JxlsHelper.getInstance()
                     .setUseFastFormulaProcessor(false)

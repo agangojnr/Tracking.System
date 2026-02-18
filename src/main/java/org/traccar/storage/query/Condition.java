@@ -2662,12 +2662,11 @@ public interface Condition {
 
         private final String searchColumn;
         private final long searchValue;
-        private final String fromValue;
-        private final String toValue;
         private final String dateColumn;
 
         private final String searchColumn1;
         private final String searchValue1;
+        private final String searchValue2;
 
         // Constructor
         public getResellerOfflineDevice(Class<?> ownerClass, String ownerColumn,String ownerColumn1,
@@ -2687,8 +2686,7 @@ public interface Condition {
                                          long searchValue,
                                          String searchColumn1,
                                          String searchValue1,
-                                         String fromValue,
-                                         String toValue,
+                                         String searchValue2,
                                          String dateColumn ) {
             this.ownerClass = ownerClass;
             this.ownerColumn = ownerColumn;
@@ -2725,8 +2723,7 @@ public interface Condition {
             this.searchValue = searchValue;
             this.searchColumn1 = searchColumn1;
             this.searchValue1 = searchValue1;
-            this.fromValue = fromValue;
-            this.toValue = toValue;
+            this.searchValue2 = searchValue2;
             this.dateColumn = dateColumn;
 
         }
@@ -2764,8 +2761,7 @@ public interface Condition {
         public long searchValue() { return searchValue; }
         public String searchColumn1() { return searchColumn1; }
         public String searchValue1() { return searchValue1; }
-        public String fromValue() { return fromValue; }
-        public String toValue() { return toValue; }
+        public String searchValue2() { return searchValue2; }
         public String dateColumn() { return dateColumn; }
     }
 
@@ -2784,11 +2780,6 @@ public interface Condition {
 
         private final Class<?> pivotClass4;
         private final String pivotColumn4;
-//        private final Class<?> pivotClass5;
-//        private final String pivotColumn5a;
-//        private final String pivotColumn5b;
-//        private final Class<?> pivotClass6;
-//        private final String pivotColumn6;
         private final Class<?> pivotClass7;
         private final String pivotColumn7;
         private final Class<?> pivotClass8;
@@ -2804,12 +2795,11 @@ public interface Condition {
 
         private final String searchColumn;
         private final long searchValue;
-        private final String fromValue;
-        private final String toValue;
         private final String dateColumn;
 
         private final String searchColumn1;
         private final String searchValue1;
+        private final String searchValue2;
 
         // Constructor
         public getSubresellerOfflineDevice(Class<?> ownerClass, String ownerColumn,String ownerColumn1,
@@ -2817,8 +2807,6 @@ public interface Condition {
                                         Class<?> pivotClass2, String pivotColumn2,
                                         Class<?> pivotClass3,String pivotColumn3a,String pivotColumn3b,
                                         Class<?> pivotClass4,String pivotColumn4,
-//                                        Class<?> pivotClass5,String pivotColumn5a,String pivotColumn5b,
-//                                        Class<?> pivotClass6,String pivotColumn6,
                                         Class<?> pivotClass7,String pivotColumn7,
                                         Class<?> pivotClass8,String pivotColumn8,
                                         Class<?> pivotClass9,String pivotColumn9a,String pivotColumn9b,
@@ -2829,8 +2817,8 @@ public interface Condition {
                                         long searchValue,
                                         String searchColumn1,
                                         String searchValue1,
-                                        String fromValue,
-                                        String toValue,
+                                        String searchValue2,
+
                                         String dateColumn ) {
             this.ownerClass = ownerClass;
             this.ownerColumn = ownerColumn;
@@ -2845,11 +2833,6 @@ public interface Condition {
             this.pivotColumn3b = pivotColumn3b;
             this.pivotClass4 = pivotClass4;
             this.pivotColumn4 = pivotColumn4;
-//            this.pivotClass5 = pivotClass5;
-//            this.pivotColumn5a = pivotColumn5a;
-//            this.pivotColumn5b = pivotColumn5b;
-//            this.pivotClass6 = pivotClass6;
-//            this.pivotColumn6 = pivotColumn6;
             this.pivotClass7 = pivotClass7;
             this.pivotColumn7 = pivotColumn7;
             this.pivotClass8 = pivotClass8;
@@ -2867,8 +2850,7 @@ public interface Condition {
             this.searchValue = searchValue;
             this.searchColumn1 = searchColumn1;
             this.searchValue1 = searchValue1;
-            this.fromValue = fromValue;
-            this.toValue = toValue;
+            this.searchValue2 = searchValue2;
             this.dateColumn = dateColumn;
 
         }
@@ -2885,11 +2867,6 @@ public interface Condition {
         public String getPivotColumn3b() { return pivotColumn3b; }
         public Class<?> getPivotClass4() { return pivotClass4; }
         public String getPivotColumn4() { return pivotColumn4; }
-//        public Class<?> getPivotClass5() { return pivotClass5; }
-//        public String getPivotColumn5a() { return pivotColumn5a; }
-//        public String getPivotColumn5b() { return pivotColumn5b; }
-//        public Class<?> getPivotClass6() { return pivotClass6; }
-//        public String getPivotColumn6() { return pivotColumn6; }
         public Class<?> getPivotClass7() { return pivotClass7; }
         public String getPivotColumn7() { return pivotColumn7; }
         public Class<?> getPivotClass8() { return pivotClass8; }
@@ -2906,8 +2883,7 @@ public interface Condition {
         public long searchValue() { return searchValue; }
         public String searchColumn1() { return searchColumn1; }
         public String searchValue1() { return searchValue1; }
-        public String fromValue() { return fromValue; }
-        public String toValue() { return toValue; }
+        public String searchValue2() { return searchValue2; }
         public String dateColumn() { return dateColumn; }
 
     }
@@ -2921,17 +2897,7 @@ public interface Condition {
         private final String pivotColumn1b;
         private final Class<?> pivotClass2;
         private final String pivotColumn2;
-//        private final Class<?> pivotClass3;
-//        private final String pivotColumn3a;
-//        private final String pivotColumn3b;
-//
-//        private final Class<?> pivotClass4;
-//        private final String pivotColumn4;
-        //        private final Class<?> pivotClass5;
-//        private final String pivotColumn5a;
-//        private final String pivotColumn5b;
-//        private final Class<?> pivotClass6;
-//        private final String pivotColumn6;
+
         private final Class<?> pivotClass7;
         private final String pivotColumn7;
         private final Class<?> pivotClass8;
@@ -2947,21 +2913,17 @@ public interface Condition {
 
         private final String searchColumn;
         private final long searchValue;
-        private final String fromValue;
-        private final String toValue;
+
         private final String dateColumn;
 
         private final String searchColumn1;
         private final String searchValue1;
+        private final String searchValue2;
 
         // Constructor
         public getClientOfflineDevice(Class<?> ownerClass, String ownerColumn,String ownerColumn1,
                                            Class<?> pivotClass1, String pivotColumn1a, String pivotColumn1b,
                                            Class<?> pivotClass2, String pivotColumn2,
-//                                           Class<?> pivotClass3,String pivotColumn3a,String pivotColumn3b,
-//                                           Class<?> pivotClass4,String pivotColumn4,
-//                                        Class<?> pivotClass5,String pivotColumn5a,String pivotColumn5b,
-//                                        Class<?> pivotClass6,String pivotColumn6,
                                            Class<?> pivotClass7,String pivotColumn7,
                                            Class<?> pivotClass8,String pivotColumn8,
                                            Class<?> pivotClass9,String pivotColumn9a,String pivotColumn9b,
@@ -2972,8 +2934,7 @@ public interface Condition {
                                            long searchValue,
                                            String searchColumn1,
                                            String searchValue1,
-                                           String fromValue,
-                                           String toValue,
+                                           String searchValue2,
                                            String dateColumn ) {
             this.ownerClass = ownerClass;
             this.ownerColumn = ownerColumn;
@@ -2983,16 +2944,6 @@ public interface Condition {
             this.pivotColumn1b = pivotColumn1b;
             this.pivotClass2 = pivotClass2;
             this.pivotColumn2 = pivotColumn2;
-//            this.pivotClass3 = pivotClass3;
-//            this.pivotColumn3a = pivotColumn3a;
-//            this.pivotColumn3b = pivotColumn3b;
-//            this.pivotClass4 = pivotClass4;
-//            this.pivotColumn4 = pivotColumn4;
-//            this.pivotClass5 = pivotClass5;
-//            this.pivotColumn5a = pivotColumn5a;
-//            this.pivotColumn5b = pivotColumn5b;
-//            this.pivotClass6 = pivotClass6;
-//            this.pivotColumn6 = pivotColumn6;
             this.pivotClass7 = pivotClass7;
             this.pivotColumn7 = pivotColumn7;
             this.pivotClass8 = pivotClass8;
@@ -3010,8 +2961,7 @@ public interface Condition {
             this.searchValue = searchValue;
             this.searchColumn1 = searchColumn1;
             this.searchValue1 = searchValue1;
-            this.fromValue = fromValue;
-            this.toValue = toValue;
+            this.searchValue2 = searchValue2;
             this.dateColumn = dateColumn;
 
         }
@@ -3023,16 +2973,7 @@ public interface Condition {
         public String getPivotColumn1b() { return pivotColumn1b; }
         public Class<?> getPivotClass2() { return pivotClass2; }
         public String getPivotColumn2() { return pivotColumn2; }
-//        public Class<?> getPivotClass3() { return pivotClass3; }
-//        public String getPivotColumn3a() { return pivotColumn3a; }
-//        public String getPivotColumn3b() { return pivotColumn3b; }
-//        public Class<?> getPivotClass4() { return pivotClass4; }
-//        public String getPivotColumn4() { return pivotColumn4; }
-        //        public Class<?> getPivotClass5() { return pivotClass5; }
-//        public String getPivotColumn5a() { return pivotColumn5a; }
-//        public String getPivotColumn5b() { return pivotColumn5b; }
-//        public Class<?> getPivotClass6() { return pivotClass6; }
-//        public String getPivotColumn6() { return pivotColumn6; }
+
         public Class<?> getPivotClass7() { return pivotClass7; }
         public String getPivotColumn7() { return pivotColumn7; }
         public Class<?> getPivotClass8() { return pivotClass8; }
@@ -3049,8 +2990,7 @@ public interface Condition {
         public long searchValue() { return searchValue; }
         public String searchColumn1() { return searchColumn1; }
         public String searchValue1() { return searchValue1; }
-        public String fromValue() { return fromValue; }
-        public String toValue() { return toValue; }
+        public String searchValue2() { return searchValue2; }
         public String dateColumn() { return dateColumn; }
 
     }

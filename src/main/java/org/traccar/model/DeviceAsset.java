@@ -6,26 +6,23 @@ import org.traccar.storage.StorageName;
 @StorageName("tc_device_asset")
 public class DeviceAsset {
 
-    private int deviceid;
-    private int assetid;
+    private Long deviceid;
+    private Long assetid;
 
     // Getters and setters
-    public int getDevcieid() {
+    public Long getDevcieid() {
         return deviceid;
     }
-    public void setDeviceid(int deviceid) {
+    public void setDeviceid(Long deviceid) {
         this.deviceid = deviceid;
     }
 
-    public int getAssetid() {
+    public Long getAssetid() {
         return assetid;
     }
-    public void getAssetid(int simcardid) {
+    public void setAssetid(Long assetid) {
         this.assetid = assetid;
     }
-
-
-
 
 }
 

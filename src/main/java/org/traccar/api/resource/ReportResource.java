@@ -337,17 +337,15 @@ public class ReportResource extends SimpleObjectResource<Report> {
     public Collection<OfflineReportItem> getOfflines(
             @QueryParam("clientId") Long clientId,
             @QueryParam("subresellerId") Long subresellerId,
-            @QueryParam("resellerId") Long resellerId,
-            @QueryParam("from") String fromStr,
-            @QueryParam("to") String toStr)
+            @QueryParam("resellerId") Long resellerId)
             throws Exception {
 
         if (resellerId != null && resellerId > 0) {
-            return offlineReportProvider.getResellerOfflineReport(resellerId, fromStr, toStr);
+            return offlineReportProvider.getResellerOfflineReport(resellerId);
         }else if (subresellerId != null && subresellerId > 0) {
-            return offlineReportProvider.getSubresellerOfflineReport(subresellerId, fromStr, toStr);
+            return offlineReportProvider.getSubresellerOfflineReport(subresellerId);
         }else if (clientId != null && clientId > 0) {
-            return offlineReportProvider.getClientOfflineReport(clientId, fromStr, toStr);
+            return offlineReportProvider.getClientOfflineReport(clientId);
         }else{
             throw new WebApplicationException(
                     "resellerId, subresellerid or clientid is required",

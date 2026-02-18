@@ -14,6 +14,8 @@ public class OfflineReportItem {
     //private String simcardType;
     private String simcard;
     private String status;
+    private String lastReportDate;
+    private long daysOffline;
 
 
     // Getters and setters
@@ -71,6 +73,20 @@ public class OfflineReportItem {
     }
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getLastReportDate() {
+        return lastReportDate;
+    }
+    public void setLastReportDate(String lastReportDate) {
+        this.lastReportDate = lastReportDate;
+    }
+
+    public Long getDaysOffline() {
+        return daysOffline;
+    }
+    public void setDaysoffline(Long daysOffline) {
+        this.daysOffline = daysOffline;
     }
 
 //    public String getSimcardType() {

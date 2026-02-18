@@ -2983,6 +2983,28 @@ public class DatabaseStorage extends Storage {
                     result.append(condition.searchValue1());result.append("'");
 
                 }else if (genericCondition instanceof Condition.getResellerOfflineDevice condition){
+                    //Device_simcard
+                    result.append(" LEFT JOIN ");
+                    result.append(getStorageName(condition.getPivotClass9()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass9()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn9a());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn());
+                    //Simcards
+                    result.append(" LEFT JOIN ");
+                    result.append(getStorageName(condition.getPivotClass10()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass10()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn10a());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass9()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn9b());
                     //Client_device
                     result.append(" INNER JOIN ");
                     result.append(getStorageName(condition.getPivotClass1()));
@@ -3071,8 +3093,40 @@ public class DatabaseStorage extends Storage {
                     result.append(getStorageName(condition.getOwnerClass()));
                     result.append(".");
                     result.append(condition.getOwnerColumn1());
+
+                    //SimcardType
+//                    result.append(" LEFT JOIN ");
+//                    result.append(getStorageName(condition.getPivotClass11()));
+//                    result.append(" ON ");
+//                    result.append(getStorageName(condition.getPivotClass11()));
+//                    result.append(".");
+//                    result.append(condition.getPivotColumn11());
+//                    result.append(" = ");
+//                    result.append(getStorageName(condition.getPivotClass10()));
+//                    result.append(".");
+//                    result.append(condition.getPivotColumn10b());
+
+                    result.append(" WHERE ");
+                    result.append(getStorageName(condition.getPivotClass5()));
+                    result.append(".");
+                    result.append(condition.searchColumn());
+                    result.append(" = ");result.append("'");
+                    result.append(condition.searchValue());result.append("'");
+
+                    result.append(" AND ");
+
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.searchColumn1());
+                    result.append(" IN (");
+                    result.append("'");result.append(condition.searchValue1());result.append("'");
+                    result.append(", ");
+                    result.append("'");result.append(condition.searchValue2());result.append("'");
+                    result.append(") ");
+
+                }else if (genericCondition instanceof Condition.getSubresellerOfflineDevice condition){
                     //Device_simcard
-                    result.append(" INNER JOIN ");
+                    result.append(" LEFT JOIN ");
                     result.append(getStorageName(condition.getPivotClass9()));
                     result.append(" ON ");
                     result.append(getStorageName(condition.getPivotClass9()));
@@ -3093,46 +3147,6 @@ public class DatabaseStorage extends Storage {
                     result.append(getStorageName(condition.getPivotClass9()));
                     result.append(".");
                     result.append(condition.getPivotColumn9b());
-
-                    //SimcardType
-                    result.append(" LEFT JOIN ");
-                    result.append(getStorageName(condition.getPivotClass11()));
-                    result.append(" ON ");
-                    result.append(getStorageName(condition.getPivotClass11()));
-                    result.append(".");
-                    result.append(condition.getPivotColumn11());
-                    result.append(" = ");
-                    result.append(getStorageName(condition.getPivotClass10()));
-                    result.append(".");
-                    result.append(condition.getPivotColumn10b());
-
-                    result.append(" WHERE ");
-                    result.append(getStorageName(condition.getPivotClass5()));
-                    result.append(".");
-                    result.append(condition.searchColumn());
-                    result.append(" = ");result.append("'");
-                    result.append(condition.searchValue());result.append("'");
-                    result.append(" AND ");
-                    result.append(getStorageName(condition.getOwnerClass()));
-                    result.append(".");
-                    result.append(condition.searchColumn1());
-                    result.append(" = ");result.append("'");
-                    result.append(condition.searchValue1());result.append("'");
-
-                    result.append(" AND ");
-                    result.append(getStorageName(condition.getOwnerClass()));
-                    result.append(".");
-                    result.append(condition.dateColumn());
-                    result.append(" BETWEEN ");
-                    result.append("'");
-                    result.append(condition.fromValue());
-                    result.append("'");
-                    result.append(" AND ");
-                    result.append("'");
-                    result.append(condition.toValue());
-                    result.append("'");
-
-                }else if (genericCondition instanceof Condition.getSubresellerOfflineDevice condition){
                     //Client_device
                     result.append(" INNER JOIN ");
                     result.append(getStorageName(condition.getPivotClass1()));
@@ -3221,8 +3235,40 @@ public class DatabaseStorage extends Storage {
                     result.append(getStorageName(condition.getOwnerClass()));
                     result.append(".");
                     result.append(condition.getOwnerColumn1());
+
+                    //SimcardType
+//                    result.append(" LEFT JOIN ");
+//                    result.append(getStorageName(condition.getPivotClass11()));
+//                    result.append(" ON ");
+//                    result.append(getStorageName(condition.getPivotClass11()));
+//                    result.append(".");
+//                    result.append(condition.getPivotColumn11());
+//                    result.append(" = ");
+//                    result.append(getStorageName(condition.getPivotClass10()));
+//                    result.append(".");
+//                    result.append(condition.getPivotColumn10b());
+
+                    result.append(" WHERE ");
+                    result.append(getStorageName(condition.getPivotClass3()));
+                    result.append(".");
+                    result.append(condition.searchColumn());
+                    result.append(" = ");result.append("'");
+                    result.append(condition.searchValue());result.append("'");
+
+                    result.append(" AND ");
+
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.searchColumn1());
+                    result.append(" IN (");
+                    result.append("'");result.append(condition.searchValue1());result.append("'");
+                    result.append(", ");
+                    result.append("'");result.append(condition.searchValue2());result.append("'");
+                    result.append(") ");
+
+                }else if (genericCondition instanceof Condition.getClientOfflineDevice condition){
                     //Device_simcard
-                    result.append(" INNER JOIN ");
+                    result.append(" LEFT JOIN ");
                     result.append(getStorageName(condition.getPivotClass9()));
                     result.append(" ON ");
                     result.append(getStorageName(condition.getPivotClass9()));
@@ -3244,45 +3290,6 @@ public class DatabaseStorage extends Storage {
                     result.append(".");
                     result.append(condition.getPivotColumn9b());
 
-                    //SimcardType
-                    result.append(" LEFT JOIN ");
-                    result.append(getStorageName(condition.getPivotClass11()));
-                    result.append(" ON ");
-                    result.append(getStorageName(condition.getPivotClass11()));
-                    result.append(".");
-                    result.append(condition.getPivotColumn11());
-                    result.append(" = ");
-                    result.append(getStorageName(condition.getPivotClass10()));
-                    result.append(".");
-                    result.append(condition.getPivotColumn10b());
-
-                    result.append(" WHERE ");
-                    result.append(getStorageName(condition.getPivotClass3()));
-                    result.append(".");
-                    result.append(condition.searchColumn());
-                    result.append(" = ");result.append("'");
-                    result.append(condition.searchValue());result.append("'");
-                    result.append(" AND ");
-                    result.append(getStorageName(condition.getOwnerClass()));
-                    result.append(".");
-                    result.append(condition.searchColumn1());
-                    result.append(" = ");result.append("'");
-                    result.append(condition.searchValue1());result.append("'");
-
-                    result.append(" AND ");
-                    result.append(getStorageName(condition.getOwnerClass()));
-                    result.append(".");
-                    result.append(condition.dateColumn());
-                    result.append(" BETWEEN ");
-                    result.append("'");
-                    result.append(condition.fromValue());
-                    result.append("'");
-                    result.append(" AND ");
-                    result.append("'");
-                    result.append(condition.toValue());
-                    result.append("'");
-
-                }else if (genericCondition instanceof Condition.getClientOfflineDevice condition){
                     //Client_device
                     result.append(" INNER JOIN ");
                     result.append(getStorageName(condition.getPivotClass1()));
@@ -3371,40 +3378,19 @@ public class DatabaseStorage extends Storage {
                     result.append(getStorageName(condition.getOwnerClass()));
                     result.append(".");
                     result.append(condition.getOwnerColumn1());
-                    //Device_simcard
-                    result.append(" INNER JOIN ");
-                    result.append(getStorageName(condition.getPivotClass9()));
-                    result.append(" ON ");
-                    result.append(getStorageName(condition.getPivotClass9()));
-                    result.append(".");
-                    result.append(condition.getPivotColumn9a());
-                    result.append(" = ");
-                    result.append(getStorageName(condition.getOwnerClass()));
-                    result.append(".");
-                    result.append(condition.getOwnerColumn());
-                    //Simcards
-                    result.append(" LEFT JOIN ");
-                    result.append(getStorageName(condition.getPivotClass10()));
-                    result.append(" ON ");
-                    result.append(getStorageName(condition.getPivotClass10()));
-                    result.append(".");
-                    result.append(condition.getPivotColumn10a());
-                    result.append(" = ");
-                    result.append(getStorageName(condition.getPivotClass9()));
-                    result.append(".");
-                    result.append(condition.getPivotColumn9b());
+
 
                     //SimcardType
-                    result.append(" LEFT JOIN ");
-                    result.append(getStorageName(condition.getPivotClass11()));
-                    result.append(" ON ");
-                    result.append(getStorageName(condition.getPivotClass11()));
-                    result.append(".");
-                    result.append(condition.getPivotColumn11());
-                    result.append(" = ");
-                    result.append(getStorageName(condition.getPivotClass10()));
-                    result.append(".");
-                    result.append(condition.getPivotColumn10b());
+//                    result.append(" LEFT JOIN ");
+//                    result.append(getStorageName(condition.getPivotClass11()));
+//                    result.append(" ON ");
+//                    result.append(getStorageName(condition.getPivotClass11()));
+//                    result.append(".");
+//                    result.append(condition.getPivotColumn11());
+//                    result.append(" = ");
+//                    result.append(getStorageName(condition.getPivotClass10()));
+//                    result.append(".");
+//                    result.append(condition.getPivotColumn10b());
 
                     result.append(" WHERE ");
                     result.append(getStorageName(condition.getPivotClass1()));
@@ -3412,26 +3398,16 @@ public class DatabaseStorage extends Storage {
                     result.append(condition.searchColumn());
                     result.append(" = ");result.append("'");
                     result.append(condition.searchValue());result.append("'");
+
                     result.append(" AND ");
                     result.append(getStorageName(condition.getOwnerClass()));
                     result.append(".");
                     result.append(condition.searchColumn1());
-                    result.append(" = ");result.append("'");
-                    result.append(condition.searchValue1());result.append("'");
-
-                    result.append(" AND ");
-                    result.append(getStorageName(condition.getOwnerClass()));
-                    result.append(".");
-                    result.append(condition.dateColumn());
-                    result.append(" BETWEEN ");
-                    result.append("'");
-                    result.append(condition.fromValue());
-                    result.append("'");
-                    result.append(" AND ");
-                    result.append("'");
-                    result.append(condition.toValue());
-                    result.append("'");
-
+                    result.append(" IN (");
+                    result.append("'");result.append(condition.searchValue1());result.append("'");
+                    result.append(", ");
+                    result.append("'");result.append(condition.searchValue2());result.append("'");
+                    result.append(") ");
 
                 }else if (genericCondition instanceof Condition.CountSubResellerOnlineDevice condition){
                     result.append(" INNER JOIN ");

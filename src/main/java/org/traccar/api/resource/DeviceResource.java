@@ -522,11 +522,21 @@ public class DeviceResource extends BaseObjectResource<Device> {
                                @QueryParam("deviceid") Long deviceid,
                                @QueryParam("assetid") Long assetid) throws Exception {
         //LOGGER.info("Inserted entity with ID: {}", clientId);
-        if (checkDeviceAssetLink(oldclientid, deviceid)) {
+        if (checkDeviceAssetLink(newclientid, oldclientid, deviceid)) {
             //Unlink existing devices and assets
             permissionsService.unlink(LinkType.CLIENT_DEVICE, oldclientid, deviceid);
             //Link new devices and simcards
             permissionsService.link(LinkType.CLIENT_DEVICE, newclientid, deviceid);
+
+            DeviceAsset asset = storage.getObject(
+                    DeviceAsset.class,
+                    new Request(
+                            new Columns.All(),
+                            new Condition.Equals("deviceid", deviceid)
+                    )
+            );
+
+            Long assetId = asset != null ? asset.getAssetid() : null;
 
             if(assetid != null && assetid > 0){
                 //Unlink existing devices and assets
@@ -535,17 +545,16 @@ public class DeviceResource extends BaseObjectResource<Device> {
                 permissionsService.link(LinkType.CLIENT_ASSET, newclientid, assetid);
             }
 
-
             return Response.ok("{\"status\":\"Moved Successfully\"}").build();
         }
         return Response.serverError()
-                .entity("{\"error\":\"Unexpected error occurred.\"}")
+                .entity("{\"error\":\"Device already in the client. \"}")
                 .build();
     }
 
-    public boolean checkDeviceAssetLink(long oldclientid,long deviceId) throws StorageException {
+    public boolean checkDeviceAssetLink(long newclientid, long oldclientid,long deviceId) throws StorageException {
         //String name = Simcard entity.getNetworkproviderid();
-        Collection<ClientDevice> clientdevice = storage.getObjects(ClientDevice.class,
+        Collection<ClientDevice> oldclientdevice = storage.getObjects(ClientDevice.class,
                 new Request(
                         new Columns.All(),
                         new Condition.And(
@@ -554,7 +563,24 @@ public class DeviceResource extends BaseObjectResource<Device> {
                         )
                 )
         );
-        if (!clientdevice.isEmpty()) {
+        Collection<ClientDevice> newclientdevice = storage.getObjects(ClientDevice.class,
+                new Request(
+                        new Columns.All(),
+                        new Condition.And(
+                                new Condition.Equals("deviceid", deviceId),
+                                new Condition.Equals("clientid", newclientid)
+                        )
+                )
+        );
+        if (!oldclientdevice.isEmpty() && newclientdevice.isEmpty()) {
+            return true;
+        }
+        return false;
+    }
+}
+
+
+
 //            Collection<ClientAsset> clientasset = storage.getObjects(ClientAsset.class,
 //                    new Request(
 //                            new Columns.All(),
@@ -567,11 +593,4 @@ public class DeviceResource extends BaseObjectResource<Device> {
 //            if (!clientasset.isEmpty()) {
 //                return true;
 //            }
-            return true;
-        }
-        return true;
-    }
-}
-
-
 
