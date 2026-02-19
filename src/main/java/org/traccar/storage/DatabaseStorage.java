@@ -693,6 +693,13 @@ public class DatabaseStorage extends Storage {
                     result.append(" = ");
                     result.append(condition.getValue2());
 
+                    result.append(" AND ");
+                    result.append(getStorageName(condition.getPivotClass()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn());
+                    result.append(" = ");
+                    result.append(condition.getValue());
+
                 }else if(genericCondition instanceof Condition.JoinTwoWhere condition){
                     result.append(" JOIN ");
                     result.append(getStorageName(condition.getPivotClass()));

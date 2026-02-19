@@ -590,7 +590,7 @@ public class DeviceResource extends BaseObjectResource<Device> {
                 new Columns.All(),
                 new Condition.JoinOneWhereBoolean(Device.class, "id",
                         AuctioneerDevice.class, "auctioneerid","deviceid",
-                        "isrepossessed", isRepossessed)));
+                        "isrepossessed", isRepossessed, auctioneerid)));
     }
 }
 

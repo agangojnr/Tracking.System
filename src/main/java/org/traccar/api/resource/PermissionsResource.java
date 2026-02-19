@@ -126,12 +126,12 @@ public class PermissionsResource  extends BaseResource {
             checkPermission(permission);
             String oneToOne = permission.getOwnerClass().getSimpleName()+""+permission.getPropertyClass().getSimpleName();
 
-            LOGGER.info("One to one -- {}", oneToOne);
+            //LOGGER.info("One to one -- {}", oneToOne);
 
             if ("DeviceSimcard".equals(oneToOne) || "DeviceAsset".equals(oneToOne)) {
                 checkLinkage(permission);
             }
-
+            //LOGGER.info("Auctioneerid - {}   Deviceid - {}",permission.getOwnerId(),permission.getPropertyId());
 
             storage.addPermission(permission);
             cacheManager.invalidatePermission(
