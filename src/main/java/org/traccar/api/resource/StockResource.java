@@ -78,7 +78,7 @@ public class StockResource extends BaseObjectResource<Device> {
 
     @GET
     public Collection<Device> get() throws StorageException{
-        LOGGER.info("Testing the query.");
+        //LOGGER.info("Testing the query.");
         return null;
     }
 
@@ -139,7 +139,10 @@ public class StockResource extends BaseObjectResource<Device> {
                     Simcard.class,
                     new Request(
                             new Columns.All(),
-                            new Condition.ThreeJoinWhere(Simcard.class,"id", DeviceSimcard.class,"simcardid","simcardid",ResellerSimcard.class,"simcardid","resellerid",resellerId)
+                            new Condition.ThreeJoinWhere(Simcard.class,"id",
+                                    DeviceSimcard.class,"simcardid","simcardid",
+                                    ResellerSimcard.class,"simcardid","resellerid",
+                                    resellerId)
                     )
             );
             return Response.ok(simcards).build();
@@ -163,7 +166,8 @@ public class StockResource extends BaseObjectResource<Device> {
                     Simcard.class,
                     new Request(
                             new Columns.All(),
-                            new Condition.LeftJoin(Simcard.class,"id", DeviceSimcard.class,"simcardid")
+                            new Condition.UnlinkedSimcards(Simcard.class,"id",
+                                    DeviceSimcard.class,"simcardid")
                     )
             );
             return Response.ok(simcards).build();
@@ -173,7 +177,10 @@ public class StockResource extends BaseObjectResource<Device> {
                     Simcard.class,
                     new Request(
                             new Columns.All(),
-                            new Condition.LeftJoinOneJoinWhere(Simcard.class,"id", DeviceSimcard.class,"simcardid", ResellerSimcard.class, "resellerid", resellerId)
+                            new Condition.ResellerUnlinkedSimcards(Simcard.class,"id",
+                                    DeviceSimcard.class,"simcardid",
+                                    ResellerSimcard.class, "resellerid",
+                                    resellerId)
                     )
             );
             return Response.ok(simcards).build();
@@ -208,7 +215,16 @@ public class StockResource extends BaseObjectResource<Device> {
                                     "model AS deviceModel",
                                     "status AS status"
                             ),
-                            new Condition.GetAllDevices(Device.class,"id", "devicetypeid", ClientDevice.class,"clientid","deviceid", Client.class,"id", SubresellerClient.class, "subresellerid", "clientid", Subreseller.class, "id", ResellerSubreseller.class, "resellerid", "subresellerid", Reseller.class, "id",Devicetype.class, "id", DeviceSimcard.class,"deviceid", "simcardid", Simcard.class,"id")
+                            new Condition.GetAllDevices(Device.class,"id", "devicetypeid",
+                                    ClientDevice.class,"clientid","deviceid",
+                                    Client.class,"id",
+                                    SubresellerClient.class, "subresellerid", "clientid",
+                                    Subreseller.class, "id",
+                                    ResellerSubreseller.class, "resellerid", "subresellerid",
+                                    Reseller.class, "id",
+                                    Devicetype.class, "id",
+                                    DeviceSimcard.class,"deviceid", "simcardid",
+                                    Simcard.class,"id")
                     )
             );
             return Response.ok(devices).build();
@@ -260,7 +276,17 @@ public class StockResource extends BaseObjectResource<Device> {
                                     "model AS deviceModel",
                                     "status AS status"
                             ),
-                            new Condition.NineJoin(Device.class,"id","devicetypeid", DeviceAsset.class,"deviceid", ClientDevice.class,"clientid", "deviceid", Client.class,"id", SubresellerClient.class, "subresellerid",  "clientid", Subreseller.class, "id", ResellerSubreseller.class, "resellerid", "subresellerid", DeviceSimcard.class, "deviceid","simcardid", Simcard.class, "id", Devicetype.class, "id", Reseller.class, "id")
+                            new Condition.NineJoin(Device.class,"id","devicetypeid",
+                                    DeviceAsset.class,"deviceid",
+                                    ClientDevice.class,"clientid", "deviceid",
+                                    Client.class,"id",
+                                    SubresellerClient.class, "subresellerid",  "clientid",
+                                    Subreseller.class, "id",
+                                    ResellerSubreseller.class, "resellerid", "subresellerid",
+                                    DeviceSimcard.class, "deviceid","simcardid",
+                                    Simcard.class, "id",
+                                    Devicetype.class, "id",
+                                    Reseller.class, "id")
                             //new Condition.ThreeJoinWhere(Device.class,"id", DeviceAsset.class,"simcardid","simcardid",ResellerSimcard.class,"simcardid","resellerid",resellerId)
                     )
             );
@@ -314,7 +340,17 @@ public class StockResource extends BaseObjectResource<Device> {
                                     "status AS status"
                             ),
                             //new Condition.FiveJoinWhere(Device.class,"id", DeviceAsset.class,"deviceid", "clientid", ClientDevice.class,  "subresellerid", SubresellerClient.class, "subresellerid", ResellerSubreseller.class, "resellerid", "resellerid", resellerId)
-                            new Condition.GetAllUnlinkedDevices(Device.class,"id","devicetypeid", DeviceAsset.class,"deviceid", ClientDevice.class,"clientid", "deviceid", Client.class,"id", SubresellerClient.class, "subresellerid",  "clientid", Subreseller.class, "id", ResellerSubreseller.class, "resellerid", "subresellerid", DeviceSimcard.class, "deviceid","simcardid", Simcard.class, "id", Devicetype.class, "id", Reseller.class, "id")
+                            new Condition.GetAllUnlinkedDevices(Device.class,"id","devicetypeid",
+                                    DeviceAsset.class,"deviceid",
+                                    ClientDevice.class,"clientid", "deviceid",
+                                    Client.class,"id",
+                                    SubresellerClient.class, "subresellerid",  "clientid",
+                                    Subreseller.class, "id",
+                                    ResellerSubreseller.class, "resellerid", "subresellerid",
+                                    DeviceSimcard.class, "deviceid","simcardid",
+                                    Simcard.class, "id",
+                                    Devicetype.class, "id",
+                                    Reseller.class, "id")
                 )
             );
             return Response.ok(devices).build();

@@ -127,7 +127,7 @@ public class DatabaseStorage extends Storage {
         query.append(" FROM ").append(getStorageName(clazz));
         //Here is the join conditions
         query.append(formatJoin(request.getCondition(),true));
-        //logger.info("SQL - {}", query);
+        logger.info("SQL - {}", query);
         //query.append(formatOrder(request.getOrder()));
 
         try {
@@ -426,6 +426,61 @@ public class DatabaseStorage extends Storage {
 
                     result.append(" AND ");
 
+                    result.append(getStorageName(condition.getPivotClass()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn());
+                    result.append(" IS NULL ");
+
+                }else if(genericCondition instanceof Condition.ResellerUnlinkedSimcards condition){
+                    result.append(" LEFT JOIN ");
+                    result.append(getStorageName(condition.getPivotClass()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn());
+
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass1()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass1()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn());
+
+                    result.append(" WHERE ");
+                    result.append(getStorageName(condition.getPivotClass1()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn1());
+                    result.append(" = ");result.append("'");
+                    result.append(condition.getValue());result.append("'");
+
+                    result.append(" AND ");
+
+                    result.append(getStorageName(condition.getPivotClass()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn());
+                    result.append(" IS NULL ");
+
+                }else if(genericCondition instanceof Condition.UnlinkedSimcards condition){
+                    result.append(" LEFT JOIN ");
+                    result.append(getStorageName(condition.getPivotClass()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn());
+
+                    result.append(" WHERE ");
                     result.append(getStorageName(condition.getPivotClass()));
                     result.append(".");
                     result.append(condition.getPivotColumn());
@@ -1123,7 +1178,7 @@ public class DatabaseStorage extends Storage {
                     result.append(".");
                     result.append(condition.getPivotColumn3a());
                     //device_simcard
-                    result.append(" INNER JOIN ");
+                    result.append(" LEFT JOIN ");
                     result.append(getStorageName(condition.getPivotClass6()));
                     result.append(" ON ");
                     result.append(getStorageName(condition.getPivotClass6()));
@@ -1134,7 +1189,7 @@ public class DatabaseStorage extends Storage {
                     result.append(".");
                     result.append(condition.getOwnerColumn());
                     //simcard
-                    result.append(" INNER JOIN ");
+                    result.append(" LEFT JOIN ");
                     result.append(getStorageName(condition.getPivotClass7()));
                     result.append(" ON ");
                     result.append(getStorageName(condition.getPivotClass7()));
@@ -3534,6 +3589,28 @@ public class DatabaseStorage extends Storage {
 
 
                 }else if (genericCondition instanceof Condition.NineJoin condition){
+                    //device_simcard
+                    result.append(" LEFT JOIN ");
+                    result.append(getStorageName(condition.getPivotClass6()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass6()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn6a());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn());
+                    //simcard
+                    result.append(" LEFT JOIN ");
+                    result.append(getStorageName(condition.getPivotClass7()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass7()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn7());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass6()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn6b());
                     //device_asset
                     result.append(" INNER JOIN ");
                     result.append(getStorageName(condition.getPivotClass()));
@@ -3600,29 +3677,8 @@ public class DatabaseStorage extends Storage {
                     result.append(getStorageName(condition.getPivotClass3()));
                     result.append(".");
                     result.append(condition.getPivotColumn3a());
-                    //device_simcard
-                    result.append(" INNER JOIN ");
-                    result.append(getStorageName(condition.getPivotClass6()));
-                    result.append(" ON ");
-                    result.append(getStorageName(condition.getPivotClass6()));
-                    result.append(".");
-                    result.append(condition.getPivotColumn6a());
-                    result.append(" = ");
-                    result.append(getStorageName(condition.getOwnerClass()));
-                    result.append(".");
-                    result.append(condition.getOwnerColumn());
-                    //simcard
-                    result.append(" INNER JOIN ");
-                    result.append(getStorageName(condition.getPivotClass7()));
-                    result.append(" ON ");
-                    result.append(getStorageName(condition.getPivotClass7()));
-                    result.append(".");
-                    result.append(condition.getPivotColumn7());
-                    result.append(" = ");
-                    result.append(getStorageName(condition.getPivotClass6()));
-                    result.append(".");
-                    result.append(condition.getPivotColumn6b());
-                    //device_simcard
+
+                    //devicetype
                     result.append(" INNER JOIN ");
                     result.append(getStorageName(condition.getPivotClass8()));
                     result.append(" ON ");
