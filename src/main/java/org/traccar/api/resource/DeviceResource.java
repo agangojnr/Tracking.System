@@ -584,14 +584,14 @@ public class DeviceResource extends BaseObjectResource<Device> {
     @Path("auctioneers")
     public Collection<Device> getDeviceByAuctioneer(
             @QueryParam("auctioneerid") long auctioneerid
-    ) throws Exception{;
-        var conditions = new LinkedList<Condition>();
-        if (auctioneerid > 0) {
-            conditions.add(new Condition.Permission(Auctioneer.class, auctioneerid, Device.class).excludeGroups());
-        }
+    ) throws Exception{
 
-        return storage.getObjects(Device.class, new Request(
-                new Columns.All(), Condition.merge(conditions), new Order("name")));
+        Long repossessed = 0L;
+        return storage.getJointObjects(baseClass, new Request(
+                new Columns.All(),
+                new Condition.JoinOneWhereBoolean(Device.class, "id",
+                        AuctioneerDevice.class, "auctioneerid","deviceid",
+                        "repossessed", repossessed)));
     }
 }
 

@@ -350,6 +350,36 @@ public interface Condition {
         public long getValue2() { return value2; }
     }
 
+    class JoinOneWhereBoolean implements Condition {
+        private final Class<?> ownerClass;
+        private final Class<?> pivotClass;
+        private final String ownerColumn;
+        private final String pivotColumn;
+        private final String column2;
+        private final String searchColumn;
+        private final Long value2;
+
+        // Constructor
+        public JoinOneWhereBoolean(Class<?> ownerClass, String ownerColumn,
+                                   Class<?> pivotClass, String pivotColumn, String column2,
+                                   String searchColumn, Long value2) {
+            this.ownerClass = ownerClass;
+            this.ownerColumn = ownerColumn;
+            this.pivotClass = pivotClass;
+            this.column2 = column2;
+            this.value2 = value2;
+            this.pivotColumn = pivotColumn;
+            this.searchColumn = searchColumn;
+        }
+        public Class<?> getOwnerClass() { return ownerClass; }
+        public Class<?> getPivotClass() { return pivotClass; }
+        public String getOwnerColumn() { return ownerColumn; }
+        public String getPivotColumn() { return pivotColumn; }
+        public String getColumn2() { return column2; }
+        public Long getValue2() { return value2; }
+        public String getSearchColumn() { return searchColumn; }
+    }
+
     class JoinTwoWhere implements Condition {
         private final Class<?> ownerClass;
         private final Class<?> pivotClass;
