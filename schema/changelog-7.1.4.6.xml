@@ -123,6 +123,16 @@
 
   </changeSet>
 
+  <changeSet id="rename-repossessed-column-tc-devices" author="walter">
+
+    <!-- Rename column repossessed to isrepossessed -->
+    <renameColumn
+            tableName="tc_devices"
+            oldColumnName="repossessed"
+            newColumnName="isrepossessed"
+            columnDataType="BOOLEAN"/>
+
+  </changeSet>
 
 
 </databaseChangeLog>

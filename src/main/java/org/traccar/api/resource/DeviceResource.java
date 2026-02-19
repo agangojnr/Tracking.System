@@ -538,11 +538,11 @@ public class DeviceResource extends BaseObjectResource<Device> {
 
             Long assetId = asset != null ? asset.getAssetid() : null;
 
-            if(assetid != null && assetid > 0){
+            if(assetId != null && assetId > 0){
                 //Unlink existing devices and assets
-                permissionsService.unlink(LinkType.CLIENT_ASSET, oldclientid, assetid);
+                permissionsService.unlink(LinkType.CLIENT_ASSET, oldclientid, assetId);
                 //Link new devices and simcards
-                permissionsService.link(LinkType.CLIENT_ASSET, newclientid, assetid);
+                permissionsService.link(LinkType.CLIENT_ASSET, newclientid, assetId);
             }
 
             return Response.ok("{\"status\":\"Moved Successfully\"}").build();
@@ -579,19 +579,18 @@ public class DeviceResource extends BaseObjectResource<Device> {
     }
 
 
-
     @GET
     @Path("auctioneers")
     public Collection<Device> getDeviceByAuctioneer(
             @QueryParam("auctioneerid") long auctioneerid
     ) throws Exception{
 
-        Long repossessed = 0L;
+        Long isRepossessed = 0L;
         return storage.getJointObjects(baseClass, new Request(
                 new Columns.All(),
                 new Condition.JoinOneWhereBoolean(Device.class, "id",
                         AuctioneerDevice.class, "auctioneerid","deviceid",
-                        "repossessed", repossessed)));
+                        "isrepossessed", isRepossessed)));
     }
 }
 
