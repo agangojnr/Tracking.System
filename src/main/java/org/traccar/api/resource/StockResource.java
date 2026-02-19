@@ -394,6 +394,7 @@ public class StockResource extends BaseObjectResource<Device> {
                     CompanyDevices.class,
                     new Request(
                             new Columns.Include(
+                                    "resellername AS resellerName",
                                     "subresellername AS SubresellerName",
                                     "clientname AS clientName",
                                     "name AS deviceName",
@@ -402,7 +403,17 @@ public class StockResource extends BaseObjectResource<Device> {
                                     "model AS deviceModel",
                                     "status AS status"
                             ),
-                            new Condition.GetResellerUnlinkedDevices(Device.class,"id","devicetypeid", DeviceAsset.class,"deviceid", ClientDevice.class,"clientid", "deviceid", Client.class,"id", SubresellerClient.class, "subresellerid",  "clientid", Subreseller.class, "id", ResellerSubreseller.class, "subresellerid", DeviceSimcard.class, "deviceid","simcardid", Simcard.class, "id", Devicetype.class, "id", resellerId)
+                            new Condition.GetResellerUnlinkedDevices(Device.class,"id","devicetypeid",
+                                    DeviceAsset.class,"deviceid",
+                                    ClientDevice.class,"clientid", "deviceid",
+                                    Client.class,"id",
+                                    SubresellerClient.class, "subresellerid",  "clientid",
+                                    Subreseller.class, "id",
+                                    ResellerSubreseller.class, "resellerid","subresellerid",
+                                    DeviceSimcard.class, "deviceid","simcardid",
+                                    Simcard.class, "id",
+                                    Devicetype.class, "id",
+                                    Reseller.class, "id", resellerId)
                     )
             );
             return Response.ok(devices).build();

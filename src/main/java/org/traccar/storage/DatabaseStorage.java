@@ -127,7 +127,7 @@ public class DatabaseStorage extends Storage {
         query.append(" FROM ").append(getStorageName(clazz));
         //Here is the join conditions
         query.append(formatJoin(request.getCondition(),true));
-        logger.info("SQL - {}", query);
+        //logger.info("SQL - {}", query);
         //query.append(formatOrder(request.getOrder()));
 
         try {
@@ -2905,7 +2905,7 @@ public class DatabaseStorage extends Storage {
                     result.append(" ON ");
                     result.append(getStorageName(condition.getPivotClass5()));
                     result.append(".");
-                    result.append(condition.getPivotColumn5());
+                    result.append(condition.getPivotColumn5a());
                     result.append(" = ");
                     result.append(getStorageName(condition.getPivotClass3()));
                     result.append(".");
@@ -2943,11 +2943,22 @@ public class DatabaseStorage extends Storage {
                     result.append(getStorageName(condition.getOwnerClass()));
                     result.append(".");
                     result.append(condition.getOwnerColumn1());
+                    //Resellers
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass9()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass9()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn9());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass5()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn5b());
 
                     result.append(" WHERE ");
                     result.append(getStorageName(condition.getPivotClass5()));
                     result.append(".");
-                    result.append(condition.getPivotColumn5());
+                    result.append(condition.getPivotColumn5a());
                     result.append(" = ");result.append("'");
                     result.append(condition.getValue1());result.append("'");
                     result.append(" AND ");
