@@ -89,21 +89,32 @@ public class StockResource extends BaseObjectResource<Device> {
         long level = permissionsService.getUserAccessLevel(getUserId());
 
         if(level == 4){
-            Collection<Simcard> simcards = storage.getJointObjects(
-                    Simcard.class,
+            Collection<SimcardList> simcards = storage.getJointObjects(
+                    SimcardList.class,
                     new Request(
-                            new Columns.All()
-                            //new Condition.InnerJoin(Device.class,"id", DeviceAsset.class,"deviceid")
+                            new Columns.Include(
+                                    "phonenumber AS phonenumber",
+                                    "iccid AS iccid",
+                                    "networkprovidername AS networkprovidername"
+                            ),
+                            new Condition.AllSimcards(Simcard.class,"id", "networkproviderid",
+                                    Networkprovider.class,"id")
                     )
             );
             return Response.ok(simcards).build();
         } else if (level == 1) {
             long resellerId = permissionsService.getLevelGroupId(getUserId(), level);
-            Collection<Simcard> simcards = storage.getJointObjects(
-                    Simcard.class,
+            Collection<SimcardList> simcards = storage.getJointObjects(
+                    SimcardList.class,
                     new Request(
-                            new Columns.All(),
-                            new Condition.OneJoinWhere(Simcard.class,"id", ResellerSimcard.class,"simcardid","resellerid",resellerId)
+                            new Columns.Include(
+                                    "phonenumber AS phonenumber",
+                                    "iccid AS iccid",
+                                    "networkprovidername AS networkprovidername"
+                            ),
+                            new Condition.ResellerAllSimcards(Simcard.class,"id","networkproviderid",
+                                    Networkprovider.class,"id",
+                                    ResellerSimcard.class,"simcardid","resellerid",resellerId)
                     )
             );
             return Response.ok(simcards).build();
@@ -122,25 +133,35 @@ public class StockResource extends BaseObjectResource<Device> {
     public Response getLinkedSimcards() throws Exception {
         long level = permissionsService.getUserAccessLevel(getUserId());
         if(level == 4){
-            Collection<Simcard> simcards = storage.getJointObjects(
-                    Simcard.class,
+            Collection<SimcardList> simcards = storage.getJointObjects(
+                    SimcardList.class,
                     new Request(
-                            new Columns.All(),
-                            new Condition.InnerJoin(
-                                    Simcard.class, "id",
-                                    DeviceSimcard.class, "simcardid"
+                            new Columns.Include(
+                                    "phonenumber AS phonenumber",
+                                    "iccid AS iccid",
+                                    "networkprovidername AS networkprovidername"
+                            ),
+                            new Condition.AllLinkedSimcards(
+                                    Simcard.class, "id","networkproviderid",
+                                    DeviceSimcard.class, "simcardid",
+                                    Networkprovider.class, "id"
                             )
                     )
             );
             return Response.ok(simcards).build();
         } else if (level == 1) {
             long resellerId = permissionsService.getLevelGroupId(getUserId(), level);
-            Collection<Simcard> simcards = storage.getJointObjects(
-                    Simcard.class,
+            Collection<SimcardList> simcards = storage.getJointObjects(
+                    SimcardList.class,
                     new Request(
-                            new Columns.All(),
-                            new Condition.ThreeJoinWhere(Simcard.class,"id",
+                            new Columns.Include(
+                                    "phonenumber AS phonenumber",
+                                    "iccid AS iccid",
+                                    "networkprovidername AS networkprovidername"
+                            ),
+                            new Condition.ResellerLinkedSimcards(Simcard.class,"id","networkproviderid",
                                     DeviceSimcard.class,"simcardid","simcardid",
+                                    Networkprovider.class, "id",
                                     ResellerSimcard.class,"simcardid","resellerid",
                                     resellerId)
                     )
@@ -162,24 +183,34 @@ public class StockResource extends BaseObjectResource<Device> {
     public Response getUnlinkedSimcards() throws Exception {
         long level = permissionsService.getUserAccessLevel(getUserId());
         if(level == 4){
-            Collection<Simcard> simcards = storage.getJointObjects(
-                    Simcard.class,
+            Collection<SimcardList> simcards = storage.getJointObjects(
+                    SimcardList.class,
                     new Request(
-                            new Columns.All(),
-                            new Condition.UnlinkedSimcards(Simcard.class,"id",
-                                    DeviceSimcard.class,"simcardid")
+                            new Columns.Include(
+                                    "phonenumber AS phonenumber",
+                                    "iccid AS iccid",
+                                    "networkprovidername AS networkprovidername"
+                            ),
+                            new Condition.UnlinkedSimcards(Simcard.class,"id", "networkproviderid",
+                                    DeviceSimcard.class,"simcardid",
+                                    Networkprovider.class, "id")
                     )
             );
             return Response.ok(simcards).build();
         }else if(level == 1){
             long resellerId = permissionsService.getLevelGroupId(getUserId(), level);
-            Collection<Simcard> simcards = storage.getJointObjects(
-                    Simcard.class,
+            Collection<SimcardList> simcards = storage.getJointObjects(
+                    SimcardList.class,
                     new Request(
-                            new Columns.All(),
-                            new Condition.ResellerUnlinkedSimcards(Simcard.class,"id",
+                            new Columns.Include(
+                                    "phonenumber AS phonenumber",
+                                    "iccid AS iccid",
+                                    "networkprovidername AS networkprovidername"
+                            ),
+                            new Condition.ResellerUnlinkedSimcards(Simcard.class,"id","networkproviderid",
                                     DeviceSimcard.class,"simcardid",
                                     ResellerSimcard.class, "resellerid",
+                                    Networkprovider.class, "id",
                                     resellerId)
                     )
             );
@@ -297,6 +328,7 @@ public class StockResource extends BaseObjectResource<Device> {
                     CompanyDevices.class,
                     new Request(
                             new Columns.Include(
+                                    "resellername AS resellerName",
                                     "subresellername AS SubresellerName",
                                     "clientname AS clientName",
                                     "name AS deviceName",
@@ -331,6 +363,7 @@ public class StockResource extends BaseObjectResource<Device> {
                     CompanyDevices.class,
                     new Request(
                             new Columns.Include(
+                                    "resellername AS resellerName",
                                     "subresellername AS SubresellerName",
                                     "clientname AS clientName",
                                     "name AS deviceName",

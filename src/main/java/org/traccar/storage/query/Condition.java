@@ -231,11 +231,40 @@ public interface Condition {
     class UnlinkedSimcards implements Condition {
         private final Class<?> ownerClass;
         private final String ownerColumn;
+        private final String ownerColumn1;
         private final Class<?> pivotClass;
         private final String pivotColumn;
+        private final Class<?> pivotClass1;
+        private final String pivotColumn1;
         // Constructor
-        public UnlinkedSimcards(Class<?> ownerClass, String ownerColumn,
-                                         Class<?> pivotClass, String pivotColumn) {
+        public UnlinkedSimcards(Class<?> ownerClass, String ownerColumn,String ownerColumn1,
+                                         Class<?> pivotClass, String pivotColumn,
+                                        Class<?> pivotClass1, String pivotColumn1) {
+            this.ownerClass = ownerClass;
+            this.ownerColumn = ownerColumn;
+            this.ownerColumn1 = ownerColumn1;
+            this.pivotClass = pivotClass;
+            this.pivotColumn = pivotColumn;
+            this.pivotClass1 = pivotClass1;
+            this.pivotColumn1 = pivotColumn1;
+        }
+        public Class<?> getOwnerClass() { return ownerClass; }
+        public String getOwnerColumn() { return ownerColumn; }
+        public String getOwnerColumn1() { return ownerColumn1; }
+        public Class<?> getPivotClass() { return pivotClass; }
+        public String getPivotColumn() { return pivotColumn; }
+        public Class<?> getPivotClass1() { return pivotClass1; }
+        public String getPivotColumn1() { return pivotColumn1; }
+    }
+
+    class InnerJoin implements Condition {
+        private final Class<?> ownerClass;
+        private final Class<?> pivotClass;
+        private final String ownerColumn;
+        private final String pivotColumn;
+        // Constructor
+        public InnerJoin(Class<?> ownerClass, String ownerColumn,
+                                 Class<?> pivotClass, String pivotColumn) {
             this.ownerClass = ownerClass;
             this.ownerColumn = ownerColumn;
             this.pivotClass = pivotClass;
@@ -247,23 +276,55 @@ public interface Condition {
         public String getPivotColumn() { return pivotColumn; }
     }
 
-
-    class InnerJoin implements Condition {
+    class AllSimcards implements Condition {
         private final Class<?> ownerClass;
         private final Class<?> pivotClass;
         private final String ownerColumn;
+        private final String ownerColumn1;
         private final String pivotColumn;
         // Constructor
-        public InnerJoin(Class<?> ownerClass, String ownerColumn, Class<?> pivotClass, String pivotColumn) {
+        public AllSimcards(Class<?> ownerClass, String ownerColumn, String ownerColumn1,
+                         Class<?> pivotClass, String pivotColumn) {
             this.ownerClass = ownerClass;
             this.ownerColumn = ownerColumn;
+            this.ownerColumn1 = ownerColumn1;
             this.pivotClass = pivotClass;
             this.pivotColumn = pivotColumn;
         }
         public Class<?> getOwnerClass() { return ownerClass; }
         public Class<?> getPivotClass() { return pivotClass; }
         public String getOwnerColumn() { return ownerColumn; }
+        public String getOwnerColumn1() { return ownerColumn1; }
         public String getPivotColumn() { return pivotColumn; }
+    }
+
+    class AllLinkedSimcards implements Condition {
+        private final Class<?> ownerClass;
+        private final Class<?> pivotClass;
+        private final Class<?> pivotClass1;
+        private final String ownerColumn;
+        private final String ownerColumn1;
+        private final String pivotColumn;
+        private final String pivotColumn1;
+        // Constructor
+        public AllLinkedSimcards(Class<?> ownerClass, String ownerColumn, String ownerColumn1,
+                         Class<?> pivotClass, String pivotColumn,
+                         Class<?> pivotClass1, String pivotColumn1) {
+            this.ownerClass = ownerClass;
+            this.ownerColumn = ownerColumn;
+            this.ownerColumn1 = ownerColumn1;
+            this.pivotClass = pivotClass;
+            this.pivotClass1 = pivotClass1;
+            this.pivotColumn = pivotColumn;
+            this.pivotColumn1 = pivotColumn1;
+        }
+        public Class<?> getOwnerClass() { return ownerClass; }
+        public Class<?> getPivotClass() { return pivotClass; }
+        public Class<?> getPivotClass1() { return pivotClass1; }
+        public String getOwnerColumn() { return ownerColumn; }
+        public String getOwnerColumn1() { return ownerColumn1; }
+        public String getPivotColumn() { return pivotColumn; }
+        public String getPivotColumn1() { return pivotColumn1; }
     }
 
     class LeftJoinOneJoinWhere implements Condition {
@@ -298,27 +359,38 @@ public interface Condition {
         private final Class<?> ownerClass;
         private final Class<?> pivotClass;
         private final String ownerColumn;
+        private final String ownerColumn1;
         private final String pivotColumn;
         private final Class<?> pivotClass1;
         private final String pivotColumn1;
+        private final Class<?> pivotClass2;
+        private final String pivotColumn2;
         private final long value;
         // Constructor
-        public ResellerUnlinkedSimcards(Class<?> ownerClass, String ownerColumn, Class<?> pivotClass, String pivotColumn,
-                                    Class<?> pivotClass1, String pivotColumn1, long value) {
+        public ResellerUnlinkedSimcards(Class<?> ownerClass, String ownerColumn, String ownerColumn1,
+                                        Class<?> pivotClass, String pivotColumn,
+                                    Class<?> pivotClass1, String pivotColumn1,
+                                        Class<?> pivotClass2, String pivotColumn2,long value) {
             this.ownerClass = ownerClass;
             this.ownerColumn = ownerColumn;
+            this.ownerColumn1 = ownerColumn1;
             this.pivotClass = pivotClass;
             this.pivotClass1 = pivotClass1;
             this.pivotColumn = pivotColumn;
             this.pivotColumn1 = pivotColumn1;
+            this.pivotClass2 = pivotClass2;
+            this.pivotColumn2 = pivotColumn2;
             this.value = value;
         }
         public Class<?> getOwnerClass() { return ownerClass; }
         public Class<?> getPivotClass() { return pivotClass; }
         public Class<?> getPivotClass1() { return pivotClass1; }
         public String getOwnerColumn() { return ownerColumn; }
+        public String getOwnerColumn1() { return ownerColumn1; }
         public String getPivotColumn() { return pivotColumn; }
         public String getPivotColumn1() { return pivotColumn1; }
+        public Class<?> getPivotClass2() { return pivotClass2; }
+        public String getPivotColumn2() { return pivotColumn2; }
         public long getValue() { return value; }
     }
 
@@ -509,6 +581,42 @@ public interface Condition {
         public long getValue() { return value; }
     }
 
+    class ResellerAllSimcards implements Condition {
+        private final Class<?> ownerClass;
+        private final Class<?> pivotClass;
+        private final Class<?> pivotClass1;
+        private final String ownerColumn;
+        private final String ownerColumn1;
+        private final String pivotColumn;
+        private final String pivotColumn1;
+        private final String pivotColumn2;
+        private final long value;
+
+        // Constructor
+        public ResellerAllSimcards(Class<?> ownerClass, String ownerColumn, String ownerColumn1,
+                                   Class<?> pivotClass, String pivotColumn,
+                                   Class<?> pivotClass1,String pivotColumn1,String pivotColumn2, long value) {
+            this.ownerClass = ownerClass;
+            this.ownerColumn = ownerColumn;
+            this.ownerColumn1 = ownerColumn1;
+            this.pivotClass = pivotClass;
+            this.pivotClass1 = pivotClass1;
+            this.value = value;
+            this.pivotColumn1 = pivotColumn1;
+            this.pivotColumn = pivotColumn;
+            this.pivotColumn2 = pivotColumn2;
+        }
+        public Class<?> getOwnerClass() { return ownerClass; }
+        public Class<?> getPivotClass() { return pivotClass; }
+        public Class<?> getPivotClass1() { return pivotClass1; }
+        public String getOwnerColumn() { return ownerColumn; }
+        public String getOwnerColumn1() { return ownerColumn1; }
+        public String getPivotColumn() { return pivotColumn; }
+        public String getPivotColumn1() { return pivotColumn1; }
+        public String getPivotColumn2() { return pivotColumn2; }
+        public long getValue() { return value; }
+    }
+
     class TwoJoinWhereSim implements Condition {
         private final Class<?> ownerClass;
         private final String ownerColumn;
@@ -677,6 +785,56 @@ public interface Condition {
         public Class<?> getPivotClass2() { return pivotClass2; }
         public String getPivotColumn2a() { return pivotColumn2a; }
         public String getPivotColumn2b() { return pivotColumn2b; }
+        public long getValue1() { return value1; }
+    }
+
+    class ResellerLinkedSimcards implements Condition {
+        private final Class<?> ownerClass;
+        private final String ownerColumn;
+        private final String ownerColumn1;
+        private final Class<?> pivotClass1;
+        private final String pivotColumn1a;
+        private final String pivotColumn1b;
+        private final Class<?> pivotClass2;
+        private final String pivotColumn2;
+        private final Class<?> pivotClass3;
+        private final String pivotColumn3a;
+        private final String pivotColumn3b;
+
+        private final long value1;
+
+        // Constructor
+        public ResellerLinkedSimcards(Class<?> ownerClass, String ownerColumn, String ownerColumn1,
+                              Class<?> pivotClass1, String pivotColumn1a,String pivotColumn1b,
+                                      Class<?> pivotClass2,String pivotColumn2,
+                              Class<?> pivotClass3,String pivotColumn3a,String pivotColumn3b,
+                                      long value1) {
+            this.ownerClass = ownerClass;
+            this.ownerColumn = ownerColumn;
+            this.ownerColumn1 = ownerColumn1;
+            this.pivotClass1 = pivotClass1;
+            this.pivotColumn1a = pivotColumn1a;
+            this.pivotColumn1b = pivotColumn1b;
+            this.pivotClass2 = pivotClass2;
+            this.pivotColumn2 = pivotColumn2;
+            this.pivotClass3 = pivotClass3;
+            this.pivotColumn3a = pivotColumn3a;
+            this.pivotColumn3b = pivotColumn3b;
+
+            this.value1 = value1;
+        }
+        public Class<?> getOwnerClass() { return ownerClass; }
+        public String getOwnerColumn() { return ownerColumn; }
+        public String getOwnerColumn1() { return ownerColumn1; }
+        public Class<?> getPivotClass1() { return pivotClass1; }
+        public String getPivotColumn1a() { return pivotColumn1a; }
+        public String getPivotColumn1b() { return pivotColumn1b; }
+        public Class<?> getPivotClass2() { return pivotClass2; }
+        public Class<?> getPivotClass3() { return pivotClass3; }
+        public String getPivotColumn3a() { return pivotColumn3a; }
+        public String getPivotColumn3b() { return pivotColumn3b; }
+
+        public String getPivotColumn2() { return pivotColumn2; }
         public long getValue1() { return value1; }
     }
 
