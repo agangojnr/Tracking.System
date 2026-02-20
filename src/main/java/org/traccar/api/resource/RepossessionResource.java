@@ -70,24 +70,23 @@ public class RepossessionResource extends ExtendedObjectResource<Repossession> {
     public Response add(Repossession entity) throws Exception {
 
         if(validate(entity)){
-            entity.setId(0);
+            //entity.setId(0);
             entity.setId(storage.addObject(entity, new Request(new Columns.Exclude("id", "attributes"))));
             actionLogger.create(request, getUserId(), entity);
+            Long deviceId = entity.getDeviceId();
 
             for (Device device : storage.getObjects(Device.class,new Request(new Columns.All(),
                     new Condition.Equals("id", entity.getId())))) {
-                Boolean isRepossessed = true;
+                Long isRepossessed = 1L;
 
                 // 🔒 Update repossession
                 device.setIsrepossessed(isRepossessed);
                 storage.updateObject(device, new Request(
                         new Columns.Include("isrepossessed"),
-                        new Condition.Equals("id", device.getId()) {
+                        new Condition.Equals("id", deviceId) {
                         }));
 
-                LOGGER.info(
-                        "Vehicle has been repossessed."
-                );
+                LOGGER.info("Vehicle has been repossessed.");
             }
 
 //            List<Device> devices = storage.getObjects(

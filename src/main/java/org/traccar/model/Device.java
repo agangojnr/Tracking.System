@@ -41,13 +41,13 @@ public class Device extends GroupedModel implements Disableable, Schedulable {
         this.devicetypeid = devicetypeid;
     }
 
-    private boolean isrepossessed;
+    private Long isrepossessed;
 
-    public boolean getIsrepossessed() {
+    public Long getIsrepossessed() {
         return isrepossessed;
     }
 
-    public void setIsrepossessed(boolean isrepossessed) {
+    public void setIsrepossessed(Long isrepossessed) {
         this.isrepossessed = isrepossessed;
     }
 
