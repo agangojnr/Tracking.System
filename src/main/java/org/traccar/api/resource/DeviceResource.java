@@ -596,7 +596,7 @@ public class DeviceResource extends BaseObjectResource<Device> {
     @GET
     @Path("drus")
     public Collection<DruDevices> getDeviceByDruId(
-            @QueryParam("druid") long druid
+            @QueryParam("auctioneerid") long auctioneerid
     ) throws Exception{
         return storage.getJointObjects(DruDevices.class, new Request(
                 new Columns.Include(
@@ -604,11 +604,13 @@ public class DeviceResource extends BaseObjectResource<Device> {
                         "clientname AS clientName",
                         "name AS deviceName"
                 ),
-                new Condition.DevicesByDruId(Device.class, "id",
+                new Condition.DevicesByAuctioneerId(Device.class, "id",
                         ClientDevice.class, "clientid", "deviceid",
                         Client.class, "id",
                         SubresellerClient.class, "subresellerid", "clientid",
-                        SubresellerDru.class, "subresellerid", "druid", druid)));
+                        SubresellerDru.class, "subresellerid", "druid",
+                        DruAuctioneer.class, "druid", "auctioneerid",
+                        DeviceAsset.class, "deviceid", auctioneerid)));
     }
 }
 

@@ -470,7 +470,7 @@ public class DatabaseStorage extends Storage {
                     result.append(condition.getPivotColumn());
                     result.append(" IS NULL ");
 
-                }else if(genericCondition instanceof Condition.DevicesByDruId condition){
+                }else if(genericCondition instanceof Condition.DevicesByAuctioneerId condition){
                     result.append(" INNER JOIN ");
                     result.append(getStorageName(condition.getPivotClass()));
                     result.append(" ON ");
@@ -515,10 +515,32 @@ public class DatabaseStorage extends Storage {
                     result.append(".");
                     result.append(condition.getPivotColumn3a());
 
-                    result.append(" WHERE ");
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass4()));
+                    result.append(" ON ");
                     result.append(getStorageName(condition.getPivotClass3()));
                     result.append(".");
                     result.append(condition.getPivotColumn3b());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass4()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn4a());
+
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass5()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass5()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn5());
+
+                    result.append(" WHERE ");
+                    result.append(getStorageName(condition.getPivotClass4()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn4b());
                     result.append(" = ");result.append("'");
                     result.append(condition.getValue());result.append("'");
 
