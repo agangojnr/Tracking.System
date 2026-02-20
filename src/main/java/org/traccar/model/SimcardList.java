@@ -3,10 +3,20 @@ package org.traccar.model;
 import org.traccar.storage.StorageName;
 
 @StorageName("tc_simcards")
-public class SimcardList extends ExtendedModel{
+public class SimcardList{
+    private Long id;
     private String phonenumber;
     private String iccid;
 //    private String networkproviderid;
+
+    public Long getId() {
+    return id;
+}
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     private String networkprovidername;
 
     public String getPhonenumber() {

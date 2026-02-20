@@ -186,7 +186,7 @@ public class StockResource extends BaseObjectResource<Device> {
             Collection<SimcardList> simcards = storage.getJointObjects(
                     SimcardList.class,
                     new Request(
-                            new Columns.Include(
+                            new Columns.Include("tc_simcards.id AS id",
                                     "phonenumber AS phonenumber",
                                     "iccid AS iccid",
                                     "networkprovidername AS networkprovidername"
@@ -203,6 +203,7 @@ public class StockResource extends BaseObjectResource<Device> {
                     SimcardList.class,
                     new Request(
                             new Columns.Include(
+                                    "tc_simcards.id AS id",
                                     "phonenumber AS phonenumber",
                                     "iccid AS iccid",
                                     "networkprovidername AS networkprovidername"
