@@ -470,6 +470,58 @@ public class DatabaseStorage extends Storage {
                     result.append(condition.getPivotColumn());
                     result.append(" IS NULL ");
 
+                }else if(genericCondition instanceof Condition.DevicesByDruId condition){
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass()));
+                    result.append(".");
+                    result.append(condition.getPivotColumnb());
+
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass1()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass()));
+                    result.append(".");
+                    result.append(condition.getPivotColumna());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass1()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn1());
+
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass()));
+                    result.append(".");
+                    result.append(condition.getPivotColumna());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn2b());
+
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass3()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn2a());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass3()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn3a());
+
+                    result.append(" WHERE ");
+                    result.append(getStorageName(condition.getPivotClass3()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn3b());
+                    result.append(" = ");result.append("'");
+                    result.append(condition.getValue());result.append("'");
+
                 }else if(genericCondition instanceof Condition.ResellerUnlinkedSimcards condition){
                     result.append(" LEFT JOIN ");
                     result.append(getStorageName(condition.getPivotClass()));

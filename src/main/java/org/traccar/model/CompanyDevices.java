@@ -7,6 +7,7 @@ import java.util.Date;
 
 @StorageName("tc_devices")
 public class CompanyDevices {
+    private Long id;
     private String resellerName;
     private String subresellerName;
     private String clientName;
@@ -20,6 +21,13 @@ public class CompanyDevices {
 
 
     // Getters and setters
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getImei() {
         return imei;
     }
