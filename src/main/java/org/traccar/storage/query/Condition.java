@@ -309,6 +309,25 @@ public interface Condition {
         public String getPivotColumn3b() { return pivotColumn3b; }
         public Long getValue() { return value; }
     }
+    class ResellerIdBySubresellerId implements Condition {
+        private final Class<?> ownerClass;
+        private final Class<?> pivotClass;
+        private final String ownerColumn;
+        private final String pivotColumn;
+        // Constructor
+        public ResellerIdBySubresellerId(Class<?> ownerClass, String ownerColumn,
+                         Class<?> pivotClass, String pivotColumn) {
+            this.ownerClass = ownerClass;
+            this.ownerColumn = ownerColumn;
+            this.pivotClass = pivotClass;
+            this.pivotColumn = pivotColumn;
+        }
+        public Class<?> getOwnerClass() { return ownerClass; }
+        public Class<?> getPivotClass() { return pivotClass; }
+        public String getOwnerColumn() { return ownerColumn; }
+        public String getPivotColumn() { return pivotColumn; }
+    }
+
 
     class InnerJoin implements Condition {
         private final Class<?> ownerClass;

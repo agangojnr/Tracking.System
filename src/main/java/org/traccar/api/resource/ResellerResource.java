@@ -44,7 +44,7 @@ public class ResellerResource extends ExtendedObjectResource<Reseller> {
     private static final Logger LOGGER = LoggerFactory.getLogger(ResellerResource.class);
 
     public ResellerResource() {
-        super(Reseller.class, "name");
+        super(Reseller.class, "resellername");
     }
 
     @GET
@@ -52,8 +52,6 @@ public class ResellerResource extends ExtendedObjectResource<Reseller> {
     public Collection<Reseller> get(@QueryParam("all") Boolean all,
                                   @QueryParam("userId") Long userId,
                                   @QueryParam("subresellerid") Long subresellerid) throws Exception {
-
-        //LOGGER.info("Checking userid - {}", getUserId());
 
         var conditions = new LinkedList<Condition>();
 
@@ -109,7 +107,7 @@ public class ResellerResource extends ExtendedObjectResource<Reseller> {
         permissionsService.checkEdit(getUserId(), entity, false, false);
 
         if(validate(entity)){
-            LOGGER.info("Checking reseller update new");
+            //LOGGER.info("Checking reseller update new");
             storage.updateObject(entity, new Request(
                     new Columns.Exclude("id"),
                     new Condition.Equals("id", entity.getId())));
@@ -159,4 +157,22 @@ public class ResellerResource extends ExtendedObjectResource<Reseller> {
         return null;
     }
 
+
+    @GET
+    @Path("id")
+    public Long getResellerId(@QueryParam("subresellerid") Long subresellerid) throws Exception {
+        Collection<ResellerSubreseller> ressub = storage.getObjects(ResellerSubreseller.class,
+                new Request(
+                        new Columns.All(),
+                        new Condition.Equals("subresellerid", subresellerid)
+                )
+        );
+        Long resellerId = null;
+
+        if (ressub != null && !ressub.isEmpty()) {
+            ResellerSubreseller resellerSubreseller = ressub.iterator().next();
+            resellerId = ((long) resellerSubreseller.getResellerid());
+        }
+        return resellerId;
+    }
 }
