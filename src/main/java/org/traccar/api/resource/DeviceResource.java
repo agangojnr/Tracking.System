@@ -593,19 +593,19 @@ public class DeviceResource extends BaseObjectResource<Device> {
                         "isrepossessed", isRepossessed, auctioneerid)));
     }
 
-    @GET
-    @Path("drus")
-    public Collection<Device> getDeviceByDruId(
-            @QueryParam("druid") long druid
-    ) throws Exception{
-        //LOGGER.info("Testing auctioneer id = {}", druid);
-        Long isRepossessed = 0L;
-        return storage.getJointObjects(baseClass, new Request(
-                new Columns.All(),
-                new Condition.DevicesByDruId(Device.class, "id",
-                        AuctioneerDevice.class, "auctioneerid","deviceid",
-                        "isrepossessed", isRepossessed, druid)));
-    }
+//    @GET
+//    @Path("drus")
+//    public Collection<Device> getDeviceByDruId(
+//            @QueryParam("druid") long druid
+//    ) throws Exception{
+//        //LOGGER.info("Testing auctioneer id = {}", druid);
+//        Long isRepossessed = 0L;
+//        return storage.getJointObjects(baseClass, new Request(
+//                new Columns.All(),
+//                new Condition.DevicesByDruId(Device.class, "id",
+//                        AuctioneerDevice.class, "auctioneerid","deviceid",
+//                        "isrepossessed", isRepossessed, druid)));
+//    }
 }
 
 
