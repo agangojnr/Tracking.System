@@ -588,8 +588,28 @@ public class DeviceResource extends BaseObjectResource<Device> {
         Long isRepossessed = 0L;
         return storage.getJointObjects(baseClass, new Request(
                 new Columns.All(),
+                new Condition.JoinOneWhereList(Device.class, "id",
+                        AuctioneerDevice.class, "auctioneerid","deviceid",
+                        "isrepossessed", isRepossessed, auctioneerid)));
+    }
+
+    @GET
+    @Path("drus/linked")
+    public Collection<DruDevices> getDeviceByAuctioneerQuery(
+            @QueryParam("auctioneerid") long auctioneerid
+    ) throws Exception{
+        //LOGGER.info("Testing auctioneer id = {}", auctioneerid);
+        Long isRepossessed = 0L;
+        return storage.getJointObjects(DruDevices.class, new Request(
+                new Columns.Include(
+                        "tc_devices.id AS id",
+                        "clientname AS clientName",
+                        "name AS deviceName"
+                ),
                 new Condition.JoinOneWhereBoolean(Device.class, "id",
                         AuctioneerDevice.class, "auctioneerid","deviceid",
+                        ClientDevice.class, "clientid", "deviceid",
+                        Client.class, "id",
                         "isrepossessed", isRepossessed, auctioneerid)));
     }
 

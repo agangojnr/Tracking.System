@@ -749,16 +749,37 @@ public class DatabaseStorage extends Storage {
 
                 }else if(genericCondition instanceof Condition.JoinOneWhereBoolean condition){
                     result.append(" INNER JOIN ");
-                    result.append(getStorageName(condition.getPivotClass()));
-
+                    result.append(getStorageName(condition.getPivotClass1()));
                     result.append(" ON ");
                     result.append(getStorageName(condition.getOwnerClass()));
                     result.append(".");
                     result.append(condition.getOwnerColumn());
                     result.append(" = ");
-                    result.append(getStorageName(condition.getPivotClass()));
+                    result.append(getStorageName(condition.getPivotClass1()));
                     result.append(".");
-                    result.append(condition.getColumn2());
+                    result.append(condition.getPivotColumn1b());
+
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn2b());
+
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass3()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn2a());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass3()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn3());
 
                     result.append(" WHERE ");
                     result.append(getStorageName(condition.getOwnerClass()));
@@ -768,11 +789,37 @@ public class DatabaseStorage extends Storage {
                     result.append(condition.getValue2());
 
                     result.append(" AND ");
-                    result.append(getStorageName(condition.getPivotClass()));
+                    result.append(getStorageName(condition.getPivotClass1()));
                     result.append(".");
-                    result.append(condition.getPivotColumn());
+                    result.append(condition.getPivotColumn1a());
                     result.append(" = ");
                     result.append(condition.getValue());
+                }else if(genericCondition instanceof Condition.JoinOneWhereList condition){
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass1()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass1()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn1b());
+
+                    result.append(" WHERE ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getSearchColumn());
+                    result.append(" = ");
+                    result.append(condition.getValue2());
+
+                    result.append(" AND ");
+                    result.append(getStorageName(condition.getPivotClass1()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn1a());
+                    result.append(" = ");
+                    result.append(condition.getValue());
+
 
                 }else if(genericCondition instanceof Condition.JoinTwoWhere condition){
                     result.append(" JOIN ");
