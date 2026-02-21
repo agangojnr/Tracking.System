@@ -641,6 +641,53 @@ public interface Condition {
         public String getSearchColumn() { return searchColumn; }
     }
 
+    class RepossessionReport implements Condition {
+        private final Class<?> ownerClass;
+        private final String ownerColumn;
+        private final String ownerColumn1;
+        private final String ownerColumn2;
+        private final String ownerColumn3;
+        private final Class<?> pivotClass1;
+        private final String pivotColumn1;
+        private final Class<?> pivotClass2;
+        private final String pivotColumn2;
+        private final Class<?> pivotClass3;
+        private final String pivotColumn3;
+        private final String searchColumn;
+
+        // Constructor
+        public RepossessionReport(Class<?> ownerClass, String ownerColumn, String ownerColumn1, String ownerColumn2,String ownerColumn3,
+                                  Class<?> pivotClass1, String pivotColumn1,
+                                  Class<?> pivotClass2, String pivotColumn2,
+                                  Class<?> pivotClass3, String pivotColumn3,
+                                String searchColumn) {
+            this.ownerClass = ownerClass;
+            this.ownerColumn = ownerColumn;
+            this.ownerColumn1 = ownerColumn1;
+            this.ownerColumn2 = ownerColumn2;
+            this.ownerColumn3 = ownerColumn3;
+            this.pivotClass1 = pivotClass1;
+            this.pivotColumn1 = pivotColumn1;
+            this.pivotClass2 = pivotClass2;
+            this.pivotColumn2 = pivotColumn2;
+            this.pivotClass3 = pivotClass3;
+            this.pivotColumn3 = pivotColumn3;
+            this.searchColumn = searchColumn;
+        }
+        public Class<?> getOwnerClass() { return ownerClass; }
+        public String getOwnerColumn() { return ownerColumn; }
+        public String getOwnerColumn1() { return ownerColumn1; }
+        public String getOwnerColumn2() { return ownerColumn2; }
+        public String getOwnerColumn3() { return ownerColumn3; }
+        public Class<?> getPivotClass1() { return pivotClass1; }
+        public String getPivotColumn1() { return pivotColumn1; }
+        public Class<?> getPivotClass2() { return pivotClass2; }
+        public String getPivotColumn2() { return pivotColumn2; }
+        public Class<?> getPivotClass3() { return pivotClass3; }
+        public String getPivotColumn3() { return pivotColumn3; }
+        public String getSearchColumn() { return searchColumn; }
+    }
+
     class JoinTwoWhere implements Condition {
         private final Class<?> ownerClass;
         private final Class<?> pivotClass;

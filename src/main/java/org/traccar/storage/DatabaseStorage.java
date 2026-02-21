@@ -470,6 +470,54 @@ public class DatabaseStorage extends Storage {
                     result.append(condition.getPivotColumn());
                     result.append(" IS NULL ");
 
+                }else if(genericCondition instanceof Condition.RepossessionReport condition){
+                    result.append(" LEFT JOIN ");
+                    result.append(getStorageName(condition.getPivotClass1()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn1());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass1()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn1());
+
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn2());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn2());
+
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass3()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn3());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass3()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn3());
+//
+//                    result.append(" WHERE ");
+//                    result.append(getStorageName(condition.getPivotClass1()));
+//                    result.append(".");
+//                    result.append(condition.getPivotColumn1());
+//                    result.append(" = ");result.append("'");
+//                    result.append(condition.getValue());result.append("'");
+//
+//                    result.append(" AND ");
+//
+//                    result.append(getStorageName(condition.getPivotClass()));
+//                    result.append(".");
+//                    result.append(condition.getPivotColumn());
+//                    result.append(" IS NULL ");
+
                 }else if(genericCondition instanceof Condition.DevicesByAuctioneerId condition){
                     result.append(" INNER JOIN ");
                     result.append(getStorageName(condition.getPivotClass()));

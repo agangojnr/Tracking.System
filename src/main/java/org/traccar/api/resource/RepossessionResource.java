@@ -12,10 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.traccar.api.ExtendedObjectResource;
 import org.traccar.api.security.PermissionsService;
 import org.traccar.helper.LogAction;
-import org.traccar.model.Device;
-import org.traccar.model.ObjectOperation;
-import org.traccar.model.Repossession;
-import org.traccar.model.Yard;
+import org.traccar.model.*;
 import org.traccar.session.ConnectionManager;
 import org.traccar.session.cache.CacheManager;
 import org.traccar.storage.StorageException;
@@ -56,13 +53,24 @@ public class RepossessionResource extends ExtendedObjectResource<Repossession> {
 
 
     @GET
-    @Path("query")
-    public Collection<Repossession> get() throws StorageException {
-        var conditions = new LinkedList<Condition>();
-
-        return storage.getObjects(baseClass, new Request(
-                new Columns.All(), Condition.merge(conditions), new Order("id")
-        ));
+    @Path("report")
+    public Collection<RepossessionList> get() throws StorageException {
+        Collection<RepossessionList> result = storage.getJointObjects(
+                RepossessionList.class,
+                new Request(
+                        new Columns.Include("tc_repossessions.id AS id",
+                                "auctioneername AS auctioneerName",
+                                "name AS assetName",
+                                "yardname AS yardName",
+                                "yardlocation AS yardLocation",
+                                "comment AS comment"
+                        ),
+                new Condition.RepossessionReport(
+                        Repossession.class, "id","auctioneerid", "deviceid","yardid",
+                        Auctioneer.class, "id",
+                        Device.class, "id",
+                        Yard.class, "id","")));
+        return result;
     }
 
     @Path("create")
@@ -88,33 +96,6 @@ public class RepossessionResource extends ExtendedObjectResource<Repossession> {
 
                 LOGGER.info("Vehicle has been repossessed.");
             }
-
-//            List<Device> devices = storage.getObjects(
-//                    Device.class,
-//                    new Request(
-//                            new Columns.All(),
-//                            new Condition.Equals("id", entity.getId())
-//                    )
-//            );
-//
-//            if (devices.isEmpty()) {
-//                throw new NotFoundException("Device not found");
-//            }
-//
-//            Device device = devices.get(0);   // ✅ get single device
-//
-//            device.setIsrepossessed(true);
-//
-//            storage.updateObject(
-//                    device,
-//                    new Request(
-//                            new Columns.Include("isrepossessed"),
-//                            new Condition.Equals("id", device.getId())
-//                    )
-//            );
-
-
-
         return Response.ok(entity).build();
     }else{
         return Response.status(Response.Status.FOUND).build();
