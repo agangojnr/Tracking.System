@@ -113,6 +113,8 @@ public class DeviceResource extends BaseObjectResource<Device> {
                             new Condition.LinkedDevicesbySubreseller_UnlinkedtoAuctioneer(Device.class, "id", DeviceAsset.class, "deviceid", "assetid", AuctioneerDevice.class, "auctioneerid", "deviceid", ClientDevice.class, "clientid", "deviceid", Client.class, "id", SubresellerClient.class, "subresellerid", "clientid", subresellerId)
                     )
             );
+        }else{
+
         }
 
         /*QUERYING LINKED DEVICES FROM DEFAULT CLIENT*/
@@ -125,6 +127,18 @@ public class DeviceResource extends BaseObjectResource<Device> {
                 )
         );
     }
+
+    @GET
+    @Path("all")
+    public Stream<Device> getDev() throws Exception{
+        return storage.getObjectsStream(
+                Device.class,
+                new Request(
+                        new Columns.All()
+                )
+        );
+    }
+
 
     /*QUERYING ALL DEVICES*/
     @GET
@@ -161,6 +175,7 @@ public class DeviceResource extends BaseObjectResource<Device> {
     }
 
 //    @GET
+//    @Path("qry")
 //    public Stream<Device> get(
 //            @QueryParam("all") boolean all, @QueryParam("userId") long userId,
 //            @QueryParam("clientId") Long clientId,
@@ -201,22 +216,7 @@ public class DeviceResource extends BaseObjectResource<Device> {
 //                            new Columns.All(), Condition.merge(conditions), new Order("name")));
 //                }
 //            } else if (clientId != null && clientId > 0) {
-//                Stream<CompanyDevices> result = storage.getJointObjectStream(
-//                        CompanyDevices.class,
-//                        new Request(
-//                                new Columns.Include(
-//                                        "subresellername AS SubresellerName",
-//                                        "clientname AS clientName",
-//                                        "assetname AS deviceName",
-//                                        "uniqueid AS imei",
-//                                        "phonenumber AS simcardNo",
-//                                        "model AS deviceModel",
-//                                        "status AS status",
-//                                        "expirationtime AS Expiration"
 //
-//                                ),
-//                        new Condition.GetAllDevicesbyClient(Device.class, "id", DeviceAsset.class, "deviceid", "assetid", Asset.class, "id", DeviceSimcard.class, "deviceid", "simcardid", Simcard.class, "id",  ClientDevice.class, "clientid", "deviceid", clientId)));
-//                return result.stream();
 //            }
 //
 //            return storage.getObjectsStream(baseClass, new Request(
@@ -261,7 +261,7 @@ public class DeviceResource extends BaseObjectResource<Device> {
         //LOGGER.info("Inserted entity with ID: {}", clientId);
         if (validate(entity)) {
             if (getUserId() != ServiceAccountUser.ID) {
-                entity.setId(0);
+                entity.setIsrepossessed(0L);
                 long deviceId = storage.addObject(entity, new Request(new Columns.Exclude("id")));
                 entity.setId(deviceId);
                 storage.addPermission(new Permission(User.class, getUserId(), baseClass, entity.getId()));
