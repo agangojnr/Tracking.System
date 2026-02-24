@@ -77,7 +77,7 @@ public class RepossessionResource extends ExtendedObjectResource<Repossession> {
     @POST
     public Response add(Repossession entity) throws Exception {
 
-        if(validate(entity)){
+        if(validateRepo(entity)){
             //entity.setId(0);
             entity.setId(storage.addObject(entity, new Request(new Columns.Exclude("id", "attributes"))));
             actionLogger.create(request, getUserId(), entity);
@@ -120,6 +120,16 @@ public Response update(Repossession entity) throws Exception {
     }
 }
 
+public boolean validateRepo(Repossession entity) throws StorageException {
+    Long deviceId = entity.getDeviceId();
+//
+//    Repossession repossess = storage.getObject(Repossession.class, new Request(
+//            new Columns.All(),
+//            new Condition.Equals("deviceid", deviceId)
+//            ));
+//    return repossess == null;
+    return true;
+}
 public boolean validate(Repossession entity) throws StorageException {
     Long auctioneerId = entity.getAuctioneerId();
     Long deviceId = entity.getDeviceId();

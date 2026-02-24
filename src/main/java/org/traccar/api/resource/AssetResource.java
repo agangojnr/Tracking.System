@@ -21,8 +21,8 @@ import org.traccar.storage.query.Condition;
 import org.traccar.storage.query.Order;
 import org.traccar.storage.query.Request;
 
-import java.util.Collection;
-import java.util.LinkedList;
+import java.util.*;
+import static org.apache.commons.lang3.ObjectUtils.isEmpty;
 
 @Path("assets")
 @Produces(MediaType.APPLICATION_JSON)
@@ -53,37 +53,44 @@ public class AssetResource extends SimpleObjectResource<Asset> {
     @Path("create/{clientId}")
     @POST
     public Response add(Asset entity, @PathParam("clientId") Long clientId) throws Exception {
-        permissionsService.checkEdit(getUserId(), entity, true, false);
-        //LOGGER.info("Received POST request -> userId: {}", clientId);
-        if(validate(entity)){
-            entity.setId(0);
-            Long assetId = storage.addObject(entity, new Request(new Columns.Exclude("id")));
-            permissionsService.link(LinkType.CLIENT_ASSET, clientId, assetId);
-            entity.setId(assetId);
-            actionLogger.create(request, getUserId(), entity);
+        Long numberOfDevices = entity.getNoofDevices();
+        List<Object> results = new ArrayList<>();
 
-            if (getUserId() != ServiceAccountUser.ID) {
-                storage.addPermission(new Permission(User.class, getUserId(), baseClass, entity.getId()));
-                cacheManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
-                connectionManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
-                actionLogger.link(request, getUserId(), User.class, getUserId(), baseClass, entity.getId());
+        for (int i = 1; i <= numberOfDevices; i++) {
+            String assetName = entity.getRegNo() + " ~ " + entity.getOwnerName() + " ~ dev" + i;
+            entity.setAssetName(assetName);
+            Map<String, Object> result = new HashMap<>();
+            result.put("assetName", assetName);
+
+            if (validate(entity)) {
+                Long assetId = storage.addObject(entity,new Request(
+                        new Columns.Exclude("id","regNo","ownerName","noofDevices")));
+                permissionsService.link(LinkType.CLIENT_ASSET, clientId, assetId);
+                entity.setId(assetId);
+                actionLogger.create(request, getUserId(), entity);
+                result.put("status", "SUCCESS");
+                result.put("assetId", assetId);
+            } else {
+                result.put("status", "FAILED");
+                result.put("reason", "Validation failed");
             }
-            return Response.ok(entity).build();
-        }else{
-            return Response.status(Response.Status.FOUND).build();
+            results.add(result);
         }
+    // return one response after processing all assets
+        return Response.ok(results).build();
     }
 
     public boolean validate(Asset entity) throws StorageException {
         String assetName = entity.getAssetName();
+        System.out.println(assetName);
 
         Asset asset = storage.getObject(Asset.class, new Request(
                 new Columns.All(),
-                new Condition.And(
-                        new Condition.Equals("assetname", assetName),
-                        new Condition.Permission(User.class, getUserId(), Asset.class))));
-
-        return asset == null;
+                new Condition.Equals("assetname", assetName)));
+        if(isEmpty(asset)){
+            return true;
+        }
+        return false;
     }
 
 

@@ -252,6 +252,12 @@ public class DeviceResource extends BaseObjectResource<Device> {
                     new Columns.All(),
                     new Condition.JoinOneWhere(Device.class, "id", ClientDevice.class, "deviceid", "clientid", clientid)));
         }
+//        else if (level == 5) {
+//            long auctioneerid = permissionsService.getLevelGroupId(getUserId(), 5);
+//            return storage.getJointObjects(baseClass, new Request(
+//                    new Columns.All(),
+//                    new Condition.JoinOneWhere(Device.class, "id", ClientDevice.class, "deviceid", "clientid", clientid)));
+//        }
         return null;
     }
 
@@ -586,7 +592,8 @@ public class DeviceResource extends BaseObjectResource<Device> {
     ) throws Exception{
         //LOGGER.info("Testing auctioneer id = {}", auctioneerid);
         Long isRepossessed = 0L;
-        return storage.getJointObjects(baseClass, new Request(
+        return storage.getJointObjects(baseClass,
+                new Request(
                 new Columns.All(),
                 new Condition.JoinOneWhereList(Device.class, "id",
                         AuctioneerDevice.class, "auctioneerid","deviceid",
