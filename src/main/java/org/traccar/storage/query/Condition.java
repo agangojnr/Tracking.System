@@ -199,6 +199,7 @@ public interface Condition {
         public Class<?> getOwnerClass() { return ownerClass; }
     }
 
+
     class ResellerClientsByClientId implements Condition {
         private final Class<?> ownerClass;
         private final String ownerColumn1;
@@ -227,6 +228,25 @@ public interface Condition {
         public String getPivotColumn2() { return pivotColumn2; }
         public Long getSearchValue() { return searchValue; }
     }
+
+    class GetAllDeviceswithReg implements Condition {
+        private final Class<?> ownerClass;
+        private final String ownerColumn;
+        private final String searchValue;
+        private final String searchTerm;
+        // Constructor
+        public GetAllDeviceswithReg(Class<?> ownerClass, String ownerColumn,
+                                    String searchValue, String searchTerm) {
+            this.ownerClass = ownerClass;
+            this.ownerColumn = ownerColumn;
+            this.searchTerm = searchTerm;
+            this.searchValue = searchValue;
+        }
+            public Class<?> getOwnerClass() { return ownerClass; }
+            public String getOwnerColumn() { return ownerColumn;}
+            public String getSearchValue() { return searchValue; }
+            public String getSearchTerm() { return searchTerm; }
+        }
 
     class LinkedDevicesbyAuctioneer implements Condition {
         private final Class<?> ownerClass;

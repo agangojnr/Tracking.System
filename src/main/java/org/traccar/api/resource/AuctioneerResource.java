@@ -20,8 +20,7 @@ import org.traccar.storage.query.Condition;
 import org.traccar.storage.query.Order;
 import org.traccar.storage.query.Request;
 
-import java.util.Collection;
-import java.util.LinkedList;
+import java.util.*;
 
 @Path("auctioneers")
 @Produces(MediaType.APPLICATION_JSON)
@@ -155,15 +154,40 @@ public class AuctioneerResource extends SimpleObjectResource<Auctioneer> {
     /* LINK DEVICES TO AUCTIONEERS*/
     @POST
     @Path("link")
-    public Response linkGroupDevice(@QueryParam("auctioneerId") long auctioneerId, @QueryParam("deviceId") long deviceId) throws Exception{
+    public Response linkAuctioneerDevice(@QueryParam("auctioneerId") long auctioneerId, @QueryParam("deviceId") long deviceId) throws Exception{
         //LOGGER.info("Received POST request -> auctioneerId: {}, deviceId: {}", auctioneerId, deviceId);
-        if(validateAuctioneerDeviceLink(auctioneerId,deviceId)){
-            permissionsService.link(LinkType.AUCTIONEER_DEVICE, auctioneerId, deviceId);
-            return Response.ok("{\"status\":\"Linked successfully\"}").build();
-        }else{
-            return Response.ok("{\"status\":\"Device already linked to the Auctioneer.\"}").build();
+        Device asset = storage.getObject(Device.class, new Request(
+                new Columns.Include("name"),
+                new Condition.Equals("id", deviceId)
+        ));
+        String deviceName = null;
+        if (asset != null) {
+            deviceName = asset.getName();
         }
+        String regNo = deviceName.split("~")[0].trim();
+        List<Device> devices = storage.getJointObjects(Device.class, new Request(
+                new Columns.Include("id"),
+                new Condition.GetAllDeviceswithReg(Device.class, "id", "name" , regNo)));
 
+        List<Map<String, Object>> responses = new ArrayList<>();
+        for (Device device : storage.getJointObjects(
+                Device.class, new Request(
+                        new Columns.Include("id"),
+                        new Condition.GetAllDeviceswithReg(Device.class, "id", "name", regNo )))) {
+            Map<String, Object> result = new HashMap<>();
+            result.put("deviceId", device.getId());
+            result.put("deviceName", device.getName());
+
+            if (validateAuctioneerDeviceLink(auctioneerId, device.getId())) {
+                permissionsService.link( LinkType.AUCTIONEER_DEVICE,auctioneerId,device.getId());
+                result.put("status", "Linked successfully");
+            } else {
+                result.put("status", "Device already linked to the Auctioneer");
+            }
+            responses.add(result);
+        }
+        // return ONE combined response
+        return Response.ok(responses).build();
     }
 
 

@@ -1549,6 +1549,16 @@ public class DatabaseStorage extends Storage {
                     result.append(condition.getPivotColumn());
                     result.append(" IS NULL");
 
+                }if(genericCondition instanceof Condition.GetAllDeviceswithReg condition){
+                    result.append(" WHERE ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getSearchValue());
+                    result.append(" LIKE ");
+                    result.append("'%");
+                    result.append(condition.getSearchTerm());
+                    result.append("%'");
+
                 }if(genericCondition instanceof Condition.GetResellerDevices condition){
                     //Client_device
                     result.append(" INNER JOIN ");

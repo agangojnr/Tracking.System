@@ -44,6 +44,9 @@ public class PermissionsResource  extends BaseResource {
     private SimcardPermissionResource simcardPermissionResource;
 
     @Inject
+    private AuctioneerResource auctioneerResource;
+
+    @Inject
     private LogAction actionLogger;
 
     @Context
@@ -125,13 +128,16 @@ public class PermissionsResource  extends BaseResource {
             Permission permission = new Permission(entity);
             checkPermission(permission);
             String oneToOne = permission.getOwnerClass().getSimpleName()+""+permission.getPropertyClass().getSimpleName();
-            LOGGER.info("Deviceid - {}   Simcardid - {}",permission.getOwnerId(),permission.getPropertyId());
+            //LOGGER.info("Deviceid - {}   Simcardid - {}",permission.getOwnerId(),permission.getPropertyId());
             //LOGGER.info("One to one -- {}", oneToOne);
 
             if ("DeviceSimcard".equals(oneToOne) || "DeviceAsset".equals(oneToOne)) {
                 checkLinkage(permission);
             }
 
+            if ("AuctioneerDevice".equals(oneToOne)) {
+                auctioneerResource.linkAuctioneerDevice(permission.getOwnerId(),permission.getPropertyId());
+            }
 
             storage.addPermission(permission);
             cacheManager.invalidatePermission(
