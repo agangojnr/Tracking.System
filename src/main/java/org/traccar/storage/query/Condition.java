@@ -228,6 +228,42 @@ public interface Condition {
         public Long getSearchValue() { return searchValue; }
     }
 
+    class LinkedDevicesbyAuctioneer implements Condition {
+        private final Class<?> ownerClass;
+        private final String ownerColumn;
+        private final Class<?> pivotClass1;
+        private final String pivotColumn1a;
+        private final String pivotColumn1b;
+        private final Class<?> pivotClass2;
+        private final String pivotColumn2a;
+        private final String pivotColumn2b;
+        private final Long searchValue;
+        // Constructor
+        public LinkedDevicesbyAuctioneer(Class<?> ownerClass, String ownerColumn,
+                                         Class<?> pivotClass1, String pivotColumn1a, String pivotColumn1b,
+                                         Class<?> pivotClass2, String pivotColumn2a, String pivotColumn2b,
+                                         Long searchValue) {
+            this.ownerClass = ownerClass;
+            this.ownerColumn = ownerColumn;
+            this.pivotClass1 = pivotClass1;
+            this.pivotColumn1a = pivotColumn1a;
+            this.pivotColumn1b = pivotColumn1b;
+            this.pivotClass2 = pivotClass2;
+            this.pivotColumn2a = pivotColumn2a;
+            this.pivotColumn2b = pivotColumn2b;
+            this.searchValue = searchValue;
+        }
+        public Class<?> getOwnerClass() { return ownerClass; }
+        public String getOwnerColumn() { return ownerColumn; }
+        public Class<?> getPivotClass1() { return pivotClass1; }
+        public String getPivotColumn1a() { return pivotColumn1a; }
+        public String getPivotColumn1b() { return pivotColumn1b; }
+        public Class<?> getPivotClass2() { return pivotClass2; }
+        public String getPivotColumn2a() { return pivotColumn2a; }
+        public String getPivotColumn2b() { return pivotColumn2b; }
+        public Long getSearchValue() { return searchValue; }
+    }
+
     class UnlinkedSimcards implements Condition {
         private final Class<?> ownerClass;
         private final String ownerColumn;
@@ -569,8 +605,6 @@ public interface Condition {
         private final String pivotColumn2b;
         private final Class<?> pivotClass3;
         private final String pivotColumn3;
-        private final String searchColumn;
-        private final Long value2;
         private final Long value;
 
         // Constructor
@@ -578,7 +612,7 @@ public interface Condition {
                                    Class<?> pivotClass1, String pivotColumn1a, String pivotColumn1b,
                                    Class<?> pivotClass2, String pivotColumn2a, String pivotColumn2b,
                                    Class<?> pivotClass3, String pivotColumn3,
-                                   String searchColumn, Long value2, Long value) {
+                                   Long value) {
             this.ownerClass = ownerClass;
             this.ownerColumn = ownerColumn;
             this.pivotClass1 = pivotClass1;
@@ -589,9 +623,7 @@ public interface Condition {
             this.pivotColumn2b = pivotColumn2b;
             this.pivotClass3 = pivotClass3;
             this.pivotColumn3 = pivotColumn3;
-            this.value2 = value2;
             this.value = value;
-            this.searchColumn = searchColumn;
         }
         public Class<?> getOwnerClass() { return ownerClass; }
         public String getOwnerColumn() { return ownerColumn; }
@@ -603,9 +635,7 @@ public interface Condition {
         public String getPivotColumn2b() { return pivotColumn2b; }
         public Class<?> getPivotClass3() { return pivotClass3; }
         public String getPivotColumn3() { return pivotColumn3; }
-        public Long getValue2() { return value2; }
         public Long getValue() { return value; }
-        public String getSearchColumn() { return searchColumn; }
     }
 
     class JoinOneWhereList implements Condition {

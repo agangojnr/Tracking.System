@@ -90,7 +90,7 @@ public class DeviceResource extends BaseObjectResource<Device> {
 
     @GET
     @Path("query")
-    public Collection<Device> get(@QueryParam("clientId") Long clientId,
+    public Collection<Device> get(@QueryParam("clientId") Long clientId, @QueryParam("auctioneerId") Long auctioneerId,
                                   @QueryParam("subresellerId") Long subresellerId) throws Exception {
         //LOGGER.info("Testing here - {}", defaultClientId);
         /*QUERYING LINKED DEVICES BY CLIENTID*/
@@ -113,8 +113,16 @@ public class DeviceResource extends BaseObjectResource<Device> {
                             new Condition.LinkedDevicesbySubreseller_UnlinkedtoAuctioneer(Device.class, "id", DeviceAsset.class, "deviceid", "assetid", AuctioneerDevice.class, "auctioneerid", "deviceid", ClientDevice.class, "clientid", "deviceid", Client.class, "id", SubresellerClient.class, "subresellerid", "clientid", subresellerId)
                     )
             );
-        }else{
-
+        }else if(auctioneerId != null && auctioneerId > 0){
+            return storage.getJointObjects(
+                    Device.class,
+                    new Request(
+                            new Columns.All(),
+                            new Condition.LinkedDevicesbyAuctioneer(Device.class, "id",
+                                     DeviceAsset.class, "deviceid", "assetid",
+                                     AuctioneerDevice.class, "auctioneerid", "deviceid", auctioneerId)
+                    )
+            );
         }
 
         /*QUERYING LINKED DEVICES FROM DEFAULT CLIENT*/
@@ -617,7 +625,7 @@ public class DeviceResource extends BaseObjectResource<Device> {
                         AuctioneerDevice.class, "auctioneerid","deviceid",
                         ClientDevice.class, "clientid", "deviceid",
                         Client.class, "id",
-                        "isrepossessed", isRepossessed, auctioneerid)));
+                         auctioneerid)));
     }
 
     @GET
