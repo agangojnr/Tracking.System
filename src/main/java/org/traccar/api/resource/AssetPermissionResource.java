@@ -31,37 +31,32 @@ public class AssetPermissionResource extends BaseResource {
     @POST
     public Response linkDeviceAsset(@QueryParam("assetId") long assetId, @QueryParam("deviceId") long deviceId) throws Exception{
         //LOGGER.info("Received POST request -> assetId: {}, deviceId: {}", assetId, deviceId);
-        if(!validateDeviceAssetLink(assetId,deviceId)){
-            permissionsService.link(LinkType.DEVICE_ASSET, deviceId,assetId);
+        if(validateDeviceAssetLink(assetId,deviceId)){
+            permissionsService.link(LinkType.ASSET_DEVICE, assetId,deviceId);
             /* Updating device name on tc_devices table*/
-            Asset asset = storage.getObject(
-                    Asset.class,
-                    new Request(
-                            new Columns.Include("assetname"),
+            Asset asset = storage.getObject(Asset.class,
+                    new Request(new Columns.Include("assetname"),
                             new Condition.Equals("id", assetId)
                     )
             );
 
-            String newName = asset != null ? asset.getAssetName() : null;
+            Long devCount = storage.getCountObjects(AssetDevice.class, new Request(
+                    new Condition.CountDevicesOnAsset(AssetDevice.class, "assetid",assetId)));
+            //LOGGER.info("Count dev = {}", devCount);
+            String newName = asset != null ? asset.getAssetName()+" ~ dev"+(devCount+1) : null;
+            //Count Devices on the asset
 
             //LOGGER.info("Asset name = {}", newName);
-            Device device = storage.getObject(
-                    Device.class,
-                    new Request(
-                            new Columns.All(),
-                            new Condition.Equals("id", deviceId)
-                    )
+            Device device = storage.getObject(Device.class,
+                    new Request(new Columns.All(),
+                            new Condition.Equals("id", deviceId))
             );
 
             if (device != null) {
                 device.setName(newName); // 👈 update specific column
-
-                storage.updateObject(
-                        device,
-                        new Request(
-                                new Columns.Include("name"),
-                                new Condition.Equals("id", device.getId())
-                        )
+                storage.updateObject(device,
+                        new Request(new Columns.Include("name"),
+                                new Condition.Equals("id", device.getId()))
                 );
             }
             return Response.ok("{\"status\":\"Linked successfully.\"}").build();
@@ -73,7 +68,7 @@ public class AssetPermissionResource extends BaseResource {
     @DELETE
     public Response unlinkDeviceAsset(@QueryParam("assetId") long assetId, @QueryParam("deviceId") long deviceId) throws Exception{
         if(validateDeviceAssetunLink(assetId,deviceId)){
-        permissionsService.unlink(LinkType.DEVICE_ASSET, deviceId,assetId);
+        permissionsService.unlink(LinkType.ASSET_DEVICE, assetId, deviceId);
             String newName = "No Asset";
             Device device = storage.getObject(
                     Device.class,
@@ -105,12 +100,15 @@ public boolean validateDeviceAssetLink(long assetId, long deviceId) throws Stora
     // Query the database for a record matching both groupId and deviceId
     AssetDevice link = storage.getObject(AssetDevice.class, new Request(
             new Columns.All(),
-            new Condition.Or(
+            new Condition.And(
                     new Condition.Equals("assetid", assetId),
                     new Condition.Equals("deviceid", deviceId)
             )));
     // If the record exists, return true; otherwise, false
-    return link != null;
+    if (link == null) {
+        return true;
+    }
+    return false;
 }
 
     public boolean validateDeviceAssetunLink(long assetId, long deviceId) throws StorageException {

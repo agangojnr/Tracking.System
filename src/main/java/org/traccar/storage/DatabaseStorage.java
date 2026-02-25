@@ -3224,6 +3224,14 @@ public class DatabaseStorage extends Storage {
                     result.append(" = ");result.append("'");
                     result.append(condition.searchValue());result.append("'");
 
+                }else if (genericCondition instanceof Condition.CountDevicesOnAsset condition){
+                    result.append(" WHERE ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn());
+                    result.append(" = ");
+                    result.append(condition.getCountTerm());
+
                 }else if (genericCondition instanceof Condition.CountAllDevice condition){
                     result.append(" INNER JOIN ");
                     result.append(getStorageName(condition.getPivotClass1()));

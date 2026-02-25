@@ -14,7 +14,7 @@ public enum LinkType {
     SIMCARD_NETWORKPROVIDER(Simcard.class, Networkprovider.class, "tc_simcard_networkprovider"),
     USER_DEVICEGROUP(User.class, Devicegroup.class, "tc_user_devicegroup"),
     DEVICE_SIMCARD(Device.class, Simcard.class, "tc_device_simcard"),
-    DEVICE_ASSET(Device.class, Asset.class, "tc_device_asset"),
+    ASSET_DEVICE( Asset.class, Device.class,"tc_asset_device"),
     CLIENT_ASSET(Client.class, Asset.class, "tc_client_asset"),
     DRU_AUCTIONEER(Dru.class, Auctioneer.class, "tc_dru_auctioneer"),
     AUCTIONEER_DEVICE(Auctioneer.class, Device.class, "tc_auctioneer_device"),

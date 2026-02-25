@@ -47,6 +47,9 @@ public class PermissionsResource  extends BaseResource {
     private AuctioneerResource auctioneerResource;
 
     @Inject
+    private AssetPermissionResource assetPermissionResource;
+
+    @Inject
     private LogAction actionLogger;
 
     @Context
@@ -139,10 +142,10 @@ public class PermissionsResource  extends BaseResource {
                 checkLinkage(permission);
             }
 
-            if ("DeviceAsset".equals(oneToOne)) {
-                checkDeviceLinkage(permission);
+            if ("AssetDevice".equals(oneToOne)) {
+                assetPermissionResource.linkDeviceAsset(permission.getOwnerId(),permission.getPropertyId());
+                return null;
             }
-
             if ("AuctioneerDevice".equals(oneToOne)) {
                 auctioneerResource.linkAuctioneerDevice(permission.getOwnerId(),permission.getPropertyId());
             }
