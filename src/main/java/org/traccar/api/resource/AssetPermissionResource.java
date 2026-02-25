@@ -10,7 +10,7 @@ import org.traccar.api.BaseResource;
 import org.traccar.api.security.PermissionsService;
 import org.traccar.model.Asset;
 import org.traccar.model.Device;
-import org.traccar.model.DeviceAsset;
+import org.traccar.model.AssetDevice;
 import org.traccar.model.LinkType;
 import org.traccar.storage.StorageException;
 import org.traccar.storage.query.Columns;
@@ -103,7 +103,7 @@ public class AssetPermissionResource extends BaseResource {
 
 public boolean validateDeviceAssetLink(long assetId, long deviceId) throws StorageException {
     // Query the database for a record matching both groupId and deviceId
-    DeviceAsset link = storage.getObject(DeviceAsset.class, new Request(
+    AssetDevice link = storage.getObject(AssetDevice.class, new Request(
             new Columns.All(),
             new Condition.Or(
                     new Condition.Equals("assetid", assetId),
@@ -115,7 +115,7 @@ public boolean validateDeviceAssetLink(long assetId, long deviceId) throws Stora
 
     public boolean validateDeviceAssetunLink(long assetId, long deviceId) throws StorageException {
         // Query the database for a record matching both groupId and deviceId
-        DeviceAsset link = storage.getObject(DeviceAsset.class, new Request(
+        AssetDevice link = storage.getObject(AssetDevice.class, new Request(
                 new Columns.All(),
                 new Condition.And(
                         new Condition.Equals("assetid", assetId),

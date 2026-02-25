@@ -136,7 +136,6 @@ import java.io.*;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 
 public class OfflineReportProvider {
     private final Config config;
@@ -187,7 +186,7 @@ public class OfflineReportProvider {
                                         Subreseller.class, "id",
                                         ResellerSubreseller.class, "resellerid", "subresellerid",
                                         Reseller.class, "id",
-                                        DeviceAsset.class, "deviceid",
+                                        AssetDevice.class, "deviceid",
                                         Devicetype.class, "id",
                                         DeviceSimcard.class, "deviceid","simcardid",
                                         Simcard.class, "id","networkproviderid",
@@ -249,7 +248,7 @@ public class OfflineReportProvider {
                                         Subreseller.class, "id",
 //                                        ResellerSubreseller.class, "resellerid", "subresellerid",
 //                                        Reseller.class, "id",
-                                        DeviceAsset.class, "deviceid",
+                                        AssetDevice.class, "deviceid",
                                         Devicetype.class, "id",
                                         DeviceSimcard.class, "deviceid","simcardid",
                                         Simcard.class, "id","networkproviderid",
@@ -310,7 +309,7 @@ public class OfflineReportProvider {
 //                                        Subreseller.class, "id",
 //                                        ResellerSubreseller.class, "resellerid", "subresellerid",
 //                                        Reseller.class, "id",
-                                        DeviceAsset.class, "deviceid",
+                                        AssetDevice.class, "deviceid",
                                         Devicetype.class, "id",
                                         DeviceSimcard.class, "deviceid","simcardid",
                                         Simcard.class, "id","networkproviderid",

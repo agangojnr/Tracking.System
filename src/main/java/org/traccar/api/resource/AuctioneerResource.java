@@ -152,7 +152,6 @@ public class AuctioneerResource extends SimpleObjectResource<Auctioneer> {
     }
 
     /*DELETE AUCTIONEERS*/
-
     @Path("{id}")
     @DELETE
     public Response remove(@PathParam("id") long id) throws Exception {

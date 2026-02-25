@@ -1,0 +1,38 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+  <changeSet id="rename-tc-device-asset-table" author="walter">
+
+    <renameTable
+            oldTableName="tc_device_asset"
+            newTableName="tc_asset_device"/>
+
+  </changeSet>
+
+  <changeSet id="fix-column-order-tc-asset-device" author="walter">
+
+    <createTable tableName="tc_asset_device_new">
+      <column name="assetid" type="BIGINT"/>
+      <column name="deviceid" type="BIGINT"/>
+    </createTable>
+
+    <sql>
+      INSERT INTO tc_asset_device_new(deviceid, assetid)
+      SELECT deviceid, assetid FROM tc_asset_device;
+    </sql>
+
+    <dropTable tableName="tc_asset_device"/>
+
+    <renameTable
+            oldTableName="tc_asset_device_new"
+            newTableName="tc_asset_device"/>
+
+  </changeSet>
+
+
+</databaseChangeLog>
+

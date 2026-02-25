@@ -18,13 +18,11 @@ import org.traccar.helper.LogAction;
 import org.traccar.model.*;
 import org.traccar.session.ConnectionManager;
 import org.traccar.session.cache.CacheManager;
-import org.traccar.storage.StorageException;
 import org.traccar.storage.query.Columns;
 import org.traccar.storage.query.Condition;
 import org.traccar.storage.query.Request;
 
 import java.util.Collection;
-import java.util.logging.Level;
 
 @Path("globalsearch")
 @Produces(MediaType.APPLICATION_JSON)
@@ -83,7 +81,7 @@ public class GlobalSearchResource extends BaseObjectResource<Device> {
                             ),
                             new Condition.AdminImeiGlobalSearch(
                                     Device.class, "id",
-                                    DeviceAsset.class, "deviceid",
+                                    AssetDevice.class, "deviceid",
                                     ClientDevice.class,"clientid", "deviceid",
                                     Client.class,"id",
                                     SubresellerClient.class, "subresellerid","clientid",
@@ -105,7 +103,7 @@ public class GlobalSearchResource extends BaseObjectResource<Device> {
                                     "name AS AssetName",
                                     "uniqueid AS Imei"
                             ),
-                            new Condition.ResellerImeiGlobalSearch(Device.class, "id", DeviceAsset.class, "deviceid",  ClientDevice.class,"clientid", "deviceid",Client.class,"id", SubresellerClient.class, "subresellerid","clientid",Subreseller.class,"id",ResellerSubreseller.class, "resellerid","subresellerid", Reseller.class,"id",resellerid, "uniqueid", imei)
+                            new Condition.ResellerImeiGlobalSearch(Device.class, "id", AssetDevice.class, "deviceid",  ClientDevice.class,"clientid", "deviceid",Client.class,"id", SubresellerClient.class, "subresellerid","clientid",Subreseller.class,"id",ResellerSubreseller.class, "resellerid","subresellerid", Reseller.class,"id",resellerid, "uniqueid", imei)
                     )
             );
         }else if(level == 2) {
@@ -120,7 +118,7 @@ public class GlobalSearchResource extends BaseObjectResource<Device> {
                                     "name AS AssetName",
                                     "uniqueid AS Imei"
                             ),
-                            new Condition.SubResellerImeiGlobalSearch(Device.class, "id", DeviceAsset.class, "deviceid",  ClientDevice.class,"clientid", "deviceid",Client.class,"id", SubresellerClient.class, "subresellerid","clientid",Subreseller.class,"id",ResellerSubreseller.class, "resellerid","subresellerid", Reseller.class,"id", subresellerid,"uniqueid", imei)
+                            new Condition.SubResellerImeiGlobalSearch(Device.class, "id", AssetDevice.class, "deviceid",  ClientDevice.class,"clientid", "deviceid",Client.class,"id", SubresellerClient.class, "subresellerid","clientid",Subreseller.class,"id",ResellerSubreseller.class, "resellerid","subresellerid", Reseller.class,"id", subresellerid,"uniqueid", imei)
                     )
             );
         }else if(level == 3) {
@@ -135,7 +133,7 @@ public class GlobalSearchResource extends BaseObjectResource<Device> {
                                     "name AS AssetName",
                                     "uniqueid AS Imei"
                             ),
-                            new Condition.ClientImeiGlobalSearch(Device.class, "id", DeviceAsset.class, "deviceid",  ClientDevice.class,"clientid", "deviceid",Client.class,"id", SubresellerClient.class, "subresellerid","clientid",Subreseller.class,"id",ResellerSubreseller.class, "resellerid","subresellerid", Reseller.class,"id", clientid, "uniqueid", imei)
+                            new Condition.ClientImeiGlobalSearch(Device.class, "id", AssetDevice.class, "deviceid",  ClientDevice.class,"clientid", "deviceid",Client.class,"id", SubresellerClient.class, "subresellerid","clientid",Subreseller.class,"id",ResellerSubreseller.class, "resellerid","subresellerid", Reseller.class,"id", clientid, "uniqueid", imei)
                     )
             );
         }
@@ -160,7 +158,7 @@ public class GlobalSearchResource extends BaseObjectResource<Device> {
                                     "name AS AssetName",
                                     "uniqueid AS Imei"
                             ),
-                            new Condition.FiveJoinWhereSearch(Device.class, "id", DeviceAsset.class, "deviceid", ClientDevice.class, "clientid","deviceid", Client.class, "id", SubresellerClient.class, "subresellerid","clientid",Subreseller.class,"id",ResellerSubreseller.class,"resellerid","subresellerid",Reseller.class,"id", "name", assetname)
+                            new Condition.FiveJoinWhereSearch(Device.class, "id", AssetDevice.class, "deviceid", ClientDevice.class, "clientid","deviceid", Client.class, "id", SubresellerClient.class, "subresellerid","clientid",Subreseller.class,"id",ResellerSubreseller.class,"resellerid","subresellerid",Reseller.class,"id", "name", assetname)
                     )
             );
         }else if(level == 1){
@@ -175,7 +173,7 @@ public class GlobalSearchResource extends BaseObjectResource<Device> {
                                     "name AS AssetName",
                                     "uniqueid AS Imei"
                             ),
-                            new Condition.SixJoinTwoWhereSearch(Device.class, "id", DeviceAsset.class, "deviceid", ClientDevice.class, "clientid","deviceid", Client.class, "id", SubresellerClient.class, "subresellerid","clientid",Subreseller.class,"id",ResellerSubreseller.class,"resellerid","subresellerid",Reseller.class,"id", resellerid,"name", assetname)
+                            new Condition.SixJoinTwoWhereSearch(Device.class, "id", AssetDevice.class, "deviceid", ClientDevice.class, "clientid","deviceid", Client.class, "id", SubresellerClient.class, "subresellerid","clientid",Subreseller.class,"id",ResellerSubreseller.class,"resellerid","subresellerid",Reseller.class,"id", resellerid,"name", assetname)
                     )
             );
         }else if(level == 2){
@@ -190,7 +188,7 @@ public class GlobalSearchResource extends BaseObjectResource<Device> {
                                     "name AS AssetName",
                                     "uniqueid AS Imei"
                             ),
-                            new Condition.FiveJoinTwoWhereSearch1(Device.class, "id", DeviceAsset.class, "deviceid", ClientDevice.class, "clientid","deviceid", Client.class, "id", SubresellerClient.class, "subresellerid","clientid",Subreseller.class,"id",ResellerSubreseller.class,"resellerid","subresellerid",Reseller.class,"id", subresellerid,"name", assetname)
+                            new Condition.FiveJoinTwoWhereSearch1(Device.class, "id", AssetDevice.class, "deviceid", ClientDevice.class, "clientid","deviceid", Client.class, "id", SubresellerClient.class, "subresellerid","clientid",Subreseller.class,"id",ResellerSubreseller.class,"resellerid","subresellerid",Reseller.class,"id", subresellerid,"name", assetname)
                     )
             );
         }else if(level == 3){
@@ -205,7 +203,7 @@ public class GlobalSearchResource extends BaseObjectResource<Device> {
                                     "name AS AssetName",
                                     "uniqueid AS Imei"
                             ),
-                            new Condition.FourJoinTwoWhereSearch1(Device.class, "id", DeviceAsset.class, "deviceid", ClientDevice.class, "clientid","deviceid", Client.class, "id", SubresellerClient.class, "subresellerid","clientid",Subreseller.class,"id",ResellerSubreseller.class,"resellerid","subresellerid",Reseller.class,"id", clientid, "name", assetname)
+                            new Condition.FourJoinTwoWhereSearch1(Device.class, "id", AssetDevice.class, "deviceid", ClientDevice.class, "clientid","deviceid", Client.class, "id", SubresellerClient.class, "subresellerid","clientid",Subreseller.class,"id",ResellerSubreseller.class,"resellerid","subresellerid",Reseller.class,"id", clientid, "name", assetname)
                     )
             );
         }

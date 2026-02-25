@@ -5,18 +5,15 @@ import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
-import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.traccar.api.BaseObjectResource;
 import org.traccar.api.security.PermissionsService;
-import org.traccar.api.security.ServiceAccountUser;
 import org.traccar.api.signature.TokenManager;
 import org.traccar.broadcast.BroadcastService;
 import org.traccar.config.Config;
-import org.traccar.config.Keys;
 import org.traccar.database.MediaManager;
 import org.traccar.helper.LogAction;
 import org.traccar.model.*;
@@ -25,17 +22,9 @@ import org.traccar.session.cache.CacheManager;
 import org.traccar.storage.StorageException;
 import org.traccar.storage.query.Columns;
 import org.traccar.storage.query.Condition;
-import org.traccar.storage.query.Order;
 import org.traccar.storage.query.Request;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.util.Collection;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
 
 @Path("stock")
 @Produces(MediaType.APPLICATION_JSON)
@@ -309,7 +298,7 @@ public class StockResource extends BaseObjectResource<Device> {
                                     "status AS status"
                             ),
                             new Condition.NineJoin(Device.class,"id","devicetypeid",
-                                    DeviceAsset.class,"deviceid",
+                                    AssetDevice.class,"deviceid",
                                     ClientDevice.class,"clientid", "deviceid",
                                     Client.class,"id",
                                     SubresellerClient.class, "subresellerid",  "clientid",
@@ -338,7 +327,7 @@ public class StockResource extends BaseObjectResource<Device> {
                                     "model AS deviceModel",
                                     "status AS status"
                                     ),
-                            new Condition.SixJoinWhere(Device.class,"id","devicetypeid", DeviceAsset.class,"deviceid", ClientDevice.class,"clientid", "deviceid", Client.class,"id", SubresellerClient.class, "subresellerid",  "clientid", Subreseller.class, "id", ResellerSubreseller.class, "subresellerid", DeviceSimcard.class, "deviceid","simcardid", Simcard.class, "id", Devicetype.class, "id", resellerId)
+                            new Condition.SixJoinWhere(Device.class,"id","devicetypeid", AssetDevice.class,"deviceid", ClientDevice.class,"clientid", "deviceid", Client.class,"id", SubresellerClient.class, "subresellerid",  "clientid", Subreseller.class, "id", ResellerSubreseller.class, "subresellerid", DeviceSimcard.class, "deviceid","simcardid", Simcard.class, "id", Devicetype.class, "id", resellerId)
                             //new Condition.ThreeJoinWhere(Device.class,"id", DeviceAsset.class,"simcardid","simcardid",ResellerSimcard.class,"simcardid","resellerid",resellerId)
                     )
             );
@@ -375,7 +364,7 @@ public class StockResource extends BaseObjectResource<Device> {
                             ),
                             //new Condition.FiveJoinWhere(Device.class,"id", DeviceAsset.class,"deviceid", "clientid", ClientDevice.class,  "subresellerid", SubresellerClient.class, "subresellerid", ResellerSubreseller.class, "resellerid", "resellerid", resellerId)
                             new Condition.GetAllUnlinkedDevices(Device.class,"id","devicetypeid",
-                                    DeviceAsset.class,"deviceid",
+                                    AssetDevice.class,"deviceid",
                                     ClientDevice.class,"clientid", "deviceid",
                                     Client.class,"id",
                                     SubresellerClient.class, "subresellerid",  "clientid",
@@ -405,7 +394,7 @@ public class StockResource extends BaseObjectResource<Device> {
                                     "status AS status"
                             ),
                             new Condition.GetResellerUnlinkedDevices(Device.class,"id","devicetypeid",
-                                    DeviceAsset.class,"deviceid",
+                                    AssetDevice.class,"deviceid",
                                     ClientDevice.class,"clientid", "deviceid",
                                     Client.class,"id",
                                     SubresellerClient.class, "subresellerid",  "clientid",
@@ -478,7 +467,7 @@ public class StockResource extends BaseObjectResource<Device> {
                     Asset.class,
                     new Request(
                             new Columns.All(),
-                            new Condition.InnerJoin(Asset.class,"id", DeviceAsset.class,"assetid")
+                            new Condition.InnerJoin(Asset.class,"id", AssetDevice.class,"assetid")
                     )
             );
             return Response.ok(assets).build();
@@ -488,7 +477,7 @@ public class StockResource extends BaseObjectResource<Device> {
                     Asset.class,
                     new Request(
                             new Columns.All(),
-                            new Condition.FiveJoinWhere1(Asset.class,"id", DeviceAsset.class,"assetid", "assetid", ClientAsset.class,"clientid", SubresellerClient.class, "subresellerid", ResellerSubreseller.class,"resellerid", "resellerId",resellerId)
+                            new Condition.FiveJoinWhere1(Asset.class,"id", AssetDevice.class,"assetid", "assetid", ClientAsset.class,"clientid", SubresellerClient.class, "subresellerid", ResellerSubreseller.class,"resellerid", "resellerId",resellerId)
                     )
             );
             return Response.ok(assets).build();
@@ -512,7 +501,7 @@ public class StockResource extends BaseObjectResource<Device> {
                     Asset.class,
                     new Request(
                             new Columns.All(),
-                            new Condition.LeftJoin(Asset.class, "id", DeviceAsset.class, "assetid")
+                            new Condition.LeftJoin(Asset.class, "id", AssetDevice.class, "assetid")
                     )
             );
             return Response.ok(assets).build();
@@ -522,7 +511,7 @@ public class StockResource extends BaseObjectResource<Device> {
                     Asset.class,
                     new Request(
                             new Columns.All(),
-                            new Condition.FiveLeftJoinWhere(Asset.class,"id", DeviceAsset.class,"assetid", "assetid", ClientAsset.class,"clientid", SubresellerClient.class, "subresellerid", ResellerSubreseller.class,"resellerid", "resellerId",resellerId)
+                            new Condition.FiveLeftJoinWhere(Asset.class,"id", AssetDevice.class,"assetid", "assetid", ClientAsset.class,"clientid", SubresellerClient.class, "subresellerid", ResellerSubreseller.class,"resellerid", "resellerId",resellerId)
                             //new Condition.LeftJoin(Asset.class, "id", DeviceAsset.class, "assetid")
                     )
             );
@@ -543,7 +532,7 @@ public class StockResource extends BaseObjectResource<Device> {
                 Asset.class,
                 new Request(
                         new Columns.All(),
-                        new Condition.ThreeLeftJoinWhere(Asset.class,"id", DeviceAsset.class,"assetid", "assetid", ClientAsset.class,"clientid", clientId)
+                        new Condition.ThreeLeftJoinWhere(Asset.class,"id", AssetDevice.class,"assetid", "assetid", ClientAsset.class,"clientid", clientId)
                         //new Condition.LeftJoin(Asset.class, "id", DeviceAsset.class, "assetid")
                 )
         );

@@ -2,15 +2,11 @@
 package org.traccar.api.resource;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
-import org.apache.commons.compress.archivers.sevenz.CLI;
-import org.h2.table.Column;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.traccar.api.BaseObjectResource;
-import org.traccar.api.ExtendedObjectResource;
 import org.traccar.api.security.PermissionsService;
 import org.traccar.api.security.ServiceAccountUser;
 import org.traccar.api.signature.TokenManager;
@@ -40,11 +36,7 @@ import java.security.GeneralSecurityException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.stream.Stream;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Path("devices")
 @Produces(MediaType.APPLICATION_JSON)
@@ -99,7 +91,7 @@ public class DeviceResource extends BaseObjectResource<Device> {
                     Device.class,
                     new Request(
                             new Columns.All(),
-                            new Condition.LinkedDevicesbyClient(Device.class, "id", DeviceAsset.class, "deviceid", "assetid", ClientDevice.class, "clientid", "deviceid", clientId)
+                            new Condition.LinkedDevicesbyClient(Device.class, "id", AssetDevice.class, "deviceid", "assetid", ClientDevice.class, "clientid", "deviceid", clientId)
                     )
             );
         }
@@ -110,7 +102,7 @@ public class DeviceResource extends BaseObjectResource<Device> {
                     Device.class,
                     new Request(
                             new Columns.All(),
-                            new Condition.LinkedDevicesbySubreseller_UnlinkedtoAuctioneer(Device.class, "id", DeviceAsset.class, "deviceid", "assetid", AuctioneerDevice.class, "auctioneerid", "deviceid", ClientDevice.class, "clientid", "deviceid", Client.class, "id", SubresellerClient.class, "subresellerid", "clientid", subresellerId)
+                            new Condition.LinkedDevicesbySubreseller_UnlinkedtoAuctioneer(Device.class, "id", AssetDevice.class, "deviceid", "assetid", AuctioneerDevice.class, "auctioneerid", "deviceid", ClientDevice.class, "clientid", "deviceid", Client.class, "id", SubresellerClient.class, "subresellerid", "clientid", subresellerId)
                     )
             );
         }else if(auctioneerId != null && auctioneerId > 0){
@@ -119,7 +111,7 @@ public class DeviceResource extends BaseObjectResource<Device> {
                     new Request(
                             new Columns.All(),
                             new Condition.LinkedDevicesbyAuctioneer(Device.class, "id",
-                                     DeviceAsset.class, "deviceid", "assetid",
+                                     AssetDevice.class, "deviceid", "assetid",
                                      AuctioneerDevice.class, "auctioneerid", "deviceid", auctioneerId)
                     )
             );
@@ -131,7 +123,7 @@ public class DeviceResource extends BaseObjectResource<Device> {
                 Device.class,
                 new Request(
                         new Columns.All(),
-                        new Condition.LinkedDevicesbyClient(Device.class, "id", DeviceAsset.class, "deviceid", "assetid", ClientDevice.class, "clientid", "deviceid", defaultClientId)
+                        new Condition.LinkedDevicesbyClient(Device.class, "id", AssetDevice.class, "deviceid", "assetid", ClientDevice.class, "clientid", "deviceid", defaultClientId)
                 )
         );
     }
@@ -170,7 +162,7 @@ public class DeviceResource extends BaseObjectResource<Device> {
                         ),
                         new Condition.GetAllDevicesbyClient(
                                 Device.class, "id", "devicetypeid",
-                                DeviceAsset.class, "deviceid", "assetid",
+                                AssetDevice.class, "deviceid", "assetid",
                                 Asset.class, "id",
                                 DeviceSimcard.class, "deviceid", "simcardid",
                                 Simcard.class, "id",
@@ -511,7 +503,7 @@ public class DeviceResource extends BaseObjectResource<Device> {
 
     public boolean validateReference(long deviceId) throws StorageException {
         //String name = Simcard entity.getNetworkproviderid();
-        Collection<DeviceAsset> asset = storage.getObjects(DeviceAsset.class,
+        Collection<AssetDevice> asset = storage.getObjects(AssetDevice.class,
                 new Request(
                         new Columns.All(),
                         new Condition.Equals("deviceid", deviceId)
@@ -542,8 +534,8 @@ public class DeviceResource extends BaseObjectResource<Device> {
             //Link new devices and simcards
             permissionsService.link(LinkType.CLIENT_DEVICE, newclientid, deviceid);
 
-            DeviceAsset asset = storage.getObject(
-                    DeviceAsset.class,
+            AssetDevice asset = storage.getObject(
+                    AssetDevice.class,
                     new Request(
                             new Columns.All(),
                             new Condition.Equals("deviceid", deviceid)
@@ -641,7 +633,7 @@ public class DeviceResource extends BaseObjectResource<Device> {
                         SubresellerClient.class, "subresellerid", "clientid",
                         SubresellerDru.class, "subresellerid", "druid",
                         DruAuctioneer.class, "druid", "auctioneerid",
-                        DeviceAsset.class, "deviceid", auctioneerid)));
+                        AssetDevice.class, "deviceid", auctioneerid)));
     }
 }
 

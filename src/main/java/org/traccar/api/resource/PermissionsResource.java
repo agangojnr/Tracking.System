@@ -80,7 +80,7 @@ public class PermissionsResource  extends BaseResource {
     private void checkDeviceLinkage(Permission permission) throws StorageException, ClassNotFoundException {
         Long devcount = storage.getCountObjects(Device.class, new Request(
                 new Columns.All(),
-                new Condition.CountDevicesOnAsset(DeviceAsset.class,"assetid", permission.getPropertyId())));
+                new Condition.CountDevicesOnAsset(AssetDevice.class,"assetid", permission.getPropertyId())));
 
         Asset asset = storage.getObject(
                     Asset.class,

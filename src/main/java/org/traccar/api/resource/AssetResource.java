@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.traccar.api.SimpleObjectResource;
 import org.traccar.api.security.PermissionsService;
-import org.traccar.api.security.ServiceAccountUser;
 import org.traccar.helper.LogAction;
 import org.traccar.model.*;
 import org.traccar.session.ConnectionManager;
@@ -164,7 +163,7 @@ public class AssetResource extends SimpleObjectResource<Asset> {
     }
 
     public boolean validateReference(long assetId) throws StorageException {
-        Collection<DeviceAsset> asset = storage.getObjects(DeviceAsset.class,
+        Collection<AssetDevice> asset = storage.getObjects(AssetDevice.class,
                 new Request(
                         new Columns.All(),
                         new Condition.Equals("assetid", assetId)

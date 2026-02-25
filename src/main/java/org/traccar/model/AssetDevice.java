@@ -3,8 +3,8 @@ package org.traccar.model;
 
 import org.traccar.storage.StorageName;
 
-@StorageName("tc_device_asset")
-public class DeviceAsset {
+@StorageName("tc_asset_device")
+public class AssetDevice {
 
     private Long deviceid;
     private Long assetid;
