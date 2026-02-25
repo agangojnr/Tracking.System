@@ -865,13 +865,6 @@ public class DatabaseStorage extends Storage {
                     result.append(condition.getPivotColumn1b());
 
                     result.append(" WHERE ");
-                    result.append(getStorageName(condition.getOwnerClass()));
-                    result.append(".");
-                    result.append(condition.getSearchColumn());
-                    result.append(" = ");
-                    result.append(condition.getValue2());
-
-                    result.append(" AND ");
                     result.append(getStorageName(condition.getPivotClass1()));
                     result.append(".");
                     result.append(condition.getPivotColumn1a());
@@ -1328,6 +1321,22 @@ public class DatabaseStorage extends Storage {
                     result.append(condition.getPivotColumn4());
                     result.append(" = ");
                     result.append(condition.getValue1());
+
+                }if(genericCondition instanceof Condition.GetAuctioneerIdformLevel condition){
+                    result.append(" WHERE ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn1());
+                    result.append(" = ");
+                    result.append(condition.getSearchValue1());
+
+                    result.append(" AND ");
+
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn2());
+                    result.append(" = ");
+                    result.append(condition.getSearchValue2());
 
                 }if(genericCondition instanceof Condition.GetAllDevices condition){
                     //Client_device

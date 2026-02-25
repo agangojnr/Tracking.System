@@ -22,13 +22,13 @@ public class Asset extends ExtendedModel {
         this.ownerName = ownerName;
     }
 
-    private Long noofDevices;
-    public Long getNoofDevices() {
-        return noofDevices;
-    }
-    public void setNoofDevices(Long noofDevices) {
-        this.noofDevices = noofDevices;
-    }
+//    private Long noofDevices;
+//    public Long getNoofDevices() {
+//        return noofDevices;
+//    }
+//    public void setNoofDevices(Long noofDevices) {
+//        this.noofDevices = noofDevices;
+//    }
 
     private String assetName;
     public String getAssetName() {

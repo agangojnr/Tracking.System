@@ -75,19 +75,23 @@ public class PermissionsResource  extends BaseResource {
             throw new StorageException("Already linked.");
         }
 
-        if(permission.getPropertyClass().getSimpleName().equals("Asset")){
-            //LOGGER.info("Device ID:  {}",permission.getOwnerId());
+    }
 
-            Asset asset = storage.getObject(
+    private void checkDeviceLinkage(Permission permission) throws StorageException, ClassNotFoundException {
+        Long devcount = storage.getCountObjects(Device.class, new Request(
+                new Columns.All(),
+                new Condition.CountDevicesOnAsset(DeviceAsset.class,"assetid", permission.getPropertyId())));
+
+        Asset asset = storage.getObject(
                     Asset.class,
                     new Request(
                             new Columns.Include("assetname"),
                             new Condition.Equals("id", permission.getPropertyId())
                     )
             );
+            String newName = asset != null ? asset.getAssetName()+" ~ dev"+devcount+1 : null;
 
-            String newName = asset != null ? asset.getAssetName() : null;
-            Device device = storage.getObject(
+        Device device = storage.getObject(
                     Device.class,
                     new Request(
                             new Columns.All(),
@@ -106,7 +110,7 @@ public class PermissionsResource  extends BaseResource {
                         )
                 );
             }
-        }
+
     }
 
     private void checkPermissionTypes(List<LinkedHashMap<String, Long>> entities) {
@@ -131,8 +135,12 @@ public class PermissionsResource  extends BaseResource {
             //LOGGER.info("Deviceid - {}   Simcardid - {}",permission.getOwnerId(),permission.getPropertyId());
             //LOGGER.info("One to one -- {}", oneToOne);
 
-            if ("DeviceSimcard".equals(oneToOne) || "DeviceAsset".equals(oneToOne)) {
+            if ("DeviceSimcard".equals(oneToOne)) {
                 checkLinkage(permission);
+            }
+
+            if ("DeviceAsset".equals(oneToOne)) {
+                checkDeviceLinkage(permission);
             }
 
             if ("AuctioneerDevice".equals(oneToOne)) {

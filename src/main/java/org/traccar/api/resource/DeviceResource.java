@@ -595,17 +595,13 @@ public class DeviceResource extends BaseObjectResource<Device> {
 
     @GET
     @Path("auctioneers")
-    public Collection<Device> getDeviceByAuctioneer(
-            @QueryParam("auctioneerid") long auctioneerid
-    ) throws Exception{
-        //LOGGER.info("Testing auctioneer id = {}", auctioneerid);
-        Long isRepossessed = 0L;
+    public Collection<Device> getDeviceByAuctioneer(@QueryParam("auctioneerid") long auctioneerid) throws Exception{
         return storage.getJointObjects(baseClass,
                 new Request(
-                new Columns.All(),
+                        new Columns.All(),
                 new Condition.JoinOneWhereList(Device.class, "id",
                         AuctioneerDevice.class, "auctioneerid","deviceid",
-                        "isrepossessed", isRepossessed, auctioneerid)));
+                         auctioneerid)));
     }
 
     @GET

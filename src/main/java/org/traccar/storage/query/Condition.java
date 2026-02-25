@@ -229,6 +229,28 @@ public interface Condition {
         public Long getSearchValue() { return searchValue; }
     }
 
+    class GetAuctioneerIdformLevel implements Condition {
+        private final Class<?> ownerClass;
+        private final String ownerColumn1;
+        private final String ownerColumn2;
+        private final Long searchValue1;
+        private final Long searchValue2;
+        // Constructor
+        public GetAuctioneerIdformLevel(Class<?> ownerClass, String ownerColumn1, String ownerColumn2,
+                                         Long searchValue1, Long searchValue2) {
+            this.ownerClass = ownerClass;
+            this.ownerColumn1 = ownerColumn1;
+            this.ownerColumn2 = ownerColumn2;
+            this.searchValue1 = searchValue1;
+            this.searchValue2 = searchValue2;
+        }
+        public Class<?> getOwnerClass() { return ownerClass; }
+        public String getOwnerColumn1() { return ownerColumn1; }
+        public String getOwnerColumn2() { return ownerColumn2; }
+        public Long getSearchValue1() { return searchValue1; }
+        public Long getSearchValue2() { return searchValue2; }
+    }
+
     class GetAllDeviceswithReg implements Condition {
         private final Class<?> ownerClass;
         private final String ownerColumn;
@@ -664,31 +686,25 @@ public interface Condition {
         private final Class<?> pivotClass1;
         private final String pivotColumn1a;
         private final String pivotColumn1b;
-        private final String searchColumn;
-        private final Long value2;
         private final Long value;
 
         // Constructor
         public JoinOneWhereList(Class<?> ownerClass, String ownerColumn,
                                    Class<?> pivotClass1, String pivotColumn1a, String pivotColumn1b,
-                                   String searchColumn, Long value2, Long value) {
+                                   Long value) {
             this.ownerClass = ownerClass;
             this.ownerColumn = ownerColumn;
             this.pivotClass1 = pivotClass1;
             this.pivotColumn1a = pivotColumn1a;
             this.pivotColumn1b = pivotColumn1b;
-            this.value2 = value2;
             this.value = value;
-            this.searchColumn = searchColumn;
         }
         public Class<?> getOwnerClass() { return ownerClass; }
         public String getOwnerColumn() { return ownerColumn; }
         public Class<?> getPivotClass1() { return pivotClass1; }
         public String getPivotColumn1a() { return pivotColumn1a; }
         public String getPivotColumn1b() { return pivotColumn1b; }
-        public Long getValue2() { return value2; }
         public Long getValue() { return value; }
-        public String getSearchColumn() { return searchColumn; }
     }
 
     class RepossessionReport implements Condition {
@@ -2887,6 +2903,23 @@ public interface Condition {
         public String getOwnerColumn() { return ownerColumn; }
         public Class<?> getPivotClass1() { return pivotClass1; }
         public String getPivotColumn1() { return pivotColumn1;}
+
+    }
+
+    class CountDevicesOnAsset implements Condition {
+        private final Class<?> ownerClass;
+        private final String ownerColumn;
+        private final Long countTerm;
+
+        // Constructor
+        public CountDevicesOnAsset(Class<?> ownerClass, String ownerColumn, Long countTerm){
+            this.ownerClass = ownerClass;
+            this.ownerColumn = ownerColumn;
+            this.countTerm = countTerm;
+        }
+        public Class<?> getOwnerClass() { return ownerClass; }
+        public String getOwnerColumn() { return ownerColumn; }
+        public Long getCountTerm() { return countTerm;}
 
     }
 

@@ -53,31 +53,19 @@ public class AssetResource extends SimpleObjectResource<Asset> {
     @Path("create/{clientId}")
     @POST
     public Response add(Asset entity, @PathParam("clientId") Long clientId) throws Exception {
-        Long numberOfDevices = entity.getNoofDevices();
-        List<Object> results = new ArrayList<>();
-
-        for (int i = 1; i <= numberOfDevices; i++) {
-            String assetName = entity.getRegNo() + " ~ " + entity.getOwnerName() + " ~ dev" + i;
+            String assetName = entity.getRegNo() + " ~ " + entity.getOwnerName();
             entity.setAssetName(assetName);
-            Map<String, Object> result = new HashMap<>();
-            result.put("assetName", assetName);
-
             if (validate(entity)) {
                 Long assetId = storage.addObject(entity,new Request(
-                        new Columns.Exclude("id","regNo","ownerName","noofDevices")));
+                        new Columns.Exclude("id","regNo","ownerName")));
                 permissionsService.link(LinkType.CLIENT_ASSET, clientId, assetId);
                 entity.setId(assetId);
                 actionLogger.create(request, getUserId(), entity);
-                result.put("status", "SUCCESS");
-                result.put("assetId", assetId);
-            } else {
-                result.put("status", "FAILED");
-                result.put("reason", "Validation failed");
+
+                return Response.ok(entity).build();
+            }else{
+                return Response.status(Response.Status.FOUND).build();
             }
-            results.add(result);
-        }
-    // return one response after processing all assets
-        return Response.ok(results).build();
     }
 
     public boolean validate(Asset entity) throws StorageException {
