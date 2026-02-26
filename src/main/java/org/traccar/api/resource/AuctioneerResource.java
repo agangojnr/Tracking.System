@@ -49,16 +49,14 @@ public class AuctioneerResource extends SimpleObjectResource<Auctioneer> {
     private static final Logger LOGGER = LoggerFactory.getLogger(Auctioneer.class);
 
 
-    /*CREATION OF AUCTIONEER BY DRU ID*/
+    /* CREATION OF AUCTIONEER GLOBALY */
     @Path("create")
     @POST
-    public Response add(Auctioneer entity, @QueryParam("druId") long druId) throws Exception {
-
+    public Response add(Auctioneer entity) throws Exception {
         if(validate(entity)){
             try{
                 // Save to database
-                Long auctioneerid = storage.addObject(entity,new Request(new Columns.Exclude("id","attributes")));
-                permissionsService.link(LinkType.DRU_AUCTIONEER, druId, auctioneerid);
+                storage.addObject(entity,new Request(new Columns.Exclude("id","attributes")));
                 actionLogger.create(request, getUserId(), entity);
 
                 return Response.ok(entity).build();
@@ -73,6 +71,53 @@ public class AuctioneerResource extends SimpleObjectResource<Auctioneer> {
 
     }
 
+    /*LINKING AUCTIONEER BY DRUID*/
+    @Path("linkauct")
+    @POST
+    public Response linkAuctioneertoDru(@QueryParam("druId") long druId,@QueryParam("auctioneerId") long auctioneerId) throws Exception {
+
+        if(validateAuct(druId,auctioneerId)){
+            try{
+                // Save to database
+                permissionsService.link(LinkType.DRU_AUCTIONEER, druId, auctioneerId);
+                //actionLogger.create(request, getUserId(), entity);
+
+                return Response.ok("{\"status\":\"Linked successfully.\"}").build();
+
+            } catch (StorageException e) {
+                LOGGER.warn("Creation of Auctioneer failed.", e);
+                return null;
+            }
+        }else{
+            return Response.status(Response.Status.FOUND).build();
+        }
+    }
+
+    /* UNLINK AUCTIONEER FROM DRU */
+    @Path("unlinkauct")
+    @DELETE
+    public Response unlinkDruAuctioneer(@QueryParam("druId") long druId,@QueryParam("auctioneerId") long auctioneerId) throws Exception{
+        //LOGGER.info("Druid = {}, AuctioneerId = {}", druId, auctioneerId);
+        if(!validateAuct(druId,auctioneerId)){
+            permissionsService.unlink(LinkType.DRU_AUCTIONEER, druId, auctioneerId);
+
+            return Response.ok("{\"status\":\"Link deleted successfully.\"}").build();
+        }else{
+            return Response.ok("{\"status\":\"Auctioneer not linked to the DRU.\"}").build();
+        }
+    }
+
+    public boolean validateAuct(long druId, long auctioneerId) throws StorageException{
+        //LOGGER.info("This is it - new one");
+        DruAuctioneer auctioneer = storage.getObject(DruAuctioneer.class, new Request(
+                new Columns.All(),
+                new Condition.And(
+                        new Condition.Equals("druid", druId),
+                        new Condition.Equals("auctioneerid", auctioneerId)
+                )
+        ));
+        return auctioneer == null ? true : false;
+    }
 
     /* VALIDATION TO AVOID DUPLICATE AUCTIONEER NAMES*/
     public boolean validate(Auctioneer entity) throws StorageException {
@@ -166,12 +211,8 @@ public class AuctioneerResource extends SimpleObjectResource<Auctioneer> {
                 return Response.ok("{\"status\":\"Deleted Successfully\"}").build();
 
             } catch (Exception e) {
-                LOGGER.error(
-                        "Unexpected error while deleting {} id={}",
-                        baseClass.getSimpleName(),
-                        id,
-                        e
-                );
+                LOGGER.error("Unexpected error while deleting {} id={}",
+                        baseClass.getSimpleName(),id,e);
 
                 return Response.serverError()
                         .entity("{\"error\":\"Unexpected error occurred or Reference constraint.\"}")
@@ -207,7 +248,7 @@ public class AuctioneerResource extends SimpleObjectResource<Auctioneer> {
             result.put("deviceId", device.getId());
             result.put("deviceName", device.getName());
 
-            if (validateAuctioneerDeviceLink(auctioneerId, device.getId())) {
+            if (validateAuctioneerAssetLink(auctioneerId, device.getId())) {
                 permissionsService.link( LinkType.AUCTIONEER_DEVICE,auctioneerId,device.getId());
                 result.put("status", "Linked successfully");
             } else {
@@ -223,8 +264,8 @@ public class AuctioneerResource extends SimpleObjectResource<Auctioneer> {
     /* UNLINK AUCTIONEER TO DEVICES */
     @DELETE
     @Path("unlink")
-    public Response unlinkAuctioneerDevice(@QueryParam("auctioneerId") long auctioneerId, @QueryParam("deviceId") long deviceId) throws Exception{
-        if(!validateAuctioneerDeviceLink(auctioneerId,deviceId)) {
+    public Response unlinkAuctioneerAsset(@QueryParam("auctioneerId") long auctioneerId, @QueryParam("deviceId") long deviceId) throws Exception{
+        if(!validateAuctioneerAssetLink(auctioneerId,deviceId)) {
             permissionsService.unlink(LinkType.AUCTIONEER_DEVICE, auctioneerId, deviceId);
             return Response.ok("{\"status\":\"Unlinked successfully.\"}").build();
         }else{
@@ -233,13 +274,13 @@ public class AuctioneerResource extends SimpleObjectResource<Auctioneer> {
     }
 
     /* CHECKING IF LINK BETWEEN AUCTIONEER AND DEVICE EXIST*/
-    public boolean validateAuctioneerDeviceLink(long auctioneerId, long deviceId) throws StorageException {
+    public boolean validateAuctioneerAssetLink(long auctioneerId, long deviceId) throws StorageException {
         // Query the database for a record matching both groupId and deviceId
-        AuctioneerDevice link = storage.getObject(AuctioneerDevice.class, new Request(
+        AuctioneerAsset link = storage.getObject(AuctioneerAsset.class, new Request(
                 new Columns.All(),
                 new Condition.And(
                         new Condition.Equals("auctioneerid", auctioneerId),
-                        new Condition.Equals("deviceid", deviceId)
+                        new Condition.Equals("assetid", deviceId)
                 )));
 
         // If the record exists, return true; otherwise, false

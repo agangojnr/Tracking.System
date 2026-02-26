@@ -7,7 +7,7 @@ import org.traccar.storage.StorageName;
 public class Repossession extends ExtendedModel {
 
     private Long auctioneerId;
-    private Long deviceId;
+    private Long assetId;
     private Long yardId;
     private String comment;
 
@@ -18,11 +18,11 @@ public class Repossession extends ExtendedModel {
         this.auctioneerId = auctioneerId;
     }
 
-    public Long getDeviceId() {
-        return deviceId;
+    public Long getAssetId() {
+        return assetId;
     }
-    public void setDeviceId(Long deviceId) {
-        this.deviceId = deviceId;
+    public void setAssetId(Long assetId) {
+        this.assetId = assetId;
     }
 
     public Long getYardId() {

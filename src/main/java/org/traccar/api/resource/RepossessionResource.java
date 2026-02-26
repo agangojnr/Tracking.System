@@ -81,7 +81,7 @@ public class RepossessionResource extends ExtendedObjectResource<Repossession> {
             //entity.setId(0);
             entity.setId(storage.addObject(entity, new Request(new Columns.Exclude("id", "attributes"))));
             actionLogger.create(request, getUserId(), entity);
-            Long deviceId = entity.getDeviceId();
+            Long deviceId = entity.getAssetId();
 
             for (Device device : storage.getObjects(Device.class,new Request(new Columns.All(),
                     new Condition.Equals("id", entity.getId())))) {
@@ -121,7 +121,7 @@ public Response update(Repossession entity) throws Exception {
 }
 
 public boolean validateRepo(Repossession entity) throws StorageException {
-    Long deviceId = entity.getDeviceId();
+    Long deviceId = entity.getAssetId();
 //
 //    Repossession repossess = storage.getObject(Repossession.class, new Request(
 //            new Columns.All(),
@@ -132,7 +132,7 @@ public boolean validateRepo(Repossession entity) throws StorageException {
 }
 public boolean validate(Repossession entity) throws StorageException {
     Long auctioneerId = entity.getAuctioneerId();
-    Long deviceId = entity.getDeviceId();
+    Long deviceId = entity.getAssetId();
     Long yardId = entity.getYardId();
     Repossession repossess = storage.getObject(Repossession.class, new Request(
             new Columns.All(),

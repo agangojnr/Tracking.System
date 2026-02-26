@@ -33,6 +33,53 @@
 
   </changeSet>
 
+  <changeSet id="rename-auctioneer-device-to-asset" author="walter">
+
+    <!-- Rename table -->
+    <renameTable
+            oldTableName="tc_auctioneer_device"
+            newTableName="tc_auctioneer_asset"/>
+
+    <!-- Rename column -->
+    <renameColumn
+            tableName="tc_auctioneer_asset"
+            oldColumnName="deviceid"
+            newColumnName="assetid"
+            columnDataType="BIGINT"/>
+
+    <!-- Drop old FK -->
+    <dropForeignKeyConstraint
+            baseTableName="tc_auctioneer_asset"
+            constraintName="fk_auctioneer_device_device"/>
+
+    <!-- Add new FK -->
+    <addForeignKeyConstraint
+            baseTableName="tc_auctioneer_asset"
+            baseColumnNames="assetid"
+            referencedTableName="tc_assets"
+            referencedColumnNames="id"
+            constraintName="fk_auctioneer_asset_asset"
+            onDelete="CASCADE"/>
+  </changeSet>
+
+
+  <changeSet id="rename-deviceid-to-assetid-tc-repossessions" author="walter">
+    <!-- Rename column -->
+    <renameColumn
+            tableName="tc_repossessions"
+            oldColumnName="deviceid"
+            newColumnName="assetid"
+            columnDataType="BIGINT"/>
+
+    <rollback>
+      <renameColumn
+              tableName="tc_repossessions"
+              oldColumnName="assetid"
+              newColumnName="deviceid"
+              columnDataType="BIGINT"/>
+    </rollback>
+
+  </changeSet>
 
 </databaseChangeLog>
 

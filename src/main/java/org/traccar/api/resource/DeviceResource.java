@@ -102,7 +102,7 @@ public class DeviceResource extends BaseObjectResource<Device> {
                     Device.class,
                     new Request(
                             new Columns.All(),
-                            new Condition.LinkedDevicesbySubreseller_UnlinkedtoAuctioneer(Device.class, "id", AssetDevice.class, "deviceid", "assetid", AuctioneerDevice.class, "auctioneerid", "deviceid", ClientDevice.class, "clientid", "deviceid", Client.class, "id", SubresellerClient.class, "subresellerid", "clientid", subresellerId)
+                            new Condition.LinkedDevicesbySubreseller_UnlinkedtoAuctioneer(Device.class, "id", AssetDevice.class, "deviceid", "assetid", AuctioneerAsset.class, "auctioneerid", "assetid", ClientDevice.class, "clientid", "deviceid", Client.class, "id", SubresellerClient.class, "subresellerid", "clientid", subresellerId)
                     )
             );
         }else if(auctioneerId != null && auctioneerId > 0){
@@ -112,7 +112,7 @@ public class DeviceResource extends BaseObjectResource<Device> {
                             new Columns.All(),
                             new Condition.LinkedDevicesbyAuctioneer(Device.class, "id",
                                      AssetDevice.class, "deviceid", "assetid",
-                                     AuctioneerDevice.class, "auctioneerid", "deviceid", auctioneerId)
+                                     AuctioneerAsset.class, "auctioneerid", "deviceid", auctioneerId)
                     )
             );
         }
@@ -592,7 +592,7 @@ public class DeviceResource extends BaseObjectResource<Device> {
                 new Request(
                         new Columns.All(),
                 new Condition.JoinOneWhereList(Device.class, "id",
-                        AuctioneerDevice.class, "auctioneerid","deviceid",
+                        AuctioneerAsset.class, "auctioneerid","deviceid",
                          auctioneerid)));
     }
 
@@ -610,7 +610,7 @@ public class DeviceResource extends BaseObjectResource<Device> {
                         "name AS deviceName"
                 ),
                 new Condition.JoinOneWhereBoolean(Device.class, "id",
-                        AuctioneerDevice.class, "auctioneerid","deviceid",
+                        AuctioneerAsset.class, "auctioneerid","deviceid",
                         ClientDevice.class, "clientid", "deviceid",
                         Client.class, "id",
                          auctioneerid)));
