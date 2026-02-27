@@ -105,6 +105,20 @@ public class AssetResource extends SimpleObjectResource<Asset> {
                 new Columns.All(), Condition.merge(conditions), new Order("assetname")));
     }
 
+    @Path("auctioneers")
+    @GET
+    public Collection<Asset> getAuctioneerAssets(@QueryParam("auctioneerId") Long auctioneerId) throws Exception{
+        if(auctioneerId != null && auctioneerId > 0){
+            return storage.getJointObjects(baseClass,
+                    new Request(
+                            new Columns.All(),
+                            new Condition.GetAuctioneerAssets(Asset.class, "id",
+                                    AuctioneerAsset.class, "auctioneerid", "assetid",
+                                    auctioneerId)));
+        }
+        return null;
+    }
+
     @Path("update/{id}")
     @PUT
     public Response update(Asset entity) throws Exception {

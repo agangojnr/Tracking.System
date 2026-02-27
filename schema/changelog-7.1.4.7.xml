@@ -81,5 +81,43 @@
 
   </changeSet>
 
+  <changeSet id="update-auctioneer-asset-fk-to-assets" author="walter">
+
+    <!-- ============================= -->
+    <!-- Drop OLD foreign key (device) -->
+    <!-- ============================= -->
+    <dropForeignKeyConstraint
+            baseTableName="tc_auctioneer_asset"
+            constraintName="fk_auctioneer_device_device"/>
+
+    <!-- ===================================== -->
+    <!-- Create NEW FK referencing tc_assets   -->
+    <!-- ===================================== -->
+    <addForeignKeyConstraint
+            baseTableName="tc_auctioneer_asset"
+            baseColumnNames="assetid"
+            referencedTableName="tc_assets"
+            referencedColumnNames="id"
+            constraintName="fk_auctioneer_asset_asset"
+            onDelete="CASCADE"/>
+
+  </changeSet>
+
+  <changeSet id="rename-auctioneer-fk-name" author="walter">
+
+    <dropForeignKeyConstraint
+            baseTableName="tc_auctioneer_asset"
+            constraintName="fk_auctioneer_device_auctioneer"/>
+
+    <addForeignKeyConstraint
+            baseTableName="tc_auctioneer_asset"
+            baseColumnNames="auctioneerid"
+            referencedTableName="tc_auctioneers"
+            referencedColumnNames="id"
+            constraintName="fk_auctioneer_asset_auctioneer"
+            onDelete="CASCADE"/>
+
+  </changeSet>
+
 </databaseChangeLog>
 

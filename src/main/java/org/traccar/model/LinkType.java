@@ -17,7 +17,7 @@ public enum LinkType {
     ASSET_DEVICE( Asset.class, Device.class,"tc_asset_device"),
     CLIENT_ASSET(Client.class, Asset.class, "tc_client_asset"),
     DRU_AUCTIONEER(Dru.class, Auctioneer.class, "tc_dru_auctioneer"),
-    AUCTIONEER_DEVICE(Auctioneer.class, Device.class, "tc_auctioneer_device"),
+    AUCTIONEER_ASSET(Auctioneer.class, Asset.class, "tc_auctioneer_asset"),
     SUBRESELLER_DRU(Subreseller.class, Dru.class, "tc_subreseller_dru");
 
     private final Class<? extends BaseModel> ownerClass;

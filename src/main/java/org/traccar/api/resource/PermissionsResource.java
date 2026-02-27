@@ -146,8 +146,8 @@ public class PermissionsResource  extends BaseResource {
                 assetPermissionResource.linkDeviceAsset(permission.getOwnerId(),permission.getPropertyId());
                 return null;
             }
-            if ("AuctioneerDevice".equals(oneToOne)) {
-                auctioneerResource.linkAuctioneerDevice(permission.getOwnerId(),permission.getPropertyId());
+            if ("AuctioneerAsset".equals(oneToOne)) {
+                auctioneerResource.linkAuctioneerAsset(permission.getOwnerId(),permission.getPropertyId());
             }
 
             storage.addPermission(permission);
@@ -165,7 +165,6 @@ public class PermissionsResource  extends BaseResource {
 
     @POST
     public Response add(LinkedHashMap<String, Long> entity) throws Exception {
-
         return add(Collections.singletonList(entity));
     }
 

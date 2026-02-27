@@ -80,6 +80,7 @@ public class DeviceResource extends BaseObjectResource<Device> {
     }
 
 
+    /* GET LINKED DEVICES PER CLIENT */
     @GET
     @Path("query")
     public Collection<Device> get(@QueryParam("clientId") Long clientId, @QueryParam("auctioneerId") Long auctioneerId,
@@ -174,56 +175,26 @@ public class DeviceResource extends BaseObjectResource<Device> {
         );
     }
 
-//    @GET
-//    @Path("qry")
-//    public Stream<Device> get(
-//            @QueryParam("all") boolean all, @QueryParam("userId") long userId,
-//            @QueryParam("clientId") Long clientId,
-//            @QueryParam("uniqueId") List<String> uniqueIds,
-//            @QueryParam("id") List<Long> deviceIds,
-//            @QueryParam("excludeAttributes") boolean excludeAttributes) throws StorageException {
-//
-//        Columns columns = excludeAttributes ? new Columns.Exclude("attributes") : new Columns.All();
-//
-//        if (!uniqueIds.isEmpty() || !deviceIds.isEmpty()) {
-//
-//            List<Device> result = new LinkedList<>();
-//            for (String uniqueId : uniqueIds) {
-//                result.addAll(storage.getObjects(Device.class, new Request(
-//                        columns,
-//                        new Condition.And(
-//                                new Condition.Equals("uniqueId", uniqueId),
-//                                new Condition.Permission(User.class, getUserId(), Device.class)))));
-//            }
-//            for (Long deviceId : deviceIds) {
-//                result.addAll(storage.getObjects(Device.class, new Request(
-//                        columns,
-//                        new Condition.And(
-//                                new Condition.Equals("id", deviceId),
-//                                new Condition.Permission(User.class, getUserId(), Device.class)))));
-//            }
-//            return result.stream();
-//
-//
-//        } else {
-//
-//            var conditions = new LinkedList<Condition>();
-//
-//            if (all) {
-//                if (permissionsService.notAdmin(getUserId())) {
-//                    conditions.add(new Condition.Permission(User.class, getUserId(), baseClass));
-//                    return storage.getObjectsStream(baseClass, new Request(
-//                            new Columns.All(), Condition.merge(conditions), new Order("name")));
-//                }
-//            } else if (clientId != null && clientId > 0) {
-//
-//            }
-//
-//            return storage.getObjectsStream(baseClass, new Request(
-//                    columns, Condition.merge(conditions), new Order("name")));
-//
-//        }
-//    }
+    /*  GET UNLIKED DEVICES BY CLIENT */
+
+    @GET
+    @Path("unlinked")
+    public Collection<Device> getUnlinkedDevices(@QueryParam("clientId") Long clientId) throws Exception {
+        /* QUERYING UNLINKED DEVICES BY CLIENTID */
+        if (clientId != null && clientId > 0) {
+
+            return storage.getJointObjects(
+                    Device.class,
+                    new Request(
+                            new Columns.All(),
+                            new Condition.UnlinkedDevicesbyClient(Device.class, "id",
+                                    AssetDevice.class, "deviceid", "assetid",
+                                    ClientDevice.class, "clientid", "deviceid", clientId)
+                    )
+            );
+        }
+        return null;
+    }
 
 
     @GET

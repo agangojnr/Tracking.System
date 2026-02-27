@@ -131,7 +131,7 @@ public class AuctioneerResource extends SimpleObjectResource<Auctioneer> {
         return auctioneer == null ? true : false;
     }
 
-/* QUERYING/LISTING AUCTIONEERS BY DRU ID*/
+    /* QUERYING/LISTING AUCTIONEERS BY DRU ID*/
     @GET
     @Path("query")
     public Collection<Auctioneer> get(@QueryParam("druId") Long druId) throws StorageException{
@@ -140,11 +140,9 @@ public class AuctioneerResource extends SimpleObjectResource<Auctioneer> {
             return storage.getJointObjects(baseClass, new Request(
                     new Columns.All(),
                     new Condition.GetOneJoinWhere(Auctioneer.class, "id", DruAuctioneer.class,"druid", "auctioneerid",  "druid", druId)));
-
         }else{
             return null;
         }
-
     }
 
     /* GET USERID FROM AUCTIONEERID */
@@ -221,52 +219,27 @@ public class AuctioneerResource extends SimpleObjectResource<Auctioneer> {
 
     }
 
-    /* LINK DEVICES TO AUCTIONEERS*/
+    /* LINK ASSETS TO AUCTIONEERS*/
     @POST
     @Path("link")
-    public Response linkAuctioneerDevice(@QueryParam("auctioneerId") long auctioneerId, @QueryParam("deviceId") long deviceId) throws Exception{
+    public Response linkAuctioneerAsset(@QueryParam("auctioneerId") long auctioneerId, @QueryParam("assetId") long assetId) throws Exception{
         //LOGGER.info("Received POST request -> auctioneerId: {}, deviceId: {}", auctioneerId, deviceId);
-        Device asset = storage.getObject(Device.class, new Request(
-                new Columns.Include("name"),
-                new Condition.Equals("id", deviceId)
-        ));
-        String deviceName = null;
-        if (asset != null) {
-            deviceName = asset.getName();
-        }
-        String regNo = deviceName.split("~")[0].trim();
-        List<Device> devices = storage.getJointObjects(Device.class, new Request(
-                new Columns.Include("id"),
-                new Condition.GetAllDeviceswithReg(Device.class, "id", "name" , regNo)));
 
-        List<Map<String, Object>> responses = new ArrayList<>();
-        for (Device device : storage.getJointObjects(
-                Device.class, new Request(
-                        new Columns.Include("id"),
-                        new Condition.GetAllDeviceswithReg(Device.class, "id", "name", regNo )))) {
-            Map<String, Object> result = new HashMap<>();
-            result.put("deviceId", device.getId());
-            result.put("deviceName", device.getName());
-
-            if (validateAuctioneerAssetLink(auctioneerId, device.getId())) {
-                permissionsService.link( LinkType.AUCTIONEER_DEVICE,auctioneerId,device.getId());
-                result.put("status", "Linked successfully");
-            } else {
-                result.put("status", "Device already linked to the Auctioneer");
+            if (validateAuctioneerAssetLink(auctioneerId, assetId)) {
+                permissionsService.link( LinkType.AUCTIONEER_ASSET,auctioneerId,assetId);
+                return Response.ok("{\"status\":\"Linked successfully.\"}").build();
+            }else{
+                return Response.ok("{\"status\":\"The auctioneer-device already linked.\"}").build();
             }
-            responses.add(result);
-        }
-        // return ONE combined response
-        return Response.ok(responses).build();
     }
 
 
-    /* UNLINK AUCTIONEER TO DEVICES */
+    /* UNLINK AUCTIONEER TO ASSET */
     @DELETE
     @Path("unlink")
-    public Response unlinkAuctioneerAsset(@QueryParam("auctioneerId") long auctioneerId, @QueryParam("deviceId") long deviceId) throws Exception{
-        if(!validateAuctioneerAssetLink(auctioneerId,deviceId)) {
-            permissionsService.unlink(LinkType.AUCTIONEER_DEVICE, auctioneerId, deviceId);
+    public Response unlinkAuctioneerAsset(@QueryParam("auctioneerId") long auctioneerId, @QueryParam("assetId") long assetId) throws Exception{
+        if(!validateAuctioneerAssetLink(auctioneerId,assetId)) {
+            permissionsService.unlink(LinkType.AUCTIONEER_ASSET, auctioneerId, assetId);
             return Response.ok("{\"status\":\"Unlinked successfully.\"}").build();
         }else{
             return Response.ok("{\"status\":\"The auctioneer-device link doesnot exist.\"}").build();
@@ -274,13 +247,13 @@ public class AuctioneerResource extends SimpleObjectResource<Auctioneer> {
     }
 
     /* CHECKING IF LINK BETWEEN AUCTIONEER AND DEVICE EXIST*/
-    public boolean validateAuctioneerAssetLink(long auctioneerId, long deviceId) throws StorageException {
+    public boolean validateAuctioneerAssetLink(long auctioneerId, long assetId) throws StorageException {
         // Query the database for a record matching both groupId and deviceId
         AuctioneerAsset link = storage.getObject(AuctioneerAsset.class, new Request(
                 new Columns.All(),
                 new Condition.And(
                         new Condition.Equals("auctioneerid", auctioneerId),
-                        new Condition.Equals("assetid", deviceId)
+                        new Condition.Equals("assetid", assetId)
                 )));
 
         // If the record exists, return true; otherwise, false

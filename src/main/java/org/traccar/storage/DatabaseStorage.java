@@ -127,7 +127,7 @@ public class DatabaseStorage extends Storage {
         query.append(" FROM ").append(getStorageName(clazz));
         //Here is the join conditions
         query.append(formatJoin(request.getCondition(),true));
-        //logger.info("SQL - {}", query);
+        logger.info("SQL - {}", query);
         //query.append(formatOrder(request.getOrder()));
 
         try {
@@ -412,6 +412,26 @@ public class DatabaseStorage extends Storage {
                         result.append(getStorageName(condition.getPivotClass1()));
                         result.append(".");
                         result.append(condition.getPivotColumn1());
+
+                }else if (genericCondition instanceof Condition.GetAuctioneerAssets condition) {
+
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn1b());
+
+                    result.append(" WHERE ");
+                    result.append(getStorageName(condition.getPivotClass()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn1a());
+                    result.append(" = ");result.append("'");
+                    result.append(condition.getSearchValue());result.append("'");
 
 
                 }else if(genericCondition instanceof Condition.LeftJoin condition){
@@ -1140,6 +1160,41 @@ public class DatabaseStorage extends Storage {
                     result.append(condition.getPivotColumn2a());
                     result.append(" = ");
                     result.append(condition.getValue1());
+
+                }if(genericCondition instanceof Condition.UnlinkedDevicesbyClient condition){
+                    result.append(" LEFT JOIN ");
+                    result.append(getStorageName(condition.getPivotClass1()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass1()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn1a());
+
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn2b());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn());
+
+                    result.append(" WHERE ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn2a());
+                    result.append(" = ");
+                    result.append(condition.getValue1());
+                    result.append(" AND ");
+                    result.append(getStorageName(condition.getPivotClass1()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn1a());
+                    result.append(" IS NULL");
 
                 }if(genericCondition instanceof Condition.LinkedDevicesbySubreseller_UnlinkedtoAuctioneer condition){
                     result.append(" INNER JOIN ");
