@@ -3,6 +3,8 @@ package org.traccar.model;
 
 import org.traccar.storage.StorageName;
 
+import java.util.Date;
+
 @StorageName("tc_repossessions")
 public class Repossession extends ExtendedModel {
 
@@ -10,7 +12,16 @@ public class Repossession extends ExtendedModel {
     private Long assetId;
     private Long yardId;
     private String comment;
+    private Date entryDate;
 
+
+    public Date getEntryDate() {
+        return entryDate;
+    }
+
+    public void setEntryDate(Date entryDate) {
+        this.entryDate = entryDate;
+    }
     public Long getAuctioneerId() {
         return auctioneerId;
     }

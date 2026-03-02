@@ -510,7 +510,7 @@ public class DatabaseStorage extends Storage {
                     result.append(" IS NULL ");
 
                 }else if(genericCondition instanceof Condition.RepossessionReport condition){
-                    result.append(" LEFT JOIN ");
+                    result.append(" INNER JOIN ");
                     result.append(getStorageName(condition.getPivotClass1()));
                     result.append(" ON ");
                     result.append(getStorageName(condition.getOwnerClass()));
@@ -542,6 +542,15 @@ public class DatabaseStorage extends Storage {
                     result.append(getStorageName(condition.getPivotClass3()));
                     result.append(".");
                     result.append(condition.getPivotColumn3());
+
+                    result.append(" WHERE ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getSearchColumn());
+                    result.append(" BETWEEN ");
+                    result.append("'");result.append(condition.getFrom());result.append("'");
+                    result.append(" AND ");
+                    result.append("'");result.append(condition.getTo());result.append("'");
 
                 }else if(genericCondition instanceof Condition.LinkedDevicesbyAuctioneer condition){
                     result.append(" INNER JOIN ");

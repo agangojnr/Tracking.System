@@ -772,13 +772,15 @@ public interface Condition {
         private final Class<?> pivotClass3;
         private final String pivotColumn3;
         private final String searchColumn;
+        private final String from;
+        private final String to;
 
         // Constructor
         public RepossessionReport(Class<?> ownerClass, String ownerColumn, String ownerColumn1, String ownerColumn2,String ownerColumn3,
                                   Class<?> pivotClass1, String pivotColumn1,
                                   Class<?> pivotClass2, String pivotColumn2,
                                   Class<?> pivotClass3, String pivotColumn3,
-                                String searchColumn) {
+                                String searchColumn, String from, String to) {
             this.ownerClass = ownerClass;
             this.ownerColumn = ownerColumn;
             this.ownerColumn1 = ownerColumn1;
@@ -791,6 +793,8 @@ public interface Condition {
             this.pivotClass3 = pivotClass3;
             this.pivotColumn3 = pivotColumn3;
             this.searchColumn = searchColumn;
+            this.from = from;
+            this.to = to;
         }
         public Class<?> getOwnerClass() { return ownerClass; }
         public String getOwnerColumn() { return ownerColumn; }
@@ -804,6 +808,8 @@ public interface Condition {
         public Class<?> getPivotClass3() { return pivotClass3; }
         public String getPivotColumn3() { return pivotColumn3; }
         public String getSearchColumn() { return searchColumn; }
+        public String getFrom() { return from; }
+        public String getTo() { return to; }
     }
 
     class JoinTwoWhere implements Condition {

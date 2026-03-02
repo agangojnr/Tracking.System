@@ -2,14 +2,22 @@ package org.traccar.model;
 
 import org.traccar.storage.StorageName;
 
+import java.util.Date;
+
 @StorageName("tc_repossessions")
 public class RepossessionList {
     private Long id;
+    private Date entryDate;
     private String auctioneerName;
     private String assetName;
     private String yardName;
     private String yardLocation;
     private String comment;
+
+
+
+    public Date getEntryDate() { return entryDate; }
+    public void setEntryDate(Date entryDate) { this.entryDate = entryDate; }
 
     public Long getId() {
     return id;

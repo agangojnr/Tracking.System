@@ -1,0 +1,37 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+  <changeSet id="add-entrydate-column" author="walter">
+
+    <addColumn tableName="tc_repossessions">
+      <column name="entrydate" type="datetime2(7)">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+
+  </changeSet>
+
+  <changeSet id="update-fk-repossession-to-assets" author="walter">
+
+    <!-- 1. Drop old foreign key referencing tc_devices -->
+    <dropForeignKeyConstraint
+            baseTableName="tc_repossessions"
+            constraintName="fk_repossession_device"/>
+
+    <!-- 2. Add new foreign key referencing tc_assets -->
+    <addForeignKeyConstraint
+            baseTableName="tc_repossessions"
+            baseColumnNames="assetid"
+            referencedTableName="tc_assets"
+            referencedColumnNames="id"
+            constraintName="fk_repossession_asset"
+            onDelete="CASCADE"/>
+
+  </changeSet>
+
+</databaseChangeLog>
+

@@ -22,6 +22,7 @@ import org.traccar.storage.query.Order;
 import org.traccar.storage.query.Request;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.LinkedList;
 
 
@@ -54,22 +55,24 @@ public class RepossessionResource extends ExtendedObjectResource<Repossession> {
 
     @GET
     @Path("report")
-    public Collection<RepossessionList> get() throws StorageException {
+    public Collection<RepossessionList> get(@QueryParam("from") String from, @QueryParam("to") String to) throws StorageException {
         Collection<RepossessionList> result = storage.getJointObjects(
                 RepossessionList.class,
                 new Request(
                         new Columns.Include("tc_repossessions.id AS id",
+                                "entrydate AS entryDate",
                                 "auctioneername AS auctioneerName",
-                                "name AS assetName",
+                                "assetname AS assetName",
                                 "yardname AS yardName",
                                 "yardlocation AS yardLocation",
                                 "comment AS comment"
                         ),
                 new Condition.RepossessionReport(
-                        Repossession.class, "id","auctioneerid", "deviceid","yardid",
+                        Repossession.class, "id","auctioneerid", "assetid","yardid",
                         Auctioneer.class, "id",
-                        Device.class, "id",
-                        Yard.class, "id","")));
+                        Asset.class, "id",
+                        Yard.class, "id",
+                        "entrydate", from, to)));
         return result;
     }
 
@@ -79,6 +82,7 @@ public class RepossessionResource extends ExtendedObjectResource<Repossession> {
 
         if(validateRepo(entity)){
             //entity.setId(0);
+            entity.setEntryDate(new Date());
             entity.setId(storage.addObject(entity, new Request(new Columns.Exclude("id", "attributes"))));
             actionLogger.create(request, getUserId(), entity);
 
