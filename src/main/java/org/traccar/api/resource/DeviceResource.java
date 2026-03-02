@@ -271,7 +271,6 @@ public class DeviceResource extends BaseObjectResource<Device> {
         if (!result.isEmpty()) {
             return result.iterator().next().getGroupId();
         }
-
         return 0; // or throw exception if required
     }
 
@@ -605,6 +604,18 @@ public class DeviceResource extends BaseObjectResource<Device> {
                         SubresellerDru.class, "subresellerid", "druid",
                         DruAuctioneer.class, "druid", "auctioneerid",
                         AssetDevice.class, "deviceid", auctioneerid)));
+    }
+
+    /* GET DEVICES BY ASSET ID */
+    @GET
+    @Path("assets")
+    public Collection<Device> getDeviceByAssetQuery(@QueryParam("assetId") long assetId) throws Exception{
+        //LOGGER.info("Testing auctioneer id = {}", auctioneerid);
+        return storage.getJointObjects(Device.class, new Request(
+                new Columns.All(),
+                new Condition.GetDevicesByAsset(Device.class, "id",
+                        AssetDevice.class, "assetid", "deviceid",
+                        assetId)));
     }
 }
 

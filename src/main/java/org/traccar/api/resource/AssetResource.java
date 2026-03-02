@@ -60,7 +60,6 @@ public class AssetResource extends SimpleObjectResource<Asset> {
                 permissionsService.link(LinkType.CLIENT_ASSET, clientId, assetId);
                 entity.setId(assetId);
                 actionLogger.create(request, getUserId(), entity);
-
                 return Response.ok(entity).build();
             }else{
                 return Response.status(Response.Status.FOUND).build();

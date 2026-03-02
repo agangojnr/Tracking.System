@@ -81,21 +81,7 @@ public class RepossessionResource extends ExtendedObjectResource<Repossession> {
             //entity.setId(0);
             entity.setId(storage.addObject(entity, new Request(new Columns.Exclude("id", "attributes"))));
             actionLogger.create(request, getUserId(), entity);
-            Long deviceId = entity.getAssetId();
 
-            for (Device device : storage.getObjects(Device.class,new Request(new Columns.All(),
-                    new Condition.Equals("id", entity.getId())))) {
-                Long isRepossessed = 1L;
-
-                // 🔒 Update repossession
-                device.setIsrepossessed(isRepossessed);
-                storage.updateObject(device, new Request(
-                        new Columns.Include("isrepossessed"),
-                        new Condition.Equals("id", deviceId) {
-                        }));
-
-                LOGGER.info("Vehicle has been repossessed.");
-            }
         return Response.ok(entity).build();
     }else{
         return Response.status(Response.Status.FOUND).build();

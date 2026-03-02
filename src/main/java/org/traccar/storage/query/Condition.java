@@ -229,6 +229,32 @@ public interface Condition {
         public Long getSearchValue() { return searchValue; }
     }
 
+    class GetDevicesByAsset implements Condition {
+        private final Class<?> ownerClass;
+        private final String ownerColumn;
+        private final Class<?> pivotClass;
+        private final String pivotColumn1;
+        private final String pivotColumn2;
+        private final Long searchValue;
+        // Constructor
+        public GetDevicesByAsset(Class<?> ownerClass, String ownerColumn,
+                                         Class<?> pivotClass, String pivotColumn1, String pivotColumn2,
+                                         Long searchValue) {
+            this.ownerClass = ownerClass;
+            this.ownerColumn = ownerColumn;
+            this.pivotClass = pivotClass;
+            this.pivotColumn1 = pivotColumn1;
+            this.pivotColumn2 = pivotColumn2;
+            this.searchValue = searchValue;
+        }
+        public Class<?> getOwnerClass() { return ownerClass; }
+        public Class<?> getPivotClass() { return pivotClass; }
+        public String getOwnerColumn() { return ownerColumn; }
+        public String getPivotColumn1() { return pivotColumn1; }
+        public String getPivotColumn2() { return pivotColumn2; }
+        public Long getSearchValue() { return searchValue; }
+    }
+
     class GetAuctioneerIdformLevel implements Condition {
         private final Class<?> ownerClass;
         private final String ownerColumn1;
