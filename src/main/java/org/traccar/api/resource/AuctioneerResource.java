@@ -145,6 +145,16 @@ public class AuctioneerResource extends SimpleObjectResource<Auctioneer> {
         }
     }
 
+    /* QUERYING/LISTING ALL AUCTIONEERS */
+    @GET
+    @Path("all")
+    public Collection<Auctioneer> getAll() throws StorageException{
+        //LOGGER.info("This is it");
+            return storage.getObjects(baseClass, new Request(
+                    new Columns.All()
+            ));
+    }
+
     /* GET USERID FROM AUCTIONEERID */
     @GET
     @Path("auct")
