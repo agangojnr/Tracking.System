@@ -182,7 +182,7 @@ public class AssetResource extends SimpleObjectResource<Asset> {
                         new Condition.Equals("assetid", assetId)
                 )
         );
-        if (!asset.isEmpty()) {
+        if (asset.isEmpty()) {
             return true;
         }
         return true;

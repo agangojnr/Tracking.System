@@ -148,6 +148,7 @@ public class PermissionsResource  extends BaseResource {
             }
             if ("AuctioneerAsset".equals(oneToOne)) {
                 auctioneerResource.linkAuctioneerAsset(permission.getOwnerId(),permission.getPropertyId());
+                return null;
             }
 
             storage.addPermission(permission);
