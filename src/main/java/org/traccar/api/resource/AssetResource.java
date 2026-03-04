@@ -114,6 +114,7 @@ public class AssetResource extends SimpleObjectResource<Asset> {
                             new Columns.All(),
                             new Condition.GetAuctioneerAssets(Asset.class, "id",
                                     AuctioneerAsset.class, "auctioneerid", "assetid",
+                                    Repossession.class, "assetid",
                                     auctioneerId)));
         }
         return null;

@@ -299,26 +299,33 @@ public interface Condition {
     class GetAuctioneerAssets implements Condition {
         private final Class<?> ownerClass;
         private final Class<?> pivotClass;
+        private final Class<?> pivotClass2;
         private final String ownerColumn;
         private final String pivotColumn1a;
         private final String pivotColumn1b;
+        private final String pivotColumn2;
         private final Long searchValue;
         // Constructor
         public GetAuctioneerAssets(Class<?> ownerClass, String ownerColumn,
                                     Class<?> pivotClass, String pivotColumn1a, String pivotColumn1b,
+                                    Class<?> pivotClass2, String pivotColumn2,
                                     Long searchValue) {
             this.ownerClass = ownerClass;
             this.pivotClass = pivotClass;
+            this.pivotClass2 = pivotClass2;
             this.pivotColumn1a = pivotColumn1a;
             this.pivotColumn1b = pivotColumn1b;
+            this.pivotColumn2 = pivotColumn2;
             this.ownerColumn = ownerColumn;
             this.searchValue = searchValue;
         }
         public Class<?> getOwnerClass() { return ownerClass; }
         public Class<?> getPivotClass() { return pivotClass; }
+        public Class<?> getPivotClass2() { return pivotClass2; }
         public String getOwnerColumn() { return ownerColumn;}
         public String getPivotColumn1a() { return pivotColumn1a;}
         public String getPivotColumn1b() { return pivotColumn1b;}
+        public String getPivotColumn2() { return pivotColumn2;}
         public Long getSearchValue() { return searchValue; }
     }
 

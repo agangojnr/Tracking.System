@@ -445,12 +445,29 @@ public class DatabaseStorage extends Storage {
                     result.append(".");
                     result.append(condition.getPivotColumn1b());
 
+                    result.append(" LEFT JOIN ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn2());
+
                     result.append(" WHERE ");
                     result.append(getStorageName(condition.getPivotClass()));
                     result.append(".");
                     result.append(condition.getPivotColumn1a());
                     result.append(" = ");result.append("'");
                     result.append(condition.getSearchValue());result.append("'");
+
+                    result.append(" AND ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn2());
+                    result.append(" IS NULL");
 
                 }else if (genericCondition instanceof Condition.GetAuctioneerAssetsUnlinked condition) {
                     result.append(" LEFT JOIN ");
