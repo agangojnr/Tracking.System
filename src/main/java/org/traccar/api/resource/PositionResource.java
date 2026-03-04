@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.traccar.api.BaseResource;
 import org.traccar.helper.model.PositionUtil;
 import org.traccar.model.Device;
+import org.traccar.model.Event;
 import org.traccar.model.Position;
 import org.traccar.model.UserRestrictions;
 import org.traccar.reports.CsvExportProvider;
@@ -43,10 +44,10 @@ import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.StreamingOutput;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.LinkedList;
+
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.util.*;
 import java.util.stream.Stream;
 
 @Path("positions")
@@ -179,6 +180,31 @@ public class PositionResource extends BaseResource {
         };
         return Response.ok(stream)
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=positions.gpx").build();
+    }
+
+    @Path("telemetry")
+    @GET
+    public Collection<Position> get(@QueryParam("deviceid") long deviceid, @QueryParam("querydate") String querydate) throws StorageException {
+        // Parse date
+        LocalDate localDate = LocalDate.parse(querydate);
+        // Start of day (00:00:00)
+        Timestamp startOfDay = Timestamp.valueOf(localDate.atStartOfDay());
+        // End of day (23:59:59.999999999)
+        Timestamp endOfDay = Timestamp.valueOf(localDate.plusDays(1).atStartOfDay().minusNanos(1));
+
+        Collection<Position> telemetry = storage.getObjects(Position.class, new Request(
+                new Columns.All(),
+                new Condition.And(
+                        new Condition.Equals("deviceid", deviceid),
+                        new Condition.Between("fixtime", startOfDay, endOfDay)
+                )
+        ));
+        //LOGGER.info("Start = {}, End = {}, device id = {}", startOfDay, endOfDay, deviceid);
+        if (telemetry == null) {
+            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).build());
+        }
+        //permissionsService.checkPermission(Device.class, getUserId(), event.getDeviceId());
+        return telemetry;
     }
 
 }
