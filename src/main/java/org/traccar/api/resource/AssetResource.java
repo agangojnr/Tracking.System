@@ -104,6 +104,7 @@ public class AssetResource extends SimpleObjectResource<Asset> {
                 new Columns.All(), Condition.merge(conditions), new Order("assetname")));
     }
 
+    /* GET ASSETS ALREADY LINKED TO AUCTIONEERS */
     @Path("auctioneers")
     @GET
     public Collection<Asset> getAuctioneerAssets(@QueryParam("auctioneerId") Long auctioneerId) throws Exception{
@@ -114,6 +115,26 @@ public class AssetResource extends SimpleObjectResource<Asset> {
                             new Condition.GetAuctioneerAssets(Asset.class, "id",
                                     AuctioneerAsset.class, "auctioneerid", "assetid",
                                     auctioneerId)));
+        }
+        return null;
+    }
+
+    /* GET ASSETS UNLINKED TO AUCTIONEERS */
+    @Path("auctassets")
+    @GET
+    public Collection<Asset> getAuctioneerAssetsUnlinked(@QueryParam("druId") Long druId) throws Exception{
+        if(druId != null && druId > 0){
+            return storage.getJointObjects(baseClass,
+                    new Request(
+                            new Columns.Include("tc_assets.id",
+                                    "tc_assets.assetname"),
+                            new Condition.GetAuctioneerAssetsUnlinked(Asset.class, "id", "assetname",
+                                    AssetDevice.class, "assetid", "deviceid",
+                                    AuctioneerAsset.class, "auctioneerid", "assetid",
+                                    ClientAsset.class, "clientid", "assetid",
+                                    SubresellerClient.class, "subresellerid", "clientid",
+                                    SubresellerDru.class, "subresellerid", "druid",
+                                    druId)));
         }
         return null;
     }

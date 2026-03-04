@@ -322,6 +322,79 @@ public interface Condition {
         public Long getSearchValue() { return searchValue; }
     }
 
+    class GetAuctioneerAssetsUnlinked implements Condition {
+        private final Class<?> ownerClass;
+        private final String ownerColumn;
+        private final String ownerColumn1;
+        private final Class<?> pivotClass1;
+        private final String pivotColumn1a;
+        private final String pivotColumn1b;
+        private final Class<?> pivotClass2;
+        private final String pivotColumn2a;
+        private final String pivotColumn2b;
+        private final Class<?> pivotClass3;
+        private final String pivotColumn3a;
+        private final String pivotColumn3b;
+        private final Class<?> pivotClass4;
+        private final String pivotColumn4a;
+        private final String pivotColumn4b;
+        private final Class<?> pivotClass5;
+        private final String pivotColumn5a;
+        private final String pivotColumn5b;
+        private final Long searchValue;
+        // Constructor
+        public GetAuctioneerAssetsUnlinked(Class<?> ownerClass, String ownerColumn, String ownerColumn1,
+                                   Class<?> pivotClass1, String pivotColumn1a, String pivotColumn1b,
+                                   Class<?> pivotClass2, String pivotColumn2a, String pivotColumn2b,
+                                   Class<?> pivotClass3, String pivotColumn3a, String pivotColumn3b,
+                                   Class<?> pivotClass4, String pivotColumn4a, String pivotColumn4b,
+                                   Class<?> pivotClass5, String pivotColumn5a, String pivotColumn5b,
+                                   Long searchValue) {
+            this.ownerClass = ownerClass;
+            this.pivotClass1 = pivotClass1;
+            this.pivotColumn1a = pivotColumn1a;
+            this.pivotColumn1b = pivotColumn1b;
+            this.pivotClass2 = pivotClass2;
+            this.pivotColumn2a = pivotColumn2a;
+            this.pivotColumn2b = pivotColumn2b;
+            this.pivotClass3 = pivotClass3;
+            this.pivotColumn3a = pivotColumn3a;
+            this.pivotColumn3b = pivotColumn3b;
+            this.pivotClass4 = pivotClass4;
+            this.pivotColumn4a = pivotColumn4a;
+            this.pivotColumn4b = pivotColumn4b;
+            this.pivotClass5 = pivotClass5;
+            this.pivotColumn5a = pivotColumn5a;
+            this.pivotColumn5b = pivotColumn5b;
+            this.ownerColumn = ownerColumn;
+            this.ownerColumn1 = ownerColumn1;
+            this.searchValue = searchValue;
+        }
+        public Class<?> getOwnerClass() { return ownerClass; }
+        public String getOwnerColumn() { return ownerColumn;}
+        public String getOwnerColumn1() { return ownerColumn1;}
+        public Class<?> getPivotClass1() { return pivotClass1; }
+        public String getPivotColumn1a() { return pivotColumn1a;}
+        public String getPivotColumn1b() { return pivotColumn1b;}
+
+        public Class<?> getPivotClass2() { return pivotClass2; }
+        public String getPivotColumn2a() { return pivotColumn2a;}
+        public String getPivotColumn2b() { return pivotColumn2b;}
+
+        public Class<?> getPivotClass3() { return pivotClass3; }
+        public String getPivotColumn3a() { return pivotColumn3a;}
+        public String getPivotColumn3b() { return pivotColumn3b;}
+
+        public Class<?> getPivotClass4() { return pivotClass4; }
+        public String getPivotColumn4a() { return pivotColumn4a;}
+        public String getPivotColumn4b() { return pivotColumn4b;}
+
+        public Class<?> getPivotClass5() { return pivotClass5; }
+        public String getPivotColumn5a() { return pivotColumn5a;}
+        public String getPivotColumn5b() { return pivotColumn5b;}
+        public Long getSearchValue() { return searchValue; }
+    }
+
     class LinkedDevicesbyAuctioneer implements Condition {
         private final Class<?> ownerClass;
         private final String ownerColumn;
