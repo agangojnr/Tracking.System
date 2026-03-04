@@ -569,24 +569,18 @@ public class DeviceResource extends BaseObjectResource<Device> {
                          auctioneerid)));
     }
 
+    /* GETTING DEVICES UNDER AN AUCTIONEER ON THE MAPPAGE */
     @GET
-    @Path("drus/linked")
-    public Collection<DruDevices> getDeviceByAuctioneerQuery(
-            @QueryParam("auctioneerid") long auctioneerid
+    @Path("auctioneer/linked")
+    public Collection<Device> getDeviceByAuctioneerQuery(@QueryParam("auctioneerid") long auctioneerid
     ) throws Exception{
         //LOGGER.info("Testing auctioneer id = {}", auctioneerid);
-        Long isRepossessed = 0L;
-        return storage.getJointObjects(DruDevices.class, new Request(
-                new Columns.Include(
-                        "tc_devices.id AS id",
-                        "clientname AS clientName",
-                        "name AS deviceName"
-                ),
-                new Condition.JoinOneWhereBoolean(Device.class, "id",
-                        AuctioneerAsset.class, "auctioneerid","deviceid",
-                        ClientDevice.class, "clientid", "deviceid",
-                        Client.class, "id",
-                         auctioneerid)));
+        return storage.getJointObjects(baseClass, new Request(
+                new Columns.All(),
+                new Condition.AuctioneerDevicesonMappage(Device.class, "id",
+                        AssetDevice.class, "assetid", "deviceid",
+                        AuctioneerAsset.class, "auctioneerid", "assetid",
+                        auctioneerid)));
     }
 
     @GET
