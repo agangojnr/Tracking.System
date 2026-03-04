@@ -341,6 +341,9 @@ public interface Condition {
         private final Class<?> pivotClass5;
         private final String pivotColumn5a;
         private final String pivotColumn5b;
+        private final Class<?> pivotClass6;
+        private final String pivotColumn6a;
+        private final String pivotColumn6b;
         private final Long searchValue;
         // Constructor
         public GetAuctioneerAssetsUnlinked(Class<?> ownerClass, String ownerColumn, String ownerColumn1,
@@ -349,6 +352,7 @@ public interface Condition {
                                    Class<?> pivotClass3, String pivotColumn3a, String pivotColumn3b,
                                    Class<?> pivotClass4, String pivotColumn4a, String pivotColumn4b,
                                    Class<?> pivotClass5, String pivotColumn5a, String pivotColumn5b,
+                                   Class<?> pivotClass6, String pivotColumn6a, String pivotColumn6b,
                                    Long searchValue) {
             this.ownerClass = ownerClass;
             this.pivotClass1 = pivotClass1;
@@ -366,6 +370,9 @@ public interface Condition {
             this.pivotClass5 = pivotClass5;
             this.pivotColumn5a = pivotColumn5a;
             this.pivotColumn5b = pivotColumn5b;
+            this.pivotClass6 = pivotClass6;
+            this.pivotColumn6a = pivotColumn6a;
+            this.pivotColumn6b = pivotColumn6b;
             this.ownerColumn = ownerColumn;
             this.ownerColumn1 = ownerColumn1;
             this.searchValue = searchValue;
@@ -392,6 +399,10 @@ public interface Condition {
         public Class<?> getPivotClass5() { return pivotClass5; }
         public String getPivotColumn5a() { return pivotColumn5a;}
         public String getPivotColumn5b() { return pivotColumn5b;}
+
+        public Class<?> getPivotClass6() { return pivotClass6; }
+        public String getPivotColumn6a() { return pivotColumn6a;}
+        public String getPivotColumn6b() { return pivotColumn6b;}
         public Long getSearchValue() { return searchValue; }
     }
 

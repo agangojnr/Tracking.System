@@ -122,8 +122,8 @@ public class AssetResource extends SimpleObjectResource<Asset> {
     /* GET ASSETS UNLINKED TO AUCTIONEERS */
     @Path("auctassets")
     @GET
-    public Collection<Asset> getAuctioneerAssetsUnlinked(@QueryParam("druId") Long druId) throws Exception{
-        if(druId != null && druId > 0){
+    public Collection<Asset> getAuctioneerAssetsUnlinked(@QueryParam("auctioneerId") Long auctioneerId) throws Exception{
+        if(auctioneerId != null && auctioneerId > 0){
             return storage.getJointObjects(baseClass,
                     new Request(
                             new Columns.Include("tc_assets.id",
@@ -134,7 +134,8 @@ public class AssetResource extends SimpleObjectResource<Asset> {
                                     ClientAsset.class, "clientid", "assetid",
                                     SubresellerClient.class, "subresellerid", "clientid",
                                     SubresellerDru.class, "subresellerid", "druid",
-                                    druId)));
+                                    DruAuctioneer.class, "druid", "auctioneerid",
+                                    auctioneerId)));
         }
         return null;
     }
