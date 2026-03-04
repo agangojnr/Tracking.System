@@ -158,7 +158,7 @@ public class AuctioneerResource extends SimpleObjectResource<Auctioneer> {
     /* GET USERID FROM AUCTIONEERID */
     @GET
     @Path("auct")
-    public Long getAuctId(@QueryParam("userid") Long userid) throws StorageException{
+    public Collection<Auctioneer> getAuctId(@QueryParam("userid") Long userid) throws StorageException{
         //LOGGER.info("This is it");
         Long levelid = 5L;
         if (userid != null && userid > 0) {
@@ -170,14 +170,14 @@ public class AuctioneerResource extends SimpleObjectResource<Auctioneer> {
                                     UserLevel.class, "userid", "levelid", userid, levelid)
                     )
             );
-
             Long levelgroupid = null;
-
             if (!userLevels.isEmpty()) {
                 levelgroupid = userLevels.get(0).getLevelgroupid();
             }
-
-            return levelgroupid;
+            return storage.getObjects(baseClass, new Request(
+                    new Columns.All(),
+                    new Condition.Equals("id", levelgroupid)
+            ));
 
         }else{
             return null;

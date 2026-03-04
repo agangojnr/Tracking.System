@@ -223,12 +223,15 @@ public class DeviceResource extends BaseObjectResource<Device> {
                     new Columns.All(),
                     new Condition.JoinOneWhere(Device.class, "id", ClientDevice.class, "deviceid", "clientid", clientid)));
         }
-//        else if (level == 5) {
-//            long auctioneerid = permissionsService.getLevelGroupId(getUserId(), 5);
-//            return storage.getJointObjects(baseClass, new Request(
-//                    new Columns.All(),
-//                    new Condition.JoinOneWhere(Device.class, "id", ClientDevice.class, "deviceid", "clientid", clientid)));
-//        }
+        else if (level == 5) {
+            long auctioneerid = permissionsService.getLevelGroupId(getUserId(), 5);
+            return storage.getJointObjects(baseClass, new Request(
+                    new Columns.All(),
+                    new Condition.AuctioneerDevicesonMappage(Device.class, "id",
+                            AssetDevice.class, "assetid", "deviceid",
+                            AuctioneerAsset.class, "auctioneerid", "assetid",
+                            auctioneerid)));
+        }
         return null;
     }
 
