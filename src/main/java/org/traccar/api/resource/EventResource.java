@@ -18,6 +18,7 @@ import jakarta.ws.rs.core.Response;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.util.Collection;
 
 @Path("events")
 @Produces(MediaType.APPLICATION_JSON)
@@ -27,8 +28,7 @@ public class EventResource extends BaseResource {
     private static final Logger LOGGER = LoggerFactory.getLogger(Event.class);
 
     @GET
-    public Event get(@QueryParam("deviceid") long deviceid, @QueryParam("querydate") String querydate) throws StorageException {
-        LOGGER.info("Event date = {}, device id = {}", querydate, deviceid);
+    public Collection<Event> get(@QueryParam("deviceid") long deviceid, @QueryParam("querydate") String querydate) throws StorageException {
         // Parse date
         LocalDate localDate = LocalDate.parse(querydate);
         // Start of day (00:00:00)
@@ -36,13 +36,14 @@ public class EventResource extends BaseResource {
         // End of day (23:59:59.999999999)
         Timestamp endOfDay = Timestamp.valueOf(localDate.plusDays(1).atStartOfDay().minusNanos(1));
 
-        Event event = storage.getObject(Event.class, new Request(
+        Collection<Event> event = storage.getObjects(Event.class, new Request(
                 new Columns.All(),
                 new Condition.And(
                         new Condition.Equals("deviceid", deviceid),
                         new Condition.Between("eventtime", startOfDay, endOfDay)
                     )
         ));
+        //LOGGER.info("Start = {}, End = {}, device id = {}", startOfDay, endOfDay, deviceid);
         if (event == null) {
             throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).build());
         }
