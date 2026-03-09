@@ -33,6 +33,8 @@
 
   </changeSet>
 
+
+
   <changeSet id="rename-auctioneer-device-to-asset" author="walter">
 
     <!-- Rename table -->
@@ -48,9 +50,9 @@
             columnDataType="BIGINT"/>
 
     <!-- Drop old FK -->
-    <dropForeignKeyConstraint
-            baseTableName="tc_auctioneer_asset"
-            constraintName="fk_auctioneer_device_device"/>
+<!--    <dropForeignKeyConstraint-->
+<!--            baseTableName="tc_auctioneer_asset"-->
+<!--            constraintName="fk_auctioneer_device_device"/>-->
 
     <!-- Add new FK -->
     <addForeignKeyConstraint
@@ -86,20 +88,20 @@
     <!-- ============================= -->
     <!-- Drop OLD foreign key (device) -->
     <!-- ============================= -->
-    <dropForeignKeyConstraint
-            baseTableName="tc_auctioneer_asset"
-            constraintName="fk_auctioneer_device_device"/>
+<!--    <dropForeignKeyConstraint-->
+<!--            baseTableName="tc_auctioneer_asset"-->
+<!--            constraintName="fk_auctioneer_device_device"/>-->
 
     <!-- ===================================== -->
     <!-- Create NEW FK referencing tc_assets   -->
     <!-- ===================================== -->
-    <addForeignKeyConstraint
-            baseTableName="tc_auctioneer_asset"
-            baseColumnNames="assetid"
-            referencedTableName="tc_assets"
-            referencedColumnNames="id"
-            constraintName="fk_auctioneer_asset_asset"
-            onDelete="CASCADE"/>
+<!--    <addForeignKeyConstraint-->
+<!--            baseTableName="tc_auctioneer_asset"-->
+<!--            baseColumnNames="assetid"-->
+<!--            referencedTableName="tc_assets"-->
+<!--            referencedColumnNames="id"-->
+<!--            constraintName="fk_auctioneer_asset_asset"-->
+<!--            onDelete="CASCADE"/>-->
 
   </changeSet>
 

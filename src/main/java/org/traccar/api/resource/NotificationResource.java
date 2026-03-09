@@ -1,18 +1,4 @@
-/*
- * Copyright 2016 - 2024 Anton Tananaev (anton@traccar.org)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+
 package org.traccar.api.resource;
 
 import jakarta.inject.Inject;
@@ -85,6 +71,7 @@ public class NotificationResource extends ExtendedObjectResource<Notification> {
     @Path("notificators")
     public Collection<Typed> getNotificators(@QueryParam("announcement") boolean announcement) {
         Set<String> announcementsUnsupported = Set.of("command", "web");
+        LOGGER.info("Test 1");
         return notificatorManager.getAllNotificatorTypes().stream()
                 .filter(typed -> !announcement || !announcementsUnsupported.contains(typed.type()))
                 .collect(Collectors.toUnmodifiableSet());
@@ -94,6 +81,7 @@ public class NotificationResource extends ExtendedObjectResource<Notification> {
     @Path("test")
     public Response testMessage() throws MessageException, StorageException {
         User user = permissionsService.getUser(getUserId());
+        LOGGER.info("Test 2");
         for (Typed method : notificatorManager.getAllNotificatorTypes()) {
             notificatorManager.getNotificator(method.type()).send(null, user, new Event("test", 0), null);
         }
@@ -104,6 +92,7 @@ public class NotificationResource extends ExtendedObjectResource<Notification> {
     @Path("test/{notificator}")
     public Response testMessage(@PathParam("notificator") String notificator)
             throws MessageException, StorageException {
+        LOGGER.info("Test 3");
         User user = permissionsService.getUser(getUserId());
         notificatorManager.getNotificator(notificator).send(null, user, new Event("test", 0), null);
         return Response.noContent().build();
@@ -114,6 +103,7 @@ public class NotificationResource extends ExtendedObjectResource<Notification> {
     public Response sendMessage(
             @PathParam("notificator") String notificator, @QueryParam("userId") List<Long> userIds,
             NotificationMessage message) throws MessageException, StorageException {
+        LOGGER.info("Test 4");
         permissionsService.checkManager(getUserId());
         List<User> users;
         if (userIds.isEmpty()) {

@@ -32,6 +32,10 @@ public class AssetPermissionResource extends BaseResource {
     public Response linkDeviceAsset(@QueryParam("assetId") long assetId, @QueryParam("deviceId") long deviceId) throws Exception{
         //LOGGER.info("Received POST request -> assetId: {}, deviceId: {}", assetId, deviceId);
         if(validateDeviceAssetLink(assetId,deviceId)){
+            Long devCount = storage.getCountObjects(AssetDevice.class, new Request(
+                    new Condition.CountDevicesOnAsset(AssetDevice.class, "assetid",assetId)));
+            //LOGGER.info("Count dev = {}", devCount);
+
             permissionsService.link(LinkType.ASSET_DEVICE, assetId,deviceId);
             /* Updating device name on tc_devices table*/
             Asset asset = storage.getObject(Asset.class,
@@ -40,10 +44,9 @@ public class AssetPermissionResource extends BaseResource {
                     )
             );
 
-            Long devCount = storage.getCountObjects(AssetDevice.class, new Request(
-                    new Condition.CountDevicesOnAsset(AssetDevice.class, "assetid",assetId)));
-            //LOGGER.info("Count dev = {}", devCount);
+
             String newName = asset != null ? asset.getAssetName()+" ~ dev"+(devCount+1) : null;
+            //LOGGER.info("Asset name = {}", newName);
             //Count Devices on the asset
 
             //LOGGER.info("Asset name = {}", newName);

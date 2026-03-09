@@ -10,10 +10,23 @@
     <entry key='database.password'></entry>
 <!--    <entry key='web.port'>8082</entry>-->
 <!--    <entry key='web.port'>8082</entry>-->
+
+    <!--    EMAIL CONFIGURATIONS -->
+    <entry key='mail.smtp.host'>smtp.office365.com</entry>
+    <entry key='mail.smtp.port'>587</entry>
+    <entry key='mail.smtp.starttls.enable'>true</entry>
+    <entry key='mail.smtp.auth'>true</entry>
+
+    <entry key='mail.smtp.username'>support@riverlong.com</entry>
+    <entry key='mail.smtp.password'>B@739258177533al</entry>
+
+    <entry key='mail.from'>support@riverlong.com</entry>
+
     <entry key='osmand.port'>5100</entry>
     <entry key='gt06.port'>5101</entry>
     <entry key='gps103.port'>5102</entry>
     <entry key='seeworld.port'>5023</entry>
     <entry key='teltonika.port'>5027</entry>
+
 
 </properties>

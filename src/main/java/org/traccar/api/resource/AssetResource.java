@@ -208,7 +208,7 @@ public class AssetResource extends SimpleObjectResource<Asset> {
         if (asset.isEmpty()) {
             return true;
         }
-        return true;
+        return false;
     }
 
 }
