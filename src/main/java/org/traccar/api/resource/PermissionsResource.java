@@ -178,8 +178,9 @@ public class PermissionsResource  extends BaseResource {
             Permission permission = new Permission(entity);
             checkPermission(permission);
             storage.removePermission(permission);
-            if(permission.getPropertyClass().getSimpleName().equals("Asset")){
+            if(permission.getOwnerClass().getSimpleName().equals("Asset")){
                 updateNoAsset(permission);
+                updateDeviceNames(permission.getOwnerId());
             }
             cacheManager.invalidatePermission(
                     true,
@@ -205,7 +206,7 @@ public class PermissionsResource  extends BaseResource {
                     Device.class,
                     new Request(
                             new Columns.All(),
-                            new Condition.Equals("id", permission.getOwnerId())
+                            new Condition.Equals("id", permission.getPropertyId())
                     )
             );
 
@@ -222,5 +223,47 @@ public class PermissionsResource  extends BaseResource {
             }
 
     }
+
+    private void updateDeviceNames(Long assetId) throws StorageException, ClassNotFoundException {
+        //LOGGER.info("Asset ID:  {}", assetId);
+        Asset asset = storage.getObject(Asset.class,new Request(
+                        new Columns.All(),
+                        new Condition.Equals("id", assetId)
+                )
+        );
+        String assetName = asset.getAssetName();
+        List<AssetDevice> devices = storage.getObjects(
+                AssetDevice.class,
+                new Request(
+                        new Columns.All(),
+                        new Condition.Equals("assetid", assetId)
+                )
+        );
+
+        if (devices != null) {
+            int count = 1;
+            for (AssetDevice device : devices){
+                Device device1 = storage.getObject(Device.class,new Request(
+                                new Columns.All(),
+                                new Condition.Equals("id", device.getDeviceid())
+                        )
+                );
+                device1.setName(assetName+" ~ dev"+(count++)); // 👈 update specific column
+
+                storage.updateObject(
+                        device1,
+                        new Request(
+                                new Columns.Include("name"),
+                                new Condition.Equals("id", device.getDeviceid())
+                        )
+                );
+            }
+
+        }else{
+            LOGGER.info("Testing empty devices");
+        }
+
+    }
+
 
 }

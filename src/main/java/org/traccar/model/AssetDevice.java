@@ -10,7 +10,7 @@ public class AssetDevice {
     private Long assetid;
 
     // Getters and setters
-    public Long getDevcieid() {
+    public Long getDeviceid() {
         return deviceid;
     }
     public void setDeviceid(Long deviceid) {
