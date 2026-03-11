@@ -71,7 +71,6 @@ public class NotificationResource extends ExtendedObjectResource<Notification> {
     @Path("notificators")
     public Collection<Typed> getNotificators(@QueryParam("announcement") boolean announcement) {
         Set<String> announcementsUnsupported = Set.of("command", "web");
-        LOGGER.info("Test 1");
         return notificatorManager.getAllNotificatorTypes().stream()
                 .filter(typed -> !announcement || !announcementsUnsupported.contains(typed.type()))
                 .collect(Collectors.toUnmodifiableSet());
@@ -81,7 +80,6 @@ public class NotificationResource extends ExtendedObjectResource<Notification> {
     @Path("test")
     public Response testMessage() throws MessageException, StorageException {
         User user = permissionsService.getUser(getUserId());
-        LOGGER.info("Test 2");
         for (Typed method : notificatorManager.getAllNotificatorTypes()) {
             notificatorManager.getNotificator(method.type()).send(null, user, new Event("test", 0), null);
         }
@@ -103,7 +101,6 @@ public class NotificationResource extends ExtendedObjectResource<Notification> {
     public Response sendMessage(
             @PathParam("notificator") String notificator, @QueryParam("userId") List<Long> userIds,
             NotificationMessage message) throws MessageException, StorageException {
-        LOGGER.info("Test 4");
         permissionsService.checkManager(getUserId());
         List<User> users;
         if (userIds.isEmpty()) {

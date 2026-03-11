@@ -55,15 +55,36 @@ public class TripsReportProvider {
         this.storage = storage;
     }
 
-    public Collection<TripReportItem> getObjects(
-            long userId, Collection<Long> deviceIds, Collection<Long> groupIds,
-            Date from, Date to) throws StorageException {
+//    public Collection<TripReportItem> getObjects(
+//            long userId, Collection<Long> deviceIds, Collection<Long> groupIds,
+//            Date from, Date to) throws StorageException {
+//        reportUtils.checkPeriodLimit(from, to);
+//
+//        ArrayList<TripReportItem> result = new ArrayList<>();
+//        for (Device device: DeviceUtil.getAccessibleDevices(storage, userId, deviceIds, groupIds)) {
+//            result.addAll(reportUtils.detectTripsAndStops(device, from, to, TripReportItem.class));
+//        }
+//        return result;
+//    }
+
+    public Collection<TripReportItem> getTripReportForDevice(
+            long userId, long deviceId, Date from, Date to) throws StorageException {
+
         reportUtils.checkPeriodLimit(from, to);
 
         ArrayList<TripReportItem> result = new ArrayList<>();
-        for (Device device: DeviceUtil.getAccessibleDevices(storage, userId, deviceIds, groupIds)) {
-            result.addAll(reportUtils.detectTripsAndStops(device, from, to, TripReportItem.class));
+
+        Device device = storage.getObject(Device.class, new Request(
+                new Columns.All(),
+                        new Condition.Equals("id", deviceId)
+                )
+        );
+
+        if (device != null) {
+            result.addAll(reportUtils.detectTripsAndStops(
+                    device, from, to, TripReportItem.class));
         }
+
         return result;
     }
 

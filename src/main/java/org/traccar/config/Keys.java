@@ -1343,7 +1343,7 @@ public final class Keys {
     public static final ConfigKey<Long> REPORT_FAST_THRESHOLD = new LongConfigKey(
             "report.fastThreshold",
             List.of(KeyType.CONFIG),
-            86400L);
+            604800L);
 
     /**
      * Trips less than minimal duration and minimal distance are ignored. 300 seconds and 500 meters are default.

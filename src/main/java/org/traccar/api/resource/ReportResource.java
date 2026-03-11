@@ -74,7 +74,7 @@ public class ReportResource extends SimpleObjectResource<Report> {
     @Context
     private HttpServletRequest request;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DeviceResource.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TripReportItem.class);
     //private static final Logger LOGGER = LoggerFactory.getLogger(OfflineReportItem.class);
 
     public ReportResource() {
@@ -240,16 +240,18 @@ public class ReportResource extends SimpleObjectResource<Report> {
         return getSummaryExcel(deviceIds, groupIds, from, to, daily, type.equals("mail"));
     }
 
-    @Path("trips")
+//
+
+    @Path("gettrips")
     @GET
     public Collection<TripReportItem> getTrips(
-            @QueryParam("deviceId") List<Long> deviceIds,
-            @QueryParam("groupId") List<Long> groupIds,
+            @QueryParam("deviceId") Long deviceId,
             @QueryParam("from") Date from,
             @QueryParam("to") Date to) throws StorageException {
-        permissionsService.checkRestriction(getUserId(), UserRestrictions::getDisableReports);
-        actionLogger.report(request, getUserId(), false, "trips", from, to, deviceIds, groupIds);
-        return tripsReportProvider.getObjects(getUserId(), deviceIds, groupIds, from, to);
+
+       // permissionsService.checkRestriction(getUserId(), UserRestrictions::getDisableReports);
+        //actionLogger.report(request, getUserId(), false, "trips", from, to, deviceIds, groupIds);
+        return tripsReportProvider.getTripReportForDevice(getUserId(), deviceId, from, to);
     }
 
     @Path("trips")
