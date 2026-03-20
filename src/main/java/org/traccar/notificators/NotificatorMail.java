@@ -25,9 +25,16 @@ public class NotificatorMail extends Notificator {
 
     @Override
     public void send(User user, NotificationMessage message, Event event, Position position) throws MessageException {
+
+        System.out.println("MAIL NOTIFICATOR STARTED");
+
         try {
             mailManager.sendMessage(user, false, message.subject(), message.body());
+
+            System.out.println("MAIL NOTIFICATOR SUCCESS");
+
         } catch (MessagingException e) {
+            System.out.println("MAIL NOTIFICATOR FAILED");
             throw new MessageException(e);
         }
     }

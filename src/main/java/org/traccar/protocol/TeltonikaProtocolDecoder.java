@@ -19,7 +19,11 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.traccar.BaseProtocolDecoder;
+import org.traccar.api.resource.CommandResource;
+import org.traccar.api.resource.NotificationResource;
 import org.traccar.helper.BufferUtil;
 import org.traccar.session.DeviceSession;
 import org.traccar.NetworkMessage;
@@ -52,6 +56,8 @@ public class TeltonikaProtocolDecoder extends BaseProtocolDecoder {
     private final boolean connectionless;
     private boolean extended;
     private final Map<Long, ByteBuf> photos = new HashMap<>();
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CommandResource.class);
 
     public void setExtended(boolean extended) {
         this.extended = extended;
@@ -708,6 +714,8 @@ public class TeltonikaProtocolDecoder extends BaseProtocolDecoder {
     protected Object decode(Channel channel, SocketAddress remoteAddress, Object msg) throws Exception {
 
         ByteBuf buf = (ByteBuf) msg;
+        String message = buf.toString(StandardCharsets.UTF_8);
+        // Example: detect command response pattern
 
         if (connectionless) {
             return decodeUdp(channel, remoteAddress, buf);

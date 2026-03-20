@@ -79,9 +79,10 @@ public class NotificationResource extends ExtendedObjectResource<Notification> {
     @POST
     @Path("test")
     public Response testMessage() throws MessageException, StorageException {
+        //LOGGER.info("This is an email test...");
         User user = permissionsService.getUser(getUserId());
         for (Typed method : notificatorManager.getAllNotificatorTypes()) {
-            notificatorManager.getNotificator(method.type()).send(null, user, new Event("test", 0), null);
+            notificatorManager.getNotificator("mail").send(null, user, new Event("test", 0), null);
         }
         return Response.noContent().build();
     }

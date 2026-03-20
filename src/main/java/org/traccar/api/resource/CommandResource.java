@@ -104,43 +104,70 @@ public class CommandResource extends ExtendedObjectResource<Command> {
 
     @POST
     @Path("send")
-    public Response send(Command entity, @QueryParam("groupId") long groupId) throws Exception {
+    public Response send(Command entity) throws Exception {
+
         if (entity.getId() > 0) {
             permissionsService.checkPermission(baseClass, getUserId(), entity.getId());
             long deviceId = entity.getDeviceId();
-            entity = storage.getObject(baseClass, new Request(
-                    new Columns.All(), new Condition.Equals("id", entity.getId())));
+
+            entity = storage.getObject(
+                    baseClass,
+                    new Request(new Columns.All(), new Condition.Equals("id", entity.getId()))
+            );
             entity.setDeviceId(deviceId);
         } else {
             permissionsService.checkRestriction(getUserId(), UserRestrictions::getLimitCommands);
         }
+        permissionsService.checkPermission(Device.class, getUserId(), entity.getDeviceId());
 
-        if (groupId > 0) {
-            permissionsService.checkPermission(Group.class, getUserId(), groupId);
-            var devices = DeviceUtil.getAccessibleDevices(storage, getUserId(), List.of(), List.of(groupId));
-            List<QueuedCommand> queuedCommands = new ArrayList<>();
-            for (Device device : devices) {
-                Command command = QueuedCommand.fromCommand(entity).toCommand();
-                command.setDeviceId(device.getId());
-                QueuedCommand queuedCommand = commandsManager.sendCommand(command);
-                if (queuedCommand != null) {
-                    queuedCommands.add(queuedCommand);
-                }
-            }
-            if (!queuedCommands.isEmpty()) {
-                return Response.accepted(queuedCommands).build();
-            }
-        } else {
-            permissionsService.checkPermission(Device.class, getUserId(), entity.getDeviceId());
-            QueuedCommand queuedCommand = commandsManager.sendCommand(entity);
-            if (queuedCommand != null) {
-                return Response.accepted(queuedCommand).build();
-            }
+        QueuedCommand queuedCommand = commandsManager.sendCommand(entity, getUserId());
+
+        if (queuedCommand != null) {
+            return Response.accepted(queuedCommand).build();
         }
 
-        actionLogger.command(request, getUserId(), groupId, entity.getDeviceId(), entity.getType());
+        actionLogger.command(request, getUserId(), 0, entity.getDeviceId(), entity.getType());
+
         return Response.ok(entity).build();
     }
+
+//    public Response send(Command entity, @QueryParam("groupId") long groupId) throws Exception {
+//        if (entity.getId() > 0) {
+//            permissionsService.checkPermission(baseClass, getUserId(), entity.getId());
+//            long deviceId = entity.getDeviceId();
+//            entity = storage.getObject(baseClass, new Request(
+//                    new Columns.All(), new Condition.Equals("id", entity.getId())));
+//            entity.setDeviceId(deviceId);
+//        } else {
+//            permissionsService.checkRestriction(getUserId(), UserRestrictions::getLimitCommands);
+//        }
+//
+//        if (groupId > 0) {
+//            permissionsService.checkPermission(Group.class, getUserId(), groupId);
+//            var devices = DeviceUtil.getAccessibleDevices(storage, getUserId(), List.of(), List.of(groupId));
+//            List<QueuedCommand> queuedCommands = new ArrayList<>();
+//            for (Device device : devices) {
+//                Command command = QueuedCommand.fromCommand(entity).toCommand();
+//                command.setDeviceId(device.getId());
+//                QueuedCommand queuedCommand = commandsManager.sendCommand(command);
+//                if (queuedCommand != null) {
+//                    queuedCommands.add(queuedCommand);
+//                }
+//            }
+//            if (!queuedCommands.isEmpty()) {
+//                return Response.accepted(queuedCommands).build();
+//            }
+//        } else {
+//            permissionsService.checkPermission(Device.class, getUserId(), entity.getDeviceId());
+//            QueuedCommand queuedCommand = commandsManager.sendCommand(entity);
+//            if (queuedCommand != null) {
+//                return Response.accepted(queuedCommand).build();
+//            }
+//        }
+//
+//        actionLogger.command(request, getUserId(), groupId, entity.getDeviceId(), entity.getType());
+//        return Response.ok(entity).build();
+//    }
 
     @GET
     @Path("types")

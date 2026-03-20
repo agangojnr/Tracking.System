@@ -16,18 +16,17 @@
  */
 package org.traccar.database;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.traccar.BaseProtocol;
 import org.traccar.ServerManager;
+import org.traccar.api.BaseResource;
+import org.traccar.api.resource.CommandResource;
 import org.traccar.broadcast.BroadcastInterface;
 import org.traccar.broadcast.BroadcastService;
 import org.traccar.command.CommandSenderManager;
 import org.traccar.config.Keys;
-import org.traccar.model.Command;
-import org.traccar.model.Device;
-import org.traccar.model.Event;
-import org.traccar.model.ObjectOperation;
-import org.traccar.model.Position;
-import org.traccar.model.QueuedCommand;
+import org.traccar.model.*;
 import org.traccar.session.ConnectionManager;
 import org.traccar.session.DeviceSession;
 import org.traccar.session.cache.CacheManager;
@@ -58,6 +57,8 @@ public class CommandsManager implements BroadcastInterface {
     private final CacheManager cacheManager;
     private final CommandSenderManager commandSenderManager;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(CommandsManager.class);
+
     @Inject
     public CommandsManager(
             Storage storage, ServerManager serverManager, @Nullable SmsManager smsManager,
@@ -75,8 +76,11 @@ public class CommandsManager implements BroadcastInterface {
         broadcastService.registerListener(this);
     }
 
-    public QueuedCommand sendCommand(Command command) throws Exception {
+    public QueuedCommand sendCommand(Command command, Long userid) throws Exception {
         long deviceId = command.getDeviceId();
+        saveCommandActivity(deviceId,userid,"tcp","commandSent",
+                command.getString(Command.KEY_DATA)
+        );
         Device device = storage.getObject(Device.class, new Request(
                 new Columns.All(), new Condition.Equals("id", deviceId)));
         Position position = storage.getObject(Position.class, new Request(
@@ -167,6 +171,29 @@ public class CommandsManager implements BroadcastInterface {
             throw new RuntimeException(e);
         } finally {
             cacheManager.removeDevice(deviceId, key);
+        }
+    }
+
+    private void saveCommandActivity(
+            long deviceId,
+            Long userId,
+            String channel,
+            String commandType,
+            String message) {
+
+        CommandActivity entity = new CommandActivity();
+
+        entity.setDeviceId(deviceId);
+        entity.setUserId(userId); // can be null
+        entity.setChannel(channel);
+        entity.setCommandType(commandType);
+        entity.setMessage(message);
+
+        try {
+            storage.addObject(entity, new Request(new Columns.Exclude("id")));
+            LOGGER.info("Command sent to device: {}", deviceId);
+        } catch (StorageException e) {
+            LOGGER.warn("Failed to save command activity", e);
         }
     }
 

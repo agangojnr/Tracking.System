@@ -1,0 +1,59 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+  <changeSet id="create-tc-commandactivities-table" author="your_name">
+
+    <createTable tableName="tc_commandactivities">
+
+      <column name="id" type="INT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="deviceid" type="INT">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="userid" type="INT">
+        <constraints nullable="true"/>
+      </column>
+
+      <column name="channel" type="VARCHAR(64)">
+        <constraints nullable="true"/>
+      </column>
+
+      <column name="commandtype" type="VARCHAR(64)">
+        <constraints nullable="true"/>
+      </column>
+
+      <column name="message" type="VARCHAR(256)">
+        <constraints nullable="true"/>
+      </column>
+
+    </createTable>
+
+    <!-- Foreign Key to tc_devices -->
+    <addForeignKeyConstraint
+            baseTableName="tc_commandactivities"
+            baseColumnNames="deviceid"
+            constraintName="fk_commandactivities_device"
+            referencedTableName="tc_devices"
+            referencedColumnNames="id"
+            onDelete="CASCADE"/>
+
+    <!-- Foreign Key to tc_users -->
+    <addForeignKeyConstraint
+            baseTableName="tc_commandactivities"
+            baseColumnNames="userid"
+            constraintName="fk_commandactivities_user"
+            referencedTableName="tc_users"
+            referencedColumnNames="id"
+            onDelete="SET NULL"/>
+
+  </changeSet>
+
+</databaseChangeLog>
+
