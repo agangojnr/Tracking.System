@@ -42,6 +42,7 @@ import jakarta.annotation.Nullable;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -174,13 +175,7 @@ public class CommandsManager implements BroadcastInterface {
         }
     }
 
-    private void saveCommandActivity(
-            long deviceId,
-            Long userId,
-            String channel,
-            String commandType,
-            String message) {
-
+    private void saveCommandActivity(long deviceId,Long userId,String channel,String commandType,String message) {
         CommandActivity entity = new CommandActivity();
 
         entity.setDeviceId(deviceId);
@@ -188,6 +183,7 @@ public class CommandsManager implements BroadcastInterface {
         entity.setChannel(channel);
         entity.setCommandType(commandType);
         entity.setMessage(message);
+        entity.setEntryDate(new Date());
 
         try {
             storage.addObject(entity, new Request(new Columns.Exclude("id")));

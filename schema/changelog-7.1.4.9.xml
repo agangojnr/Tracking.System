@@ -55,5 +55,16 @@
 
   </changeSet>
 
+
+  <changeSet id="add-entrydate-to-tc-commandactivities" author="Walter">
+
+    <addColumn tableName="tc_commandactivities">
+      <column name="entrydate" type="datetime2(7)">
+        <constraints nullable="true"/>
+      </column>
+    </addColumn>
+
+  </changeSet>
+
 </databaseChangeLog>
 

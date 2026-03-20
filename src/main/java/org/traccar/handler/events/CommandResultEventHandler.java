@@ -27,6 +27,8 @@ import org.traccar.storage.StorageException;
 import org.traccar.storage.query.Columns;
 import org.traccar.storage.query.Request;
 
+import java.util.Date;
+
 
 public class CommandResultEventHandler extends BaseEventHandler {
 
@@ -55,6 +57,7 @@ public class CommandResultEventHandler extends BaseEventHandler {
             entity.setMessage(String.valueOf(commandResult));
             entity.setChannel("teltonika");
             entity.setUserId(1L);
+            entity.setEntryDate(new Date());
 
             // Save to storage
             try {

@@ -2,6 +2,7 @@
 package org.traccar.api.resource;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,30 +14,19 @@ import org.traccar.config.Keys;
 import org.traccar.database.CommandsManager;
 import org.traccar.helper.LogAction;
 import org.traccar.helper.model.DeviceUtil;
-import org.traccar.model.Command;
-import org.traccar.model.Device;
-import org.traccar.model.Group;
-import org.traccar.model.Position;
-import org.traccar.model.QueuedCommand;
-import org.traccar.model.Typed;
-import org.traccar.model.User;
-import org.traccar.model.UserRestrictions;
+import org.traccar.model.*;
 import org.traccar.storage.StorageException;
 import org.traccar.storage.query.Columns;
 import org.traccar.storage.query.Condition;
 import org.traccar.storage.query.Request;
 
 import jakarta.inject.Inject;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -130,6 +120,33 @@ public class CommandResource extends ExtendedObjectResource<Command> {
 
         return Response.ok(entity).build();
     }
+
+    @Path("all")
+    @GET
+    public Collection<CommandActivity> get(@QueryParam("deviceid") long deviceid,
+                                           @QueryParam("from") String from,
+                                           @QueryParam("to") String to) throws StorageException {
+        // Parse date
+        LocalDate fromlocalDate = LocalDate.parse(from);
+        LocalDate tolocalDate = LocalDate.parse(to);
+        Timestamp startOfDay = Timestamp.valueOf(fromlocalDate.atStartOfDay());
+        Timestamp endOfDay = Timestamp.valueOf(tolocalDate.plusDays(1).atStartOfDay().minusNanos(1));
+
+        Collection<CommandActivity> command = storage.getObjects(CommandActivity.class, new Request(
+                new Columns.All(),
+                new Condition.And(
+                        new Condition.Equals("deviceid", deviceid),
+                        new Condition.Between("entrydate", startOfDay, endOfDay)
+                )
+        ));
+        LOGGER.info("Start = {}, End = {}, device id = {}", startOfDay, endOfDay, deviceid);
+        if (command == null) {
+            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).build());
+        }
+        //permissionsService.checkPermission(Device.class, getUserId(), event.getDeviceId());
+        return command;
+    }
+
 
 //    public Response send(Command entity, @QueryParam("groupId") long groupId) throws Exception {
 //        if (entity.getId() > 0) {
