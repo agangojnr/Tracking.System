@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Path("commands")
 @Produces(MediaType.APPLICATION_JSON)
@@ -123,23 +124,41 @@ public class CommandResource extends ExtendedObjectResource<Command> {
 
     @Path("all")
     @GET
-    public Collection<CommandActivity> get(@QueryParam("deviceid") long deviceid,
-                                           @QueryParam("from") String from,
-                                           @QueryParam("to") String to) throws StorageException {
+    public Stream<CommandDisplay> get(@QueryParam("deviceid") long deviceid,
+                                       @QueryParam("from") String from,
+                                       @QueryParam("to") String to) throws StorageException {
         // Parse date
         LocalDate fromlocalDate = LocalDate.parse(from);
         LocalDate tolocalDate = LocalDate.parse(to);
         Timestamp startOfDay = Timestamp.valueOf(fromlocalDate.atStartOfDay());
         Timestamp endOfDay = Timestamp.valueOf(tolocalDate.plusDays(1).atStartOfDay().minusNanos(1));
 
-        Collection<CommandActivity> command = storage.getObjects(CommandActivity.class, new Request(
-                new Columns.All(),
-                new Condition.And(
-                        new Condition.Equals("deviceid", deviceid),
-                        new Condition.Between("entrydate", startOfDay, endOfDay)
+//        Collection<CommandActivity> command = storage.getObjects(CommandActivity.class, new Request(
+//                new Columns.All(),
+//                new Condition.And(
+//                        new Condition.Equals("deviceid", deviceid),
+//                        new Condition.Between("entrydate", startOfDay, endOfDay)
+//                )
+//        ));
+
+        Stream<CommandDisplay> command = storage.getJointObjectStream(
+                CommandDisplay.class,
+                new Request(
+                        new Columns.Include(
+                                "tc_commandactivities.deviceid AS deviceid",
+                                "tc_commandactivities.commandType AS commandType",
+                                "tc_commandactivities.message AS message",
+                                "tc_commandactivities.entryDate AS entryDate",
+                                "tc_users.name AS name"
+                        ),
+                        new Condition.GetCommandDisplay(
+                                CommandActivity.class, "deviceid", "userid","commandtype","message", "entrydate",
+                                User.class, "id", "name",
+                                deviceid, startOfDay, endOfDay
+                        )
                 )
-        ));
-        LOGGER.info("Start = {}, End = {}, device id = {}", startOfDay, endOfDay, deviceid);
+        );
+        //LOGGER.info("Start = {}, End = {}, device id = {}", startOfDay, endOfDay, deviceid);
         if (command == null) {
             throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).build());
         }

@@ -3,6 +3,7 @@ package org.traccar.storage.query;
 
 import org.traccar.model.GroupedModel;
 
+import java.util.Date;
 import java.util.List;
 
 public interface Condition {
@@ -227,6 +228,50 @@ public interface Condition {
         public String getPivotColumn1() { return pivotColumn1; }
         public String getPivotColumn2() { return pivotColumn2; }
         public Long getSearchValue() { return searchValue; }
+    }
+
+    class GetCommandDisplay implements Condition {
+        private final Class<?> ownerClass;
+        private final String ownerColumn1;
+        private final String ownerColumn2;
+        private final String ownerColumn3;
+        private final String ownerColumn4;
+        private final String ownerColumn5;
+        private final Class<?> pivotClass;
+        private final String pivotColumn1;
+        private final String pivotColumn2;
+        private final Long searchValue;
+        private final Date fromValue;
+        private final Date toValue;
+        // Constructor
+        public GetCommandDisplay(Class<?> ownerClass, String ownerColumn1, String ownerColumn2, String ownerColumn3, String ownerColumn4, String ownerColumn5,
+                                 Class<?> pivotClass, String pivotColumn1, String pivotColumn2,
+                                 Long searchValue, Date fromValue, Date toValue) {
+            this.ownerClass = ownerClass;
+            this.ownerColumn1 = ownerColumn1;
+            this.ownerColumn2 = ownerColumn2;
+            this.ownerColumn3 = ownerColumn3;
+            this.ownerColumn4 = ownerColumn4;
+            this.ownerColumn5 = ownerColumn5;
+            this.pivotClass = pivotClass;
+            this.pivotColumn1 = pivotColumn1;
+            this.pivotColumn2 = pivotColumn2;
+            this.searchValue = searchValue;
+            this.fromValue = fromValue;
+            this.toValue = toValue;
+        }
+        public Class<?> getOwnerClass() { return ownerClass; }
+        public Class<?> getPivotClass() { return pivotClass; }
+        public String getOwnerColumn1() { return ownerColumn1; }
+        public String getOwnerColumn2() { return ownerColumn2; }
+        public String getOwnerColumn3() { return ownerColumn3; }
+        public String getOwnerColumn4() { return ownerColumn4; }
+        public String getOwnerColumn5() { return ownerColumn5; }
+        public String getPivotColumn1() { return pivotColumn1; }
+        public String getPivotColumn2() { return pivotColumn2; }
+        public Long getSearchValue() { return searchValue; }
+        public Date getFromValue() { return fromValue; }
+        public Date getToValue() { return toValue; }
     }
 
     class GetDevicesByAsset implements Condition {

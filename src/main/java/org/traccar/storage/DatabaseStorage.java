@@ -3471,6 +3471,35 @@ public class DatabaseStorage extends Storage {
                     result.append(" = ");result.append("'");
                     result.append(condition.getSearchValue());result.append("'");
 
+                }else if (genericCondition instanceof Condition.GetCommandDisplay condition){
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn2());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn1());
+
+                    result.append(" WHERE ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn1());
+                    result.append(" = ");
+                    result.append(condition.getSearchValue());
+
+                    result.append(" AND ");
+
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn5());
+                    result.append(" BETWEEN ");
+                    result.append("'");result.append(condition.getFromValue());result.append("'");
+                    result.append(" AND ");
+                    result.append("'");result.append(condition.getToValue());result.append("'");
+
 
                 }else if (genericCondition instanceof Condition.CountSubResellerDevice condition){
                     result.append(" INNER JOIN ");
