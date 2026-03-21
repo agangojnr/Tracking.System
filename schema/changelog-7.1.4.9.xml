@@ -66,5 +66,13 @@
 
   </changeSet>
 
+  <changeSet id="drop-fk-users-defaultclientid" author="Walter">
+
+    <dropForeignKeyConstraint
+            baseTableName="tc_users"
+            constraintName="fk_users_defaultclientid"/>
+
+  </changeSet>
+
 </databaseChangeLog>
 

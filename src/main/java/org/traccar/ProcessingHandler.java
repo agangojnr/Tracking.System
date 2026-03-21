@@ -42,18 +42,7 @@ import org.traccar.handler.PositionForwardingHandler;
 import org.traccar.handler.PostProcessHandler;
 import org.traccar.handler.SpeedLimitHandler;
 import org.traccar.handler.TimeHandler;
-import org.traccar.handler.events.AlarmEventHandler;
-import org.traccar.handler.events.BaseEventHandler;
-import org.traccar.handler.events.BehaviorEventHandler;
-import org.traccar.handler.events.CommandResultEventHandler;
-import org.traccar.handler.events.DriverEventHandler;
-import org.traccar.handler.events.FuelEventHandler;
-import org.traccar.handler.events.GeofenceEventHandler;
-import org.traccar.handler.events.IgnitionEventHandler;
-import org.traccar.handler.events.MaintenanceEventHandler;
-import org.traccar.handler.events.MediaEventHandler;
-import org.traccar.handler.events.MotionEventHandler;
-import org.traccar.handler.events.OverspeedEventHandler;
+import org.traccar.handler.events.*;
 import org.traccar.handler.network.AcknowledgementHandler;
 import org.traccar.helper.PositionLogger;
 import org.traccar.model.Position;
@@ -126,6 +115,7 @@ public class ProcessingHandler extends ChannelInboundHandlerAdapter implements B
                 GeofenceEventHandler.class,
                 AlarmEventHandler.class,
                 IgnitionEventHandler.class,
+                BatteryEventHandler.class,
                 MaintenanceEventHandler.class,
                 DriverEventHandler.class)
                 .map((clazz) -> (BaseEventHandler) injector.getInstance(clazz))
