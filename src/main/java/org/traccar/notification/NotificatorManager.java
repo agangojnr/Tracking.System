@@ -2,6 +2,9 @@
 package org.traccar.notification;
 
 import com.google.inject.Injector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.traccar.api.resource.NotificationResource;
 import org.traccar.config.Config;
 import org.traccar.config.Keys;
 import org.traccar.model.Typed;
@@ -37,6 +40,8 @@ public class NotificatorManager {
             "pushover", NotificatorPushover.class);
 
     private final Injector injector;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(NotificationResource.class);
 
     private final Set<String> types = new HashSet<>();
 

@@ -17,6 +17,7 @@
     <entry key='logger.queries'>false</entry>
     <entry key='logger.fullStackTraces'>true</entry>
 
+<!--    <entry key='logger.level'>debug</entry>-->
     <entry key='mail.debug'>true</entry>
 
 <!--    <entry key='database.driver'>org.h2.Driver</entry>-->

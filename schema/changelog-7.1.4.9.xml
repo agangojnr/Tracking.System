@@ -74,5 +74,16 @@
 
   </changeSet>
 
+  <changeSet id="20260324-01-add-usertime-to-tc-positions" author="walter">
+
+    <!-- Add usertime column -->
+    <addColumn tableName="tc_positions">
+      <column name="usertime" type="TIMESTAMP">
+        <constraints nullable="true"/>
+      </column>
+    </addColumn>
+
+  </changeSet>
+
 </databaseChangeLog>
 

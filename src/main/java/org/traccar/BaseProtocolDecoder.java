@@ -80,6 +80,7 @@ public abstract class BaseProtocolDecoder extends ExtendedObjectDecoder {
         return mediaManager.writeFile(uniqueId, buf, extension);
     }
 
+
     public String getProtocolName() {
         return protocol != null ? protocol.getName() : PROTOCOL_UNKNOWN;
     }

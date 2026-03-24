@@ -168,6 +168,16 @@ public class Position extends Message {
         this.protocol = protocol;
     }
 
+    private Date userTime;
+
+    public Date getUserTime() {
+        return userTime;
+    }
+
+    public void setUserTime(Date userTime) {
+        this.userTime = userTime;
+    }
+
     private Date serverTime = new Date();
 
     public Date getServerTime() {

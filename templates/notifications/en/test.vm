@@ -2,5 +2,5 @@ Subject: Traccar Test Notification
 
 This is a test notification from Traccar.
 
-Event: $event.type
-Time: $event.serverTime
+Event: ${event.type}
+Time: ${event.serverTime}

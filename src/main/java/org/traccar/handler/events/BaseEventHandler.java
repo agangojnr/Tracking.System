@@ -20,6 +20,8 @@ import org.slf4j.LoggerFactory;
 import org.traccar.model.Event;
 import org.traccar.model.Position;
 
+import java.util.Date;
+
 public abstract class BaseEventHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseEventHandler.class);

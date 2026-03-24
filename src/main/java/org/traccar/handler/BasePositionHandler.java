@@ -19,6 +19,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.traccar.model.Position;
 
+import java.util.Date;
+
 public abstract class BasePositionHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BasePositionHandler.class);
@@ -31,6 +33,8 @@ public abstract class BasePositionHandler {
 
     public void handlePosition(Position position, Callback callback) {
         try {
+            //LOGGER.info("Testing");
+            position.setUserTime(new Date());
             onPosition(position, callback);
         } catch (RuntimeException e) {
             LOGGER.warn("Position handler failed", e);

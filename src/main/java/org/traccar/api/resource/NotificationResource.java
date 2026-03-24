@@ -82,7 +82,9 @@ public class NotificationResource extends ExtendedObjectResource<Notification> {
         //LOGGER.info("This is an email test...");
         User user = permissionsService.getUser(getUserId());
         for (Typed method : notificatorManager.getAllNotificatorTypes()) {
-            notificatorManager.getNotificator("mail").send(null, user, new Event("test", 0), null);
+            notificatorManager.getNotificator("mail").send(user,
+                    new NotificationMessage("Subjecttest", "Something new...", "Testing the email body", true),
+                    new Event("test", 0), null);
         }
         return Response.noContent().build();
     }
