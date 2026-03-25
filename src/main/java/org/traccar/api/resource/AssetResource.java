@@ -211,4 +211,15 @@ public class AssetResource extends SimpleObjectResource<Asset> {
         return false;
     }
 
+    @Path("release/{assetid}")
+    @PUT
+    public Response updateRelease(@PathParam("assetid") Long assetid) throws Exception {
+        Asset asset = new Asset();
+        asset.setIsRepossessed(0);
+        storage.updateObject(asset, new Request(
+                new Columns.Include("isRepossessed"),
+                new Condition.Equals("id", assetid)));
+        return Response.ok(asset.getIsRepossessed()).build();
+    }
+
 }
