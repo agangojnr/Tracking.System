@@ -86,6 +86,11 @@ public class RepossessionResource extends ExtendedObjectResource<Repossession> {
             //LOGGER.info("First Auctioneer Id = {} Asset id = {}",entity.getAuctioneerId(),entity.getAssetId());
             entity.setId(storage.addObject(entity, new Request(new Columns.Exclude("id", "attributes"))));
             storage.removeObject(AuctioneerAsset.class, new Request(new Condition.Equals("assetid", entity.getAssetId())));
+            Asset asset = new Asset();
+            asset.setIsRepossessed(1);
+            storage.updateObject(asset, new Request(
+                    new Columns.Include("isRepossessed"),
+                    new Condition.Equals("id", entity.getAssetId())));
             //permissionsService.unlink(LinkType.AUCTIONEER_ASSET, entity.getAuctioneerId(), entity.getAssetId());
             actionLogger.create(request, getUserId(), entity);
         return Response.ok(entity).build();

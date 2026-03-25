@@ -189,7 +189,7 @@ public class PositionResource extends BaseResource {
                 new Columns.All(),
                 new Condition.And(
                         new Condition.Equals("deviceid", deviceid),
-                        new Condition.Between("fixtime", startOfDay, endOfDay)
+                        new Condition.Between("usertime", startOfDay, endOfDay)
                 )
         ));
         //LOGGER.info("Start = {}, End = {}, device id = {}", startOfDay, endOfDay, deviceid);

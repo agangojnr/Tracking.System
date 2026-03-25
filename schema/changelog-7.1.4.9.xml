@@ -85,5 +85,14 @@
 
   </changeSet>
 
+
+  <changeSet id="add-isrepossessed-to-tc-assets" author="walter">
+    <addColumn tableName="tc_assets">
+      <column name="isrepossessed" type="INT" defaultValueNumeric="0">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
 </databaseChangeLog>
 

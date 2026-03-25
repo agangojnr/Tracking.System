@@ -22,6 +22,14 @@ public class Asset extends ExtendedModel {
         this.ownerName = ownerName;
     }
 
+    private int isRepossessed;
+    public int getIsRepossessed() {
+        return isRepossessed;
+    }
+    public void setIsRepossessed(int isRepossessed) {
+        this.isRepossessed = isRepossessed;
+    }
+
 //    private Long noofDevices;
 //    public Long getNoofDevices() {
 //        return noofDevices;
