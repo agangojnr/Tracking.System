@@ -537,6 +537,13 @@ public class DatabaseStorage extends Storage {
                     result.append(condition.getPivotColumn6a());
 
                     result.append(" WHERE ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn2());
+                    result.append(" = ");result.append("0");
+
+                    result.append(" AND ");
+
                     result.append(getStorageName(condition.getPivotClass6()));
                     result.append(".");
                     result.append(condition.getPivotColumn6b());

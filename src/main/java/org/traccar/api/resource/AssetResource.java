@@ -129,7 +129,7 @@ public class AssetResource extends SimpleObjectResource<Asset> {
                     new Request(
                             new Columns.Include("tc_assets.id",
                                     "tc_assets.assetname"),
-                            new Condition.GetAuctioneerAssetsUnlinked(Asset.class, "id", "assetname",
+                            new Condition.GetAuctioneerAssetsUnlinked(Asset.class, "id", "assetname", "isrepossessed",
                                     AssetDevice.class, "assetid", "deviceid",
                                     AuctioneerAsset.class, "auctioneerid", "assetid",
                                     ClientAsset.class, "clientid", "assetid",

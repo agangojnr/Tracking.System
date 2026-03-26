@@ -378,6 +378,7 @@ public interface Condition {
         private final Class<?> ownerClass;
         private final String ownerColumn;
         private final String ownerColumn1;
+        private final String ownerColumn2;
         private final Class<?> pivotClass1;
         private final String pivotColumn1a;
         private final String pivotColumn1b;
@@ -398,7 +399,7 @@ public interface Condition {
         private final String pivotColumn6b;
         private final Long searchValue;
         // Constructor
-        public GetAuctioneerAssetsUnlinked(Class<?> ownerClass, String ownerColumn, String ownerColumn1,
+        public GetAuctioneerAssetsUnlinked(Class<?> ownerClass, String ownerColumn, String ownerColumn1,String ownerColumn2,
                                    Class<?> pivotClass1, String pivotColumn1a, String pivotColumn1b,
                                    Class<?> pivotClass2, String pivotColumn2a, String pivotColumn2b,
                                    Class<?> pivotClass3, String pivotColumn3a, String pivotColumn3b,
@@ -427,11 +428,13 @@ public interface Condition {
             this.pivotColumn6b = pivotColumn6b;
             this.ownerColumn = ownerColumn;
             this.ownerColumn1 = ownerColumn1;
+            this.ownerColumn2 = ownerColumn2;
             this.searchValue = searchValue;
         }
         public Class<?> getOwnerClass() { return ownerClass; }
         public String getOwnerColumn() { return ownerColumn;}
         public String getOwnerColumn1() { return ownerColumn1;}
+        public String getOwnerColumn2() { return ownerColumn2;}
         public Class<?> getPivotClass1() { return pivotClass1; }
         public String getPivotColumn1a() { return pivotColumn1a;}
         public String getPivotColumn1b() { return pivotColumn1b;}
