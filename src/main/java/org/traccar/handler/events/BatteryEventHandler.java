@@ -29,22 +29,29 @@ public class BatteryEventHandler extends BaseEventHandler {
 
     @Override
     public void onPosition(Position position, Callback callback) {
+
         Device device = cacheManager.getObject(Device.class, position.getDeviceId());
 
         if (device == null || !PositionUtil.isLatest(cacheManager, position)) {
             return;
         }
 
-        // 🔋 Get battery from current position
-        Object batteryObj = position.getAttributes().get(Position.KEY_BATTERY_LEVEL);
+        // 🔋 Get battery voltage from position
+        Object batteryObj = position.getAttributes().get(Position.KEY_BATTERY);
 
         if (!(batteryObj instanceof Number)) {
             return;
         }
 
-        double newBattery = ((Number) batteryObj).doubleValue();
+        double voltage = ((Number) batteryObj).doubleValue();
 
-        // 🔍 Get last known battery from device attributes
+        // 🔢 Convert voltage to percentage
+        double percentage = ((voltage - 3.4) / (4.13 - 3.4)) * 100;
+
+        // Clamp between 0% and 100%
+        percentage = Math.max(0, Math.min(100, percentage));
+
+        // 🔍 Get last saved percentage
         Object oldBatteryObj = device.getAttributes().get(Position.KEY_BATTERY_LEVEL);
 
         double oldBattery = -1;
@@ -53,10 +60,11 @@ public class BatteryEventHandler extends BaseEventHandler {
         }
 
         // ✅ Only update if changed
-        if (newBattery != oldBattery) {
+        if (percentage != oldBattery) {
 
-            // Update device attributes
-            device.set(Position.KEY_BATTERY_LEVEL, newBattery);
+            // Save both voltage and percentage (optional but recommended)
+            device.set(Position.KEY_BATTERY, voltage);
+            device.set(Position.KEY_BATTERY_LEVEL, percentage);
 
             try {
                 storage.updateObject(device, new Request(
@@ -66,7 +74,9 @@ public class BatteryEventHandler extends BaseEventHandler {
             } catch (StorageException e) {
                 LOGGER.warn("Failed to update battery level", e);
             }
-            LOGGER.info("Battery updated for device {}: {}%", device.getId(), newBattery);
+
+            LOGGER.info("Battery updated for device {}: {}V ({}%)",
+                    device.getId(), voltage, percentage);
         }
     }
 }

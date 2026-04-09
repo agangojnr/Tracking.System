@@ -43,12 +43,21 @@
     <entry key='geocoder.key'>pk.d18f554c7c57fff1b15d0d7f9ac82985</entry>
 
 
+<!--    <entry key='mail.smtp.port'>587</entry>-->
+<!--    <entry key='mail.smtp.starttls.enable'>true</entry>-->
+<!--    <entry key='mail.smtp.host'>smtp.gmail.com</entry>-->
+<!--    <entry key='mail.smtp.from'>agangojnr@gmail.com</entry>-->
+<!--    <entry key='mail.smtp.auth'>true</entry>-->
+<!--    <entry key='mail.smtp.username'>agangojnr@gmail.com</entry>-->
+<!--    <entry key='mail.smtp.password'></entry>-->
+
+    <entry key='mail.smtp.host'>smtp.gmail.com</entry>
     <entry key='mail.smtp.port'>587</entry>
     <entry key='mail.smtp.starttls.enable'>true</entry>
-    <entry key='mail.smtp.host'>smtp.gmail.com</entry>
-    <entry key='mail.smtp.from'>agangojnr@gmail.com</entry>
     <entry key='mail.smtp.auth'>true</entry>
     <entry key='mail.smtp.username'>agangojnr@gmail.com</entry>
     <entry key='mail.smtp.password'>hvahnnfhbgvewkhj</entry>
+    <entry key='mail.smtp.from'>agangojnr@gmail.com</entry>
+    <entry key='mail.smtp.ssl.trust'>smtp.gmail.com</entry>
 
 </properties>

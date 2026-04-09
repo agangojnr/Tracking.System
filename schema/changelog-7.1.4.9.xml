@@ -94,5 +94,12 @@
     </addColumn>
   </changeSet>
 
+  <changeSet id="drop-isrepossessed-column-tc-devices" author="walter">
+    <preConditions onFail="MARK_RAN">
+      <columnExists tableName="tc_devices" columnName="isrepossessed"/>
+    </preConditions>
+    <dropColumn tableName="tc_devices" columnName="isrepossessed"/>
+  </changeSet>
+
 </databaseChangeLog>
 

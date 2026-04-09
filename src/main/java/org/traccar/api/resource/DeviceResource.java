@@ -85,17 +85,20 @@ public class DeviceResource extends BaseObjectResource<Device> {
     @Path("query")
     public Collection<Device> get(@QueryParam("clientId") Long clientId, @QueryParam("auctioneerId") Long auctioneerId,
                                   @QueryParam("subresellerId") Long subresellerId) throws Exception {
-        //LOGGER.info("Testing here - {}", defaultClientId);
         /*QUERYING LINKED DEVICES BY CLIENTID*/
         if (clientId != null && clientId > 0) {
             return storage.getJointObjects(
                     Device.class,
                     new Request(
                             new Columns.All(),
-                            new Condition.LinkedDevicesbyClient(Device.class, "id", AssetDevice.class, "deviceid", "assetid", ClientDevice.class, "clientid", "deviceid", clientId)
+                            new Condition.LinkedDevicesbyClient(Device.class, "id",
+                                    AssetDevice.class, "deviceid", "assetid",
+                                    ClientDevice.class, "clientid", "deviceid",
+                                    clientId)
                     )
             );
         }
+
 
         /* QUERYING OF LINKED DEVICES BY SUBRESELLER */
         else if (subresellerId != null && subresellerId > 0) {
@@ -182,7 +185,6 @@ public class DeviceResource extends BaseObjectResource<Device> {
     public Collection<Device> getUnlinkedDevices(@QueryParam("clientId") Long clientId) throws Exception {
         /* QUERYING UNLINKED DEVICES BY CLIENTID */
         if (clientId != null && clientId > 0) {
-
             return storage.getJointObjects(
                     Device.class,
                     new Request(
@@ -241,7 +243,7 @@ public class DeviceResource extends BaseObjectResource<Device> {
         //LOGGER.info("Inserted entity with ID: {}", clientId);
         if (validate(entity)) {
             if (getUserId() != ServiceAccountUser.ID) {
-                entity.setIsrepossessed(0L);
+
                 long deviceId = storage.addObject(entity, new Request(new Columns.Exclude("id")));
                 entity.setId(deviceId);
                 storage.addPermission(new Permission(User.class, getUserId(), baseClass, entity.getId()));

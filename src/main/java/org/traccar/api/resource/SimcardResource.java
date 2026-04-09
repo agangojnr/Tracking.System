@@ -114,6 +114,8 @@ public class SimcardResource extends ExtendedObjectResource<Simcard> {
 
         if(!validate(entity)){
             entity.setId(0);
+            String simcardnumber = entity.getPhonenumber().trim();
+            entity.setPhonenumber(simcardnumber);
             long simcardid = storage.addObject(entity, new Request(new Columns.Exclude("id")));
             //LOGGER.info("Checking for clientId: {}", resellerid);
             permissionsService.link(LinkType.RESELLER_SIMCARD, resellerid, simcardid);
