@@ -25,6 +25,7 @@ import org.traccar.storage.query.Request;
 
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -323,8 +324,40 @@ public class ClientResource extends ExtendedObjectResource<Client> {
                         new Condition.ClientsByResellerId(Client.class,"id", SubresellerClient.class,"subresellerid","clientid",ResellerSubreseller.class,"resellerid","subresellerid",resellerId)
                 )
         );
-
         return clients;
+    }
 
+    /* CREATION OF STOCK ON A RESELLER */
+    @Path("createstock/{resellerId}")
+    @POST
+    public Response createStock(Client entity,  @PathParam("resellerId") Long resellerId) throws Exception {
+        try{
+           /* Creation of stock subreseller */
+            Subreseller stockSubresellerEntity = new Subreseller();
+            stockSubresellerEntity.setId(0);
+            stockSubresellerEntity.setSubResellerName(""+resellerId+"");
+            stockSubresellerEntity.setAttributes(Map.of("action", "Stock subreseller creation"));
+            Long stocksubresellerId =storage.addObject(stockSubresellerEntity, new Request(new Columns.Exclude("id")));
+            stockSubresellerEntity.setId(stocksubresellerId);
+            permissionsService.link(LinkType.RESELLER_SUBRESELLER, resellerId, stocksubresellerId);
+            actionLogger.create(request, getUserId(), stockSubresellerEntity);
+
+           /* Creation of stock client */
+            Client stockclientEntity = new Client();
+            stockclientEntity.setId(0);
+            stockclientEntity.setClientName(""+stocksubresellerId+"");
+            stockclientEntity.setAttributes(Map.of("action", "Stock client creation"));
+            Long stockclientId =storage.addObject(stockclientEntity, new Request(new Columns.Exclude("id")));
+            stockclientEntity.setId(stockclientId);
+            permissionsService.link(LinkType.SUBRESELLER_CLIENT, stocksubresellerId, stockclientId);
+            actionLogger.create(request, getUserId(), stockclientEntity);
+
+            return Response.ok(stockclientEntity).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.CONFLICT)
+                    .entity("{\"error\":\"Stock client already created.\"}")
+                    .build();
+        }
+        //return null;
     }
 }
