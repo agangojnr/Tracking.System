@@ -83,6 +83,7 @@ public final class SmtpMailManager implements MailManager {
             copyStringProperty(properties, provider, Keys.MAIL_SMTP_PASSWORD);
             copyStringProperty(properties, provider, Keys.MAIL_SMTP_FROM);
             copyStringProperty(properties, provider, Keys.MAIL_SMTP_FROM_NAME);
+            copyBooleanProperty(properties, provider, Keys.MAIL_DEBUG);
 
             return properties;
         }

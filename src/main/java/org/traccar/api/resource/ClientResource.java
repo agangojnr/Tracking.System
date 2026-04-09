@@ -335,7 +335,7 @@ public class ClientResource extends ExtendedObjectResource<Client> {
            /* Creation of stock subreseller */
             Subreseller stockSubresellerEntity = new Subreseller();
             stockSubresellerEntity.setId(0);
-            stockSubresellerEntity.setSubResellerName(""+resellerId+"");
+            stockSubresellerEntity.setSubResellerName("reseller"+resellerId+"stock");
             stockSubresellerEntity.setAttributes(Map.of("action", "Stock subreseller creation"));
             Long stocksubresellerId =storage.addObject(stockSubresellerEntity, new Request(new Columns.Exclude("id")));
             stockSubresellerEntity.setId(stocksubresellerId);
@@ -345,7 +345,7 @@ public class ClientResource extends ExtendedObjectResource<Client> {
            /* Creation of stock client */
             Client stockclientEntity = new Client();
             stockclientEntity.setId(0);
-            stockclientEntity.setClientName(""+stocksubresellerId+"");
+            stockclientEntity.setClientName("subreseller"+stocksubresellerId+"stock");
             stockclientEntity.setAttributes(Map.of("action", "Stock client creation"));
             Long stockclientId =storage.addObject(stockclientEntity, new Request(new Columns.Exclude("id")));
             stockclientEntity.setId(stockclientId);

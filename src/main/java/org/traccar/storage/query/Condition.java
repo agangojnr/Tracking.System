@@ -1931,6 +1931,54 @@ public interface Condition {
 
     }
 
+    class GetDevicesinStock implements Condition {
+        private final Class<?> ownerClass;
+        private final String ownerColumn;
+        private final Class<?> pivotClass;
+        private final String pivotColumn1a;
+        private final String pivotColumn1b;
+        private final Class<?> pivotClass2;
+        private final String pivotColumn2a;
+        private final String pivotColumn2b;
+        private final Class<?> pivotClass3;
+        private final String pivotColumn3a;
+        private final String pivotColumn3b;
+        private final String value;
+
+        // Constructor
+        public GetDevicesinStock(Class<?> ownerClass, String ownerColumn,
+                             Class<?> pivotClass, String pivotColumn1a, String pivotColumn1b,
+                             Class<?> pivotClass2,String pivotColumn2a,String pivotColumn2b,
+                             Class<?> pivotClass3,String pivotColumn3a,String pivotColumn3b,
+                                 String value) {
+            this.ownerClass = ownerClass;
+            this.ownerColumn = ownerColumn;
+            this.pivotClass = pivotClass;
+            this.pivotColumn1a = pivotColumn1a;
+            this.pivotColumn1b = pivotColumn1b;
+            this.pivotClass2 = pivotClass2;
+            this.pivotColumn2a = pivotColumn2a;
+            this.pivotColumn2b = pivotColumn2b;
+            this.pivotClass3 = pivotClass3;
+            this.pivotColumn3a = pivotColumn3a;
+            this.pivotColumn3b = pivotColumn3b;
+            this.value = value;
+        }
+        public Class<?> getOwnerClass() { return ownerClass; }
+        public String getOwnerColumn() { return ownerColumn; }
+        public Class<?> getPivotClass() { return pivotClass; }
+        public String getPivotColumn1a() { return pivotColumn1a; }
+        public String getPivotColumn1b() { return pivotColumn1b; }
+        public Class<?> getPivotClass2() { return pivotClass2; }
+        public String getPivotColumn2a() { return pivotColumn2a; }
+        public String getPivotColumn2b() { return pivotColumn2b; }
+        public Class<?> getPivotClass3() { return pivotClass3; }
+        public String getPivotColumn3a() { return pivotColumn3a; }
+        public String getPivotColumn3b() { return pivotColumn3b; }
+        public String getValue() { return value; }
+
+    }
+
     class FiveJoinWhere1 implements Condition {
         private final Class<?> ownerClass;
         private final String ownerColumn;

@@ -127,7 +127,7 @@ public class DatabaseStorage extends Storage {
         query.append(" FROM ").append(getStorageName(clazz));
         //Here is the join conditions
         query.append(formatJoin(request.getCondition(),true));
-        //logger.info("SQL - {}", query);
+        logger.info("SQL - {}", query);
         //query.append(formatOrder(request.getOrder()));
 
         try {
@@ -2447,6 +2447,48 @@ public class DatabaseStorage extends Storage {
                         result.append(condition.getPivotColumn5());
                         result.append(" = ");result.append("'");
                         result.append(condition.getValue1());result.append("'");
+
+                }else if (genericCondition instanceof Condition.GetDevicesinStock condition){
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getOwnerClass()));
+                    result.append(".");
+                    result.append(condition.getOwnerColumn());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn1b());
+
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn1a());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn2b());
+
+                    result.append(" INNER JOIN ");
+                    result.append(getStorageName(condition.getPivotClass3()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass2()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn2a());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass3()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn3a());
+
+                    result.append(" WHERE ");
+                    result.append(getStorageName(condition.getPivotClass3()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn3b());
+                    result.append(" = ");
+                    result.append("'");
+                    result.append(condition.getValue());result.append("'");
 
                 }else if (genericCondition instanceof Condition.FiveJoinWhere1 condition){
                     result.append(" INNER JOIN ");

@@ -616,6 +616,20 @@ public class DeviceResource extends BaseObjectResource<Device> {
                         AssetDevice.class, "assetid", "deviceid",
                         assetId)));
     }
+
+
+    @GET
+    @Path("stock/{resellerid}")
+    public Collection<Device> getDevicesinStock(@PathParam("resellerid") Long resellerid) throws Exception{
+        String subresellername = "reseller"+resellerid+"stock";
+        return storage.getJointObjects(Device.class, new Request(
+                new Columns.All(),
+                new Condition.GetDevicesinStock(Device.class, "id",
+                        ClientDevice.class,"clientid", "deviceid",
+                        SubresellerClient.class, "subresellerid", "clientid",
+                        Subreseller.class, "id", "subresellername",
+                        subresellername)));
+    }
 }
 
 
