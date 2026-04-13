@@ -230,6 +230,65 @@ public interface Condition {
         public Long getSearchValue() { return searchValue; }
     }
 
+    class GetHighRiskUnitsperSubreseller implements Condition {
+        private final Class<?> ownerClass;
+        private final String ownerColumna;
+        private final String ownerColumnb;
+        private final Class<?> pivotClass1;
+        private final String pivotColumn1a;
+        private final String pivotColumn1b;
+        private final Class<?> pivotClass2;
+        private final String pivotColumn2;
+        private final String pivotColumn2a;
+        private final Class<?> pivotClass3;
+        private final String pivotColumn3a;
+        private final String pivotColumn3b;
+        private final Class<?> pivotClass4;
+        private final String pivotColumn4a;
+        private final String pivotColumn4b;
+        private final Long searchValue;
+        // Constructor
+        public GetHighRiskUnitsperSubreseller(Class<?> ownerClass, String ownerColumna, String ownerColumnb,
+                                         Class<?> pivotClass1, String pivotColumn1a, String pivotColumn1b,
+                                         Class<?> pivotClass2, String pivotColumn2,String pivotColumn2a,
+                                         Class<?> pivotClass3, String pivotColumn3a, String pivotColumn3b,
+                                         Class<?> pivotClass4, String pivotColumn4a, String pivotColumn4b,
+                                         Long searchValue) {
+            this.ownerClass = ownerClass;
+            this.ownerColumna = ownerColumna;
+            this.ownerColumnb = ownerColumnb;
+            this.pivotClass1 = pivotClass1;
+            this.pivotColumn1a = pivotColumn1a;
+            this.pivotColumn1b = pivotColumn1b;
+            this.pivotClass2 = pivotClass2;
+            this.pivotColumn2 = pivotColumn2;
+            this.pivotColumn2a = pivotColumn2a;
+            this.pivotClass3 = pivotClass3;
+            this.pivotColumn3a = pivotColumn3a;
+            this.pivotColumn3b = pivotColumn3b;
+            this.pivotClass4 = pivotClass4;
+            this.pivotColumn4a = pivotColumn4a;
+            this.pivotColumn4b = pivotColumn4b;
+            this.searchValue = searchValue;
+        }
+        public Class<?> getOwnerClass() { return ownerClass; }
+        public String getOwnerColumna() { return ownerColumna; }
+        public String getOwnerColumnb() { return ownerColumnb; }
+        public Class<?> getPivotClass1() { return pivotClass1; }
+        public String getPivotColumn1a() { return pivotColumn1a; }
+        public String getPivotColumn1b() { return pivotColumn1b; }
+        public Class<?> getPivotClass2() { return pivotClass2; }
+        public String getPivotColumn2() { return pivotColumn2; }
+        public String getPivotColumn2a() { return pivotColumn2a; }
+        public Class<?> getPivotClass3() { return pivotClass3; }
+        public String getPivotColumn3a() { return pivotColumn3a; }
+        public String getPivotColumn3b() { return pivotColumn3b; }
+        public Class<?> getPivotClass4() { return pivotClass4; }
+        public String getPivotColumn4a() { return pivotColumn4a; }
+        public String getPivotColumn4b() { return pivotColumn4b; }
+        public Long getSearchValue() { return searchValue; }
+    }
+
     class GetCommandDisplay implements Condition {
         private final Class<?> ownerClass;
         private final String ownerColumn1;

@@ -159,7 +159,7 @@ public class SimcardResource extends ExtendedObjectResource<Simcard> {
     }
 
     public boolean validate(Simcard entity) throws StorageException {
-        String phonenumber = entity.getPhonenumber();
+        String phonenumber = entity.getPhonenumber().trim();
         if (phonenumber == null) {
             throw new IllegalArgumentException("Phonenumber cannot be null");
         }

@@ -222,4 +222,26 @@ public class AssetResource extends SimpleObjectResource<Asset> {
         return Response.ok(asset.getIsRepossessed()).build();
     }
 
+
+    /* QUERYING OF HIGH RISK UNITS */
+    @Path("highriskassets/{subresellerid}")
+    @GET
+    public Collection<HighRiskAsset> getHighriskAssets(@PathParam("subresellerid") Long subresellerid) throws Exception{
+        if(subresellerid != null && subresellerid > 0){
+            return storage.getJointObjects(HighRiskAsset.class,
+                    new Request(
+                            new Columns.Include(
+                                    "assetname AS assetname",
+                                    "uniqueid AS uniqueid"
+                            ),
+                            new Condition.GetHighRiskUnitsperSubreseller(Asset.class, "id", "assetname",
+                                    AssetDevice.class, "assetid", "deviceid",
+                                    Device.class,"id", "uniqueid",
+                                    ClientAsset.class, "clientid", "assetid",
+                                    SubresellerClient.class, "subresellerid", "clientid",
+                                    subresellerid)));
+        }
+        return null;
+    }
+
 }
