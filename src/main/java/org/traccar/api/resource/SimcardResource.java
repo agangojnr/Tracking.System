@@ -166,9 +166,8 @@ public class SimcardResource extends ExtendedObjectResource<Simcard> {
 
         Simcard simcard = storage.getObject(Simcard.class, new Request(
                 new Columns.All(),
-                new Condition.And(
-                        new Condition.Equals("phonenumber", phonenumber),
-                        new Condition.Permission(User.class, getUserId(), Simcard.class))));
+                        new Condition.Equals("phonenumber", phonenumber)
+                ));
 
         return simcard != null;
     }
