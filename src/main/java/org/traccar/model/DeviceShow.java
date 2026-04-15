@@ -6,12 +6,12 @@ import org.traccar.storage.StorageName;
 import java.util.Date;
 
 @StorageName("tc_devices")
-public class DevicesOnClient {;
+public class DeviceShow {
+    private Date actiontime;
     private String deviceName;
-    private String createdat;
     private long id;
     private String imei;
-    private String deviceModel;
+    private String model;
     private String simcardNo;
     private Date lastReportDate;
     private String status;
@@ -26,11 +26,11 @@ public class DevicesOnClient {;
         this.id = id;
     }
 
-    public String getCreatedAt() {
-        return createdat;
+    public Date getActionTime() {
+        return actiontime;
     }
-    public void setCreatedAt(String createdat) {
-        this.createdat = createdat;
+    public void setActionTime(Date actiontime) {
+        this.actiontime = actiontime;
     }
 
     public String getImei() {
@@ -47,11 +47,11 @@ public class DevicesOnClient {;
         this.deviceName = deviceName;
     }
 
-    public String getDeviceModel() {
-        return deviceModel;
+    public String getModel() {
+        return model;
     }
-    public void setDeviceModel(String deviceModel) {
-        this.deviceModel = deviceModel;
+    public void setModel(String model) {
+        this.model = model;
     }
 
     public String getSimcardNo() {

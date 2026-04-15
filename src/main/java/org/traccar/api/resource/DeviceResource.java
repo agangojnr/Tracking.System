@@ -115,8 +115,8 @@ public class DeviceResource extends BaseObjectResource<Device> {
                     new Request(
                             new Columns.All(),
                             new Condition.LinkedDevicesbyAuctioneer(Device.class, "id",
-                                     AssetDevice.class, "deviceid", "assetid",
-                                     AuctioneerAsset.class, "auctioneerid", "deviceid", auctioneerId)
+                                    AssetDevice.class, "deviceid", "assetid",
+                                    AuctioneerAsset.class, "auctioneerid", "deviceid", auctioneerId)
                     )
             );
         }
@@ -148,6 +148,7 @@ public class DeviceResource extends BaseObjectResource<Device> {
     @GET
     public Stream<DevicesOnClient> get(@QueryParam("clientId") Long clientId)
             throws StorageException {
+        String objecttype = "device"; String actiontype = "create";
 
         if (clientId == null || clientId <= 0) {
             return Stream.empty();
@@ -157,6 +158,7 @@ public class DeviceResource extends BaseObjectResource<Device> {
                 new Request(
                         new Columns.Include(
                                 "tc_devices.id AS id",
+                                "tc_actions.actiontime AS createdat",
                                 "tc_assets.assetname AS deviceName",
                                 "tc_devices.uniqueid AS imei",
                                 "tc_simcards.phonenumber AS simcardNo",
@@ -172,7 +174,8 @@ public class DeviceResource extends BaseObjectResource<Device> {
                                 Simcard.class, "id",
                                 ClientDevice.class, "clientid", "deviceid",
                                 Devicetype.class, "id",
-                                clientId
+                                Action.class, "objectid", "objecttype", "actiontype",
+                                objecttype, actiontype, clientId
                         )
                 )
         );

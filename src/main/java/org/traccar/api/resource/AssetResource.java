@@ -100,9 +100,35 @@ public class AssetResource extends SimpleObjectResource<Asset> {
         }else if(userId != null && userId > 0){
             conditions.add(new Condition.Permission(User.class, userId, Asset.class).excludeGroups());
         }
+
         return storage.getObjects(baseClass, new Request(
                 new Columns.All(), Condition.merge(conditions), new Order("assetname")));
     }
+
+    @GET
+    @Path("all")
+    public Collection<AssetView> getAssetswithCreateDate(@QueryParam("clientid") Long clientid) throws Exception{
+        if(clientid != null && clientid > 0){
+            LOGGER.info("Testing assets date query");
+            String objecttype = "asset"; String actiontype = "create";
+            return storage.getJointObjects(AssetView.class,
+                    new Request(
+                            new Columns.Include(
+                                    "tc_assets.id AS id",
+                                    "tc_actions.actiontime AS createdat",
+                                    "tc_assets.assetname AS assetname",
+                                    "tc_assettypes.name AS assetType",
+                                    "tc_assets.isrepossessed AS isRepossessed"
+                            ),
+                            new Condition.GetAssetwithCreatedate(Asset.class, "id", "assettypeid",
+                                    ClientAsset.class, "clientid", "assetid",
+                                    Action.class, "objectid", "objecttype", "actiontype",
+                                    Assettype.class, "id", "name",
+                                    objecttype, actiontype, clientid)));
+        }
+        return null;
+    }
+
 
     /* GET ASSETS ALREADY LINKED TO AUCTIONEERS */
     @Path("auctioneers")
