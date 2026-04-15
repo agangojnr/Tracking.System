@@ -234,7 +234,8 @@ public class StockResource extends BaseObjectResource<Device> {
                                     "uniqueid AS imei",
                                     "phonenumber AS simcardNo",
                                     "model AS deviceModel",
-                                    "status AS status"
+                                    "status AS status",
+                                    "lastUpdate AS lastUpdate"
                             ),
                             new Condition.GetAllDevices(Device.class,"id", "devicetypeid",
                                     ClientDevice.class,"clientid","deviceid",
@@ -264,7 +265,8 @@ public class StockResource extends BaseObjectResource<Device> {
                                     "uniqueid AS imei",
                                     "phonenumber AS simcardNo",
                                     "model AS deviceModel",
-                                    "status AS status"
+                                    "status AS status",
+                                    "lastUpdate AS lastUpdate"
                             ),
                             new Condition.GetResellerDevices(Device.class,"id", "devicetypeid", ClientDevice.class,"clientid","deviceid", Client.class,"id", SubresellerClient.class, "subresellerid", "clientid", Subreseller.class, "id", ResellerSubreseller.class, "resellerid", "subresellerid", Reseller.class, "id", Devicetype.class, "id", DeviceSimcard.class,"deviceid", "simcardid", Simcard.class,"id", resellerId)
                     )
@@ -295,7 +297,8 @@ public class StockResource extends BaseObjectResource<Device> {
                                     "uniqueid AS imei",
                                     "phonenumber AS simcardNo",
                                     "model AS deviceModel",
-                                    "status AS status"
+                                    "status AS status",
+                                    "lastUpdate AS lastUpdate"
                             ),
                             new Condition.NineJoin(Device.class,"id","devicetypeid",
                                     AssetDevice.class,"deviceid",
@@ -325,7 +328,8 @@ public class StockResource extends BaseObjectResource<Device> {
                                     "uniqueid AS imei",
                                     "phonenumber AS simcardNo",
                                     "model AS deviceModel",
-                                    "status AS status"
+                                    "status AS status",
+                                    "lastUpdate AS lastUpdate"
                                     ),
                             new Condition.SixJoinWhere(Device.class,"id","devicetypeid", AssetDevice.class,"deviceid", ClientDevice.class,"clientid", "deviceid", Client.class,"id", SubresellerClient.class, "subresellerid",  "clientid", Subreseller.class, "id", ResellerSubreseller.class, "subresellerid", DeviceSimcard.class, "deviceid","simcardid", Simcard.class, "id", Devicetype.class, "id", resellerId)
                             //new Condition.ThreeJoinWhere(Device.class,"id", DeviceAsset.class,"simcardid","simcardid",ResellerSimcard.class,"simcardid","resellerid",resellerId)
@@ -360,7 +364,8 @@ public class StockResource extends BaseObjectResource<Device> {
                                     "uniqueid AS imei",
                                     "phonenumber AS simcardNo",
                                     "model AS deviceModel",
-                                    "status AS status"
+                                    "status AS status",
+                                    "lastUpdate AS lastUpdate"
                             ),
                             //new Condition.FiveJoinWhere(Device.class,"id", DeviceAsset.class,"deviceid", "clientid", ClientDevice.class,  "subresellerid", SubresellerClient.class, "subresellerid", ResellerSubreseller.class, "resellerid", "resellerid", resellerId)
                             new Condition.GetAllUnlinkedDevices(Device.class,"id","devicetypeid",
@@ -391,7 +396,8 @@ public class StockResource extends BaseObjectResource<Device> {
                                     "uniqueid AS imei",
                                     "phonenumber AS simcardNo",
                                     "model AS deviceModel",
-                                    "status AS status"
+                                    "status AS status",
+                                    "lastUpdate AS lastUpdate"
                             ),
                             new Condition.GetResellerUnlinkedDevices(Device.class,"id","devicetypeid",
                                     AssetDevice.class,"deviceid",

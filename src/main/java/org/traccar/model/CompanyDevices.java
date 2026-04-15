@@ -15,7 +15,7 @@ public class CompanyDevices {
     private String imei;
     private String deviceModel;
     private String simcardNo;
-    private Date lastReportDate;
+    private Date lastUpdate;
     private String status;
     private Date expirationTime;
 
@@ -84,11 +84,11 @@ public class CompanyDevices {
         this.status = status;
     }
 
-    public Date lastReportDate() {
-        return lastReportDate;
+    public Date getLastUpdate() {
+        return lastUpdate;
     }
-    public void setLastReportDate(Date lastReportDate) {
-        this.lastReportDate = lastReportDate;
+    public void setLastUpdate(Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 
     public Date getExpirationTime() {

@@ -232,7 +232,8 @@ public class AssetResource extends SimpleObjectResource<Asset> {
                     new Request(
                             new Columns.Include(
                                     "assetname AS assetname",
-                                    "uniqueid AS uniqueid"
+                                    "uniqueid AS uniqueid",
+                                    "status AS status"
                             ),
                             new Condition.GetHighRiskUnitsperSubreseller(Asset.class, "id", "assetname",
                                     AssetDevice.class, "assetid", "deviceid",
