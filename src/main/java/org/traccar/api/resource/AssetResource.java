@@ -109,7 +109,7 @@ public class AssetResource extends SimpleObjectResource<Asset> {
     @Path("all")
     public Collection<AssetView> getAssetswithCreateDate(@QueryParam("clientid") Long clientid) throws Exception{
         if(clientid != null && clientid > 0){
-            LOGGER.info("Testing assets date query");
+            //LOGGER.info("Testing assets date query");
             String objecttype = "asset"; String actiontype = "create";
             return storage.getJointObjects(AssetView.class,
                     new Request(

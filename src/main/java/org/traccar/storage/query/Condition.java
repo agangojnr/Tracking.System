@@ -1165,6 +1165,62 @@ public interface Condition {
         public long getValue() { return value; }
     }
 
+    class GetSimcardsResellerwithDate implements Condition {
+        private final Class<?> ownerClass;
+        private final String ownerColumn;
+        private final String ownerColumn1;
+        private final Class<?> pivotClass;
+        private final String pivotColumn;
+        private final Class<?> pivotClass1;
+        private final String pivotColumn1a;
+        private final String pivotColumn1b;
+        private final Class<?> pivotClass2;
+        private final String pivotColumn2a;
+        private final String pivotColumn2b;
+        private final String pivotColumn2c;
+        private final String searchValue1;
+        private final String searchValue2;
+        private final long searchValue3;
+
+        // Constructor
+        public GetSimcardsResellerwithDate(Class<?> ownerClass, String ownerColumn, String ownerColumn1,
+                               Class<?> pivotClass, String pivotColumn,
+                               Class<?> pivotClass1, String pivotColumn1a, String pivotColumn1b,
+                               Class<?> pivotClass2, String pivotColumn2a, String pivotColumn2b, String pivotColumn2c,
+                                          String searchValue1, String searchValue2,  long searchValue3) {
+            this.ownerClass = ownerClass;
+            this.ownerColumn = ownerColumn;
+            this.ownerColumn1 = ownerColumn1;
+            this.pivotClass = pivotClass;
+            this.pivotColumn = pivotColumn;
+            this.pivotClass1 = pivotClass1;
+            this.pivotColumn1a = pivotColumn1a;
+            this.pivotColumn1b = pivotColumn1b;
+            this.pivotClass2 = pivotClass2;
+            this.pivotColumn2a = pivotColumn2a;
+            this.pivotColumn2b = pivotColumn2b;
+            this.pivotColumn2c = pivotColumn2c;
+            this.searchValue1 = searchValue1;
+            this.searchValue2 = searchValue2;
+            this.searchValue3 = searchValue3;
+        }
+        public Class<?> getOwnerClass() { return ownerClass; }
+        public String getOwnerColumn() { return ownerColumn; }
+        public String getOwnerColumn1() { return ownerColumn1; }
+        public Class<?> getPivotClass() { return pivotClass; }
+        public String getPivotColumn() { return pivotColumn; }
+        public Class<?> getPivotClass1() { return pivotClass1; }
+        public String getPivotColumn1a() { return pivotColumn1a; }
+        public String getPivotColumn1b() { return pivotColumn1b; }
+        public Class<?> getPivotClass2() { return pivotClass2; }
+        public String getPivotColumn2a() { return pivotColumn2a; }
+        public String getPivotColumn2b() { return pivotColumn2b; }
+        public String getPivotColumn2c() { return pivotColumn2c; }
+        public String getSearchValue1() { return searchValue1; }
+        public String getSearchValue2() { return searchValue2; }
+        public long getSearchValue3() { return searchValue3; }
+    }
+
     class TwoJoinWhereSim implements Condition {
         private final Class<?> ownerClass;
         private final String ownerColumn;

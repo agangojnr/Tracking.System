@@ -88,18 +88,23 @@ public class SimcardResource extends ExtendedObjectResource<Simcard> {
     @GET
     @Path("reseller")
     public Collection<SimcardList> getResellerSimcards(@QueryParam("resellerid") Long resellerid) throws StorageException {
+        String objecttype = "simcard"; String actiontype = "create";
+        LOGGER.info("Testing simcard date");
         return storage.getJointObjects(
                 SimcardList.class,
                 new Request(
                         new Columns.Include("tc_simcards.id AS id",
+                                "tc_actions.actiontime AS createdat",
                                 "tc_simcards.phonenumber AS phonenumber",
                                 "tc_simcards.iccid AS iccid",
                                 "tc_networkproviders.networkprovidername AS networkprovidername"
                         ),
-                        new Condition.TwoJoinWhereSim(
+                        new Condition.GetSimcardsResellerwithDate(
                                 Simcard.class,"id","networkproviderid",
                                 Networkprovider.class,"id",
-                                ResellerSimcard.class, "resellerid", "simcardid", resellerid)
+                                ResellerSimcard.class, "resellerid", "simcardid",
+                                Action.class, "objectid", "objecttype", "actiontype",
+                                objecttype, actiontype, resellerid)
                 )
         );
     }
