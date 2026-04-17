@@ -15,6 +15,7 @@
  */
 package org.traccar.api.resource;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.ws.rs.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -176,6 +177,7 @@ public class PositionResource extends BaseResource {
     }
 
     @Path("telemetry")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Africa/Nairobi")
     @GET
     public Collection<Position> get(@QueryParam("deviceid") long deviceid, @QueryParam("querydate") String querydate) throws StorageException {
         // Parse date
@@ -192,6 +194,9 @@ public class PositionResource extends BaseResource {
                         new Condition.Between("usertime", startOfDay, endOfDay)
                 )
         ));
+        for (Position p : telemetry) {
+            p.setUserTime(new Date(p.getUserTime().getTime() + (3 * 60 * 60 * 1000)));
+        }
         //LOGGER.info("Start = {}, End = {}, device id = {}", startOfDay, endOfDay, deviceid);
         if (telemetry == null) {
             throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).build());
