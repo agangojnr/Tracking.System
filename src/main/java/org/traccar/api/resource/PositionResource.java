@@ -21,10 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.traccar.api.BaseResource;
 import org.traccar.helper.model.PositionUtil;
-import org.traccar.model.Device;
-import org.traccar.model.Event;
-import org.traccar.model.Position;
-import org.traccar.model.UserRestrictions;
+import org.traccar.model.*;
 import org.traccar.reports.CsvExportProvider;
 import org.traccar.reports.GpxExportProvider;
 import org.traccar.reports.KmlExportProvider;
@@ -177,7 +174,6 @@ public class PositionResource extends BaseResource {
     }
 
     @Path("telemetry")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Africa/Nairobi")
     @GET
     public Collection<Position> get(@QueryParam("deviceid") long deviceid, @QueryParam("querydate") String querydate) throws StorageException {
         // Parse date
@@ -197,6 +193,44 @@ public class PositionResource extends BaseResource {
         for (Position p : telemetry) {
             p.setUserTime(new Date(p.getUserTime().getTime() + (3 * 60 * 60 * 1000)));
         }
+        //LOGGER.info("Start = {}, End = {}, device id = {}", startOfDay, endOfDay, deviceid);
+        if (telemetry == null) {
+            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).build());
+        }
+        //permissionsService.checkPermission(Device.class, getUserId(), event.getDeviceId());
+        return telemetry;
+    }
+
+    @Path("telemetrydata")
+    @GET
+    public Collection<Telemetrydata> getTele(@QueryParam("deviceid") long deviceid, @QueryParam("querydate") String querydate) throws StorageException {
+        // Parse date
+        LocalDate localDate = LocalDate.parse(querydate);
+        // Start of day (00:00:00)
+        Timestamp startOfDay = Timestamp.valueOf(localDate.atStartOfDay());
+        // End of day (23:59:59.999999999)
+        Timestamp endOfDay = Timestamp.valueOf(localDate.plusDays(1).atStartOfDay().minusNanos(1));
+
+        Collection<Telemetrydata> telemetry = storage.getObjects(Telemetrydata.class, new Request(
+                new Columns.Include(
+                        "userTime AS userTime",
+                        "deviceTime AS deviceTime",
+                        "latitude AS latitude",
+                        "longitude AS longitude",
+                        "altitude AS altitude",
+                        "JSON_VALUE(attributes, '$.odometer') AS odometer",
+                        "JSON_VALUE(attributes, '$.ignition') AS ignition",
+                        "speed AS speed",
+                        "course AS course",
+                        "address AS address",
+                        "attributes AS attributes"
+                ),
+                new Condition.And(
+                        new Condition.Equals("deviceid", deviceid),
+                        new Condition.Between("usertime", startOfDay, endOfDay)
+                )
+        ));
+
         //LOGGER.info("Start = {}, End = {}, device id = {}", startOfDay, endOfDay, deviceid);
         if (telemetry == null) {
             throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).build());
