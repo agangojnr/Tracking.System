@@ -118,7 +118,9 @@ public class AssetResource extends SimpleObjectResource<Asset> {
                                     "tc_actions.actiontime AS createdat",
                                     "tc_assets.assetname AS assetname",
                                     "tc_assettypes.name AS assetType",
-                                    "tc_assets.isrepossessed AS isRepossessed"
+                                    "tc_assets.isrepossessed AS isRepossessed",
+                                    "tc_assets.assetModel AS assetModel",
+                                    "tc_assets.clientContact AS clientContact"
                             ),
                             new Condition.GetAssetwithCreatedate(Asset.class, "id", "assettypeid",
                                     ClientAsset.class, "clientid", "assetid",

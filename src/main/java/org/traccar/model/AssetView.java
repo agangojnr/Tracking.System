@@ -9,6 +9,8 @@ public class AssetView extends ExtendedModel {
     private String createdat;
     private String assetname;
     private String assetType;
+    private String clientContact;
+    private String assetModel;
 
     public String getAssetName() {
         return assetname;
@@ -37,5 +39,19 @@ public class AssetView extends ExtendedModel {
     }
     public void setIsRepossessed(int isRepossessed) {
         this.isRepossessed = isRepossessed;
+    }
+
+    public String getClientContact() {
+        return clientContact;
+    }
+    public void setClientContact(String clientContact) {
+        this.clientContact = clientContact;
+    }
+
+    public String getAssetModel() {
+        return assetModel;
+    }
+    public void setAssetModel(String assetModel) {
+        this.assetModel = assetModel;
     }
 }

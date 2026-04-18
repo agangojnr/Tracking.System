@@ -30,20 +30,33 @@ public class Asset extends ExtendedModel {
         this.isRepossessed = isRepossessed;
     }
 
-//    private Long noofDevices;
-//    public Long getNoofDevices() {
-//        return noofDevices;
-//    }
-//    public void setNoofDevices(Long noofDevices) {
-//        this.noofDevices = noofDevices;
-//    }
-
     private String assetName;
     public String getAssetName() {
         return assetName;
     }
     public void setAssetName(String assetName) {
         this.assetName = assetName;
+    }
+
+    private String clientContact;
+
+    public String getClientContact() {
+        return clientContact;
+    }
+
+    public void setClientContact(String clientContact) {
+        if (clientContact == null || !clientContact.matches("\\d{10}")) {
+            throw new IllegalArgumentException("Client contact must be exactly 10 digits");
+        }
+        this.clientContact = clientContact;
+    }
+
+    private String assetModel;
+    public String getAssetModel() {
+        return assetModel;
+    }
+    public void setAssetModel(String assetModel) {
+        this.assetModel = assetModel;
     }
 
     private Long assettypeid;
