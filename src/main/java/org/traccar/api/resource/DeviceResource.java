@@ -633,6 +633,18 @@ public class DeviceResource extends BaseObjectResource<Device> {
                         Subreseller.class, "id", "subresellername",
                         subresellername)));
     }
+
+
+    /* GETTING DEVICE STATUS BY IMEI */
+    @GET
+    @Path("status")
+    public DeviceStatus getDeviceStatus(@QueryParam("imei") long imei
+    ) throws Exception{
+        //LOGGER.info("Testing auctioneer id = {}", auctioneerid);
+        return storage.getObject(DeviceStatus.class, new Request(
+                new Columns.Include("status"),
+                new Condition.Equals("uniqueid", imei)));
+    }
 }
 
 
