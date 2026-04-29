@@ -360,4 +360,19 @@ public class ClientResource extends ExtendedObjectResource<Client> {
         }
         //return null;
     }
+
+    /* GET CLIENTSTOCK ON A RESELLER */
+    @GET
+    @Path("resellerstock")
+    public Collection<Client> getResellerStock(@QueryParam("resellerid") Long resellerid) throws StorageException {
+        String clientname = "reseller"+resellerid+"stock";
+        LOGGER.info("Group is 1 or less - groups");
+        return storage.getObjects(
+                Client.class,
+                new Request(
+                        new Columns.All(),
+                        new Condition.Equals("clientname", clientname)
+                )
+        );
+    }
 }
