@@ -14,6 +14,7 @@ import org.traccar.api.ExtendedObjectResource;
 import org.traccar.api.security.PermissionsService;
 import org.traccar.api.security.ServiceAccountUser;
 import org.traccar.helper.LogAction;
+import org.traccar.helper.UniqueIdentifierGenerator;
 import org.traccar.model.*;
 import org.traccar.session.ConnectionManager;
 import org.traccar.session.cache.CacheManager;
@@ -42,6 +43,9 @@ public class ClientResource extends ExtendedObjectResource<Client> {
 
     @Inject
     private LogAction actionLogger;
+
+    @Inject
+    private UniqueIdentifierGenerator uniqueIdentifierGenerator;
 
     @Inject
     private ConnectionManager connectionManager;
@@ -154,6 +158,7 @@ public class ClientResource extends ExtendedObjectResource<Client> {
 
         if(validate(entity)){
             entity.setId(0);
+            entity.setUniqueIdentifier(uniqueIdentifierGenerator.generate());
             long clientId = storage.addObject(entity, new Request(new Columns.Exclude("id")));
             //LOGGER.info("Checking for clientId: {}", clientId);
             permissionsService.link(LinkType.SUBRESELLER_CLIENT, subresellerId, clientId);

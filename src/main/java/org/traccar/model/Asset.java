@@ -67,4 +67,13 @@ public class Asset extends ExtendedModel {
         this.assettypeid = assettypeid;
     }
 
+    private String uniqueIdentifier;
+
+    public String getUniqueIdentifier() {
+        return uniqueIdentifier;
+    }
+    public void setUniqueIdentifier(String uniqueIdentifier) {
+        this.uniqueIdentifier = uniqueIdentifier;
+    }
+
 }

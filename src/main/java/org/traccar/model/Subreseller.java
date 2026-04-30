@@ -11,8 +11,16 @@ public class Subreseller extends ExtendedModel {
     public String getSubResellerName() {
         return subResellerName;
     }
-
     public void setSubResellerName(String subResellerName) {
         this.subResellerName = subResellerName;
+    }
+
+    private String uniqueIdentifier;
+
+    public String getUniqueIdentifier() {
+        return uniqueIdentifier;
+    }
+    public void setUniqueIdentifier(String uniqueIdentifier) {
+        this.uniqueIdentifier = uniqueIdentifier;
     }
 }

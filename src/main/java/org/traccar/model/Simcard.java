@@ -7,11 +7,18 @@ public class Simcard extends ExtendedModel{
     private String phonenumber;
     private String iccid;
     private String networkproviderid;
+    private String uniqueIdentifier;
+
+    public String getUniqueIdentifier() {
+        return uniqueIdentifier;
+    }
+    public void setUniqueIdentifier(String uniqueIdentifier) {
+        this.uniqueIdentifier = uniqueIdentifier;
+    }
 
     public String getPhonenumber() {
         return phonenumber;
     }
-
     public void setPhonenumber(String phonenumber) {
         this.phonenumber = phonenumber;
     }
@@ -27,7 +34,6 @@ public class Simcard extends ExtendedModel{
     public String getNetworkproviderid() {
         return networkproviderid;
     }
-
     public void setNetworkproviderid(String networkproviderid) {
         this.networkproviderid = networkproviderid;
     }

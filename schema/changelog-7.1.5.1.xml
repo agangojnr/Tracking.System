@@ -1,0 +1,79 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+    <changeSet id="add-uniqueidentifier-filtered-index" author="walter">
+
+        <addColumn tableName="tc_simcards">
+            <column name="uniqueidentifier" type="varchar(20)"/>
+        </addColumn>
+
+        <sql>
+            CREATE UNIQUE INDEX uk_tc_simcards_uniqueidentifier
+            ON tc_simcards (uniqueidentifier)
+            WHERE uniqueidentifier IS NOT NULL;
+        </sql>
+
+    </changeSet>
+
+    <changeSet id="add-uniqueidentifier-filtered-index-to-tc-devices" author="walter">
+
+        <addColumn tableName="tc_devices">
+            <column name="uniqueidentifier" type="varchar(20)"/>
+        </addColumn>
+
+        <sql>
+            CREATE UNIQUE INDEX uk_tc_devices_uniqueidentifier
+            ON tc_devices (uniqueidentifier)
+            WHERE uniqueidentifier IS NOT NULL;
+        </sql>
+
+    </changeSet>
+
+    <changeSet id="add-uniqueidentifier-filtered-index-to-tc-assets" author="walter">
+
+        <addColumn tableName="tc_assets">
+            <column name="uniqueidentifier" type="varchar(20)"/>
+        </addColumn>
+
+        <sql>
+            CREATE UNIQUE INDEX uk_tc_assets_uniqueidentifier
+            ON tc_assets (uniqueidentifier)
+            WHERE uniqueidentifier IS NOT NULL;
+        </sql>
+
+    </changeSet>
+
+    <changeSet id="add-uniqueidentifier-filtered-index-to-tc-clients" author="walter">
+
+        <addColumn tableName="tc_clients">
+            <column name="uniqueidentifier" type="varchar(20)"/>
+        </addColumn>
+
+        <sql>
+            CREATE UNIQUE INDEX uk_tc_clients_uniqueidentifier
+            ON tc_clients (uniqueidentifier)
+            WHERE uniqueidentifier IS NOT NULL;
+        </sql>
+
+    </changeSet>
+
+    <changeSet id="add-uniqueidentifier-filtered-index-to-tc-subresellers" author="walter">
+
+        <addColumn tableName="tc_subresellers">
+            <column name="uniqueidentifier" type="varchar(20)"/>
+        </addColumn>
+
+        <sql>
+            CREATE UNIQUE INDEX uk_tc_subresellers_uniqueidentifier
+            ON tc_subresellers (uniqueidentifier)
+            WHERE uniqueidentifier IS NOT NULL;
+        </sql>
+
+    </changeSet>
+
+</databaseChangeLog>
+

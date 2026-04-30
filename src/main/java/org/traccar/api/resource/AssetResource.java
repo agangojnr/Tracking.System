@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.traccar.api.SimpleObjectResource;
 import org.traccar.api.security.PermissionsService;
 import org.traccar.helper.LogAction;
+import org.traccar.helper.UniqueIdentifierGenerator;
 import org.traccar.model.*;
 import org.traccar.session.ConnectionManager;
 import org.traccar.session.cache.CacheManager;
@@ -30,6 +31,9 @@ public class AssetResource extends SimpleObjectResource<Asset> {
 
     @Inject
     private LogAction actionLogger;
+
+    @Inject
+    private UniqueIdentifierGenerator uniqueIdentifierGenerator;
 
     @Inject
     private CacheManager cacheManager;
@@ -55,6 +59,7 @@ public class AssetResource extends SimpleObjectResource<Asset> {
             String assetName = entity.getRegNo() + " ~ " + entity.getOwnerName();
             entity.setAssetName(assetName);
             if (validate(entity)) {
+                entity.setUniqueIdentifier(uniqueIdentifierGenerator.generate());
                 Long assetId = storage.addObject(entity,new Request(
                         new Columns.Exclude("id","regNo","ownerName")));
                 permissionsService.link(LinkType.CLIENT_ASSET, clientId, assetId);

@@ -13,6 +13,7 @@ import org.traccar.api.ExtendedObjectResource;
 import org.traccar.api.security.PermissionsService;
 import org.traccar.api.security.ServiceAccountUser;
 import org.traccar.helper.LogAction;
+import org.traccar.helper.UniqueIdentifierGenerator;
 import org.traccar.model.*;
 import org.traccar.session.ConnectionManager;
 import org.traccar.session.cache.CacheManager;
@@ -36,6 +37,9 @@ public class SimcardResource extends ExtendedObjectResource<Simcard> {
 
     @Inject
     private LogAction actionLogger;
+
+    @Inject
+    private UniqueIdentifierGenerator uniqueIdentifierGenerator;
 
     @Inject
     private ConnectionManager connectionManager;
@@ -121,6 +125,7 @@ public class SimcardResource extends ExtendedObjectResource<Simcard> {
             entity.setId(0);
             String simcardnumber = entity.getPhonenumber().trim();
             entity.setPhonenumber(simcardnumber);
+            entity.setUniqueIdentifier(uniqueIdentifierGenerator.generate());
             long simcardid = storage.addObject(entity, new Request(new Columns.Exclude("id")));
             //LOGGER.info("Checking for clientId: {}", resellerid);
             permissionsService.link(LinkType.RESELLER_SIMCARD, resellerid, simcardid);

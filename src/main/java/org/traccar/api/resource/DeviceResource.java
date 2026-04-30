@@ -15,6 +15,7 @@ import org.traccar.config.Config;
 import org.traccar.config.Keys;
 import org.traccar.database.MediaManager;
 import org.traccar.helper.LogAction;
+import org.traccar.helper.UniqueIdentifierGenerator;
 import org.traccar.model.*;
 import org.traccar.session.ConnectionManager;
 import org.traccar.session.cache.CacheManager;
@@ -28,6 +29,7 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import software.amazon.awssdk.services.sns.endpoints.internal.Value;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -66,6 +68,9 @@ public class DeviceResource extends BaseObjectResource<Device> {
 
     @Inject
     private LogAction actionLogger;
+
+    @Inject
+    private UniqueIdentifierGenerator uniqueIdentifierGenerator;
 
     @Context
     private HttpServletRequest request;
@@ -246,13 +251,20 @@ public class DeviceResource extends BaseObjectResource<Device> {
         //LOGGER.info("Inserted entity with ID: {}", clientId);
         if (validate(entity)) {
             if (getUserId() != ServiceAccountUser.ID) {
-
+                entity.setUniqueIdentifier(uniqueIdentifierGenerator.generate());
                 long deviceId = storage.addObject(entity, new Request(new Columns.Exclude("id")));
                 entity.setId(deviceId);
                 storage.addPermission(new Permission(User.class, getUserId(), baseClass, entity.getId()));
                 permissionsService.link(LinkType.CLIENT_DEVICE, clientId, deviceId);
                 //LOGGER.info("Info here - {} --- {}",getDefaultGroupId(clientId),deviceId);
-                permissionsService.link(LinkType.GROUP_DEVICE, getDefaultGroupId(clientId), deviceId);
+                int defaultGroupId = getDefaultGroupId(clientId);
+                if (defaultGroupId != 0 && defaultGroupId > 0) {
+                    permissionsService.link(LinkType.GROUP_DEVICE, defaultGroupId, deviceId);
+                } else {
+                    LOGGER.warn("No valid default group found for clientId: {}. Skipping GROUP_DEVICE link.", clientId);
+                }
+
+                permissionsService.link(LinkType.GROUP_DEVICE, defaultGroupId, deviceId);
                 cacheManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
                 connectionManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
                 actionLogger.create(request, getUserId(), entity);
@@ -272,7 +284,9 @@ public class DeviceResource extends BaseObjectResource<Device> {
                 ClientGroup.class,
                 new Request(
                         new Columns.All(),
-                        new Condition.JoinWhere(ClientGroup.class, "groupid", Group.class, "id", "name", defaultName, "clientid", clientId)
+                        new Condition.JoinWhere(ClientGroup.class, "groupid",
+                                Group.class, "id", "name",
+                                defaultName, "clientid", clientId)
                 )
         );
 

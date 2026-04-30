@@ -16,4 +16,13 @@ public class Client extends ExtendedModel {
         this.clientName = clientName;
     }
 
+    private String uniqueIdentifier;
+
+    public String getUniqueIdentifier() {
+        return uniqueIdentifier;
+    }
+    public void setUniqueIdentifier(String uniqueIdentifier) {
+        this.uniqueIdentifier = uniqueIdentifier;
+    }
+
 }
