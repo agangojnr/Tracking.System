@@ -4229,7 +4229,11 @@ public interface Condition {
         private final String pivotColumn8a;
         private final String pivotColumn8b;
         private final Class<?> pivotClass9;
-        private final String pivotColumn9;
+        private final String pivotColumn9a;
+        private final String pivotColumn9b;
+        private final Class<?> pivotClass10;
+        private final String pivotColumn10a;
+        private final String pivotColumn10b;
 
         // Constructor
         public GetAllDevices(Class<?> ownerClass, String ownerColumn, String ownerColumn1,
@@ -4241,7 +4245,8 @@ public interface Condition {
                                          Class<?> pivotClass6, String pivotColumn6,
                                          Class<?> pivotClass7, String pivotColumn7,
                                          Class<?> pivotClass8, String pivotColumn8a, String pivotColumn8b,
-                                         Class<?> pivotClass9, String pivotColumn9
+                                         Class<?> pivotClass9, String pivotColumn9a,String pivotColumn9b,
+                                        Class<?> pivotClass10, String pivotColumn10a,String pivotColumn10b
                                        ) {
             this.ownerClass = ownerClass;
             this.ownerColumn = ownerColumn;
@@ -4267,7 +4272,11 @@ public interface Condition {
             this.pivotColumn8a = pivotColumn8a;
             this.pivotColumn8b = pivotColumn8b;
             this.pivotClass9 = pivotClass9;
-            this.pivotColumn9 = pivotColumn9;
+            this.pivotColumn9a = pivotColumn9a;
+            this.pivotColumn9b = pivotColumn9b;
+            this.pivotClass10 = pivotClass10;
+            this.pivotColumn10a = pivotColumn10a;
+            this.pivotColumn10b = pivotColumn10b;
         }
         public Class<?> getOwnerClass() { return ownerClass; }
         public String getOwnerColumn() { return ownerColumn; }
@@ -4301,7 +4310,12 @@ public interface Condition {
         public String getPivotColumn8b() { return pivotColumn8b; }
 
         public Class<?> getPivotClass9() { return pivotClass9; }
-        public String getPivotColumn9() { return pivotColumn9; }
+        public String getPivotColumn9a() { return pivotColumn9a; }
+        public String getPivotColumn9b() { return pivotColumn9b; }
+
+        public Class<?> getPivotClass10() { return pivotClass10; }
+        public String getPivotColumn10a() { return pivotColumn10a; }
+        public String getPivotColumn10b() { return pivotColumn10b; }
     }
 
     class GetAllUnlinkedDevices implements Condition {

@@ -43,13 +43,16 @@ public class Asset extends ExtendedModel {
     public String getClientContact() {
         return clientContact;
     }
-
     public void setClientContact(String clientContact) {
-        if (clientContact == null || !clientContact.matches("\\d{10}")) {
-            throw new IllegalArgumentException("Client contact must be exactly 10 digits");
-        }
         this.clientContact = clientContact;
     }
+
+//    public void setClientContact(String clientContact) {
+//        if (clientContact == null || !clientContact.matches("\\d{10}")) {
+//            throw new IllegalArgumentException("Client contact must be exactly 10 digits");
+//        }
+//        this.clientContact = clientContact;
+//    }
 
     private String assetModel;
     public String getAssetModel() {

@@ -2,11 +2,9 @@
 <!DOCTYPE properties SYSTEM 'http://java.sun.com/dtd/properties.dtd'>
 <properties>
 
-    <entry key='web.path'>./traccar-web/simple</entry>
-    <entry key='web.localizationPath'>./traccar-web/src/resources/l10n</entry>
     <entry key='web.debug'>true</entry>
     <entry key='web.console'>true</entry>
-<!--    <entry key='web.port'>8082</entry>-->
+    <entry key='WEB_PORT'>8082</entry>
 
 
     <entry key='geocoder.type'>pluscodes</entry>
@@ -17,52 +15,19 @@
     <entry key='logger.queries'>false</entry>
     <entry key='logger.fullStackTraces'>true</entry>
 
-<!--    <entry key='logger.level'>debug</entry>-->
     <entry key='mail.debug'>true</entry>
-
-<!--    <entry key='database.driver'>org.h2.Driver</entry>-->
-<!--    <entry key='database.url'>jdbc:h2:./target/database</entry>-->
-<!--    <entry key='database.user'>sa</entry>-->
-<!--    <entry key='database.password'></entry>-->
 
     <entry key='database.driver'>com.microsoft.sqlserver.jdbc.SQLServerDriver</entry>
     <entry key='database.url'>jdbc:sqlserver://localhost:1433;databaseName=ipinner;user=dbuser;password=P@55w0rd;encrypt=false;</entry>
 
-    <!--<entry key='server.instantAcknowledgement'>true</entry>
-    <entry key='server.buffering.threshold'>5000</entry>-->
 
     <entry key='atrack.custom'>true</entry>
     <entry key='intellitrac.port'>6037</entry>
 
     <entry key='geocoder.enable'>true</entry>
 
-<!--    <entry key='geocoder.type'>google</entry>-->
-<!--    <entry key='geocoder.key'>AIzaSyDaCYZsF7pIk5Tk3WQkcaNcBXfUm5Gjadc</entry>-->
 
     <entry key='geocoder.type'>locationiq</entry>
     <entry key='geocoder.key'>pk.d18f554c7c57fff1b15d0d7f9ac82985</entry>
-
-
-<!--    <entry key='mail.smtp.host'>smtp.gmail.com</entry>-->
-<!--    <entry key='mail.smtp.port'>587</entry>-->
-<!--    <entry key='mail.smtp.starttls.enable'>true</entry>-->
-<!--    <entry key='mail.smtp.auth'>true</entry>-->
-<!--    <entry key='mail.smtp.username'>agangojnr@gmail.com</entry>-->
-<!--    <entry key='mail.smtp.password'>hvahnnfhbgvewkhj777</entry>-->
-<!--    <entry key='mail.smtp.from'>agangojnr@gmail.com</entry>-->
-<!--    <entry key='mail.smtp.ssl.trust'>smtp.gmail.com</entry>-->
-<!--    <entry key='mail.debug'>true</entry>-->
-
-    <entry key='mail.smtp.host'>outlook.office365.com</entry>
-    <entry key='mail.smtp.port'>587</entry>
-    <entry key='mail.smtp.starttls.enable'>true</entry>
-    <entry key='mail.smtp.auth'>true</entry>
-    <entry key='mail.smtp.username'>autobidadmin@riverlong.com</entry>
-    <entry key='mail.smtp.password'>dcptpygbxpffzjtt</entry>
-    <entry key='mail.smtp.from'>autobidadmin@riverlong.com</entry>
-<!--    <entry key='mail.smtp.ssl.trust'>smtp.gmail.com</entry>-->
-    <entry key='mail.debug'>true</entry>
-
-
 
 </properties>

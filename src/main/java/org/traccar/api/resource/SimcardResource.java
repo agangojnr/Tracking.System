@@ -93,7 +93,7 @@ public class SimcardResource extends ExtendedObjectResource<Simcard> {
     @Path("reseller")
     public Collection<SimcardList> getResellerSimcards(@QueryParam("resellerid") Long resellerid) throws StorageException {
         String objecttype = "simcard"; String actiontype = "create";
-        LOGGER.info("Testing simcard date");
+        //LOGGER.info("Testing simcard date");
         return storage.getJointObjects(
                 SimcardList.class,
                 new Request(

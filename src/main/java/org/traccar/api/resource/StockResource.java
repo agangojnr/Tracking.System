@@ -223,6 +223,7 @@ public class StockResource extends BaseObjectResource<Device> {
 
         if(level == 4){
             /* All devices under super admin */
+            LOGGER.info("This is all devices stock");
             Collection<CompanyDevices> devices = storage.getJointObjects(
                     CompanyDevices.class,
                     new Request(
@@ -233,6 +234,7 @@ public class StockResource extends BaseObjectResource<Device> {
                                     "name AS deviceName",
                                     "uniqueid AS imei",
                                     "phonenumber AS simcardNo",
+                                    "networkprovidername AS networkProvider",
                                     "model AS deviceModel",
                                     "status AS status",
                                     "lastUpdate AS lastUpdate"
@@ -246,7 +248,8 @@ public class StockResource extends BaseObjectResource<Device> {
                                     Reseller.class, "id",
                                     Devicetype.class, "id",
                                     DeviceSimcard.class,"deviceid", "simcardid",
-                                    Simcard.class,"id")
+                                    Simcard.class,"id", "networkproviderid",
+                                    Networkprovider.class,"id","networkprovidername")
                     )
             );
             return Response.ok(devices).build();

@@ -34,6 +34,7 @@ public final class Main {
     }
 
     private Main() {
+
     }
 
     public static void logSystemInfo() {
@@ -63,7 +64,7 @@ public final class Main {
 
     public static void main(String[] args) throws Exception {
         Locale.setDefault(Locale.ENGLISH);
-
+        LOGGER.info("-------------MAIN METHOD NOW STARTS--------------");
         final String configFile;
         if (args.length <= 0) {
             configFile = "./debug.xml";
@@ -105,13 +106,34 @@ public final class Main {
             LOGGER.info("Version: {}", Main.class.getPackage().getImplementationVersion());
             LOGGER.info("Starting server...");
 
+//            var services = new ArrayList<LifecycleObject>();
+//            for (var clazz : List.of(
+//                    ScheduleManager.class, ServerManager.class, WebServer.class, BroadcastService.class)) {
+//
+//                var service = injector.getInstance(clazz);
+//                if (service != null) {
+//                    service.start();
+//                    services.add(service);
+//                }
+//            }
+
             var services = new ArrayList<LifecycleObject>();
             for (var clazz : List.of(
                     ScheduleManager.class, ServerManager.class, WebServer.class, BroadcastService.class)) {
+
+                LOGGER.info("Attempting to get instance of: {}", clazz.getSimpleName());  // ADD
+
                 var service = injector.getInstance(clazz);
+
+                LOGGER.info("Instance of {} = {}", clazz.getSimpleName(), service != null ? "CREATED" : "NULL");  // ADD
+
                 if (service != null) {
+                    LOGGER.info("Starting service: {}", clazz.getSimpleName());  // ADD
                     service.start();
+                    LOGGER.info("Started service: {}", clazz.getSimpleName());  // ADD
                     services.add(service);
+                } else {
+                    LOGGER.warn("Service {} was NULL - skipping", clazz.getSimpleName());  // ADD
                 }
             }
 

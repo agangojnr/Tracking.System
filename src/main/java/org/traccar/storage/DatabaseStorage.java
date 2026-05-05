@@ -1864,7 +1864,18 @@ public class DatabaseStorage extends Storage {
                     result.append(" = ");
                     result.append(getStorageName(condition.getPivotClass9()));
                     result.append(".");
-                    result.append(condition.getPivotColumn9());
+                    result.append(condition.getPivotColumn9a());
+                    //Network provider
+                    result.append(" LEFT JOIN ");
+                    result.append(getStorageName(condition.getPivotClass10()));
+                    result.append(" ON ");
+                    result.append(getStorageName(condition.getPivotClass10()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn10a());
+                    result.append(" = ");
+                    result.append(getStorageName(condition.getPivotClass9()));
+                    result.append(".");
+                    result.append(condition.getPivotColumn9b());
 
                 }else if (genericCondition instanceof Condition.GetAllUnlinkedDevices condition){
                     //device_asset

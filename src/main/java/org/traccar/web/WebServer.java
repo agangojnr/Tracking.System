@@ -73,10 +73,12 @@ public class WebServer implements LifecycleObject {
     private final Server server;
 
     public WebServer(Injector injector, Config config) {
+        LOGGER.info("-------------------Now on the Webserver------------------------");
         this.injector = injector;
         this.config = config;
         String address = config.getString(Keys.WEB_ADDRESS);
         int port = config.getInteger(Keys.WEB_PORT);
+        LOGGER.info("Webserver port here is - {}", port);
         if (address == null) {
             server = new Server(port);
         } else {
@@ -139,9 +141,32 @@ public class WebServer implements LifecycleObject {
         }
     }
 
+//    private void initWebApp(ServletContextHandler servletHandler) {
+//        ServletHolder servletHolder = new ServletHolder(new DefaultOverrideServlet(config));
+//        servletHolder.setInitParameter("resourceBase", new File(config.getString(Keys.WEB_PATH)).getAbsolutePath());
+//        servletHolder.setInitParameter("dirAllowed", "false");
+//        if (config.getBoolean(Keys.WEB_DEBUG)) {
+//            servletHandler.setWelcomeFiles(new String[] {"debug.html", "index.html"});
+//        } else {
+//            String cache = config.getString(Keys.WEB_CACHE_CONTROL);
+//            if (cache != null && !cache.isEmpty()) {
+//                servletHolder.setInitParameter("cacheControl", cache);
+//            }
+//            servletHandler.setWelcomeFiles(new String[] {"release.html", "index.html"});
+//        }
+//        servletHandler.addServlet(servletHolder, "/*");
+//    }
+
     private void initWebApp(ServletContextHandler servletHandler) {
+        String webPath = config.getString(Keys.WEB_PATH);
+
+        if (webPath == null || webPath.isEmpty()) {
+            LOGGER.warn("web.path not configured, skipping web app initialization");
+            return;  // <-- just return, API still works on /api/*
+        }
+        LOGGER.info("Web path configured as: {}", webPath);
         ServletHolder servletHolder = new ServletHolder(new DefaultOverrideServlet(config));
-        servletHolder.setInitParameter("resourceBase", new File(config.getString(Keys.WEB_PATH)).getAbsolutePath());
+        servletHolder.setInitParameter("resourceBase", new File(webPath).getAbsolutePath());
         servletHolder.setInitParameter("dirAllowed", "false");
         if (config.getBoolean(Keys.WEB_DEBUG)) {
             servletHandler.setWelcomeFiles(new String[] {"debug.html", "index.html"});

@@ -28,6 +28,8 @@ import com.nimbusds.oauth2.sdk.GeneralException;
 import io.netty.util.HashedWheelTimer;
 import io.netty.util.Timer;
 import org.apache.velocity.app.VelocityEngine;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.traccar.broadcast.BroadcastService;
 import org.traccar.broadcast.MulticastBroadcastService;
 import org.traccar.broadcast.RedisBroadcastService;
@@ -118,12 +120,16 @@ public class MainModule extends AbstractModule {
         this.configFile = configFile;
     }
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(MainModule.class);
+
     @Override
     protected void configure() {
+        LOGGER.info("-------------CONFIGURE METHOD HERE--------------");
         bindConstant().annotatedWith(Names.named("configFile")).to(configFile);
         bind(Config.class).asEagerSingleton();
         bind(Timer.class).to(HashedWheelTimer.class).in(Scopes.SINGLETON);
     }
+
 
     @Singleton
     @Provides
@@ -198,7 +204,11 @@ public class MainModule extends AbstractModule {
     }
 
     @Provides
+    @Nullable
     public static WebServer provideWebServer(Injector injector, Config config) {
+        LOGGER.info("provideWebServer called");
+        LOGGER.info("WEB_PORT value = {}", config.getInteger(Keys.WEB_PORT));
+        LOGGER.info("WEB_PORT key string = {}", Keys.WEB_PORT.getKey());
         if (config.getInteger(Keys.WEB_PORT) > 0) {
             return new WebServer(injector, config);
         }

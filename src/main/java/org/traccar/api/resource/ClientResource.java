@@ -350,7 +350,7 @@ public class ClientResource extends ExtendedObjectResource<Client> {
            /* Creation of stock client */
             Client stockclientEntity = new Client();
             stockclientEntity.setId(0);
-            stockclientEntity.setClientName("subreseller"+stocksubresellerId+"stock");
+            stockclientEntity.setClientName("reseller"+resellerId+"stock");
             stockclientEntity.setAttributes(Map.of("action", "Stock client creation"));
             Long stockclientId =storage.addObject(stockclientEntity, new Request(new Columns.Exclude("id")));
             stockclientEntity.setId(stockclientId);
@@ -371,7 +371,6 @@ public class ClientResource extends ExtendedObjectResource<Client> {
     @Path("resellerstock")
     public Collection<Client> getResellerStock(@QueryParam("resellerid") Long resellerid) throws StorageException {
         String clientname = "reseller"+resellerid+"stock";
-        LOGGER.info("Group is 1 or less - groups");
         return storage.getObjects(
                 Client.class,
                 new Request(

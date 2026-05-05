@@ -15,6 +15,7 @@ public class CompanyDevices {
     private String imei;
     private String deviceModel;
     private String simcardNo;
+    private String networkProvider;
     private Date lastUpdate;
     private String status;
     private Date expirationTime;
@@ -68,6 +69,13 @@ public class CompanyDevices {
     }
     public void setSimcardNo(String simcardNo) {
         this.simcardNo = simcardNo;
+    }
+
+    public String getNetworkProvider() {
+        return networkProvider;
+    }
+    public void setNetworkProvider(String networkProvider) {
+        this.networkProvider = networkProvider;
     }
 
     public String getResellerName() {
