@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM 'http://java.sun.com/dtd/properties.dtd'>
+<properties>
+
+    <entry key='web.debug'>true</entry>
+    <entry key='web.console'>true</entry>
+    <entry key='WEB_PORT'>8082</entry>
+
+
+    <entry key='geocoder.type'>pluscodes</entry>
+
+    <entry key='media.path'>./target/media</entry>
+
+    <entry key='logger.console'>true</entry>
+    <entry key='logger.queries'>false</entry>
+    <entry key='logger.fullStackTraces'>true</entry>
+
+    <entry key='mail.debug'>true</entry>
+
+    <entry key='database.driver'>com.microsoft.sqlserver.jdbc.SQLServerDriver</entry>
+    <entry key='database.url'>jdbc:sqlserver://localhost:1433;databaseName=ipinner;user=dbuser;password=Infi@ni2026SQL;encrypt=false;</entry>
+
+
+    <entry key='atrack.custom'>true</entry>
+    <entry key='intellitrac.port'>6037</entry>
+
+    <entry key='geocoder.enable'>true</entry>
+
+
+    <entry key='geocoder.type'>locationiq</entry>
+    <entry key='geocoder.key'>pk.d18f554c7c57fff1b15d0d7f9ac82985</entry>
+
+</properties>

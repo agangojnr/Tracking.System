@@ -120,6 +120,7 @@ public class AssetResource extends SimpleObjectResource<Asset> {
                     new Request(
                             new Columns.Include(
                                     "tc_assets.id AS id",
+                                    "tc_assets.uniqueIdentifier AS uniqueIdentifier",
                                     "tc_actions.actiontime AS createdat",
                                     "tc_assets.assetname AS assetname",
                                     "tc_assettypes.name AS assetType",
@@ -127,7 +128,7 @@ public class AssetResource extends SimpleObjectResource<Asset> {
                                     "tc_assets.assetModel AS assetModel",
                                     "tc_assets.clientContact AS clientContact"
                             ),
-                            new Condition.GetAssetwithCreatedate(Asset.class, "id", "assettypeid",
+                            new Condition.GetAssetwithCreatedate(Asset.class, "id", "assettypeid", "uniqueIdentifier",
                                     ClientAsset.class, "clientid", "assetid",
                                     Action.class, "objectid", "objecttype", "actiontype",
                                     Assettype.class, "id", "name",

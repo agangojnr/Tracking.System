@@ -3038,7 +3038,7 @@ public interface Condition {
     }
 
     class GetAssetwithCreatedate implements Condition {
-        private final Class<?> ownerClass;        private final String ownerColumn; private final String ownerColumna;
+        private final Class<?> ownerClass;        private final String ownerColumn; private final String ownerColumna;  private final String ownerColumnb;
         private final Class<?> pivotClass;        private final String pivotColumn;        private final String pivotColumn1;
         private final Class<?> pivotClass2;       private final String pivotColumn2a; private final String pivotColumn2b; private final String pivotColumn2c;
         private final Class<?> pivotClass3;       private final String pivotColumn3a; private final String pivotColumn3b;
@@ -3046,12 +3046,12 @@ public interface Condition {
         private final String searchValue2;
 
         // Constructor
-        public GetAssetwithCreatedate(Class<?> ownerClass, String ownerColumn, String ownerColumna,
+        public GetAssetwithCreatedate(Class<?> ownerClass, String ownerColumn, String ownerColumna, String ownerColumnb,
                                        Class<?> pivotClass, String pivotColumn, String pivotColumn1,
                                        Class<?> pivotClass2,String pivotColumn2a,String pivotColumn2b,String pivotColumn2c,
                                        Class<?> pivotClass3,String pivotColumn3a,String pivotColumn3b,
                                        String searchValue1, String searchValue2, long searchValue3) {
-            this.ownerClass = ownerClass;            this.ownerColumn = ownerColumn;   this.ownerColumna = ownerColumna;
+            this.ownerClass = ownerClass;            this.ownerColumn = ownerColumn;   this.ownerColumna = ownerColumna;   this.ownerColumnb = ownerColumnb;
             this.pivotClass = pivotClass;            this.pivotColumn = pivotColumn;            this.pivotColumn1 = pivotColumn1;
             this.pivotClass2 = pivotClass2;            this.pivotColumn2a = pivotColumn2a; this.pivotColumn2b = pivotColumn2b; this.pivotColumn2c = pivotColumn2c;
             this.pivotClass3 = pivotClass3;            this.pivotColumn3a = pivotColumn3a; this.pivotColumn3b = pivotColumn3b;
@@ -3061,6 +3061,7 @@ public interface Condition {
         public Class<?> getOwnerClass() { return ownerClass; }
         public String getOwnerColumn() { return ownerColumn; }
         public String getOwnerColumna() { return ownerColumna; }
+        public String getOwnerColumnb() { return ownerColumnb; }
         public Class<?> getPivotClass() { return pivotClass; }
         public String getPivotColumn() { return pivotColumn; }
         public String getPivotColumn1() { return pivotColumn1; }
@@ -4431,7 +4432,8 @@ public interface Condition {
     class GetAllDevicesbyClient implements Condition {
         private final Class<?> ownerClass;
         private final String ownerColumn;
-        private final String ownerColumn1;
+        private final String ownerColumn1a;
+        private final String ownerColumn1b;
 
         private final Class<?> pivotClass1;
         private final String pivotColumn1a;
@@ -4464,7 +4466,7 @@ public interface Condition {
         private final long searchValue3;
 
         // Constructor
-        public GetAllDevicesbyClient(Class<?> ownerClass, String ownerColumn, String ownerColumn1,
+        public GetAllDevicesbyClient(Class<?> ownerClass, String ownerColumn, String ownerColumn1a, String ownerColumn1b,
                                      Class<?> pivotClass1, String pivotColumn1a ,String pivotColumn1b,
                                      Class<?> pivotClass2,String pivotColumn2,
                                      Class<?> pivotClass3,String pivotColumn3a,String pivotColumn3b,
@@ -4476,7 +4478,8 @@ public interface Condition {
         ) {
             this.ownerClass = ownerClass;
             this.ownerColumn = ownerColumn;
-            this.ownerColumn1 = ownerColumn1;
+            this.ownerColumn1a = ownerColumn1a;
+            this.ownerColumn1b = ownerColumn1b;
 
             this.pivotClass1 = pivotClass1;
             this.pivotColumn1a = pivotColumn1a;
@@ -4503,7 +4506,8 @@ public interface Condition {
         }
         public Class<?> getOwnerClass() { return ownerClass; }
         public String getOwnerColumn() { return ownerColumn; }
-        public String getOwnerColumn1() { return ownerColumn1; }
+        public String getOwnerColumn1a() { return ownerColumn1a; }
+        public String getOwnerColumn1b() { return ownerColumn1b; }
         public Class<?> getPivotClass1() { return pivotClass1; }
         public String getPivotColumn1a() { return pivotColumn1a; }
         public String getPivotColumn1b() { return pivotColumn1b; }

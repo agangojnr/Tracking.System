@@ -2178,7 +2178,7 @@ public class DatabaseStorage extends Storage {
                     result.append(" ON ");
                     result.append(getStorageName(condition.getOwnerClass()));
                     result.append(".");
-                    result.append(condition.getOwnerColumn1());
+                    result.append(condition.getOwnerColumn1a());
                     result.append(" = ");
                     result.append(getStorageName(condition.getPivotClass6()));
                     result.append(".");

@@ -349,6 +349,7 @@ public class ClientResource extends ExtendedObjectResource<Client> {
 
            /* Creation of stock client */
             Client stockclientEntity = new Client();
+            stockclientEntity.setUniqueIdentifier(uniqueIdentifierGenerator.generate());
             stockclientEntity.setId(0);
             stockclientEntity.setClientName("reseller"+resellerId+"stock");
             stockclientEntity.setAttributes(Map.of("action", "Stock client creation"));

@@ -6,11 +6,19 @@ import org.traccar.storage.StorageName;
 @StorageName("tc_assets")
 public class AssetView extends ExtendedModel {
 
+    private String uniqueIdentifier;
     private String createdat;
     private String assetname;
     private String assetType;
     private String clientContact;
     private String assetModel;
+
+    public String getUniqueIdentifier() {
+        return uniqueIdentifier;
+    }
+    public void setUniqueIdentifier(String uniqueIdentifier) {
+        this.uniqueIdentifier = uniqueIdentifier;
+    }
 
     public String getAssetName() {
         return assetname;

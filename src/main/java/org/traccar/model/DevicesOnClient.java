@@ -8,6 +8,7 @@ import java.util.Date;
 @StorageName("tc_devices")
 public class DevicesOnClient {;
     private String deviceName;
+    private String uniqueIdentifier;
     private String createdat;
     private long id;
     private String imei;
@@ -24,6 +25,13 @@ public class DevicesOnClient {;
     }
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getUniqueIdentifier() {
+        return uniqueIdentifier;
+    }
+    public void setUniqueIdentifier(String uniqueIdentifier) {
+        this.uniqueIdentifier = uniqueIdentifier;
     }
 
     public String getCreatedAt() {
