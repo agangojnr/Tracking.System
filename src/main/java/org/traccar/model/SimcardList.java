@@ -4,6 +4,7 @@ import org.traccar.storage.StorageName;
 
 @StorageName("tc_simcards")
 public class SimcardList{
+    private String uniqueIdentifier;
     private String createdat;
     private Long id;
     private String phonenumber;
@@ -15,6 +16,13 @@ public class SimcardList{
 }
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getUniqueIdentifier() {
+        return uniqueIdentifier;
+    }
+    public void setUniqueIdentifier(String uniqueIdentifier) {
+        this.uniqueIdentifier = uniqueIdentifier;
     }
 
     private String networkprovidername;

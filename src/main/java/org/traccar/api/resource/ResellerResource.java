@@ -86,7 +86,7 @@ public class ResellerResource extends ExtendedObjectResource<Reseller> {
             actionLogger.create(request, getUserId(), entity);
 
             if (getUserId() != ServiceAccountUser.ID) {
-                storage.addPermission(new Permission(User.class, getUserId(), baseClass, entity.getId()));
+//                storage.addPermission(new Permission(User.class, getUserId(), baseClass, entity.getId()));
                 //LOGGER.info("Checking resellerId: {}");
                 cacheManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
                 connectionManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
@@ -126,9 +126,9 @@ public class ResellerResource extends ExtendedObjectResource<Reseller> {
 
         Reseller reseller = storage.getObject(Reseller.class, new Request(
                 new Columns.All(),
-                new Condition.And(
-                        new Condition.Equals("resellername", resellername),
-                        new Condition.Permission(User.class, getUserId(), Reseller.class))));
+                        new Condition.Equals("resellername", resellername)
+                )
+        );
         return reseller == null;
     }
 

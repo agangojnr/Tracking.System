@@ -19,7 +19,7 @@
         <constraints nullable="false"/>
       </column>
 
-      <column name="location" type="VARCHAR(255)">
+      <column name="yardlocation" type="VARCHAR(255)">
         <constraints nullable="false"/>
       </column>
 
@@ -31,18 +31,17 @@
   <changeSet id="create-tc-repossessions-table" author="walter">
 
     <createTable tableName="tc_repossessions">
-
       <column name="id" type="BIGINT" autoIncrement="true">
         <constraints primaryKey="true"
                      primaryKeyName="pk_tc_repossessions"
                      nullable="false"/>
       </column>
 
-      <column name="auctioneerid" type="BIGINT">
+      <column name="auctioneerid" type="INT">
         <constraints nullable="false"/>
       </column>
 
-      <column name="deviceid" type="INT">
+      <column name="assetid" type="INT">
         <constraints nullable="false"/>
       </column>
 
@@ -61,10 +60,10 @@
     <!-- FK: device -->
     <addForeignKeyConstraint
             baseTableName="tc_repossessions"
-            baseColumnNames="deviceid"
-            referencedTableName="tc_devices"
+            baseColumnNames="assetid"
+            referencedTableName="tc_assets"
             referencedColumnNames="id"
-            constraintName="fk_repossession_device"
+            constraintName="fk_repossession_asset"
             onDelete="CASCADE"/>
 
     <!-- FK: yard -->
@@ -75,21 +74,6 @@
             referencedColumnNames="id"
             constraintName="fk_repossession_yard"
             onDelete="RESTRICT"/>
-
-  </changeSet>
-
-  <changeSet id="modify-auctioneerid-to-int" author="walter">
-
-    <preConditions onFail="HALT">
-      <tableExists tableName="tc_repossessions"/>
-      <columnExists tableName="tc_repossessions" columnName="auctioneerid"/>
-    </preConditions>
-
-    <!-- Change column type -->
-    <modifyDataType
-            tableName="tc_repossessions"
-            columnName="auctioneerid"
-            newDataType="INT"/>
 
   </changeSet>
 
@@ -106,34 +90,6 @@
             onDelete="RESTRICT"/>
 
   </changeSet>
-
-  <changeSet id="rename-location-to-yardlocation" author="walter">
-
-    <preConditions onFail="HALT">
-      <tableExists tableName="tc_yards"/>
-      <columnExists tableName="tc_yards" columnName="location"/>
-    </preConditions>
-
-    <!-- Rename column -->
-    <renameColumn
-            tableName="tc_yards"
-            oldColumnName="location"
-            newColumnName="yardlocation"
-            columnDataType="VARCHAR(255)"/>
-
-  </changeSet>
-
-  <changeSet id="rename-repossessed-column-tc-devices" author="walter">
-
-    <!-- Rename column repossessed to isrepossessed -->
-    <renameColumn
-            tableName="tc_devices"
-            oldColumnName="repossessed"
-            newColumnName="isrepossessed"
-            columnDataType="BOOLEAN"/>
-
-  </changeSet>
-
 
 </databaseChangeLog>
 

@@ -129,7 +129,7 @@ public class SubResellerResource extends ExtendedObjectResource<Subreseller> {
             actionLogger.create(request, getUserId(), entity);
 
             if (getUserId() != ServiceAccountUser.ID) {
-                storage.addPermission(new Permission(User.class, getUserId(), baseClass, entity.getId()));
+                //storage.addPermission(new Permission(User.class, getUserId(), baseClass, entity.getId()));
                 cacheManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
                 connectionManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
                 actionLogger.link(request, getUserId(), User.class, getUserId(), baseClass, entity.getId());
@@ -166,9 +166,8 @@ public class SubResellerResource extends ExtendedObjectResource<Subreseller> {
         //LOGGER.info("User ID here and there -------------------------------{} ", name);
         Subreseller subreseller = storage.getObject(Subreseller.class, new Request(
                 new Columns.All(),
-                new Condition.And(
-                        new Condition.Equals("subresellername", name),
-                        new Condition.Permission(User.class, getUserId(), Subreseller.class))));
+                        new Condition.Equals("subresellername", name)
+        ));
 
         return subreseller == null;
     }

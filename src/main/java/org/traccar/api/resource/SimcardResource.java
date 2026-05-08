@@ -98,13 +98,14 @@ public class SimcardResource extends ExtendedObjectResource<Simcard> {
                 SimcardList.class,
                 new Request(
                         new Columns.Include("tc_simcards.id AS id",
+                                "tc_simcards.uniqueIdentifier AS uniqueIdentifier",
                                 "tc_actions.actiontime AS createdat",
                                 "tc_simcards.phonenumber AS phonenumber",
                                 "tc_simcards.iccid AS iccid",
                                 "tc_networkproviders.networkprovidername AS networkprovidername"
                         ),
                         new Condition.GetSimcardsResellerwithDate(
-                                Simcard.class,"id","networkproviderid",
+                                Simcard.class,"id","networkproviderid", "uniqueidentifier",
                                 Networkprovider.class,"id",
                                 ResellerSimcard.class, "resellerid", "simcardid",
                                 Action.class, "objectid", "objecttype", "actiontype",

@@ -85,119 +85,30 @@
             onDelete="RESTRICT"/>
   </changeSet>
 
-  <changeSet id="create-tc-auctioneer-device" author="walter">
-    <createTable tableName="tc_auctioneer_device">
+  <changeSet id="create-tc-auctioneer-asset" author="walter">
+    <createTable tableName="tc_auctioneer_asset">
       <column name="auctioneerid" type="int">
         <constraints nullable="false"/>
       </column>
-      <column name="deviceid" type="int">
+      <column name="assetid" type="int">
         <constraints nullable="false"/>
       </column>
     </createTable>
 
-
     <addForeignKeyConstraint
-            baseTableName="tc_auctioneer_device"
+            baseTableName="tc_auctioneer_asset"
             baseColumnNames="auctioneerid"
             referencedTableName="tc_auctioneers"
             referencedColumnNames="id"
-            constraintName="fk_auctioneer_device_auctioneer"
+            constraintName="fk_auctioneer_asset_auctioneer"
             onDelete="RESTRICT"/>
 
     <addForeignKeyConstraint
-            baseTableName="tc_auctioneer_device"
-            baseColumnNames="deviceid"
-            referencedTableName="tc_devices"
+            baseTableName="tc_auctioneer_asset"
+            baseColumnNames="assetid"
+            referencedTableName="tc_assets"
             referencedColumnNames="id"
-            constraintName="fk_auctioneer_device_device"
-            onDelete="RESTRICT"/>
-  </changeSet>
-
-  <changeSet id="create-tc-auctioneer-user" author="walter">
-    <createTable tableName="tc_auctioneer_user">
-      <column name="auctioneerid" type="int">
-        <constraints nullable="false"/>
-      </column>
-      <column name="userid" type="int">
-        <constraints nullable="false"/>
-      </column>
-    </createTable>
-
-
-    <addForeignKeyConstraint
-            baseTableName="tc_auctioneer_user"
-            baseColumnNames="auctioneerid"
-            referencedTableName="tc_auctioneers"
-            referencedColumnNames="id"
-            constraintName="fk_auctioneer_user_auctioneer"
-            onDelete="RESTRICT"/>
-
-    <addForeignKeyConstraint
-            baseTableName="tc_auctioneer_user"
-            baseColumnNames="userid"
-            referencedTableName="tc_users"
-            referencedColumnNames="id"
-            constraintName="fk_auctioneer_user_user"
-            onDelete="RESTRICT"/>
-  </changeSet>
-
-
-  <changeSet id="create-tc-user-dru" author="walter">
-    <createTable tableName="tc_user_dru">
-      <column name="userid" type="int">
-        <constraints nullable="false"/>
-      </column>
-      <column name="druid" type="int">
-        <constraints nullable="false"/>
-      </column>
-
-    </createTable>
-
-    <addForeignKeyConstraint
-            baseTableName="tc_user_dru"
-            baseColumnNames="userid"
-            referencedTableName="tc_users"
-            referencedColumnNames="id"
-            constraintName="fk_user_dru_dru"
-            onDelete="RESTRICT"/>
-
-    <addForeignKeyConstraint
-            baseTableName="tc_user_dru"
-            baseColumnNames="druid"
-            referencedTableName="tc_drus"
-            referencedColumnNames="id"
-            constraintName="fk_dru_user_dru"
-            onDelete="RESTRICT"/>
-
-
-  </changeSet>
-
-
-  <changeSet id="create-tc-user-auctioneer" author="walter">
-    <createTable tableName="tc_user_auctioneer">
-      <column name="userid" type="int">
-        <constraints nullable="false"/>
-      </column>
-      <column name="auctioneerid" type="int">
-        <constraints nullable="false"/>
-      </column>
-
-    </createTable>
-
-    <addForeignKeyConstraint
-            baseTableName="tc_user_auctioneer"
-            baseColumnNames="userid"
-            referencedTableName="tc_users"
-            referencedColumnNames="id"
-            constraintName="fk_user_auctioneer_auctioneer"
-            onDelete="RESTRICT"/>
-
-    <addForeignKeyConstraint
-            baseTableName="tc_user_auctioneer"
-            baseColumnNames="auctioneerid"
-            referencedTableName="tc_auctioneers"
-            referencedColumnNames="id"
-            constraintName="fk_auctioneer_user_auctioneer"
+            constraintName="fk_auctioneer_asset_asset"
             onDelete="RESTRICT"/>
   </changeSet>
 

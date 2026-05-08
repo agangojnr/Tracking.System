@@ -8,29 +8,22 @@
   <changeSet id="1" author="walter">
     <addUniqueConstraint
             tableName="tc_clients"
-            columnNames="name"
+            columnNames="clientname"
             constraintName="uc_tc_clients_name"/>
   </changeSet>
 
   <changeSet id="2" author="walter">
     <addUniqueConstraint
             tableName="tc_subresellers"
-            columnNames="name"
+            columnNames="subresellername"
             constraintName="uc_tc_subresellers_name"/>
   </changeSet>
 
   <changeSet id="3" author="walter">
     <addUniqueConstraint
             tableName="tc_resellers"
-            columnNames="name"
+            columnNames="resellername"
             constraintName="uc_tc_resellers_name"/>
-  </changeSet>
-
-  <changeSet id="4" author="walter">
-    <addUniqueConstraint
-            tableName="tc_client_device"
-            columnNames="deviceid"
-            constraintName="uc_tc_client_device_deviceid"/>
   </changeSet>
 
   <changeSet id="5" author="walter">

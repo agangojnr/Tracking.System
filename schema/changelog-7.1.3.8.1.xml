@@ -24,37 +24,6 @@
     </createTable>
   </changeSet>
 
-
-  <!-- =============================== -->
-  <!-- 3. USER & NETWORKPROVIDER RELATIONSHIPS -->
-  <!-- =============================== -->
-
-  <changeSet id="create-tc-user-networkprovider" author="walter">
-    <createTable tableName="tc_user_networkprovider">
-      <column name="userid" type="INT">
-        <constraints nullable="false"/>
-      </column>
-      <column name="networkproviderid" type="INT">
-        <constraints nullable="false"/>
-      </column>
-    </createTable>
-
-    <addForeignKeyConstraint baseTableName="tc_user_networkprovider"
-                             baseColumnNames="userid"
-                             constraintName="fk_user_networkprovider_user"
-                             referencedTableName="tc_users"
-                             referencedColumnNames="id"
-                             onDelete="CASCADE"/>
-
-    <addForeignKeyConstraint baseTableName="tc_user_networkprovider"
-                             baseColumnNames="networkproviderid"
-                             constraintName="fk_user_networkprovider_provider"
-                             referencedTableName="tc_networkproviders"
-                             referencedColumnNames="id"
-                             onDelete="CASCADE"/>
-  </changeSet>
-
-
   <!-- ===================== -->
   <!-- 2. SIMCARD STRUCTURES -->
   <!-- ===================== -->
@@ -92,31 +61,6 @@
                              onDelete="CASCADE"/>
   </changeSet>
 
-  <!-- Pivot tables for simcards -->
-  <changeSet id="create-tc-user-simcard" author="walter">
-    <createTable tableName="tc_user_simcard">
-      <column name="userid" type="INT">
-        <constraints nullable="false"/>
-      </column>
-      <column name="simcardid" type="INT">
-        <constraints nullable="false"/>
-      </column>
-    </createTable>
-
-    <addForeignKeyConstraint baseTableName="tc_user_simcard"
-                             baseColumnNames="userid"
-                             constraintName="fk_user_simcard_user"
-                             referencedTableName="tc_users"
-                             referencedColumnNames="id"
-                             onDelete="CASCADE"/>
-
-    <addForeignKeyConstraint baseTableName="tc_user_simcard"
-                             baseColumnNames="simcardid"
-                             constraintName="fk_user_simcard_simcard"
-                             referencedTableName="tc_simcards"
-                             referencedColumnNames="id"
-                             onDelete="CASCADE"/>
-  </changeSet>
 
   <changeSet id="create-tc-device-simcard" author="walter">
     <createTable tableName="tc_device_simcard">
@@ -168,32 +112,6 @@
                              baseColumnNames="simcardid"
                              constraintName="fk_reseller_simcard_simcard"
                              referencedTableName="tc_simcards"
-                             referencedColumnNames="id"
-                             onDelete="CASCADE"/>
-  </changeSet>
-
-
-  <changeSet id="create-tc-user-devicegroup" author="walter">
-    <createTable tableName="tc_user_devicegroup">
-      <column name="userid" type="INT">
-        <constraints nullable="false"/>
-      </column>
-      <column name="devicegroupid" type="INT">
-        <constraints nullable="false"/>
-      </column>
-    </createTable>
-
-    <addForeignKeyConstraint baseTableName="tc_user_devicegroup"
-                             baseColumnNames="userid"
-                             constraintName="fk_user_devicegroup_user"
-                             referencedTableName="tc_users"
-                             referencedColumnNames="id"
-                             onDelete="CASCADE"/>
-
-    <addForeignKeyConstraint baseTableName="tc_user_devicegroup"
-                             baseColumnNames="devicegroupid"
-                             constraintName="fk_user_devicegroup_devicegroup"
-                             referencedTableName="tc_groups"
                              referencedColumnNames="id"
                              onDelete="CASCADE"/>
   </changeSet>

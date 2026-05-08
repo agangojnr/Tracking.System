@@ -45,35 +45,6 @@
     </addColumn>
   </changeSet>
 
-  <changeSet id="create-tc-user-devicetype" author="walter">
-    <createTable tableName="tc_user_devicetype">
-      <column name="userid" type="INT">
-        <constraints nullable="false"/>
-      </column>
-      <column name="devicetypeid" type="INT">
-        <constraints nullable="false"/>
-      </column>
-    </createTable>
-
-    <addForeignKeyConstraint baseTableName="tc_user_devicetype"
-                             baseColumnNames="userid"
-                             constraintName="fk_user_devicetype_user"
-                             referencedTableName="tc_users"
-                             referencedColumnNames="id"
-                             onDelete="CASCADE"/>
-
-    <addForeignKeyConstraint baseTableName="tc_user_devicetype"
-                             baseColumnNames="devicetypeid"
-                             constraintName="fk_user_devicetype_simcard"
-                             referencedTableName="tc_devicetypes"
-                             referencedColumnNames="id"
-                             onDelete="CASCADE"/>
-  </changeSet>
-
-
-<!--  <changeSet id="drop-tc-device-asset-table" author="Walter">-->
-<!--    <dropTable tableName="tc_device_asset"/>-->
-<!--  </changeSet>-->
 
   <changeSet id="create-tc-device-asset1" author="walter">
     <createTable tableName="tc_device_asset">

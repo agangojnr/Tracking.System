@@ -1168,7 +1168,8 @@ public interface Condition {
     class GetSimcardsResellerwithDate implements Condition {
         private final Class<?> ownerClass;
         private final String ownerColumn;
-        private final String ownerColumn1;
+        private final String ownerColumn1a;
+        private final String ownerColumn1b;
         private final Class<?> pivotClass;
         private final String pivotColumn;
         private final Class<?> pivotClass1;
@@ -1183,14 +1184,15 @@ public interface Condition {
         private final long searchValue3;
 
         // Constructor
-        public GetSimcardsResellerwithDate(Class<?> ownerClass, String ownerColumn, String ownerColumn1,
+        public GetSimcardsResellerwithDate(Class<?> ownerClass, String ownerColumn, String ownerColumn1a, String ownerColumn1b,
                                Class<?> pivotClass, String pivotColumn,
                                Class<?> pivotClass1, String pivotColumn1a, String pivotColumn1b,
                                Class<?> pivotClass2, String pivotColumn2a, String pivotColumn2b, String pivotColumn2c,
                                           String searchValue1, String searchValue2,  long searchValue3) {
             this.ownerClass = ownerClass;
             this.ownerColumn = ownerColumn;
-            this.ownerColumn1 = ownerColumn1;
+            this.ownerColumn1a = ownerColumn1a;
+            this.ownerColumn1b = ownerColumn1b;
             this.pivotClass = pivotClass;
             this.pivotColumn = pivotColumn;
             this.pivotClass1 = pivotClass1;
@@ -1206,7 +1208,8 @@ public interface Condition {
         }
         public Class<?> getOwnerClass() { return ownerClass; }
         public String getOwnerColumn() { return ownerColumn; }
-        public String getOwnerColumn1() { return ownerColumn1; }
+        public String getOwnerColumn1a() { return ownerColumn1a; }
+        public String getOwnerColumn1b() { return ownerColumn1b; }
         public Class<?> getPivotClass() { return pivotClass; }
         public String getPivotColumn() { return pivotColumn; }
         public Class<?> getPivotClass1() { return pivotClass1; }

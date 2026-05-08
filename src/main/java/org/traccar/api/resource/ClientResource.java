@@ -173,7 +173,6 @@ public class ClientResource extends ExtendedObjectResource<Client> {
             defaultGroupEntity.setId(groupId);
 
             if (getUserId() != ServiceAccountUser.ID) {
-                storage.addPermission(new Permission(User.class, getUserId(), baseClass, entity.getId()));
                 //storage.addPermission(new Permission(User.class, getUserId(), baseClass, entity.getId()));
                 cacheManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
                 connectionManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
@@ -210,9 +209,8 @@ public class ClientResource extends ExtendedObjectResource<Client> {
 
         Client client = storage.getObject(Client.class, new Request(
                 new Columns.All(),
-                new Condition.And(
-                        new Condition.Equals("clientname", name),
-                        new Condition.Permission(User.class, getUserId(), Client.class))));
+                        new Condition.Equals("clientname", name)
+        ));
         return client == null;
     }
 

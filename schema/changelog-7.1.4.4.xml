@@ -172,43 +172,8 @@
 
   </changeSet>
 
-  <changeSet id="create-tc-user-auctioneer" author="walter">
-    <createTable tableName="tc_user_auctioneer">
-      <column name="userid" type="int">
-        <constraints nullable="false"/>
-      </column>
-      <column name="auctioneerid" type="int">
-        <constraints nullable="false"/>
-      </column>
 
-    </createTable>
 
-    <addForeignKeyConstraint
-            baseTableName="tc_user_auctioneer"
-            baseColumnNames="userid"
-            referencedTableName="tc_users"
-            referencedColumnNames="id"
-            constraintName="fk_user_auctioneer_user"
-            onDelete="RESTRICT"/>
-
-    <addForeignKeyConstraint
-            baseTableName="tc_user_auctioneer"
-            baseColumnNames="auctioneerid"
-            referencedTableName="tc_auctioneers"
-            referencedColumnNames="id"
-            constraintName="fk_user_auctioneer_auctioneer"
-            onDelete="RESTRICT"/>
-  </changeSet>
-
-  <changeSet id="rename-tc-asset-name-to-assetname" author="walter">
-
-    <renameColumn
-            tableName="tc_assets"
-            oldColumnName="name"
-            newColumnName="assetname"
-            columnDataType="VARCHAR(255)"/>
-
-  </changeSet>
 
 </databaseChangeLog>
 

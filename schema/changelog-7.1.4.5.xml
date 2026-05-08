@@ -5,34 +5,6 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
 
-  <changeSet id="modify-fk-subreseller-client-cascade" author="walter">
-
-    <!-- Drop existing foreign key -->
-    <dropForeignKeyConstraint
-            baseTableName="tc_subreseller_client"
-            constraintName="fk_subreseller_client_client"/>
-
-    <!-- Recreate with ON DELETE CASCADE -->
-    <addForeignKeyConstraint
-            baseTableName="tc_subreseller_client"
-            baseColumnNames="clientid"
-            referencedTableName="tc_clients"
-            referencedColumnNames="id"
-            constraintName="fk_subreseller_client_client"
-            onDelete="CASCADE"/>
-
-  </changeSet>
-
-  <changeSet id="rename-tc-group-name-to-groupname" author="walter">
-
-    <renameColumn
-            tableName="tc_groups"
-            oldColumnName="name"
-            newColumnName="groupname"
-            columnDataType="VARCHAR(255)"/>
-
-  </changeSet>
-
   <changeSet id="add-fk-client-device" author="walter">
 
     <!-- Drop if already exists -->
@@ -69,16 +41,6 @@
 
   </changeSet>
 
-  <changeSet id="rename-tc-group-name-to-name" author="walter">
-
-    <renameColumn
-            tableName="tc_groups"
-            oldColumnName="groupname"
-            newColumnName="name"
-            columnDataType="VARCHAR(255)"/>
-
-  </changeSet>
-
   <changeSet id="rename-tc-networkprovider-name-to-networkprovidername" author="walter">
 
     <renameColumn
@@ -106,26 +68,6 @@
             onDelete="CASCADE"
             onUpdate="NO ACTION"/>
   </changeSet>
-
-
-  <changeSet id="add-repossessed-column-tc_devices" author="walter">
-
-    <addColumn tableName="tc_devices">
-      <column name="repossessed" type="BOOLEAN" defaultValueBoolean="false"/>
-    </addColumn>
-
-    <update tableName="tc_devices">
-      <column name="repossessed" valueBoolean="false"/>
-      <where>repossessed IS NULL</where>
-    </update>
-
-    <addNotNullConstraint
-            tableName="tc_devices"
-            columnName="repossessed"
-            columnDataType="BOOLEAN"/>
-
-  </changeSet>
-
 
 </databaseChangeLog>
 
