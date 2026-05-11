@@ -660,6 +660,16 @@ public class DeviceResource extends BaseObjectResource<Device> {
                 new Columns.Include("status"),
                 new Condition.Equals("uniqueid", imei)));
     }
+
+    /* GETTING DEVICES BY IMEI FOR LOCATION SHARING */
+    @GET
+    @Path("queryimei")
+    public Collection<Device> getDeviceByImei(@QueryParam("imei") String imei
+    ) throws Exception{
+        return storage.getObjects(Device.class, new Request(
+                new Columns.All(),
+                new Condition.Equals("uniqueid", imei)));
+    }
 }
 
 

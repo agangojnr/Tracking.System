@@ -57,34 +57,17 @@ public class SubResellerResource extends ExtendedObjectResource<Subreseller> {
 
     @GET
     @Path("query")
-    public Collection<Subreseller> get(@QueryParam("all") Boolean all,
-                                       @QueryParam("resellerId") Long resellerId,
-                                       @QueryParam("clientid") Long clientid,
-                                       @QueryParam("userId") Long userId) throws Exception {
+    public Collection<Subreseller> get(@QueryParam("resellerId") Long resellerId) throws Exception {
 
         var conditions = new LinkedList<Condition>();
 
-        if (Boolean.TRUE.equals(all)) {
-            if (permissionsService.notAdmin(getUserId())) {
-                permissionsService.checkReseller(getUserId());
-                conditions.add(new Condition.Permission(User.class, getUserId(), baseClass));
-            }
-        } else if (resellerId != null && resellerId > 0) {
-            permissionsService.checkReseller(getUserId());
-            conditions.add(new Condition.Permission(Reseller.class, resellerId, Subreseller.class).excludeGroups());
-        } else if (clientid != null && clientid > 0) {
-            permissionsService.checkReseller(getUserId());
-            conditions.add(new Condition.Permission(Subreseller.class, Client.class, clientid).excludeGroups());
-        }else if(userId != null && userId > 0){
-            permissionsService.checkReseller(getUserId());
-            conditions.add(new Condition.Permission(User.class, userId, Subreseller.class).excludeGroups());
+        if(resellerId != null && resellerId > 0){
+            conditions.add(new Condition.Permission(Reseller.class, resellerId, Subreseller.class));
         }
-        permissionsService.checkReseller(getUserId());
         return storage.getObjects(baseClass, new Request(
                 new Columns.All(), Condition.merge(conditions), new Order("subresellername")
         ));
     }
-
 
 
     @GET
@@ -128,12 +111,14 @@ public class SubResellerResource extends ExtendedObjectResource<Subreseller> {
             entity.setId(subresellerId);
             actionLogger.create(request, getUserId(), entity);
 
-            if (getUserId() != ServiceAccountUser.ID) {
-                //storage.addPermission(new Permission(User.class, getUserId(), baseClass, entity.getId()));
-                cacheManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
-                connectionManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
-                actionLogger.link(request, getUserId(), User.class, getUserId(), baseClass, entity.getId());
-            }
+            actionLogger.link(request, getUserId(), User.class, getUserId(), baseClass, entity.getId());
+
+//            if (getUserId() != ServiceAccountUser.ID) {
+//                //storage.addPermission(new Permission(User.class, getUserId(), baseClass, entity.getId()));
+//                cacheManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
+//                connectionManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
+//
+//            }
 
             return Response.ok(entity).build();
             //return Response.ok("{\"status\":\"success\"}").build();

@@ -1,6 +1,7 @@
 
 package org.traccar.api.resource;
 
+import com.rabbitmq.client.Return;
 import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.*;
@@ -63,46 +64,19 @@ public class ClientResource extends ExtendedObjectResource<Client> {
         super(Client.class, "clientname");
     }
 
-
     @GET
     @Path("query")
-    public Collection<Client> get(@QueryParam("all") Boolean all,
-                                  @QueryParam("userId") Long userId,
-                                  @QueryParam("groupid") Long groupid,
-                                  @QueryParam("deviceid") Long deviceid,
-                                  @QueryParam("subresellerId") Long subresellerId,
-                                  @QueryParam("resellerId") Long resellerId) throws Exception {
+    public Collection<Client> getClients(@QueryParam("subresellerid") Long subresellerid) throws Exception {
+
         var conditions = new LinkedList<Condition>();
 
-        if (Boolean.TRUE.equals(all)) {
-            if (permissionsService.notAdmin(getUserId())) {
-                permissionsService.checkSubreseller(getUserId());
-                conditions.add(new Condition.Permission(User.class, getUserId(), baseClass));
-            }
-
-        } else if (subresellerId != null && subresellerId > 0) {
-            permissionsService.checkSubreseller(getUserId());
-            conditions.add(new Condition.Permission(Subreseller.class, subresellerId, Client.class).excludeGroups());
-        } else if (groupid != null && groupid > 0) {
-            permissionsService.checkSubreseller(getUserId());
-            conditions.add(new Condition.Permission(Client.class, Group.class, groupid).excludeGroups());
-        } else if (deviceid != null && deviceid > 0) {
-            permissionsService.checkSubreseller(getUserId());
-            conditions.add(new Condition.Permission(Client.class, Device.class, deviceid).excludeGroups());
-        }else if(userId != null && userId > 0){
-            permissionsService.checkSubreseller(getUserId());
-            conditions.add(new Condition.Permission(User.class, userId, Client.class).excludeGroups());
-        }else if(resellerId != null && resellerId > 0){
-            //conditions.add(new Condition.Permission(User.class, userId, Client.class).excludeGroups());
-            return storage.getJointObjects(baseClass, new Request(
-                    new Columns.All(),
-                    new Condition.ClientsByResellerId(Client.class,"id", SubresellerClient.class,"subresellerid","clientid",ResellerSubreseller.class,"resellerid","subresellerid",resellerId)));
-
+        if(subresellerid != null && subresellerid > 0){
+            conditions.add(new Condition.Permission(Subreseller.class, subresellerid, Client.class));
         }
-        permissionsService.checkSubreseller(getUserId());
         return storage.getObjects(baseClass, new Request(
                 new Columns.All(), Condition.merge(conditions), new Order("clientname")
         ));
+
     }
 
     @GET
@@ -154,8 +128,6 @@ public class ClientResource extends ExtendedObjectResource<Client> {
     @POST
     public Response add(Client entity,  @PathParam("subresellerId") Long subresellerId) throws Exception {
 
-        permissionsService.checkEdit(getUserId(), entity, true, false);
-
         if(validate(entity)){
             entity.setId(0);
             entity.setUniqueIdentifier(uniqueIdentifierGenerator.generate());
@@ -164,7 +136,6 @@ public class ClientResource extends ExtendedObjectResource<Client> {
             permissionsService.link(LinkType.SUBRESELLER_CLIENT, subresellerId, clientId);
             entity.setId(clientId);
             actionLogger.create(request, getUserId(), entity);
-
             Group defaultGroupEntity = new Group();
             defaultGroupEntity.setId(0);
             defaultGroupEntity.setName("Default_Group");
@@ -172,12 +143,13 @@ public class ClientResource extends ExtendedObjectResource<Client> {
             permissionsService.link(LinkType.CLIENT_GROUP, clientId, groupId);
             defaultGroupEntity.setId(groupId);
 
-            if (getUserId() != ServiceAccountUser.ID) {
-                //storage.addPermission(new Permission(User.class, getUserId(), baseClass, entity.getId()));
-                cacheManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
-                connectionManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
-                actionLogger.link(request, getUserId(), User.class, getUserId(), baseClass, entity.getId());
-            }
+//            actionLogger.link(request, getUserId(), User.class, getUserId(), baseClass, entity.getId());
+//            if (getUserId() != ServiceAccountUser.ID) {
+//                //storage.addPermission(new Permission(User.class, getUserId(), baseClass, entity.getId()));
+//                cacheManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
+//                connectionManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
+//                actionLogger.link(request, getUserId(), User.class, getUserId(), baseClass, entity.getId());
+//            }
             return Response.ok(entity).build();
         }else{
             return Response.status(Response.Status.FOUND).build();
