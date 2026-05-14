@@ -57,12 +57,14 @@ public class SubResellerResource extends ExtendedObjectResource<Subreseller> {
 
     @GET
     @Path("query")
-    public Collection<Subreseller> get(@QueryParam("resellerId") Long resellerId) throws Exception {
+    public Collection<Subreseller> get(@QueryParam("resellerId") Long resellerId, @QueryParam("clientid") Long clientid) throws Exception {
 
         var conditions = new LinkedList<Condition>();
 
         if(resellerId != null && resellerId > 0){
             conditions.add(new Condition.Permission(Reseller.class, resellerId, Subreseller.class));
+        } else if (clientid != null && clientid > 0) {
+            conditions.add(new Condition.Permission(Subreseller.class,  Client.class,clientid));
         }
         return storage.getObjects(baseClass, new Request(
                 new Columns.All(), Condition.merge(conditions), new Order("subresellername")

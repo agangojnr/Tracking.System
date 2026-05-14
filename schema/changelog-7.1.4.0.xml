@@ -65,5 +65,71 @@
 
     </changeSet>
 
+    <changeSet id="swap-deviceid-assetid-columns-tc_asset_device" author="walter">
+
+      <!-- Ensure table exists -->
+      <preConditions onFail="MARK_RAN">
+        <tableExists tableName="tc_asset_device"/>
+      </preConditions>
+
+      <!-- Step 1: Rename existing columns temporarily -->
+      <renameColumn
+              tableName="tc_asset_device"
+              oldColumnName="deviceid"
+              newColumnName="temp_deviceid"
+              columnDataType="INT"/>
+
+      <renameColumn
+              tableName="tc_asset_device"
+              oldColumnName="assetid"
+              newColumnName="deviceid"
+              columnDataType="INT"/>
+
+      <!-- Step 2: Rename temp column to assetid -->
+      <renameColumn
+              tableName="tc_asset_device"
+              oldColumnName="temp_deviceid"
+              newColumnName="assetid"
+              columnDataType="INT"/>
+
+    </changeSet>
+
+
+    <changeSet id="swap-columns-and-recreate-fk-tc_asset_device" author="walter">
+
+      <!-- Ensure table exists -->
+      <preConditions onFail="MARK_RAN">
+        <tableExists tableName="tc_asset_device"/>
+      </preConditions>
+
+      <!-- Drop old foreign keys -->
+      <dropForeignKeyConstraint
+              baseTableName="tc_asset_device"
+              constraintName="fk_asset_device_device"/>
+
+      <dropForeignKeyConstraint
+              baseTableName="tc_asset_device"
+              constraintName="fk_asset_device_asset"/>
+
+      <!-- Recreate FK for new assetid column -->
+      <addForeignKeyConstraint
+              baseTableName="tc_asset_device"
+              baseColumnNames="assetid"
+              constraintName="fk_asset_device_asset_new"
+              referencedTableName="tc_assets"
+              referencedColumnNames="id"
+              onDelete="CASCADE"/>
+
+      <!-- Recreate FK for new deviceid column -->
+      <addForeignKeyConstraint
+              baseTableName="tc_asset_device"
+              baseColumnNames="deviceid"
+              constraintName="fk_asset_device_device_new"
+              referencedTableName="tc_devices"
+              referencedColumnNames="id"
+              onDelete="CASCADE"/>
+
+    </changeSet>
+
 </databaseChangeLog>
 

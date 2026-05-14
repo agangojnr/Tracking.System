@@ -72,6 +72,7 @@ public class ClientResource extends ExtendedObjectResource<Client> {
 
         if(subresellerid != null && subresellerid > 0){
             conditions.add(new Condition.Permission(Subreseller.class, subresellerid, Client.class));
+            //LOGGER.info("Get clients by subreseller = {}", subresellerid);
         }
         return storage.getObjects(baseClass, new Request(
                 new Columns.All(), Condition.merge(conditions), new Order("clientname")
@@ -143,13 +144,6 @@ public class ClientResource extends ExtendedObjectResource<Client> {
             permissionsService.link(LinkType.CLIENT_GROUP, clientId, groupId);
             defaultGroupEntity.setId(groupId);
 
-//            actionLogger.link(request, getUserId(), User.class, getUserId(), baseClass, entity.getId());
-//            if (getUserId() != ServiceAccountUser.ID) {
-//                //storage.addPermission(new Permission(User.class, getUserId(), baseClass, entity.getId()));
-//                cacheManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
-//                connectionManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
-//                actionLogger.link(request, getUserId(), User.class, getUserId(), baseClass, entity.getId());
-//            }
             return Response.ok(entity).build();
         }else{
             return Response.status(Response.Status.FOUND).build();
@@ -194,13 +188,11 @@ public class ClientResource extends ExtendedObjectResource<Client> {
         if(validateReference(id)){
             //LOGGER.info("testing delete");
             try{
-                permissionsService.checkPermission(baseClass, getUserId(), id);
-                permissionsService.checkEdit(getUserId(), baseClass, false, false);
+//                permissionsService.checkPermission(baseClass, getUserId(), id);
+//                permissionsService.checkEdit(getUserId(), baseClass, false, false);
 
                 storage.removeObject(baseClass, new Request(new Condition.Equals("id", id)));
-
-                cacheManager.invalidateObject(true, baseClass, id, ObjectOperation.DELETE);
-
+                //cacheManager.invalidateObject(true, baseClass, id, ObjectOperation.DELETE);
                 actionLogger.remove(request, getUserId(), baseClass, id);
                 //return Response.noContent().build();
                 return Response.ok("{\"status\":\"Deleted Successfully\"}").build();
@@ -219,11 +211,9 @@ public class ClientResource extends ExtendedObjectResource<Client> {
                     .entity("{\"error\":\"Cannot delete this record because it is referenced by other records.\"}")
                     .build();
         }
-
     }
 
     public boolean validateReference(long clientId) throws StorageException {
-
         Long group = storage.getCountObjects(ClientGroup.class,
                 new Request(
                         new Columns.All(),
@@ -258,8 +248,6 @@ public class ClientResource extends ExtendedObjectResource<Client> {
                         )
                 );
                 if(device.isEmpty()){
-
-                    //LOGGER.info("device is empty");
                     return true;
                 }
                 return false;
