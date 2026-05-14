@@ -114,6 +114,26 @@ public class Telemetrydata extends ExtendedModel{
         this.address = address;
     }
 
+    private String hours;
+
+    public String getHours() {
+        return hours;
+    }
+
+    public void setHours(String hours) {
+        this.hours = hours;
+    }
+
+    private String events;
+
+    public String getEvents() {
+        return events;
+    }
+
+    public void setEvents(String hours) {
+        this.events = events;
+    }
+
 }
 
 

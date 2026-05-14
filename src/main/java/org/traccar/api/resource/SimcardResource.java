@@ -134,12 +134,6 @@ public class SimcardResource extends ExtendedObjectResource<Simcard> {
             entity.setId(simcardid);
             actionLogger.create(request, getUserId(), entity);
 
-            if (getUserId() != ServiceAccountUser.ID) {
-                storage.addPermission(new Permission(User.class, getUserId(), baseClass, entity.getId()));
-                cacheManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
-                connectionManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
-                actionLogger.link(request, getUserId(), User.class, getUserId(), baseClass, entity.getId());
-            }
             return Response.ok(entity).build();
         }else{
             return Response.status(Response.Status.FOUND).build();

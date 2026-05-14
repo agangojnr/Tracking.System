@@ -113,13 +113,6 @@ public class SubResellerResource extends ExtendedObjectResource<Subreseller> {
 
             actionLogger.link(request, getUserId(), User.class, getUserId(), baseClass, entity.getId());
 
-//            if (getUserId() != ServiceAccountUser.ID) {
-//                //storage.addPermission(new Permission(User.class, getUserId(), baseClass, entity.getId()));
-//                cacheManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
-//                connectionManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
-//
-//            }
-
             return Response.ok(entity).build();
             //return Response.ok("{\"status\":\"success\"}").build();
         }else{

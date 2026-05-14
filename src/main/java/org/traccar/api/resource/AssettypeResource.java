@@ -53,18 +53,11 @@ public class AssettypeResource extends SimpleObjectResource<Assettype> {
     @Path("create")
     @POST
     public Response add(Assettype entity) throws Exception {
-        permissionsService.checkEdit(getUserId(), entity, true, false);
-
+        //LOGGER.info("Testing add asset type...");
         if(validate(entity)){
             entity.setId(storage.addObject(entity, new Request(new Columns.Exclude("id"))));
-            actionLogger.create(request, getUserId(), entity);
+            //actionLogger.create(request, getUserId(), entity);
 
-            if (getUserId() != ServiceAccountUser.ID) {
-                storage.addPermission(new Permission(User.class, getUserId(), baseClass, entity.getId()));
-                cacheManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
-                connectionManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
-                actionLogger.link(request, getUserId(), User.class, getUserId(), baseClass, entity.getId());
-            }
             return Response.ok(entity).build();
         }else{
             return Response.status(Response.Status.FOUND).build();
@@ -73,12 +66,10 @@ public class AssettypeResource extends SimpleObjectResource<Assettype> {
 
     public boolean validate(Assettype entity) throws StorageException {
         String name = entity.getName();
-
+        //LOGGER.info("Testing add asset type...");
         Assettype assettype = storage.getObject(Assettype.class, new Request(
                 new Columns.All(),
-                new Condition.And(
-                        new Condition.Equals("name", name),
-                        new Condition.Permission(User.class, getUserId(), Assettype.class))));
+                new Condition.Equals("name", name)));
 
         return assettype == null;
     }
@@ -87,12 +78,13 @@ public class AssettypeResource extends SimpleObjectResource<Assettype> {
     @GET
     @Path("query")
     public Collection<Assettype> get() throws StorageException{
-        //LOGGER.info("This is it");
+       // LOGGER.info("This is it querying of assettypes");
         var conditions = new LinkedList<Condition>();
 
         return storage.getObjects(baseClass, new Request(
                 new Columns.All(), Condition.merge(conditions), new Order("name")
         ));
+
     }
 
 

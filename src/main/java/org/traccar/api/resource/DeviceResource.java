@@ -2,6 +2,7 @@
 package org.traccar.api.resource;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.constraints.Null;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import org.slf4j.Logger;
@@ -253,9 +254,10 @@ public class DeviceResource extends BaseObjectResource<Device> {
         if (validate(entity)) {
             if (getUserId() != ServiceAccountUser.ID) {
                 entity.setUniqueIdentifier(uniqueIdentifierGenerator.generate());
+                entity.setOldModelName("--");
                 long deviceId = storage.addObject(entity, new Request(new Columns.Exclude("id")));
                 entity.setId(deviceId);
-                storage.addPermission(new Permission(User.class, getUserId(), baseClass, entity.getId()));
+                //storage.addPermission(new Permission(User.class, getUserId(), baseClass, entity.getId()));
                 permissionsService.link(LinkType.CLIENT_DEVICE, clientId, deviceId);
                 //LOGGER.info("Info here - {} --- {}",getDefaultGroupId(clientId),deviceId);
                 int defaultGroupId = getDefaultGroupId(clientId);
@@ -372,9 +374,7 @@ public class DeviceResource extends BaseObjectResource<Device> {
 
         Device device = storage.getObject(Device.class, new Request(
                 new Columns.All(),
-                new Condition.And(
-                        new Condition.Equals("id", deviceId),
-                        new Condition.Permission(User.class, getUserId(), Device.class))));
+                new Condition.Equals("id", deviceId)));
         if (device != null) {
             String name = "device";
             String extension = imageExtension(type);
@@ -464,8 +464,8 @@ public class DeviceResource extends BaseObjectResource<Device> {
 
         if (validateReference(id)) {
             try {
-                permissionsService.checkPermission(baseClass, getUserId(), id);
-                permissionsService.checkEdit(getUserId(), baseClass, false, false);
+//                permissionsService.checkPermission(baseClass, getUserId(), id);
+//                permissionsService.checkEdit(getUserId(), baseClass, false, false);
 
                 storage.removeObject(baseClass, new Request(new Condition.Equals("id", id)));
                 storage.removeObject(ClientDevice.class, new Request(new Condition.Equals("deviceid", id)));

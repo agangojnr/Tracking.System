@@ -53,18 +53,18 @@ public class DevicetypeResource extends SimpleObjectResource<Devicetype> {
     @Path("create")
     @POST
     public Response add(Devicetype entity) throws Exception {
-        permissionsService.checkEdit(getUserId(), entity, true, false);
+        //permissionsService.checkEdit(getUserId(), entity, true, false);
 
         if(validate(entity)){
             entity.setId(storage.addObject(entity, new Request(new Columns.Exclude("id"))));
             actionLogger.create(request, getUserId(), entity);
 
-            if (getUserId() != ServiceAccountUser.ID) {
-                storage.addPermission(new Permission(User.class, getUserId(), baseClass, entity.getId()));
-                cacheManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
-                connectionManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
-                actionLogger.link(request, getUserId(), User.class, getUserId(), baseClass, entity.getId());
-            }
+//            if (getUserId() != ServiceAccountUser.ID) {
+//                storage.addPermission(new Permission(User.class, getUserId(), baseClass, entity.getId()));
+//                cacheManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
+//                connectionManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
+//                actionLogger.link(request, getUserId(), User.class, getUserId(), baseClass, entity.getId());
+//            }
             return Response.ok(entity).build();
         }else{
             return Response.status(Response.Status.FOUND).build();
@@ -77,9 +77,7 @@ public class DevicetypeResource extends SimpleObjectResource<Devicetype> {
 
         Devicetype devicetype = storage.getObject(Devicetype.class, new Request(
                 new Columns.All(),
-                new Condition.And(
-                        new Condition.Equals("model", model),
-                        new Condition.Permission(User.class, getUserId(), Devicetype.class))));
+                new Condition.Equals("model", model)));
 
         return devicetype == null;
     }

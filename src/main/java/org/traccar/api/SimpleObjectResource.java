@@ -55,7 +55,7 @@ public class SimpleObjectResource<T extends BaseModel> extends BaseObjectResourc
             } else {
                 permissionsService.checkUser(getUserId(), userId);
             }
-            conditions.add(new Condition.Permission(User.class, userId, baseClass));
+            //conditions.add(new Condition.Permission(User.class, userId, baseClass));
         }
 
         return storage.getObjects(baseClass, new Request(

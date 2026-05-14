@@ -45,34 +45,25 @@
     </addColumn>
   </changeSet>
 
+    <changeSet id="rename-model-to-oldmodelname-tc-devices" author="walter">
 
-  <changeSet id="create-tc-device-asset1" author="walter">
-    <createTable tableName="tc_device_asset">
-      <column name="deviceid" type="INT">
-        <constraints nullable="false"/>
-      </column>
-      <column name="assetid" type="INT">
-        <constraints nullable="false"/>
-      </column>
-    </createTable>
+      <preConditions onFail="MARK_RAN">
+        <and>
+          <tableExists tableName="tc_devices"/>
+          <columnExists tableName="tc_devices" columnName="model"/>
+          <not>
+            <columnExists tableName="tc_devices" columnName="oldmodelname"/>
+          </not>
+        </and>
+      </preConditions>
 
-    <addForeignKeyConstraint baseTableName="tc_device_asset"
-                             baseColumnNames="deviceid"
-                             constraintName="fk_asset_device_device"
-                             referencedTableName="tc_devices"
-                             referencedColumnNames="id"
-                             onDelete="CASCADE"/>
+      <renameColumn
+              tableName="tc_devices"
+              oldColumnName="model"
+              newColumnName="oldmodelname"
+              columnDataType="VARCHAR(128)"/>
 
-    <addForeignKeyConstraint baseTableName="tc_device_asset"
-                             baseColumnNames="assetid"
-                             constraintName="fk_asset_asset_device"
-                             referencedTableName="tc_assets"
-                             referencedColumnNames="id"
-                             onDelete="CASCADE"/>
-
-
-  </changeSet>
-
+    </changeSet>
 
 </databaseChangeLog>
 

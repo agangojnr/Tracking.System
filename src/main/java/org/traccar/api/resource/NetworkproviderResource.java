@@ -68,7 +68,7 @@ public class NetworkproviderResource extends ExtendedObjectResource<Networkprovi
     @POST
     public Response add(Networkprovider entity) throws Exception {
 
-        permissionsService.checkEdit(getUserId(), entity, true, false);
+        //permissionsService.checkEdit(getUserId(), entity, true, false);
 
         if(validate(entity)){
             entity.setId(0);
@@ -76,12 +76,12 @@ public class NetworkproviderResource extends ExtendedObjectResource<Networkprovi
             entity.setId(storage.addObject(entity, new Request(new Columns.Exclude("id"))));
             actionLogger.create(request, getUserId(), entity);
 
-            if (getUserId() != ServiceAccountUser.ID) {
-                storage.addPermission(new Permission(User.class, getUserId(), baseClass, entity.getId()));
-                cacheManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
-                connectionManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
-                actionLogger.link(request, getUserId(), User.class, getUserId(), baseClass, entity.getId());
-            }
+//            if (getUserId() != ServiceAccountUser.ID) {
+//                storage.addPermission(new Permission(User.class, getUserId(), baseClass, entity.getId()));
+//                cacheManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
+//                connectionManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
+//                actionLogger.link(request, getUserId(), User.class, getUserId(), baseClass, entity.getId());
+//            }
             return Response.ok(entity).build();
         }else{
             return Response.status(Response.Status.FOUND).build();
@@ -111,9 +111,7 @@ public class NetworkproviderResource extends ExtendedObjectResource<Networkprovi
         String name = entity.getNetworkprovidername();
         Networkprovider networkprovider = storage.getObject(Networkprovider.class, new Request(
                 new Columns.All(),
-                new Condition.And(
-                        new Condition.Equals("networkprovidername", name),
-                        new Condition.Permission(User.class, getUserId(), Networkprovider.class))));
+                new Condition.Equals("networkprovidername", name)));
         return networkprovider == null;
     }
 

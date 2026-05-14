@@ -49,25 +49,10 @@ public class ResellerResource extends ExtendedObjectResource<Reseller> {
 
     @GET
     @Path("query")
-    public Collection<Reseller> get(@QueryParam("all") Boolean all,
-                                  @QueryParam("userId") Long userId,
-                                  @QueryParam("subresellerid") Long subresellerid) throws Exception {
+    public Collection<Reseller> get(@QueryParam("all") Boolean all) throws Exception {
 
         var conditions = new LinkedList<Condition>();
 
-        if (Boolean.TRUE.equals(all)) {
-            if (permissionsService.notAdmin(getUserId())) {
-                permissionsService.checkSuperAdmin(getUserId());
-                conditions.add(new Condition.Permission(Reseller.class, getUserId(), baseClass));
-            }
-        } else if (subresellerid != null && subresellerid > 0) {
-            permissionsService.checkSuperAdmin(getUserId());
-            conditions.add(new Condition.Permission(Reseller.class, Subreseller.class, subresellerid).excludeGroups());
-        }else if(userId != null && userId > 0){
-            permissionsService.checkSuperAdmin(getUserId());
-            conditions.add(new Condition.Permission(User.class, userId, Client.class).excludeGroups());
-        }
-        permissionsService.checkSuperAdmin(getUserId());
         return storage.getObjects(baseClass, new Request(
                 new Columns.All(), Condition.merge(conditions), new org.traccar.storage.query.Order("name")
         ));
@@ -82,17 +67,7 @@ public class ResellerResource extends ExtendedObjectResource<Reseller> {
 
         if(validate(entity)){
             entity.setId(storage.addObject(entity, new Request(new Columns.Exclude("id"))));
-            //LOGGER.info("Checking for testing error");
             actionLogger.create(request, getUserId(), entity);
-
-            if (getUserId() != ServiceAccountUser.ID) {
-//                storage.addPermission(new Permission(User.class, getUserId(), baseClass, entity.getId()));
-                //LOGGER.info("Checking resellerId: {}");
-                cacheManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
-                connectionManager.invalidatePermission(true, User.class, getUserId(), baseClass, entity.getId(), true);
-                actionLogger.link(request, getUserId(), User.class, getUserId(), baseClass, entity.getId());
-            }
-
             return Response.ok(entity).build();
         }else{
             return Response.status(Response.Status.FOUND).build();
